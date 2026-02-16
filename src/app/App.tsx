@@ -1,5 +1,5 @@
-import LoginPage from "./login/LoginPage"
-import GamePage from './game/Game'
+import LoginPage from "./pages/LoginPage"
+import GamePage from './pages/GamePage'
 // import { useState } from "react"
 // import { useStore } from "./store/useStore"
 

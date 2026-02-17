@@ -1,7 +1,18 @@
 # PyQuest
 
+An RPG Typing-Based Game for Python Learning
 
-# Game Logic Lives in Zustand
+## Quick Start
+### Install packages
+```
+npm install
+```
 
+### Run dev mode
+```
+npm run dev
+```
 
-# Rendering Lives in Pixi
+## Project Guide
+- Game Logic Lives in **Zustand**
+- Rendering Lives in **Pixi**

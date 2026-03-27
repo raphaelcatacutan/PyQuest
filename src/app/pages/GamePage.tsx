@@ -11,11 +11,20 @@ export default function GamePage() {
         <button></button>  
       </div> 
 
-      <div className="relative flex flex-col h-full p-5"> {/* body div */}
+      <div className="relative flex flex-row h-full p-5"> {/* body div */}
 
-        <div className="relative flex h-full border-2"> {/* scene */}
+        <div className="relative bg-amber-800 w-150">  {/* CodeEditor div */}
+          <CodeEditor/>
+        </div>
 
-          <Group orientation="horizontal" className="absolute top-0">
+        <div className="relative flex h-full w-full border-2"> {/* scene */}
+          <div className="">
+            <SideBar/>
+          </div>
+
+
+
+          {/* <Group orientation="horizontal" className="absolute top-0">
             <Panel defaultSize={50} minSize={300} className="relative bg-amber-800">
               <CodeEditor/>
             </Panel>
@@ -23,7 +32,7 @@ export default function GamePage() {
             <Panel minSize={685}>
               <SideBar/>
             </Panel>
-          </Group>
+          </Group> */}
 
           <div className="absolute flex right-0 h-full border">
             <LootInventoryTree/>

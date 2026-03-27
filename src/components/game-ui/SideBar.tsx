@@ -1,5 +1,4 @@
-import { PlayerInventoryTree } from "@/src/components/game-ui/PlayerInventoryTree"
-import { LootInventoryTree } from "./LootInventoryTree"
+import { PlayerInventoryTree } from "@/src/components/game-ui/PlayerInventoryTree/PlayerInventoryTree"
 import { useState } from "react"
 
 

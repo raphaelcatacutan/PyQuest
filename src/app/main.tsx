@@ -6,6 +6,7 @@ import App from './App.tsx'
 import WatcherTestPage from './tests/backend-test.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import GamePage from './pages/GamePage.tsx'
+import SignupPage from './pages/SignupPage.tsx'
 
 /**
  *  
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path='/game' element={<GamePage/>}/>  
         <Route path='/login' element={<LoginPage/>}/>
+        <Route path='/signup' element={<SignupPage/>}/>
         <Route path="/test" element={<WatcherTestPage />} />
       </Routes>
     </BrowserRouter>

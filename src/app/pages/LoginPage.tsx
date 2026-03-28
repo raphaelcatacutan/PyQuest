@@ -8,13 +8,12 @@ export default function LoginPage() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: hook this into your auth/status logic
+    // TODO: hook this into auth/status logic
     console.log({ username, password });
   }
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      {/* Optional vignette overlay (works great on top of your wallpaper parent) */}
       <div className="absolute inset-0"></div>
 
       {/* Center container */}

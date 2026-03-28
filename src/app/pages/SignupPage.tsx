@@ -2,13 +2,11 @@ import { useState } from "react";
 
 export default function SignupPage() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const canSignup =
     username.trim().length > 0 &&
-    email.trim().length > 0 &&
     password.length > 0 &&
     confirmPassword.length > 0 &&
     password === confirmPassword;
@@ -16,7 +14,7 @@ export default function SignupPage() {
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     // TODO: hook this into your auth/status logic
-    console.log({ username, email, password });
+    console.log({ username, password });
   }
 
   return (
@@ -33,7 +31,7 @@ export default function SignupPage() {
               PyQuest
             </h1>
             <p className="mt-2 text-sm text-gray-300">
-              Create your character. Begin your journey.
+              Create an account and begin your journey.
             </p>
           </div>
 
@@ -41,7 +39,7 @@ export default function SignupPage() {
           <div className="mb-6 flex items-center gap-3">
             <div className="h-px flex-1 bg-white/10"></div>
             <span className="text-xs uppercase tracking-widest text-gray-400">
-              Character Creation
+              Account Creation
             </span>
             <div className="h-px flex-1 bg-white/10"></div>
           </div>
@@ -56,19 +54,6 @@ export default function SignupPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="e.g. AriaStorm"
-                className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-yellow-200/60 focus:ring-2 focus:ring-yellow-200/20"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-xs uppercase tracking-widest text-gray-300">
-                Email
-              </label>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="your@email.com"
                 className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-yellow-200/60 focus:ring-2 focus:ring-yellow-200/20"
               />
             </div>
@@ -113,7 +98,7 @@ export default function SignupPage() {
                 className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
                 onClick={() => alert("Back to login coming soon!")}
               >
-                Already have a character? Login here
+                Already have an account? Login here
               </button>
             </div>
           </form>

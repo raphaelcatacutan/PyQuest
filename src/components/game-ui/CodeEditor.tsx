@@ -9,7 +9,6 @@ import openIcon from "@/public/assets/icons/open.svg?url"
 
 export default function CodeEditor() {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
     editorRef.current = editor;
@@ -37,6 +36,7 @@ export default function CodeEditor() {
     }
   }
 
+  // TODO: Save changes to File Tree only
   function handleSave() {
     if (editorRef.current) {
       const code = editorRef.current.getValue();
@@ -51,7 +51,7 @@ export default function CodeEditor() {
       URL.revokeObjectURL(url);
     }
   }
-
+  
   function handleOpen() {
     const input = document.createElement("input");
     input.type = "file";
@@ -82,11 +82,11 @@ export default function CodeEditor() {
 
   return (
     <div className="flex flex-col w-full h-full relative border-1 bg-gray-700">
-      <div className="flex flex-row-reverse m-1 gap-2 border-1">
-        <Button icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
-        <Button icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/>
-        <Button icon={openIcon} iconSize={20} onClick={handleOpen} title="Open a file"/>
-        <Button icon={playIcon} iconSize={20} onClick={handleRun} title="Execute code (Ctrl + Enter)"/>
+      <div className="flex flex-row-reverse m-1 gap-2">
+        <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
+        {/* <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/> */}
+        {/* <Button variant="icon-only-btn" icon={openIcon} iconSize={20} onClick={handleOpen} title="Open a file"/> */}
+        <Button variant="icon-only-btn" icon={playIcon} iconSize={20} onClick={handleRun} title="Execute code (Ctrl + Enter)"/>
       </div>
       <div className="flex-1 relative">
         <Editor

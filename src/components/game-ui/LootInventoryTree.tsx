@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Tree } from "react-arborist";
+import Button from "../ui/Button";
+import closeIcon from "@/public/assets/icons/close.svg?url"
 
 const data = [
   {
@@ -28,7 +30,8 @@ export function LootInventoryTree(){
       {inv && 
         <div className="relative h-full border">
           <div className="flex flex-row-reverse border-1">
-            <button className="" onClick={() => toggleInv(prev => !prev)}></button>
+            <Button variant="icon-only-btn" icon={closeIcon} iconSize={25} onClick={() => toggleInv(prev => !prev)}/>
+            {/* <button className="" onClick={() => toggleInv(prev => !prev)}></button> */}
           </div>
           <Tree
             data={data}

@@ -8,8 +8,8 @@ export default function GamePage() {
   return (
     <div className="relative flex flex-col w-full h-full">
 
-      <div className="flex flex-row-reverse h-10 p-1 bg-amber-950">{/* nav div */}
-        <Button variant="exit-btn" icon={exitIcon} iconSize={30} title="Exit"></Button>
+      <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,0,0.6)]">{/* nav div */}
+        <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit"></Button>
         <button></button>  
       </div> 
 

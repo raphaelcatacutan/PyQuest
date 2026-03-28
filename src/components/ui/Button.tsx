@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 
 interface ButtonProps {
-  variant?: 'primary' | 'run-btn' | 'bag-btn' | 'exit-btn';
+  variant?: 'primary' | 'run-btn' | 'bag-btn' | 'icon-only-btn';
   text?: string;
   icon?: ReactNode;
   iconSize?: number;
@@ -19,8 +19,8 @@ export default function Button({variant, text, icon, iconSize, onClick, alt_text
       case 'run-btn':
         return "w-fit bg-amber-500 "
       case 'bag-btn':
-        return ""
-      case 'exit-btn':
+        return "w-fit cursor-pointer border-1 hover:"
+      case 'icon-only-btn':
         return "w-fit cursor-pointer"
       default:
         return "w-fit border border-gray-300 cursor-pointer";

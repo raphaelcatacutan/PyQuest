@@ -29,7 +29,6 @@ export function LootInventoryTree(){
         <div className="relative h-full border">
           <div className="flex flex-row-reverse border-1">
             <button className="" onClick={() => toggleInv(prev => !prev)}></button>
-
           </div>
           <Tree
             data={data}

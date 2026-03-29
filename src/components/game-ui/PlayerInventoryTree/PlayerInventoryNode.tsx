@@ -121,7 +121,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
         flex flex-row
       `}
     >
-      <div className="flex flex-1 w-fit gap-1 pl-1">
+      <div className="flex flex-1 w-fit gap-1 pl-1 min-w-0">
         {getNodeType(node.data.kind)} 
         {isRenaming ? (
           <input
@@ -131,10 +131,10 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
             onBlur={handleConfirmRename}
             onKeyDown={handleKeyDown}
             autoFocus
-            className="bg-gray-700 text-white rounded border border-blue-500"
+            className="bg-gray-700 text-white rounded border border-blue-500 truncate"
           />
         ) : (
-          name
+          <span className="truncate">{name}</span>
         )}
       </div>
       {isHovered && (

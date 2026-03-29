@@ -114,8 +114,8 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
         border-l-2
         border-transparent
         px-2 cursor-pointer
-        ${node.isSelected ? "bg-blue-500 text-white" : ""}
-        ${node.isFocused ? "outline-1 outline-blue-300" : ""}
+        ${node.isSelected ? "bg-yellow-500 text-white" : ""}
+        ${node.isFocused ? "" : ""} 
         hover:border-l-2
         hover:border-l-amber-300
         flex flex-row
@@ -141,8 +141,12 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
         <div className="flex-2 flex flex-row-reverse w-fit" onClick={(e) => e.stopPropagation()}>
           <Button variant="icon-only-btn" icon={deleteIcon} iconSize={20} onClick={handleDeleteNode}/>
           <Button variant="icon-only-btn" icon={renameIcon} iconSize={20} onClick={handleRenameNode}/>
-          <Button variant="icon-only-btn" icon={addFolderIcon} iconSize={23} onClick={handleAddFolder}/>
-          <Button variant="icon-only-btn" icon={addFileIcon} iconSize={23} onClick={handleAddFile}/>
+          {node.data.kind === "folder" && (
+            <>
+              <Button variant="icon-only-btn" icon={addFolderIcon} iconSize={23} onClick={handleAddFolder}/>
+              <Button variant="icon-only-btn" icon={addFileIcon} iconSize={23} onClick={handleAddFile}/>
+            </>
+          )}
         </div>
       )}
     </div>

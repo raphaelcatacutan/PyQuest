@@ -138,7 +138,7 @@ export function PlayerInventoryTree(){
     <div className="relative h-full" ref={containerRef}>
       <div className="relative flex border-b-2 mb-2" ref={toolbarRef}>
         <div className="flex-1 h-fit pl-1 pr-1 pt-1">        
-          Toolbar
+          Inventory
         </div>
         <div className="flex-2 flex flex-row-reverse pl-1 pr-1 pt-1">
           <Button variant="icon-only-btn" icon={collapseIcon} iconSize={23} onClick={handleCollapse}></Button>

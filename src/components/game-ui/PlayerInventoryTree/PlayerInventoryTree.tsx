@@ -99,6 +99,95 @@ export function PlayerInventoryTree(){
     return ids;
   }
 
+  function hasDuplicateName(parentId: string | undefined, newName: string, excludeId?: string): boolean {
+    const checkInArray = (items: InventoryNode[]): boolean => {
+      return items.some(item => 
+        item.id !== excludeId && 
+        item.name.toLowerCase() === newName.toLowerCase()
+      );
+    };
+
+    if (!parentId) {
+      // Check at root level
+      return checkInArray(inventory);
+    }
+
+    // Find the parent folder and check its children
+    const findParentChildren = (items: InventoryNode[]): InventoryNode[] | null => {
+      for (const item of items) {
+        if (item.id === parentId && item.kind === "folder") {
+          return item.children;
+        }
+        if (item.kind === "folder") {
+          const result = findParentChildren(item.children);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+
+    const parentChildren = findParentChildren(inventory);
+    return parentChildren ? checkInArray(parentChildren) : false;
+  }
+
+  function findNodePathToId(nodeId: string, nodes: InventoryNode[] = inventory): { parentId: string | undefined; node: InventoryNode } | null {
+    const traverse = (items: InventoryNode[], parentId: string | undefined): { parentId: string | undefined; node: InventoryNode } | null => {
+      for (const item of items) {
+        if (item.id === nodeId) {
+          return { parentId, node: item };
+        }
+        if (item.kind === "folder") {
+          const result = traverse(item.children, item.id);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+    return traverse(nodes, undefined);
+  }
+
+  function getNextNumberForPrefix(parentId: string | undefined, prefix: string): number {
+    const findSiblingsWithPrefix = (items: InventoryNode[]): InventoryNode[] => {
+      return items.filter(item => item.name.startsWith(prefix));
+    };
+
+    let siblings: InventoryNode[] = [];
+
+    if (!parentId) {
+      // Check at root level
+      siblings = findSiblingsWithPrefix(inventory);
+    } else {
+      // Find the parent folder and get its children
+      const findParentChildren = (items: InventoryNode[]): InventoryNode[] | null => {
+        for (const item of items) {
+          if (item.id === parentId && item.kind === "folder") {
+            return item.children;
+          }
+          if (item.kind === "folder") {
+            const result = findParentChildren(item.children);
+            if (result) return result;
+          }
+        }
+        return null;
+      };
+
+      const parentChildren = findParentChildren(inventory);
+      if (parentChildren) {
+        siblings = findSiblingsWithPrefix(parentChildren);
+      }
+    }
+
+    // Extract numbers from names like "New Folder 1", "New Folder 2", etc.
+    const numbers = siblings
+      .map(item => {
+        const match = item.name.match(new RegExp(`^${prefix} (\\d+)$`));
+        return match ? parseInt(match[1], 10) : 0;
+      })
+      .filter(num => num > 0);
+
+    return numbers.length > 0 ? Math.max(...numbers) + 1 : 1;
+  }
+
   function handleCollapse(){
     // Recreate inventory to reset tree expansion state
     setInventory(JSON.parse(JSON.stringify(inventory)));
@@ -122,6 +211,16 @@ export function PlayerInventoryTree(){
   }
 
   function handleRenameNode(nodeId: string, newName: string) {
+    // Find parent to check for duplicates
+    const pathInfo = findNodePathToId(nodeId);
+    if (!pathInfo) return;
+
+    // Check for duplicate names in the same parent
+    if (hasDuplicateName(pathInfo.parentId, newName, nodeId)) {
+      alert(`A file or folder with the name "${newName}" already exists at this level.`);
+      return;
+    }
+
     const renameInArray = (items: InventoryNode[]): InventoryNode[] => {
       return items.map(item => 
         item.id === nodeId
@@ -135,10 +234,13 @@ export function PlayerInventoryTree(){
   }
 
   function handleNodeAddFolder(parentId?: string) {
+    const nextNum = getNextNumberForPrefix(parentId, "New Folder");
+    const newFolderName = `New Folder ${nextNum}`;
+
     const newFolder: InventoryNode = {
       id: `folder-${Date.now()}`,
       kind: "folder",
-      name: "New Folder",
+      name: newFolderName,
       children: []
     };
 
@@ -161,11 +263,14 @@ export function PlayerInventoryTree(){
   }
 
   function handleNodeAddFile(parentId?: string) {
+    const nextNum = getNextNumberForPrefix(parentId, "New Item");
+    const newFileName = `New Item ${nextNum}`;
+
     const newFile: InventoryNode = {
       id: `item-${Date.now()}`,
       kind: "misc",
       itemId: "abc",
-      name: "New Item"
+      name: newFileName
     };
 
     if (!parentId) {

@@ -19,11 +19,9 @@ export default function GamePage() {
           <CodeEditor/>
         </div>
 
-        <div className="relative flex h-full w-full border-2"> {/* scene */}
-          <div className="">
-            <SideBar/> 
-          </div>
-          <div className="absolute flex right-0 h-full border">
+        <div className="relative flex h-full w-full border"> {/* scene */}
+          <SideBar/> 
+          <div className="absolute flex right-0 h-full">
             <LootInventoryTree/>
           </div>
         </div>

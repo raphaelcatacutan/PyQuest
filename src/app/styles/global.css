@@ -17,6 +17,8 @@
   --color-secondary: #6a7282;         /* light gray */
   --color-white-override: #eef2ff;    /* not too white*/
   --color-focus: #fff085;             /* gold border */
+
+  --color-header: #131315;
 }
 
 :root {

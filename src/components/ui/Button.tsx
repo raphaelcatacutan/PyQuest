@@ -17,11 +17,11 @@ export default function Button({variant, text, icon, iconSize, onClick, alt_text
       case 'primary':
         return "w-fit rounded-lg border border-transparent px-5 py-2.4 font-medium bg-neutral-900 cursor-pointer transition-colors duration-250 hover:border-blue-500 focus:outline-4 focus-visible:outline-blue-500";
       case 'run-btn':
-        return "w-fit bg-amber-500 "
+        return "w-fit p-2 rounded-lg cursor-pointer transition-colors duration-250 hover:bg-amber-500 hover:bg-opacity-30"
       case 'bag-btn':
-        return "w-fit cursor-pointer border-1 hover:"
+        return "w-fit cursor-pointer border-1 bg-[#23100a]"
       case 'icon-only-btn':
-        return "w-fit cursor-pointer"
+        return "w-fit cursor-pointer p-0.5 rounded-lg transition-colors duration-250 hover:bg-gray-600 hover:bg-opacity-30 active:bg-gray-800"
       default:
         return "w-fit border border-gray-300 cursor-pointer";
     }

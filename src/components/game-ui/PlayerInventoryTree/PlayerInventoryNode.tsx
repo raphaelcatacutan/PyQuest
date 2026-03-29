@@ -110,14 +110,17 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`
+        border-l-2
+        border-transparent
         px-2 cursor-pointer
         ${node.isSelected ? "bg-blue-500 text-white" : ""}
         ${node.isFocused ? "outline-1 outline-blue-300" : ""}
-        hover:border
+        hover:border-l-2
+        hover:border-l-amber-300
         flex flex-row
       `}
     >
-      <div className="flex-1 w-fit">
+      <div className="flex flex-1 w-fit gap-1 pl-1">
         {getNodeType(node.data.kind)} 
         {isRenaming ? (
           <input
@@ -127,7 +130,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
             onBlur={handleConfirmRename}
             onKeyDown={handleKeyDown}
             autoFocus
-            className="bg-gray-700 text-white px-1 rounded border border-blue-500"
+            className="bg-gray-700 text-white rounded border border-blue-500"
           />
         ) : (
           name

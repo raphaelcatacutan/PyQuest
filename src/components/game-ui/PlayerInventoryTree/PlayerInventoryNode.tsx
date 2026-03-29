@@ -80,6 +80,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    e.stopPropagation();
     if (e.key === 'Enter') {
       handleConfirmRename();
     } else if (e.key === 'Escape') {

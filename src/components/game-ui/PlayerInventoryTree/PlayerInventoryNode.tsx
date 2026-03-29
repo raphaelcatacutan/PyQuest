@@ -104,10 +104,19 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
     <div 
       style={style} 
       ref={dragHandle}
-      onClick={() => {
-        node.select()
+      onClick={(e) => {
+        if (e.shiftKey) {
+          // Shift-click: multi-select with range
+          node.selectMulti();
+        } else if (e.ctrlKey || e.metaKey) {
+          // Ctrl/Cmd-click: toggle selection
+          node.selectMulti();
+        } else {
+          // Normal click: select only this node
+          node.select();
+        }
         if (node.data.kind === "folder") node.toggle();  
-      }} 
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`

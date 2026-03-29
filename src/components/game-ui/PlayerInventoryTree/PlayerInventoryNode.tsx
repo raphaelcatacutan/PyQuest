@@ -134,7 +134,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
         )}
       </div>
       {isHovered && (
-        <div className="flex-2 flex flex-row-reverse w-fit">
+        <div className="flex-2 flex flex-row-reverse w-fit" onClick={(e) => e.stopPropagation()}>
           <Button variant="icon-only-btn" icon={deleteIcon} iconSize={20} onClick={handleDeleteNode}/>
           <Button variant="icon-only-btn" icon={renameIcon} iconSize={20} onClick={handleRenameNode}/>
           <Button variant="icon-only-btn" icon={addFolderIcon} iconSize={23} onClick={handleAddFolder}/>

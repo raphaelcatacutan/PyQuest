@@ -31,6 +31,8 @@ export function PlayerInventoryTree(){
   const [treeHeight, setTreeHeight] = useState(500);
   const [inventory, setInventory] = useState(InitialInventory);
   const [selectedNode, setSelectedNode] = useState<InventoryNode | null>(null);
+  const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
+  const [lastSelectedNodeId, setLastSelectedNodeId] = useState<string | null>(null);
 
   useEffect(() => {
     const calculateHeight = () => {
@@ -46,6 +48,56 @@ export function PlayerInventoryTree(){
     window.addEventListener('resize', calculateHeight);
     return () => window.removeEventListener('resize', calculateHeight);
   }, []);
+
+  function handleNodeSelect(nodeId: string, isShiftClick: boolean, isCtrlClick: boolean) {
+    if (!isShiftClick && !isCtrlClick) {
+      // Normal click: select only this node
+      setSelectedNodeIds(new Set([nodeId]));
+      setLastSelectedNodeId(nodeId);
+      return;
+    }
+
+    if (isCtrlClick) {
+      // Ctrl-click: toggle this node
+      const newSet = new Set(selectedNodeIds);
+      if (newSet.has(nodeId)) {
+        newSet.delete(nodeId);
+      } else {
+        newSet.add(nodeId);
+      }
+      setSelectedNodeIds(newSet);
+      setLastSelectedNodeId(nodeId);
+      return;
+    }
+
+    if (isShiftClick && lastSelectedNodeId) {
+      // Shift-click: select range between last selected and current
+      const allNodeIds = collectAllNodeIds(inventory);
+      const lastIndex = allNodeIds.indexOf(lastSelectedNodeId);
+      const currentIndex = allNodeIds.indexOf(nodeId);
+
+      if (lastIndex !== -1 && currentIndex !== -1) {
+        const start = Math.min(lastIndex, currentIndex);
+        const end = Math.max(lastIndex, currentIndex);
+        const rangeIds = allNodeIds.slice(start, end + 1);
+        setSelectedNodeIds(new Set(rangeIds));
+      }
+    }
+  }
+
+  function collectAllNodeIds(nodes: InventoryNode[]): string[] {
+    const ids: string[] = [];
+    const traverse = (items: InventoryNode[]) => {
+      for (const item of items) {
+        ids.push(item.id);
+        if (item.kind === "folder") {
+          traverse(item.children);
+        }
+      }
+    };
+    traverse(nodes);
+    return ids;
+  }
 
   function handleCollapse(){
     // Recreate inventory to reset tree expansion state
@@ -161,7 +213,6 @@ export function PlayerInventoryTree(){
         onSelect={(nodes) => {
           const selected = nodes.length > 0 ? nodes[0].data : null;
           setSelectedNode(selected);
-          console.log("Selected:", nodes.map(n => n.data));
         }}
       >
         {(props) => (
@@ -171,6 +222,8 @@ export function PlayerInventoryTree(){
             onAddFolder={handleNodeAddFolder}
             onAddFile={handleNodeAddFile}
             onRename={handleRenameNode}
+            onSelect={handleNodeSelect}
+            selectedNodeIds={selectedNodeIds}
           />
         )}
       </Tree> 

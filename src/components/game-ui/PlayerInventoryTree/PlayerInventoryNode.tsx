@@ -18,9 +18,11 @@ interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onAddFolder: (parentId?: string) => void;
   onAddFile: (parentId?: string) => void;
   onRename: (nodeId: string, newName: string) => void;
+  onSelect: (nodeId: string, isShiftClick: boolean, isCtrlClick: boolean) => void;
+  selectedNodeIds: Set<string>;
 }
 
-export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFolder, onAddFile, onRename }: PlayerInventoryNodeProps) {
+export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFolder, onAddFile, onRename, onSelect, selectedNodeIds }: PlayerInventoryNodeProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(node.data.name);
@@ -105,16 +107,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
       style={style} 
       ref={dragHandle}
       onClick={(e) => {
-        if (e.shiftKey) {
-          // Shift-click: multi-select with range
-          node.selectMulti();
-        } else if (e.ctrlKey || e.metaKey) {
-          // Ctrl/Cmd-click: toggle selection
-          node.selectMulti();
-        } else {
-          // Normal click: select only this node
-          node.select();
-        }
+        onSelect(node.id, e.shiftKey, e.ctrlKey || e.metaKey);
         if (node.data.kind === "folder") node.toggle();  
       }}
       onMouseEnter={() => setIsHovered(true)}
@@ -123,7 +116,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
         border-l-2
         border-transparent
         px-2 cursor-pointer
-        ${node.isSelected ? "bg-yellow-500 text-white" : ""}
+        ${selectedNodeIds.has(node.id) ? "bg-yellow-500 text-white" : ""}
         ${node.isFocused ? "" : ""} 
         hover:border-l-2
         hover:border-l-amber-300

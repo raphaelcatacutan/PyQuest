@@ -76,12 +76,13 @@ export default function CodeEditor() {
 
   function handleRun() {
     // TODO: Bind Python Run
+    const code = editorRef.current?.getValue() 
+    alert(code)
     console.log("Run function executed")
   } 
 
-
   return (
-    <div className="flex flex-col w-full h-full relative border-1 bg-gray-700">
+    <div className="flex flex-col w-full h-full relative  bg-gray-700">
       <div className="flex flex-row-reverse m-1 gap-2">
         <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
         {/* <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/> */}
@@ -92,9 +93,11 @@ export default function CodeEditor() {
         <Editor
           height="100%"
           defaultLanguage="python"
-          defaultValue="# Defeat the slime!\nprint('Hello, world!')"
+          defaultValue="# Welcome to PyQuest! 
+# Start writing your coding journey in Python here!"
           theme="vs-dark"
           onMount={handleEditorDidMount}
+          
         />
 
         {/* {isDragging && (

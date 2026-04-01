@@ -1,4 +1,4 @@
-import { Tree } from "react-arborist";
+import { Tree, TreeApi } from "react-arborist";
 import { PlayerInventoryNode } from './PlayerInventoryNode'
 import { InventoryNode } from "@/src/domain/inventory";
 import { useRef, useState, useEffect } from "react";
@@ -28,6 +28,7 @@ export const InitialInventory: InventoryNode[] = [
 export function PlayerInventoryTree(){
   const containerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
+  const treeRef = useRef<TreeApi<InventoryNode>>(null);
   const [treeHeight, setTreeHeight] = useState(500);
   const [inventory, setInventory] = useState(InitialInventory);
   const [selectedNode, setSelectedNode] = useState<InventoryNode | null>(null);
@@ -189,12 +190,62 @@ export function PlayerInventoryTree(){
   }
 
   function handleCollapse(){
-    // Recreate inventory to reset tree expansion state
-    setInventory(JSON.parse(JSON.stringify(inventory)));
+    treeRef.current?.closeAll();
   }
 
   function handleRefresh(){
     setInventory([...inventory]);
+  }
+
+  function handleMoveNode(args: { dragIds: string[]; parentId: string | null; index: number }) {
+    const { dragIds, parentId, index } = args;
+    
+    // Deep clone inventory
+    let newInventory = JSON.parse(JSON.stringify(inventory)) as InventoryNode[];
+    
+    // Step 1: Collect and remove nodes being moved
+    const nodesToMove: InventoryNode[] = [];
+    const removeNodes = (items: InventoryNode[]): InventoryNode[] => {
+      const result: InventoryNode[] = [];
+      for (const item of items) {
+        if (dragIds.includes(item.id)) {
+          nodesToMove.push(item);
+        } else {
+          if (item.kind === "folder") {
+            result.push({ ...item, children: removeNodes(item.children) });
+          } else {
+            result.push(item);
+          }
+        }
+      }
+      return result;
+    };
+    
+    newInventory = removeNodes(newInventory);
+    
+    // Step 2: Insert nodes at target location
+    if (parentId === null) {
+      // Insert at root level
+      newInventory.splice(index, 0, ...nodesToMove);
+    } else {
+      // Insert into parent folder
+      const insertIntoParent = (items: InventoryNode[]): InventoryNode[] => {
+        return items.map(item => {
+          if (item.id === parentId && item.kind === "folder") {
+            const newChildren = [...item.children];
+            newChildren.splice(index, 0, ...nodesToMove);
+            return { ...item, children: newChildren };
+          }
+          if (item.kind === "folder") {
+            return { ...item, children: insertIntoParent(item.children) };
+          }
+          return item;
+        });
+      };
+      newInventory = insertIntoParent(newInventory);
+    }
+    
+    setInventory(newInventory);
   }
 
   function handleDeleteNode(nodeId: string) {
@@ -311,14 +362,16 @@ export function PlayerInventoryTree(){
         </div>
       </div>
       <Tree
-        key={JSON.stringify(inventory)}
-        initialData={inventory}
+        ref={treeRef}
+        data={inventory}
         height={treeHeight}
         width={300}
         onSelect={(nodes) => {
           const selected = nodes.length > 0 ? nodes[0].data : null;
           setSelectedNode(selected);
         }}
+        onMove={handleMoveNode}
+        openByDefault={false}
       >
         {(props) => (
           <PlayerInventoryNode 

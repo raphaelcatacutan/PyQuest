@@ -117,6 +117,7 @@ export function PlayerInventoryNode({ node, style, dragHandle, onDelete, onAddFo
         border-transparent
         px-2 cursor-pointer
         ${selectedNodeIds.has(node.id) ? "bg-yellow-500 text-white" : ""}
+        ${node.isDragging ? "opacity-50 bg-gray-600" : ""}
         ${node.isFocused ? "" : ""} 
         hover:border-l-2
         hover:border-l-amber-300

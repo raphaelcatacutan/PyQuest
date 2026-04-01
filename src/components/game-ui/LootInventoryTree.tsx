@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Tree } from "react-arborist";
 import Button from "../ui/Button";
 import closeIcon from "@/public/assets/icons/close.svg?url"
@@ -21,25 +20,22 @@ const data = [
   }
 ];
 
-export function LootInventoryTree(){
-  const [inv, toggleInv] = useState(true)
+interface RightSideBarProps {
+  onClose?: () => void
+}
 
+export function LootInventoryTree({ onClose }: RightSideBarProps){
   // TODO: Add Confirm Message, Loot will disappear after confirming. Must ahave "Don't show again" option
   return (
-    <>
-      {inv && 
-        <div className="relative h-full border">
-          <div className="flex flex-row-reverse border-1">
-            <Button variant="icon-only-btn" icon={closeIcon} iconSize={25} onClick={() => toggleInv(prev => !prev)}/>
-            {/* <button className="" onClick={() => toggleInv(prev => !prev)}></button> */}
-          </div>
-          <Tree
-            data={data}
-            height={400}
-            width={300}
-          />
-        </div>
-      }
-    </>
+    <div className="relative h-full border">
+      <div className="flex flex-row-reverse border">
+        <Button variant="icon-only-btn" icon={closeIcon} iconSize={25} onClick={onClose}/>
+      </div>
+      <Tree
+        data={data}
+        height={400}
+        width={300}
+      />
+    </div>
   );
 }

@@ -37,7 +37,7 @@ export default function GamePage() {
           </div>
           : 
           <div className="absolute flex right-0 h-full">
-            <LootInventoryTree/>
+            <LootInventoryTree onClose={() => toggleRightPanel(false)}/>
           </div>
           }
         </div>

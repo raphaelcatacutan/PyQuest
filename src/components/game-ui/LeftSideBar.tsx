@@ -5,7 +5,7 @@ import bagIcon from "@/public/assets/icons/bag.svg?url"
 import coinsIcon from "@/public/assets/icons/coins.svg?url"
 import leatherBg from "@/public/assets/inventory_bg.png" // adjust path to your image 
 
-export default function SideBar(){
+export default function LeftSideBar(){
   const [inv, toggleInv] = useState(false)
   
   const coin = 0;

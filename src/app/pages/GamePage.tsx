@@ -1,13 +1,16 @@
+import { useState } from "react"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import { LootInventoryTree } from "@/src/components/game-ui/LootInventoryTree"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import exitIcon from "@/public/assets/icons/exit.svg?url"
-import showToast from "@/src/components/ui/Toast"
+import rightPanelIcon from "@/public/assets/icons/right_panel.svg?url"
 import mapBg from "@/public/assets/maps/dungeon.png?url"
+import showToast from "@/src/components/ui/Toast"
 // import mapBg from "@/public/assets/maps/labyrinth.png?url"
 
 export default function GamePage() {
+  const [rightPanel, toggleRightPanel] = useState(false)
 
   function handleExitGame(){
     showToast({ variant: 'info', message: 'Welcome, adventurer!' });
@@ -27,10 +30,16 @@ export default function GamePage() {
         </div>
 
         <div className="relative flex h-full w-full" style={{ backgroundImage: `url(${mapBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}> {/* scene */}
-          <LeftSideBar/> 
+          <LeftSideBar/>
+          {!rightPanel ? 
+          <div className="absolute right-1 top-1">
+            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel(rightPanel => !rightPanel)}/> 
+          </div>
+          : 
           <div className="absolute flex right-0 h-full">
             <LootInventoryTree/>
           </div>
+          }
         </div>
       </div>
     </div>

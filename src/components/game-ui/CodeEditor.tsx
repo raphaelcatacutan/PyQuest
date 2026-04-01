@@ -6,6 +6,8 @@ import playIcon from "@/public/assets/icons/play.svg?url"
 import clearIcon from "@/public/assets/icons/clear.svg?url"
 import saveIcon from "@/public/assets/icons/save.svg?url"
 import openIcon from "@/public/assets/icons/open.svg?url"
+import ceBg from "@/public/assets/codeeditor_frame.jfif?url"
+
 
 export default function CodeEditor() {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -82,7 +84,7 @@ export default function CodeEditor() {
   } 
 
   return (
-    <div className="flex flex-col w-full h-full relative  bg-gray-700">
+    <div className="flex flex-col w-full h-full relative bg-gray-700">
       <div className="flex flex-row-reverse m-1 gap-2">
         <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
         {/* <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/> */}
@@ -91,6 +93,7 @@ export default function CodeEditor() {
       </div>
       <div className="flex-1 relative">
         <Editor
+          
           height="100%"
           defaultLanguage="python"
           defaultValue="# Welcome to PyQuest! 

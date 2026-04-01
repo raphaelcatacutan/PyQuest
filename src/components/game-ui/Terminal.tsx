@@ -16,13 +16,13 @@ export default function Terminal({ messages = [] }: TerminalProps){
 
   return (
     <div className="flex flex-col h-full border">
-      <div className="flex justify-end items-center px-1 bg-gray-900 border">
+      <div className="flex justify-end items-center px-1 bg-[#261c13] border">
         Terminal
       </div>
-      <div className="flex-1 w-full bg-black/50 text-white font-mono text-sm p-3 overflow-y-auto overflow-x-auto">
+      <div className="flex-1 w-full bg-black/50 text-white font-mono text-sm p-3 overflow-y-auto">
         <div className="space-y-1">
           {messages.map((message, index) => (
-            <div key={index} className="whitespace-nowrap">
+            <div key={index} className="break-words">
               {message}
             </div>
           ))}

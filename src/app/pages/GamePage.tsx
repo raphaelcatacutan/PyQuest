@@ -1,6 +1,6 @@
 import { useState } from "react"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
-import { LootInventoryTree } from "@/src/components/game-ui/LootInventoryTree"
+import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import exitIcon from "@/public/assets/icons/exit.svg?url"
@@ -37,7 +37,7 @@ export default function GamePage() {
           </div>
           : 
           <div className="absolute flex right-0 h-full">
-            <LootInventoryTree onClose={() => toggleRightPanel(false)}/>
+            <RightSideBar onClose={() => toggleRightPanel(false)}/>
           </div>
           }
         </div>

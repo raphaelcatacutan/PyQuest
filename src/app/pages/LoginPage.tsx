@@ -1,3 +1,4 @@
+import Button from "@/src/components/ui/Button";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -64,14 +65,15 @@ export default function LoginPage() {
                 className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-input-focus/60 focus:ring-2 focus:ring-yellow-200/20"
               />
             </div>
-
-            <button
+            
+            <Button variant="login-btn" text="Begin Adventure"/>
+            {/* <button
               type="submit"
               disabled={!canLogin}
               className="w-full rounded-xl bg-yellow-300 px-4 py-3 font-semibold text-gray-400 hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
             >
               Begin Adventure
-            </button>
+            </button> */}
 
             <div className="flex items-center justify-between text-xs text-gray-400">
               <button
@@ -79,7 +81,7 @@ export default function LoginPage() {
                 className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
                 onClick={() => alert("Create character coming soon!")}
               >
-                Create character
+                Create Account
               </button>
               <button
                 type="button"

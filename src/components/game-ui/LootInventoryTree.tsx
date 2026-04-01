@@ -1,6 +1,7 @@
 import { Tree } from "react-arborist";
 import Button from "../ui/Button";
 import closeIcon from "@/public/assets/icons/close.svg?url"
+import Terminal from "./Terminal";
 
 const data = [
   {
@@ -17,7 +18,7 @@ const data = [
         ],
       }
     ]
-  }
+  },
 ];
 
 interface RightSideBarProps {
@@ -27,15 +28,20 @@ interface RightSideBarProps {
 export function LootInventoryTree({ onClose }: RightSideBarProps){
   // TODO: Add Confirm Message, Loot will disappear after confirming. Must ahave "Don't show again" option
   return (
-    <div className="relative h-full border">
+    <div className="flex flex-col h-full w-80 border">
       <div className="flex flex-row-reverse border">
         <Button variant="icon-only-btn" icon={closeIcon} iconSize={25} onClick={onClose}/>
       </div>
-      <Tree
-        data={data}
-        height={400}
-        width={300}
-      />
+      <div className="flex-1 shrink-0">
+        <Tree
+          data={data}
+          height={400}
+          width={300}
+        />
+      </div>
+      <div className="flex-1 overflow-hidden">
+        <Terminal messages={["Helloaaadadadadaaaaaaaaaaaaaaaaaaaaaaaaaaaaada", "HI"]}/>
+      </div>
     </div>
   );
 }

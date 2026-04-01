@@ -1,16 +1,23 @@
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import { LootInventoryTree } from "@/src/components/game-ui/LootInventoryTree"
-import SideBar from "@/src/components/game-ui/SideBar"
+import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import exitIcon from "@/public/assets/icons/exit.svg?url"
+import showToast from "@/src/components/ui/Toast"
+import mapBg from "@/public/assets/maps/dungeon.png?url"
+// import mapBg from "@/public/assets/maps/labyrinth.png?url"
 
 export default function GamePage() {
+
+  function handleExitGame(){
+    showToast({ variant: 'info', message: 'Welcome, adventurer!' });
+  }
+
   return (
     <div className="relative flex flex-col w-full h-full">
 
-      <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,0,0.6)]">{/* nav div */}
-        <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit"></Button>
-        <button></button>  
+      <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
+        <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
       </div> 
 
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
@@ -19,8 +26,8 @@ export default function GamePage() {
           <CodeEditor/>
         </div>
 
-        <div className="relative flex h-full w-full border"> {/* scene */}
-          <SideBar/> 
+        <div className="relative flex h-full w-full" style={{ backgroundImage: `url(${mapBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}> {/* scene */}
+          <LeftSideBar/> 
           <div className="absolute flex right-0 h-full">
             <LootInventoryTree/>
           </div>

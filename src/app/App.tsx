@@ -1,5 +1,6 @@
 import LoginPage from "./pages/LoginPage"
 import GamePage from './pages/GamePage'
+import { ToastContainer } from "react-toastify"
 // import { useState } from "react"
 // import { useStore } from "./store/useStore"
 
@@ -14,6 +15,7 @@ export default function App() {
 
   return (
     <div className="bg-[url('/assets/wallpaper.jpg')] bg-cover bg-center h-screen w-screen overflow-hidden">
+        <ToastContainer stacked/>
         {!status ? <LoginPage /> : <GamePage />}
     </div>
   )

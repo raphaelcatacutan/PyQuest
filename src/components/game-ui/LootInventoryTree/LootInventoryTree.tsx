@@ -1,4 +1,6 @@
 import { Tree } from "react-arborist";
+import { LootInventoryNode } from "./LootInventoryNode";
+import { useState } from "react";
 
 const data = [
   {
@@ -19,12 +21,20 @@ const data = [
 ];
 
 export function LootInventoryTree(){
+  const [inventory, setInventory] = useState(data)
   // TODO: Add Confirm Message, Loot will disappear after confirming. Must ahave "Don't show again" option
+  
+  
   return (
-   <Tree
-      data={data}
-      height={400}
-      width={300}
-    />
+    <div className="flex shrink-0 p-2">
+      <Tree
+          data={inventory}
+          height={400}
+          width={300}
+          
+      >
+        {/* <LootInventoryNode/> */}
+      </Tree>
+    </div>
   )
 }

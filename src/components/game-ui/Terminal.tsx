@@ -16,7 +16,7 @@ export default function Terminal({ messages = [] }: TerminalProps){
 
   return (
     <div className="flex flex-col h-full border">
-      <div className="flex justify-end items-center px-1 bg-[#261c13] border">
+      <div className="flex justify-end items-center px-1 bg-[#23100a] border">
         Terminal
       </div>
       <div className="flex-1 w-full bg-black/50 text-white font-mono text-sm p-3 overflow-y-auto">

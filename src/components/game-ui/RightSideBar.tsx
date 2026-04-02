@@ -2,7 +2,7 @@ import Button from "../ui/Button";
 import closeIcon from "@/public/assets/icons/close.svg?url"
 import lootBg from "@/public/assets/loot_bg.png?url"
 import Terminal from "./Terminal";
-import { LootInventoryTree } from "./LootInventoryTree";
+import { LootInventoryTree } from "@/src/components/game-ui/LootInventoryTree/LootInventoryTree";
 import { useState } from "react";
 
 
@@ -15,12 +15,12 @@ export function RightSideBar({ onClose }: RightSideBarProps){
 
   return (
     <div className="flex flex-col h-full w-80 border" style={{ backgroundImage: `url(${lootBg})`, backgroundSize: 'cover' }}>
-      <div className="flex flex-row-reverse bg-[#261c13] border">
+      <div className="flex flex-row-reverse bg-[#23100a] border">
         <Button variant="icon-only-btn" icon={closeIcon} iconSize={25} onClick={onClose}/>
       </div>
 
       {loot ? 
-        <div className="flex-1 shrink-0">
+        <div className="flex-1">
           <LootInventoryTree/>
         </div>
       : 

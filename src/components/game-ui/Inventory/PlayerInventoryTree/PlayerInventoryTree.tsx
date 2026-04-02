@@ -7,39 +7,18 @@ import collapseIcon from "@/public/assets/icons/collapse.svg?url"
 import addFolderIcon from "@/public/assets/icons/add_folder.svg?url"
 import addFileIcon from "@/public/assets/icons/add_file.svg?url"
 import refreshIcon from "@/public/assets/icons/refresh.svg?url"
+import showToast from "@/src/components/ui/Toast"
 
 // RESTRICTIONS: Duplicate Files is not allowed
 //               Duplicate Folder names & File names is not allowed
 
-export const InitialInventory: InventoryNode[] = [
-  { 
-    id: "root",
-    kind: "folder", 
-    name: "User", 
-    children: [
-      { id: "wp_folder", kind: "folder", name: "Weapons", children: [] },   
-      { id: "arm_folder", kind: "folder", name: "Armors", children: [] },   
-      { id: "cons_folder", kind: "folder", name: "Consumables", children: [] }
-    ]
-  },
-  { id: "misc_folder", kind: "folder", name: "Miscellaneous", children: [] },
-  { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
-];
-
 interface PlayerInventoryTreeProps {
-  inventory?: InventoryNode[];
-  setInventory?: (inventory: InventoryNode[]) => void;
+  inventory: InventoryNode[];
+  setInventory: (inventory: InventoryNode[]) => void;
 }
 
-export function PlayerInventoryTree({ inventory: propInventory, setInventory: propSetInventory }: PlayerInventoryTreeProps){
+export function PlayerInventoryTree({ inventory, setInventory }: PlayerInventoryTreeProps){
   const containerRef = useRef<HTMLDivElement>(null);
-  const [localInventory, setLocalInventory] = useState(InitialInventory);
-  
-  // Use prop inventory if provided, otherwise use local state
-  const inventory = propInventory !== undefined ? propInventory : localInventory;
-  const setInventory = propSetInventory !== undefined ? propSetInventory : setLocalInventory;
-  
-  console.log("PlayerInventoryTree rendered with inventory:", inventory);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<TreeApi<InventoryNode>>(null);
   const [treeHeight, setTreeHeight] = useState(500);
@@ -280,7 +259,7 @@ export function PlayerInventoryTree({ inventory: propInventory, setInventory: pr
 
     // Check for duplicate names in the same parent
     if (hasDuplicateName(pathInfo.parentId, newName, nodeId)) {
-      alert(`A file or folder with the name "${newName}" already exists at this level.`);
+      showToast({ variant: "error", message: `A file or folder with the name "${newName}" already exists at this level.`})
       return;
     }
 

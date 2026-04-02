@@ -2,15 +2,17 @@ import Button from "../ui/Button";
 import closeIcon from "@/public/assets/icons/close.svg?url"
 import lootBg from "@/public/assets/loot_bg.png?url"
 import Terminal from "./Terminal";
-import { LootInventoryTree } from "@/src/components/game-ui/LootInventoryTree/LootInventoryTree";
+import { LootInventoryTree } from "@/src/components/game-ui/Inventory/LootInventoryTree/LootInventoryTree";
+import { InventoryNode } from "@/src/domain/inventory";
 import { useState } from "react";
 
 
 interface RightSideBarProps {
-  onClose?: () => void
+  onClose?: () => void;
+  onItemTransferred?: (item: InventoryNode) => void;
 }
 
-export function RightSideBar({ onClose }: RightSideBarProps){
+export function RightSideBar({ onClose, onItemTransferred }: RightSideBarProps){
   const [loot, setLoot] = useState(true) 
 
   return (
@@ -21,7 +23,7 @@ export function RightSideBar({ onClose }: RightSideBarProps){
 
       {loot ? 
         <div className="flex-1">
-          <LootInventoryTree/>
+          <LootInventoryTree onItemTransferred={onItemTransferred}/>
         </div>
       : 
         <div className="flex h-100 w-full text-5xl justify-center items-center text-zinc-500">

@@ -7,13 +7,49 @@ import exitIcon from "@/public/assets/icons/exit.svg?url"
 import rightPanelIcon from "@/public/assets/icons/right_panel.svg?url"
 import mapBg from "@/public/assets/maps/dungeon.png?url"
 import showToast from "@/src/components/ui/Toast"
+import { InventoryNode } from "@/src/domain/inventory"
 // import mapBg from "@/public/assets/maps/labyrinth.png?url"
+
+const InitialPlayerInventory: InventoryNode[] = [
+  { 
+    id: "root",
+    kind: "folder", 
+    name: "User", 
+    children: [
+      { id: "wp_folder", kind: "folder", name: "Weapons", children: [] },   
+      { id: "arm_folder", kind: "folder", name: "Armors", children: [] },   
+      { id: "cons_folder", kind: "folder", name: "Consumables", children: [] }
+    ]
+  },
+  { id: "misc_folder", kind: "folder", name: "Miscellaneous", children: [] },
+  { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
+];
 
 export default function GamePage() {
   const [rightPanel, toggleRightPanel] = useState(false)
+  const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
 
   function handleExitGame(){
     showToast({ variant: 'info', message: 'Welcome, adventurer!' });
+  }
+
+  function handleItemTransferred(item: InventoryNode) {
+    // Add the transferred item to the "Picked-up" folder
+    const addToPickedUp = (items: InventoryNode[]): InventoryNode[] => {
+      return items.map(folderItem => {
+        if (folderItem.id === "pickedup_folder" && folderItem.kind === "folder") {
+          return {
+            ...folderItem,
+            children: [...folderItem.children, { ...item, id: `item-${Date.now()}` }]
+          };
+        }
+        if (folderItem.kind === "folder") {
+          return { ...folderItem, children: addToPickedUp(folderItem.children) };
+        }
+        return folderItem;
+      });
+    };
+    setPlayerInventory(addToPickedUp(playerInventory));
   }
 
   return (
@@ -30,14 +66,14 @@ export default function GamePage() {
         </div>
 
         <div className="relative flex h-full w-full" style={{ backgroundImage: `url(${mapBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}> {/* scene */}
-          <LeftSideBar/>
+          <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
           {!rightPanel ? 
           <div className="absolute right-1 top-1">
             <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel(rightPanel => !rightPanel)}/> 
           </div>
           : 
           <div className="absolute flex right-0 h-full">
-            <RightSideBar onClose={() => toggleRightPanel(false)}/>
+            <RightSideBar onClose={() => toggleRightPanel(false)} onItemTransferred={handleItemTransferred}/>
           </div>
           }
         </div>

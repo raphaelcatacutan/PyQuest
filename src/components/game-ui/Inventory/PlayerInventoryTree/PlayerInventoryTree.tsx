@@ -23,14 +23,24 @@ export const InitialInventory: InventoryNode[] = [
     ]
   },
   { id: "misc_folder", kind: "folder", name: "Miscellaneous", children: [] },
+  { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
 ];
 
-export function PlayerInventoryTree(){
+interface PlayerInventoryTreeProps {
+  inventory?: InventoryNode[];
+  setInventory?: (inventory: InventoryNode[]) => void;
+}
+
+export function PlayerInventoryTree({ inventory: propInventory, setInventory: propSetInventory }: PlayerInventoryTreeProps){
   const containerRef = useRef<HTMLDivElement>(null);
+  const [localInventory, setLocalInventory] = useState(InitialInventory);
+  
+  // Use prop inventory if provided, otherwise use local state
+  const inventory = propInventory !== undefined ? propInventory : localInventory;
+  const setInventory = propSetInventory !== undefined ? propSetInventory : setLocalInventory;
   const toolbarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<TreeApi<InventoryNode>>(null);
   const [treeHeight, setTreeHeight] = useState(500);
-  const [inventory, setInventory] = useState(InitialInventory);
   const [selectedNode, setSelectedNode] = useState<InventoryNode | null>(null);
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
   const [lastSelectedNodeId, setLastSelectedNodeId] = useState<string | null>(null);
@@ -371,7 +381,7 @@ export function PlayerInventoryTree(){
           setSelectedNode(selected);
         }}
         onMove={handleMoveNode}
-        openByDefault={false}
+        openByDefault={true}
       >
         {(props) => (
           <PlayerInventoryNode 

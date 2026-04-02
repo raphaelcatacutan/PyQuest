@@ -34,22 +34,39 @@ export default function GamePage() {
   }
 
   function handleItemTransferred(item: InventoryNode) {
-    // Add the transferred item to the "Picked-up" folder
-    const addToPickedUp = (items: InventoryNode[]): InventoryNode[] => {
-      return items.map(folderItem => {
-        if (folderItem.id === "pickedup_folder" && folderItem.kind === "folder") {
-          return {
-            ...folderItem,
-            children: [...folderItem.children, { ...item, id: `item-${Date.now()}` }]
-          };
-        }
-        if (folderItem.kind === "folder") {
-          return { ...folderItem, children: addToPickedUp(folderItem.children) };
-        }
-        return folderItem;
-      });
-    };
-    setPlayerInventory(addToPickedUp(playerInventory));
+    console.log("GamePage.handleItemTransferred called with item:", item);
+    
+    // Use a unique counter to ensure each transferred item has a unique ID
+    const uniqueId = `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    console.log("Generated unique ID:", uniqueId);
+    
+    // Use functional state update to avoid stale closure issues
+    setPlayerInventory(prevInventory => {
+      // Add the transferred item to the "Picked-up" folder
+      const addToPickedUp = (items: InventoryNode[]): InventoryNode[] => {
+        return items.map(folderItem => {
+          if (folderItem.id === "pickedup_folder" && folderItem.kind === "folder") {
+            console.log("Found Picked-up folder, adding item:", item.name);
+            return {
+              ...folderItem,
+              children: [...folderItem.children, { ...item, id: uniqueId }]
+            };
+          }
+          if (folderItem.kind === "folder" && folderItem.children) {
+            return { ...folderItem, children: addToPickedUp(folderItem.children) };
+          }
+          return folderItem;
+        });
+      };
+      
+      const newInventory = addToPickedUp(prevInventory);
+      console.log("New inventory after adding item:", newInventory);
+      const pickedUpFolder = newInventory.find(i => i.kind === "folder" && i.id === "pickedup_folder");
+      if (pickedUpFolder && pickedUpFolder.kind === "folder") {
+        console.log("Picked-up folder children count:", pickedUpFolder.children.length);
+      }
+      return newInventory;
+    });
   }
 
   return (

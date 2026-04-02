@@ -10,9 +10,9 @@ import openFolderIcon from "@/public/assets/icons/open_folder.svg?url"
 import closedFolderIcon from "@/public/assets/icons/closed_folder.svg?url"
 
 interface LootInventoryNodeProps extends NodeRendererProps<InventoryNode>{
-  onTrash: () => void;
+  onTrash: (nodeIds: string[]) => void;
   onSelect: (nodeId: string, isShiftClick: boolean, isCtrlClick: boolean) => void;
-  onGetItem: () => void;
+  onGetItem: (nodeIds: string[]) => void;
   selectedNodeIds: Set<string>;
 }
 
@@ -77,8 +77,22 @@ export function LootInventoryNode({ node, style, dragHandle, onTrash, onSelect, 
       </div>
       {isHovered && (
         <div className="flex-2 flex flex-row-reverse w-fit gap-1" onClick={(e) => e.stopPropagation()}>
-          <Button variant="icon-only-btn" icon={deleteIcon} iconSize={20} onClick={onTrash}/>
-          <Button variant="icon-only-btn" icon={transferIcon} iconSize={20} onClick={onGetItem} title="Take Item"/>
+          <Button variant="icon-only-btn" icon={deleteIcon} iconSize={20} onClick={() => onTrash([node.id])}/>
+          <Button 
+            variant="icon-only-btn" 
+            icon={transferIcon} 
+            iconSize={20} 
+            onClick={() => {
+              // If multiple items are selected, transfer all of them
+              // Otherwise, transfer just the hovered item
+              const itemsToTransfer = selectedNodeIds.size > 1 ? Array.from(selectedNodeIds) : [node.id];
+              console.log("Transfer button clicked on:", node.data.name);
+              console.log("  Selected IDs:", Array.from(selectedNodeIds));
+              console.log("  Transferring:", itemsToTransfer);
+              console.log("  Selected count:", selectedNodeIds.size);
+              onGetItem(itemsToTransfer);
+            }} 
+            title="Take Item"/>
         </div>
       )}
     </div>

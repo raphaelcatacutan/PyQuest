@@ -34,11 +34,11 @@ export function LootInventoryTree({ onItemTransferred }: LootInventoryTreeProps)
 
   // TODO: Add Confirm Message, Loot will disappear after confirming. Must have "Don't show again" option
   
-  function handleTrash(nodeId: string) {
-    // Remove item from inventory
+  function handleTrash(nodeIds: string[]) {
+    // Remove items from inventory
     const deleteFromArray = (items: InventoryNode[]): InventoryNode[] => {
       return items
-        .filter(item => item.id !== nodeId)
+        .filter(item => !nodeIds.includes(item.id))
         .map(item => 
           item.kind === "folder" 
             ? { ...item, children: deleteFromArray(item.children) }
@@ -48,30 +48,47 @@ export function LootInventoryTree({ onItemTransferred }: LootInventoryTreeProps)
     setInventory(deleteFromArray(inventory));
   }
 
-  function handleGetItem(nodeId: string) {
-    // Find the item being transferred
-    const findItem = (items: InventoryNode[]): InventoryNode | null => {
+  function handleGetItem(nodeIds: string[]) {
+    console.log("=== handleGetItem START ===");
+    console.log("nodeIds to transfer:", nodeIds);
+    console.log("Current inventory:", JSON.stringify(inventory, null, 2));
+    
+    // Find all items being transferred
+    const itemsToTransfer: InventoryNode[] = [];
+    
+    const traverse = (items: InventoryNode[]) => {
       for (const item of items) {
-        if (item.id === nodeId) {
-          return item;
+        if (nodeIds.includes(item.id)) {
+          console.log(`  Found item: ${item.id} (${item.name}) - kind: ${item.kind}`);
+          itemsToTransfer.push(item);
         }
         if (item.kind === "folder" && item.children) {
-          const found = findItem(item.children);
-          if (found) return found;
+          traverse(item.children);
         }
       }
-      return null;
     };
-
-    const itemToTransfer = findItem(inventory);
     
-    // Transfer item to player inventory if callback provided
-    if (itemToTransfer && onItemTransferred) {
-      onItemTransferred(itemToTransfer);
+    traverse(inventory);
+    console.log(`Found ${itemsToTransfer.length} items to transfer:`, itemsToTransfer.map(i => i.name));
+    
+    // Transfer all items to player inventory if callback provided
+    if (itemsToTransfer.length > 0 && onItemTransferred) {
+      console.log("Calling onItemTransferred callback for each item...");
+      itemsToTransfer.forEach((item, index) => {
+        console.log(`  [${index}] Transferring: ${item.name}`);
+        onItemTransferred(item);
+      });
+    } else {
+      console.log("WARNING: No items to transfer or no callback provided!");
     }
     
     // Remove from loot
-    handleTrash(nodeId);
+    console.log("Removing transferred items from loot...");
+    handleTrash(nodeIds);
+    
+    // Clear selection after transfer
+    setSelectedNodeIds(new Set());
+    console.log("=== handleGetItem END ===");
   }
 
   function collectAllNodeIds(nodes: InventoryNode[]): string[] {
@@ -134,8 +151,8 @@ export function LootInventoryTree({ onItemTransferred }: LootInventoryTreeProps)
       >
         {(props) => (<LootInventoryNode 
           {...props}
-          onTrash={() => handleTrash(props.node.id)}
-          onGetItem={() => handleGetItem(props.node.id)}
+          onTrash={(nodeIds) => handleTrash(nodeIds)}
+          onGetItem={(nodeIds) => handleGetItem(nodeIds)}
           onSelect={handleNodeSelect}
           selectedNodeIds={selectedNodeIds}
         />

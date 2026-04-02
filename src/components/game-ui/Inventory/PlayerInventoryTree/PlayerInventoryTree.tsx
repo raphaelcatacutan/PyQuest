@@ -38,6 +38,8 @@ export function PlayerInventoryTree({ inventory: propInventory, setInventory: pr
   // Use prop inventory if provided, otherwise use local state
   const inventory = propInventory !== undefined ? propInventory : localInventory;
   const setInventory = propSetInventory !== undefined ? propSetInventory : setLocalInventory;
+  
+  console.log("PlayerInventoryTree rendered with inventory:", inventory);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<TreeApi<InventoryNode>>(null);
   const [treeHeight, setTreeHeight] = useState(500);

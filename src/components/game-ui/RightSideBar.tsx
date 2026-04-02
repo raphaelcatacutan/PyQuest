@@ -4,15 +4,19 @@ import lootBg from "@/public/assets/loot_bg.png?url"
 import Terminal from "./Terminal";
 import { LootInventoryTree } from "@/src/components/game-ui/Inventory/LootInventoryTree/LootInventoryTree";
 import { InventoryNode } from "@/src/domain/inventory";
-import { useState } from "react";
+import { useState, Ref } from "react";
 
 
 interface RightSideBarProps {
   onClose?: () => void;
   onItemTransferred?: (item: InventoryNode) => void;
+  lootInventoryRef?: Ref<{ 
+    getItems: (nodeIds: string[]) => InventoryNode[],
+    removeItems: (nodeIds: string[]) => void 
+  }>;
 }
 
-export function RightSideBar({ onClose, onItemTransferred }: RightSideBarProps){
+export function RightSideBar({ onClose, onItemTransferred, lootInventoryRef }: RightSideBarProps){
   const [loot, setLoot] = useState(true) 
 
   return (
@@ -23,7 +27,7 @@ export function RightSideBar({ onClose, onItemTransferred }: RightSideBarProps){
 
       {loot ? 
         <div className="flex-1">
-          <LootInventoryTree onItemTransferred={onItemTransferred}/>
+          <LootInventoryTree onItemTransferred={onItemTransferred} ref={lootInventoryRef}/>
         </div>
       : 
         <div className="flex h-100 w-full text-5xl justify-center items-center text-zinc-500">

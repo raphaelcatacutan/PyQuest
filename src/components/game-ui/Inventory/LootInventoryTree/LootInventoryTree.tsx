@@ -1,7 +1,7 @@
 import { Tree } from "react-arborist";
 import { LootInventoryNode } from "./LootInventoryNode";
 import { InventoryNode } from "@/src/domain/inventory";
-import { useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 
 const data: InventoryNode[] = [
   {
@@ -27,10 +27,48 @@ interface LootInventoryTreeProps {
   onItemTransferred?: (item: InventoryNode) => void;
 }
 
-export function LootInventoryTree({ onItemTransferred }: LootInventoryTreeProps){
+export const LootInventoryTree = forwardRef<
+  { 
+    getItems: (nodeIds: string[]) => InventoryNode[],
+    removeItems: (nodeIds: string[]) => void 
+  },
+  LootInventoryTreeProps
+>(function LootInventoryTree({ onItemTransferred }, ref) {
   const [inventory, setInventory] = useState(data)
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
   const [lastSelectedNodeId, setLastSelectedNodeId] = useState<string | null>(null);
+
+  // Expose getItems and removeItems methods for parent components
+  useImperativeHandle(ref, () => ({
+    getItems: (nodeIds: string[]) => {
+      const items: InventoryNode[] = [];
+      const traverse = (itemList: InventoryNode[]) => {
+        for (const item of itemList) {
+          if (nodeIds.includes(item.id)) {
+            items.push(item);
+          }
+          if (item.kind === "folder" && item.children) {
+            traverse(item.children);
+          }
+        }
+      };
+      traverse(inventory);
+      return items;
+    },
+    removeItems: (nodeIds: string[]) => {
+      const deleteFromArray = (items: InventoryNode[]): InventoryNode[] => {
+        return items
+          .filter(item => !nodeIds.includes(item.id))
+          .map(item => 
+            item.kind === "folder" 
+              ? { ...item, children: deleteFromArray(item.children) }
+              : item
+          );
+      };
+      setInventory(deleteFromArray(inventory));
+      setSelectedNodeIds(new Set());
+    }
+  }));
 
   // TODO: Add Confirm Message, Loot will disappear after confirming. Must have "Don't show again" option
   
@@ -160,4 +198,4 @@ export function LootInventoryTree({ onItemTransferred }: LootInventoryTreeProps)
       </Tree>
     </div>
   )
-}
+});

@@ -20,6 +20,20 @@ export function LootInventoryNode({ node, style, dragHandle, onTrash, onSelect, 
   const [isHovered, setIsHovered] = useState(false);
   const name = node.data.name;
   
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
+    // Store the item data in the drag event
+    const dragData = {
+      nodeIds: selectedNodeIds.size > 1 && selectedNodeIds.has(node.id) 
+        ? Array.from(selectedNodeIds) 
+        : [node.id],
+      source: 'loot'
+    };
+    const jsonString = JSON.stringify(dragData);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', jsonString);
+    console.log("Dragging items:", dragData.nodeIds, "JSON:", jsonString);
+  }
+  
   function getNodeIcon(type: InventoryNode["kind"]) {
     switch (type) {
       case "weapon": return "⚔️ ";
@@ -54,6 +68,8 @@ export function LootInventoryNode({ node, style, dragHandle, onTrash, onSelect, 
     <div 
       style={style}
       ref={dragHandle}
+      draggable
+      onDragStart={handleDragStart}
       onClick={(e) => {
         onSelect(node.id, e.shiftKey, e.ctrlKey || e.metaKey);
         if (node.data.kind === "folder") node.toggle();

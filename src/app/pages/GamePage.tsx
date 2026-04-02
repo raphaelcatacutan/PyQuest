@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRef } from "react"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
@@ -28,6 +29,37 @@ const InitialPlayerInventory: InventoryNode[] = [
 export default function GamePage() {
   const [rightPanel, toggleRightPanel] = useState(false)
   const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
+  const lootInventoryRef = useRef<{ 
+    getItems: (nodeIds: string[]) => InventoryNode[],
+    removeItems: (nodeIds: string[]) => void
+  } | null>(null)
+
+  useEffect(() => {
+    // Listen for drop events from loot inventory
+    const handleLootDrop = (event: Event) => {
+      const customEvent = event as CustomEvent<string[]>;
+      const nodeIds = customEvent.detail;
+      console.log("GamePage received loot-dropped-to-player event for nodeIds:", nodeIds);
+      
+      // Get the items from loot inventory and transfer them
+      if (lootInventoryRef.current?.getItems) {
+        const items = lootInventoryRef.current.getItems(nodeIds);
+        console.log("Retrieved items:", items);
+        items.forEach(item => {
+          handleItemTransferred(item);
+        });
+        
+        // Remove items from loot after transfer
+        if (lootInventoryRef.current?.removeItems) {
+          lootInventoryRef.current.removeItems(nodeIds);
+          console.log("Removed items from loot");
+        }
+      }
+    };
+
+    window.addEventListener('loot-dropped-to-player', handleLootDrop);
+    return () => window.removeEventListener('loot-dropped-to-player', handleLootDrop);
+  }, []);
 
   function handleExitGame(){
     showToast({ variant: 'info', message: 'Welcome, adventurer!' });
@@ -90,7 +122,7 @@ export default function GamePage() {
           </div>
           : 
           <div className="absolute flex right-0 h-full">
-            <RightSideBar onClose={() => toggleRightPanel(false)} onItemTransferred={handleItemTransferred}/>
+            <RightSideBar onClose={() => toggleRightPanel(false)} onItemTransferred={handleItemTransferred} lootInventoryRef={lootInventoryRef}/>
           </div>
           }
         </div>

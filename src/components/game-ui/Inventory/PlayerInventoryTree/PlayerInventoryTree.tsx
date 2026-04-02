@@ -15,9 +15,10 @@ import showToast from "@/src/components/ui/Toast"
 interface PlayerInventoryTreeProps {
   inventory: InventoryNode[];
   setInventory: (inventory: InventoryNode[]) => void;
+  onItemTransferred?: (item: InventoryNode) => void;
 }
 
-export function PlayerInventoryTree({ inventory, setInventory }: PlayerInventoryTreeProps){
+export function PlayerInventoryTree({ inventory, setInventory, onItemTransferred }: PlayerInventoryTreeProps){
   const containerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<TreeApi<InventoryNode>>(null);
@@ -25,6 +26,7 @@ export function PlayerInventoryTree({ inventory, setInventory }: PlayerInventory
   const [selectedNode, setSelectedNode] = useState<InventoryNode | null>(null);
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
   const [lastSelectedNodeId, setLastSelectedNodeId] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   useEffect(() => {
     const calculateHeight = () => {
@@ -188,6 +190,48 @@ export function PlayerInventoryTree({ inventory, setInventory }: PlayerInventory
     setInventory([...inventory]);
   }
 
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setIsDragOver(true);
+  }
+
+  function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    // Only set to false if leaving the container entirely
+    if (e.currentTarget === e.target) {
+      setIsDragOver(false);
+    }
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    try {
+      const data = e.dataTransfer.getData('text/plain');
+      console.log("Raw drag data:", data, "Type:", typeof data);
+      const dragData = JSON.parse(data);
+      console.log("Dropped items:", dragData.nodeIds);
+      
+      // Only handle drops from loot inventory
+      if (dragData.source !== 'loot') {
+        return;
+      }
+
+      // Note: We cannot access the actual item data here since we're in PlayerInventory
+      // The actual transfer will be handled by the parent component
+      // For now, we'll just notify that a drop occurred
+      // In GamePage, we'll need to handle the actual transfer
+      console.log("Items dropped in player inventory:", dragData.nodeIds);
+      
+      // Dispatch a custom event that GamePage can listen to
+      const event = new CustomEvent('loot-dropped-to-player', { detail: dragData.nodeIds });
+      window.dispatchEvent(event);
+    } catch (error) {
+      console.error("Error parsing drag data:", error);
+    }
+  }
+
   function handleMoveNode(args: { dragIds: string[]; parentId: string | null; index: number }) {
     const { dragIds, parentId, index } = args;
     
@@ -334,7 +378,17 @@ export function PlayerInventoryTree({ inventory, setInventory }: PlayerInventory
   }
 
   return (
-    <div className="relative h-full" ref={containerRef}>
+    <div 
+      className="relative h-full" 
+      ref={containerRef}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      style={{
+        backgroundColor: isDragOver ? 'rgba(255, 215, 0, 0.1)' : 'transparent',
+        transition: 'background-color 0.2s'
+      }}
+    >
       <div className="relative flex border-b-2 mb-2" ref={toolbarRef}>
         <div className="flex-1 h-fit pl-1 pr-1 pt-1">        
           Inventory

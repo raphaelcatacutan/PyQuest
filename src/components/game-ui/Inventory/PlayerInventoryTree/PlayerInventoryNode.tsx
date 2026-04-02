@@ -3,7 +3,7 @@ import { useState } from "react";
 import { 
   InventoryNode,
 } from "@/src/domain/inventory";
-import Button from "../../ui/Button";
+import Button from "../../../ui/Button";
 import openFolderIcon from "@/public/assets/icons/open_folder.svg?url"
 import closedFolderIcon from "@/public/assets/icons/closed_folder.svg?url"
 import consumableIcon from "@/public/assets/icons/consumable.svg?url"

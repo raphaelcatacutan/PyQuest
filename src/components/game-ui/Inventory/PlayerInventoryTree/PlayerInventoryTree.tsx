@@ -2,7 +2,7 @@ import { Tree, TreeApi } from "react-arborist";
 import { PlayerInventoryNode } from './PlayerInventoryNode'
 import { InventoryNode } from "@/src/domain/inventory";
 import { useRef, useState, useEffect } from "react";
-import Button from "../../ui/Button";
+import Button from "../../../ui/Button";
 import collapseIcon from "@/public/assets/icons/collapse.svg?url"
 import addFolderIcon from "@/public/assets/icons/add_folder.svg?url"
 import addFileIcon from "@/public/assets/icons/add_file.svg?url"

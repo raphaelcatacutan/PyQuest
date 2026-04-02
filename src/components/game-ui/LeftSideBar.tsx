@@ -1,4 +1,4 @@
-import { PlayerInventoryTree } from "@/src/components/game-ui/PlayerInventoryTree/PlayerInventoryTree"
+import { PlayerInventoryTree } from "@/src/components/game-ui/Inventory/PlayerInventoryTree/PlayerInventoryTree"
 import { useState } from "react"
 import Button from "../ui/Button"
 import bagIcon from "@/public/assets/icons/bag.svg?url" 

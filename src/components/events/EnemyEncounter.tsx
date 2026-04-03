@@ -11,7 +11,7 @@ export default function EnemyEncounter({ enemyName, health, maxHealth, enemyImg 
   const healthPercentage = (health / maxHealth) * 100;
 
   return (
-    <div className="absolute flex h-full w-full z-1"> {/* Enemy encounter */}
+    <> {/* Enemy encounter */}
       
       <div className="absolute flex flex-col w-full h-full items-center">
         <span className="text-4xl mt-2">
@@ -31,6 +31,6 @@ export default function EnemyEncounter({ enemyName, health, maxHealth, enemyImg 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
         <img src={enemyImg} className="w-80 h-80" draggable={false}></img>
       </div>
-    </div>
+    </>
   )
 }

@@ -6,11 +6,10 @@ import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import exitIcon from "@/public/assets/icons/exit.svg?url"
 import rightPanelIcon from "@/public/assets/icons/right_panel.svg?url"
-import mapBg from "@/public/assets/maps/dungeon.png?url"
+import villageBg from "@/public/assets/maps/village.png?url"
 import showToast from "@/src/components/ui/Toast"
 import { InventoryNode } from "@/src/domain/inventory"
-// import mapBg from "@/public/assets/maps/labyrinth.png?url"
-// import skeletonEnemy from  "@/public/assets/enemies/skeleton_head.png?url"
+import dmgHud from "@/public/assets/pain.png?url"
 import slimeEnemy from  "@/public/assets/enemies/slime.png?url"
 import EnemyEncounter from "@/src/components/events/EnemyEncounter"
 
@@ -32,7 +31,9 @@ const InitialPlayerInventory: InventoryNode[] = [
 export default function GamePage() {
   const [rightPanel, toggleRightPanel] = useState(false)
   const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
-  const [enemy, setEnemy] = useState(true)
+  const [enemy, setEnemy] = useState(false)
+  const [dmg, isDmg] = useState(false)
+  const [loot, isLoot] = useState(true)
 
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -119,27 +120,25 @@ export default function GamePage() {
           <CodeEditor/>
         </div>
 
-        <div className="relative flex h-full w-full" style={{ backgroundImage: `url(${mapBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}> {/* scene */}
+        <div className="relative flex h-full w-full"> {/* scene */}
           <div className="absolute h-full z-99">
             <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
           </div>
-          
 
-            {enemy && (
+          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${villageBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+
+          {/* Enemy Encounter */}
+          {enemy && (
+            <div className="absolute flex h-full w-full z-1"> 
               <EnemyEncounter enemyName={"Slime"} health={80} maxHealth={100} enemyImg={slimeEnemy}/>
-            )}
-            {/* <div className="relative flex h-full w-full">
-              <div>
-                gh
-                <div className="absolute flex top-4 left-1/2 -translate-x-1/2 w-48 bg-gray-800 border-2 border-gray-600 rounded h-8 overflow-hidden">
-                  <div className="bg-red-600 h-full w-4/4 transition-all duration-300"></div>
-                  <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">75/100</span>
-                </div>
-              </div>
+            </div>
+          )}
 
-              <img src={slimeEnemy} className="w-80  justify-center items-center"></img>
-            </div> */}
-          
+          {/* Dmg HUD */}
+          {dmg && (
+            <div className="absolute w-full h-full z-2 opacity-50 transition" style={{ backgroundImage: `url(${dmgHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+          )}
+
           {!rightPanel ? 
           <div className="absolute right-1 top-1 z-99">
             <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel(rightPanel => !rightPanel)}/> 

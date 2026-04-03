@@ -6,11 +6,11 @@ import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import exitIcon from "@/public/assets/icons/exit.svg?url"
 import rightPanelIcon from "@/public/assets/icons/right_panel.svg?url"
-import villageBg from "@/public/assets/maps/village.png?url"
+import villageBg from "@/public/assets/maps/village1.png?url"
 import showToast from "@/src/components/ui/Toast"
 import { InventoryNode } from "@/src/domain/inventory"
 import dmgHud from "@/public/assets/pain.png?url"
-import slimeEnemy from  "@/public/assets/enemies/slime.png?url"
+import slimeEnemy from "@/public/assets/enemies/slime.png?url"
 import EnemyEncounter from "@/src/components/events/EnemyEncounter"
 
 const InitialPlayerInventory: InventoryNode[] = [
@@ -34,6 +34,7 @@ export default function GamePage() {
   const [enemy, setEnemy] = useState(false)
   const [dmg, isDmg] = useState(false)
   const [loot, isLoot] = useState(true)
+  const [inVillage, setInVillage] = useState(true)
 
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -145,7 +146,13 @@ export default function GamePage() {
           </div>
           : 
           <div className="absolute flex right-0 h-full z-99">
-            <RightSideBar onClose={() => toggleRightPanel(false)} onItemTransferred={handleItemTransferred} lootInventoryRef={lootInventoryRef}/>
+            <RightSideBar 
+              onClose={() => toggleRightPanel(false)} 
+              onItemTransferred={handleItemTransferred} 
+              lootInventoryRef={lootInventoryRef}
+              atVillage={inVillage}
+
+              />
           </div>
           }
         </div>

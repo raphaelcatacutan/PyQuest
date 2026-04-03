@@ -15,9 +15,11 @@ interface RightSideBarProps {
     getItems: (nodeIds: string[]) => InventoryNode[],
     removeItems: (nodeIds: string[]) => void 
   }>;
+  atVillage?: boolean;
+  Merchant?: string;
 }
 
-export function RightSideBar({ onClose, onItemTransferred, lootInventoryRef }: RightSideBarProps){
+export function RightSideBar({ onClose, onItemTransferred, lootInventoryRef, atVillage, Merchant }: RightSideBarProps){
   const [loot, setLoot] = useState(true) 
 
   return (

@@ -5,6 +5,7 @@ import Terminal from "./Terminal";
 import { LootInventoryTree } from "@/src/components/game-ui/Inventory/LootInventoryTree/LootInventoryTree";
 import { InventoryNode } from "@/src/domain/inventory";
 import { useState, Ref } from "react";
+import { MerchantInventoryTree } from "./Inventory/MerchantInventoryTree/MerchantInventoryTree";
 
 
 interface RightSideBarProps {
@@ -27,7 +28,8 @@ export function RightSideBar({ onClose, onItemTransferred, lootInventoryRef }: R
 
       {loot ? 
         <div className="flex-1">
-          <LootInventoryTree onItemTransferred={onItemTransferred} ref={lootInventoryRef}/>
+          {/* <LootInventoryTree onItemTransferred={onItemTransferred} ref={lootInventoryRef}/> */}
+          <MerchantInventoryTree onItemBought={onItemTransferred}/>
         </div>
       : 
         <div className="flex h-100 w-full text-5xl justify-center items-center text-zinc-500">

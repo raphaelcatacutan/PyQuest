@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react"
 import { useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import exitIcon from "@/public/assets/icons/exit.svg?url"
 import rightPanelIcon from "@/public/assets/icons/right_panel.svg?url"
-import villageBg from "@/public/assets/maps/village1.png?url"
 import showToast from "@/src/components/ui/Toast"
 import { InventoryNode } from "@/src/domain/inventory"
 import dmgHud from "@/public/assets/pain.png?url"
 import slimeEnemy from "@/public/assets/enemies/slime.png?url"
 import EnemyEncounter from "@/src/components/events/EnemyEncounter"
+import { useSceneStore, type SceneName} from "@/src/game/store/sceneStore"
 
 const InitialPlayerInventory: InventoryNode[] = [
   { 
@@ -28,14 +29,21 @@ const InitialPlayerInventory: InventoryNode[] = [
   { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
 ];
 
+
 export default function GamePage() {
+  const { scene, setScene, getSceneBg } = useSceneStore()
+
+  const bg: Array<SceneName> = ['village', 'labyrinth'] 
+  const RandScene = bg[Math.floor(Math.random() * bg.length)]
+
   const [rightPanel, toggleRightPanel] = useState(false)
   const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
   const [enemy, setEnemy] = useState(false)
   const [dmg, isDmg] = useState(false)
   const [loot, isLoot] = useState(true)
   const [inVillage, setInVillage] = useState(true)
-
+  // const { bees, increaseBees } = useBeeStore()
+  
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
     removeItems: (nodeIds: string[]) => void
@@ -68,8 +76,14 @@ export default function GamePage() {
     return () => window.removeEventListener('loot-dropped-to-player', handleLootDrop);
   }, []);
 
+  useEffect(() => {
+    console.log(scene)
+  }, [scene])
+
   function handleExitGame(){
-    showToast({ variant: 'info', message: 'Welcome, adventurer!' });
+
+    // Debug
+    setScene(RandScene)
   }
 
   function handleItemTransferred(item: InventoryNode) {
@@ -126,7 +140,7 @@ export default function GamePage() {
             <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
           </div>
 
-          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${villageBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${getSceneBg(scene)})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
 
           {/* Enemy Encounter */}
           {enemy && (

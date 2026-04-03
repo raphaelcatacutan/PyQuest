@@ -7,10 +7,12 @@ import clearIcon from "@/public/assets/icons/clear.svg?url"
 import saveIcon from "@/public/assets/icons/save.svg?url"
 import openIcon from "@/public/assets/icons/open.svg?url"
 import ceBg from "@/public/assets/codeeditor_frame.jfif?url"
+import { useBeeStore } from "@/src/game/store/useBeeStore";
 
 
 export default function CodeEditor() {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const { bees, increaseBees } = useBeeStore();
 
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
     editorRef.current = editor;
@@ -36,6 +38,8 @@ export default function CodeEditor() {
     if (editorRef.current) {
       editorRef.current.setValue("");
     }
+    increaseBees();
+    console.log('Bees after increment:', bees);
   }
 
   // TODO: Save changes to File Tree only

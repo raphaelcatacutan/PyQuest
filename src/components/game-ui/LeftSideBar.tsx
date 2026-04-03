@@ -24,7 +24,7 @@ export default function LeftSideBar({ playerInventory, setPlayerInventory }: Lef
             <PlayerInventoryTree inventory={playerInventory} setInventory={setPlayerInventory}/>
           </div>
           <div className="pt-1 pb-1">
-            <img src={coinsIcon} className="w-7 h-7 inline"/> 
+            <img src={coinsIcon} draggable={false} className="w-7 h-7 inline"/> 
             {coin}
           </div>
         </div>

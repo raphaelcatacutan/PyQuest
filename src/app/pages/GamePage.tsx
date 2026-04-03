@@ -120,8 +120,10 @@ export default function GamePage() {
         </div>
 
         <div className="relative flex h-full w-full" style={{ backgroundImage: `url(${mapBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}> {/* scene */}
-          <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
-          <div className="absolute flex w-full h-full"> {/* Events render */}
+          <div className="absolute h-full z-99">
+            <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
+          </div>
+          
 
             {enemy && (
               <EnemyEncounter enemyName={"Slime"} health={80} maxHealth={100} enemyImg={slimeEnemy}/>
@@ -137,13 +139,13 @@ export default function GamePage() {
 
               <img src={slimeEnemy} className="w-80  justify-center items-center"></img>
             </div> */}
-          </div>
+          
           {!rightPanel ? 
-          <div className="absolute right-1 top-1">
+          <div className="absolute right-1 top-1 z-99">
             <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel(rightPanel => !rightPanel)}/> 
           </div>
           : 
-          <div className="absolute flex right-0 h-full">
+          <div className="absolute flex right-0 h-full z-99">
             <RightSideBar onClose={() => toggleRightPanel(false)} onItemTransferred={handleItemTransferred} lootInventoryRef={lootInventoryRef}/>
           </div>
           }

@@ -32,7 +32,7 @@ export default function Button({variant, text, icon, iconSize, onClick, alt_text
   return  (
     <button className={getStyle()} onClick={onClick} title={title}>
       {icon && typeof icon === 'string' ? (
-        <img src={icon} style={{ width: iconSize, height: iconSize }} alt={alt_text} />
+        <img src={icon} style={{ width: iconSize, height: iconSize }} draggable={false} alt={alt_text} />
       ) : (
         <span style={{ width: iconSize, height: iconSize }}>
           {icon}

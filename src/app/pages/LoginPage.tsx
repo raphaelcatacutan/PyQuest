@@ -5,15 +5,15 @@ import { useState, useEffect } from "react";
 import showToast from '@/src/components/ui/Toast'
 
 export default function LoginPage() {
-  const setUserId = usePlayerStore((state) => state.setUserId)
-
-  const player = usePlayerStore()
-  const navigate = useNavigate()
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  
+  const player = usePlayerStore()
+  const navigate = useNavigate()
+  
+  const setUserId = usePlayerStore((state) => state.setUserId)
   const canLogin = username.trim().length > 0 && password.length > 0;
+
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,10 +37,6 @@ export default function LoginPage() {
 
   function handleCreateAccount(){
     navigate('/signup')
-  }
-
-  function handleForgotPassword(){
-
   }
 
   return (

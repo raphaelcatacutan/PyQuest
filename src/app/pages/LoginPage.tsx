@@ -1,7 +1,15 @@
 import Button from "@/src/components/ui/Button";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { usePlayerStore } from "@/src/game/store";
+import { useState, useEffect } from "react";
+import showToast from '@/src/components/ui/Toast'
 
 export default function LoginPage() {
+  const setUserId = usePlayerStore((state) => state.setUserId)
+
+  const player = usePlayerStore()
+  const navigate = useNavigate()
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -9,8 +17,30 @@ export default function LoginPage() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    
     // TODO: hook this into auth/status logic
-    console.log({ username, password });
+    // TODO: Add authentication
+    
+    if (!player.user_id) {
+      showToast({ variant: "error", message: "Invalid Username and Password" });
+      return;
+    }
+    
+    setUserId(username);
+    navigate('/game');
+    showToast({ variant: "success", message: "Welcome, adventurer!" });
+  }
+
+  useEffect(() => {
+    console.log("Player ID updated in component:", player.user_id);
+  }, [player.user_id]); // This fires every time user_id changes
+
+  function handleCreateAccount(){
+    navigate('/signup')
+  }
+
+  function handleForgotPassword(){
+
   }
 
   return (
@@ -66,29 +96,20 @@ export default function LoginPage() {
               />
             </div>
             
-            <Button variant="login-btn" text="Begin Adventure"/>
-            {/* <button
+            <button
               type="submit"
-              disabled={!canLogin}
-              className="w-full rounded-xl bg-yellow-300 px-4 py-3 font-semibold text-gray-400 hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
+              className="w-full rounded-xl bg-zinc-700 px-4 py-3 font-semibold text-gray-400  cursor-pointer hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
             >
               Begin Adventure
-            </button> */}
+            </button>
 
-            <div className="flex items-center justify-between text-xs text-gray-400">
+            <div className="flex items-center justify-center text-xs text-gray-400">
               <button
                 type="button"
-                className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
-                onClick={() => alert("Create character coming soon!")}
+                className="underline decoration-white/20 underline-offset-4 cursor-pointer hover:text-gray-200"
+                onClick={handleCreateAccount}
               >
                 Create Account
-              </button>
-              <button
-                type="button"
-                className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
-                onClick={() => alert("Forgot password coming soon!")}
-              >
-                Forgot password?
               </button>
             </div>
           </form>

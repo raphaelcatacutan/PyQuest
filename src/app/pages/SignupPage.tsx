@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { usePlayerStore } from "@/src/game/store";
+import showToast from "@/src/components/ui/Toast";
 
 export default function SignupPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate()
+  const { username, setUsername } = usePlayerStore()
+  const { password, setPassword } = usePlayerStore()
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const canSignup =
@@ -13,8 +17,14 @@ export default function SignupPage() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     // TODO: hook this into your auth/status logic
-    console.log({ username, password });
+    if (!canSignup){
+      showToast({ variant: "error", message: "Please recheck each field"})
+    }
+    
+    showToast({ variant: "success", message: "Account creation successful! Please login again" });
+    navigate('/login');
   }
 
   return (
@@ -86,8 +96,8 @@ export default function SignupPage() {
 
             <button
               type="submit"
-              disabled={!canSignup}
-              className="w-full rounded-xl bg-yellow-300 px-4 py-3 font-semibold text-gray-400 hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
+              // disabled={!canSignup}
+              className="w-full rounded-xl bg-yellow-300 px-4 py-3 font-semibold text-gray-400 cursor-pointer hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
             >
               Create Character
             </button>

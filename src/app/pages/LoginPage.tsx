@@ -1,20 +1,45 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { usePlayerStore } from "@/src/game/store";
+import { useState, useEffect } from "react";
+import showToast from '@/src/components/ui/Toast'
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  
+  const player = usePlayerStore()
+  const navigate = useNavigate()
+  
+  const setUserId = usePlayerStore((state) => state.setUserId)
   const canLogin = username.trim().length > 0 && password.length > 0;
+
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // TODO: hook this into your auth/status logic
-    console.log({ username, password });
+    
+    // TODO: hook this into auth/status logic
+    // TODO: Add authentication
+    
+    if (!player.user_id) {
+      showToast({ variant: "error", message: "Invalid Username and Password" });
+      return;
+    }
+    
+    setUserId(username);
+    navigate('/game');
+    showToast({ variant: "success", message: "Welcome, adventurer!" });
+  }
+
+  useEffect(() => {
+    console.log("Player ID updated in component:", player.user_id);
+  }, [player.user_id]); // This fires every time user_id changes
+
+  function handleCreateAccount(){
+    navigate('/signup')
   }
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
-      {/* Optional vignette overlay (works great on top of your wallpaper parent) */}
       <div className="absolute inset-0"></div>
 
       {/* Center container */}
@@ -65,29 +90,21 @@ export default function LoginPage() {
                 className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-input-focus/60 focus:ring-2 focus:ring-yellow-200/20"
               />
             </div>
-
+            
             <button
               type="submit"
-              disabled={!canLogin}
-              className="w-full rounded-xl bg-yellow-300 px-4 py-3 font-semibold text-gray-400 hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
+              className="w-full rounded-xl bg-zinc-700 px-4 py-3 font-semibold text-gray-400  cursor-pointer hover:text-gray-200 transition hover:border-input-focus active:translate-y-px disabled:cursor-not-allowed"
             >
               Begin Adventure
             </button>
 
-            <div className="flex items-center justify-between text-xs text-gray-400">
+            <div className="flex items-center justify-center text-xs text-gray-400">
               <button
                 type="button"
-                className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
-                onClick={() => alert("Create character coming soon!")}
+                className="underline decoration-white/20 underline-offset-4 cursor-pointer hover:text-gray-200"
+                onClick={handleCreateAccount}
               >
-                Create character
-              </button>
-              <button
-                type="button"
-                className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
-                onClick={() => alert("Forgot password coming soon!")}
-              >
-                Forgot password?
+                Create Account
               </button>
             </div>
           </form>

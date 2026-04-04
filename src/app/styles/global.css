@@ -17,6 +17,8 @@
   --color-secondary: #6a7282;         /* light gray */
   --color-white-override: #eef2ff;    /* not too white*/
   --color-focus: #fff085;             /* gold border */
+
+  --color-header: #131315;
 }
 
 :root {
@@ -60,7 +62,7 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
+/* 
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -78,7 +80,7 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 
 @media (prefers-color-scheme: light) {
   :root {

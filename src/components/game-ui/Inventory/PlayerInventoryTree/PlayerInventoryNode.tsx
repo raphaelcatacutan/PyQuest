@@ -1,17 +1,17 @@
 import { NodeRendererProps } from "react-arborist";
 import { useState } from "react";
-import { 
-  InventoryNode,
-} from "@/src/domain/inventory";
+import { InventoryNode } from "@/src/domain/inventory/inventory.types";
 import Button from "../../../ui/Button";
-import openFolderIcon from "@/public/assets/icons/open_folder.svg?url"
-import closedFolderIcon from "@/public/assets/icons/closed_folder.svg?url"
-import consumableIcon from "@/public/assets/icons/consumable.svg?url"
-import fileIcon from "@/public/assets/icons/file.svg?url"
-import deleteIcon from "@/public/assets/icons/delete.svg?url"
-import renameIcon from "@/public/assets/icons/rename.svg?url"
-import addFolderIcon from "@/public/assets/icons/add_folder.svg?url"
-import addFileIcon from "@/public/assets/icons/add_file.svg?url"
+import {
+  openFolderIcon,
+  consumableIcon,
+  fileIcon,
+  deleteIcon,
+  renameIcon,
+  addFolderIcon,
+  addFileIcon,
+  closedFolderIcon
+} from '@/src/assets'
 
 interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onDelete: (nodeId: string) => void;

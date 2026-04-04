@@ -1,10 +1,12 @@
 import { PlayerInventoryTree } from "@/src/components/game-ui/Inventory/PlayerInventoryTree/PlayerInventoryTree"
 import { useState } from "react"
 import Button from "../ui/Button"
-import { InventoryNode } from "@/src/domain/inventory"
-import bagIcon from "@/public/assets/icons/bag.svg?url" 
-import coinsIcon from "@/public/assets/icons/coins.svg?url"
-import leatherBg from "@/public/assets/inventory_bg.png" // adjust path to your image 
+import { InventoryNode } from "@/src/domain/inventory/inventory.types"
+import {
+  bagIcon,
+  coinsIcon,
+  playerInventoryBg,
+} from '@/src/assets'
 
 interface LeftSideBarProps {
   playerInventory: InventoryNode[];
@@ -18,7 +20,7 @@ export default function LeftSideBar({ playerInventory, setPlayerInventory }: Lef
 
   return (
     <div className="relative h-full flex flex-row">
-      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${inv ? 'max-w-96' : 'max-w-0'}`} style={{ backgroundImage: `url(${leatherBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}>
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${inv ? 'max-w-96' : 'max-w-0'}`} style={{ backgroundImage: `url(${playerInventoryBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}>
         <div className="relative p-5 h-full flex flex-col">
           <div className="flex-1">
             <PlayerInventoryTree inventory={playerInventory} setInventory={setPlayerInventory}/>

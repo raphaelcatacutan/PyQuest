@@ -1,12 +1,15 @@
-import { InventoryNode } from "@/src/domain/inventory";
+import { InventoryNode } from "@/src/domain/inventory/inventory.types";
 import { NodeRendererProps } from "react-arborist";
 import { useState } from "react";
 import Button from "../../../ui/Button";
-import buyIcon from "@/public/assets/icons/buy.svg?url"
-import fileIcon from "@/public/assets/icons/file.svg?url"
-import consumableIcon from "@/public/assets/icons/consumable.svg?url"
-import openFolderIcon from "@/public/assets/icons/open_folder.svg?url"
-import closedFolderIcon from "@/public/assets/icons/closed_folder.svg?url"
+import {
+  buyIcon,
+  fileIcon,
+  consumableIcon,
+  openFolderIcon,
+  closedFolderIcon,
+
+} from '@/src/assets'
 
 interface MerchantInventoryNodeProps extends NodeRendererProps<InventoryNode>{
   onSelect: (nodeId: string) => void;

@@ -1,4 +1,3 @@
-import Button from "@/src/components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "@/src/game/store";
 import { useState, useEffect } from "react";

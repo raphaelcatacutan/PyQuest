@@ -1,13 +1,15 @@
-import { InventoryNode } from "@/src/domain/inventory";
+import { InventoryNode } from "@/src/domain/inventory/inventory.types";
 import { NodeRendererProps } from "react-arborist";
 import { useState } from "react";
 import Button from "../../../ui/Button";
-import deleteIcon from "@/public/assets/icons/delete.svg?url"
-import fileIcon from "@/public/assets/icons/file.svg?url"
-import transferIcon from "@/public/assets/icons/transfer.svg?url"
-import consumableIcon from "@/public/assets/icons/consumable.svg?url"
-import openFolderIcon from "@/public/assets/icons/open_folder.svg?url"
-import closedFolderIcon from "@/public/assets/icons/closed_folder.svg?url"
+import {
+  deleteIcon,
+  fileIcon,
+  transferIcon,
+  consumableIcon,
+  openFolderIcon,
+  closedFolderIcon,
+} from '@/src/assets'
 
 interface LootInventoryNodeProps extends NodeRendererProps<InventoryNode>{
   onTrash: (nodeIds: string[]) => void;

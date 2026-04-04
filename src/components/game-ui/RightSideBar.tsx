@@ -1,9 +1,11 @@
 import Button from "../ui/Button";
-import closeIcon from "@/public/assets/icons/close.svg?url"
-import lootBg from "@/public/assets/loot_bg.png?url"
+import {
+  closeIcon,
+  lootBg,
+} from '@/src/assets'
 import Terminal from "./Terminal";
 import { LootInventoryTree } from "@/src/components/game-ui/Inventory/LootInventoryTree/LootInventoryTree";
-import { InventoryNode } from "@/src/domain/inventory";
+import { InventoryNode } from "@/src/domain/inventory/inventory.types";
 import { useState, Ref } from "react";
 import { MerchantInventoryTree } from "./Inventory/MerchantInventoryTree/MerchantInventoryTree";
 

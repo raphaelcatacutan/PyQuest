@@ -1,12 +1,11 @@
 import Editor, { OnMount } from "@monaco-editor/react";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import * as monaco from 'monaco-editor';
 import Button from "../ui/Button";  
-import playIcon from "@/public/assets/icons/play.svg?url"
-import clearIcon from "@/public/assets/icons/clear.svg?url"
-import saveIcon from "@/public/assets/icons/save.svg?url"
-import openIcon from "@/public/assets/icons/open.svg?url"
-import ceBg from "@/public/assets/codeeditor_frame.jfif?url"
+import {
+  playIcon,
+  clearIcon,
+} from '@/src/assets'
 import { useBeeStore } from "@/src/game/store/useBeeStore";
 
 

@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react"
-import { useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
-import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
-import exitIcon from "@/public/assets/icons/exit.svg?url"
-import rightPanelIcon from "@/public/assets/icons/right_panel.svg?url"
 import showToast from "@/src/components/ui/Toast"
-import { InventoryNode } from "@/src/domain/inventory"
-import dmgHud from "@/public/assets/pain.png?url"
-import slimeEnemy from "@/public/assets/enemies/slime.png?url"
 import EnemyEncounter from "@/src/components/events/EnemyEncounter"
+import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
+import { 
+  exitIcon,
+  rightPanelIcon,
+  
+  skeletonHeadEnemy,
+  slimeEnemy,
+  
+  painHud,
+} from '@/src/assets'
+import { InventoryNode } from "@/src/domain/inventory/inventory.types"
 import { useSceneStore, type SceneName} from "@/src/game/store/sceneStore"
 
 const InitialPlayerInventory: InventoryNode[] = [
@@ -151,7 +155,7 @@ export default function GamePage() {
 
           {/* Dmg HUD */}
           {dmg && (
-            <div className="absolute w-full h-full z-2 opacity-50 transition" style={{ backgroundImage: `url(${dmgHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+            <div className="absolute w-full h-full z-2 opacity-50 transition" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
           )}
 
           {!rightPanel ? 

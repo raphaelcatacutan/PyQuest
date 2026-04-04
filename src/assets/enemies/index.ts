@@ -1,7 +1,7 @@
-import skeletonHead from "./skeleton_head.png?url"
-import slime from "./slime.png?url"
+import skeletonHeadEnemy from "./skeleton_head.png?url"
+import slimeEnemy from "./slime.png?url"
 
 export { 
-  skeletonHead, 
-  slime 
+  skeletonHeadEnemy, 
+  slimeEnemy
 }

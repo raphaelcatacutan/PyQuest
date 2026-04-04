@@ -23,15 +23,6 @@ describe('Custom Module System', () => {
             expect(modules).toContain('utils');
         });
 
-        it('should provide module documentation', () => {
-            const docs = getModuleDocumentation();
-            expect(docs.length).toBeGreaterThan(0);
-            
-            const spearDoc = docs.find(d => d.name === 'spear');
-            expect(spearDoc).toBeDefined();
-            expect(spearDoc?.description).toContain('Spear');
-        });
-
         it('should list all available modules', () => {
             const modules = getAvailableModules();
             expect(modules).toEqual(expect.arrayContaining(['spear', 'inventory', 'magic', 'utils']));

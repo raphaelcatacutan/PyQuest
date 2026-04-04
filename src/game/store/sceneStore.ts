@@ -1,7 +1,9 @@
 import { create } from "zustand";
-import villageBg from "@/public/assets/maps/village1.png?url"
-import labyrinthBg from "@/public/assets/maps/labyrinth.png?url"
-import dungeonBg from "@/public/assets/maps/dungeon.png?url"
+import {
+  villageBg,
+  labyrinthBg,
+  dungeonBg,
+} from '@/src/assets'
 
 /**
  * 

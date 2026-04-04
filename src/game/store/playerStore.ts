@@ -7,7 +7,7 @@ import { create } from 'zustand'
 
 // TODO: Plan how to store Inventory Tree attr
 interface PlayerStoreProps {
-  user_id: string;
+  user_id: string | null;
   username: string;
   password: string;
   hp: number;
@@ -17,6 +17,7 @@ interface PlayerStoreProps {
   level: number;
   XP: number;
   maxXP: number;
+  isDamaged: boolean;
   setUserId: (user_id: string) => void;
   setUsername: (username: string) => void;
   setPassword: (pass: string) => void;
@@ -24,6 +25,9 @@ interface PlayerStoreProps {
   gainHealth: (amount: number) => void;
   gainXP: (amount: number) => void;
   gainEnergy: (amount: number) => void;
+  loseEnergy: (amount: number) => void;
+  toggleIsDamaged: () => void;
+  logOut: () => void;
 }
 
 export const usePlayerStore = create<PlayerStoreProps>((set) => ({
@@ -37,11 +41,15 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   level: 0,
   XP: 0,
   maxXP: 0,
-  setUserId: (user_id) => set((state) => ({ user_id: user_id })),
-  setUsername: (username) => set((state) => ({ username: username })),
-  setPassword: (pass) => set((state) => ({ password: pass })),
+  isDamaged: false,
+  setUserId: (user_id) => set(({ user_id: user_id })),
+  setUsername: (username) => set(({ username: username })),
+  setPassword: (pass) => set(({ password: pass })),
   takeDamage: (amount) => set((state) => ({ hp: state.hp - amount })),
   gainHealth: (amount) => set((state) => ({ hp: state.hp + amount })),
   gainXP: (amount) => set((state) => ({ XP: state.XP + amount })),
   gainEnergy: (amount) => set((state) => ({ energy: state.energy + amount})),
+  loseEnergy: (amount) => set((state) => ({ energy: state.energy - amount })),
+  toggleIsDamaged: () => set((state) => ({ isDamaged: !state.isDamaged })),
+  logOut: () => set({ user_id: null })
 }))

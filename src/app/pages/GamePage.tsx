@@ -9,14 +9,15 @@ import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import { 
   exitIcon,
   rightPanelIcon,
-  
   skeletonHeadEnemy,
   slimeEnemy,
-  
   painHud,
 } from '@/src/assets'
 import { InventoryNode } from "@/src/domain/inventory/inventory.types"
 import { useSceneStore, type SceneName} from "@/src/game/store/sceneStore"
+import { useGameStore } from "@/src/game/store/gameStore"
+import { usePlayerStore } from "@/src/game/store"
+import { useShallow } from "zustand/shallow"
 
 const InitialPlayerInventory: InventoryNode[] = [
   { 
@@ -36,16 +37,48 @@ const InitialPlayerInventory: InventoryNode[] = [
 
 export default function GamePage() {
   const { scene, setScene, getSceneBg } = useSceneStore()
+  const { inVillage, toggleInVillage } = useGameStore(
+    useShallow((state) => ({
+      inVillage: state.inVillage,
+      toggleInVillage: state.toggleInVillage
+    }))
+  )
+  // const { isMerchant, setIsMerchant } = useGameStore(
+  //   useShallow((state) => ({
+  //     isMerchant: state.isMerchant,
+  //     setIsMerchant: state.setIsMerchant
+  //   }))
+  // )
+  const { isThereEnemy, toggleIsThereEnemy } = useGameStore(
+    useShallow((state) => ({
+      isThereEnemy: state.isThereEnemy,
+      toggleIsThereEnemy: state.toggleIsThereEnemy
+    }))
+  )
+  const { rightPanel, toggleRightPanel } = useGameStore(
+    useShallow((state) => ({
+      rightPanel: state.rightPanel,
+      toggleRightPanel: state.toggleRightPanel
+    }))
+  )
+  const { isDamaged, toggleIsDamaged } = usePlayerStore(
+    useShallow((state) => ({
+      isDamaged: state.isDamaged,
+      toggleIsDamaged: state.toggleIsDamaged
+    }))
+  )
+  // const isThereEnemy = useGameStore((state) => state.isThereEnemy)
+  // const rightPanel = useGameStore((state) => state.rightPanel)
 
   const bg: Array<SceneName> = ['village', 'labyrinth'] 
   const RandScene = bg[Math.floor(Math.random() * bg.length)]
 
-  const [rightPanel, toggleRightPanel] = useState(false)
+  // const [rightPanel, toggleRightPanel] = useState(false)
   const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
-  const [enemy, setEnemy] = useState(false)
-  const [dmg, isDmg] = useState(false)
-  const [loot, isLoot] = useState(true)
-  const [inVillage, setInVillage] = useState(true)
+  // const [enemy, setEnemy] = useState(false)
+  // const [dmg, isDmg] = useState(false)
+  // const [loot, isLoot] = useState(true)
+  // const [inVillage, setInVillage] = useState(true)
   // const { bees, increaseBees } = useBeeStore()
   
   const lootInventoryRef = useRef<{ 
@@ -87,7 +120,9 @@ export default function GamePage() {
   function handleExitGame(){
 
     // Debug
-    setScene(RandScene)
+    // toggleIsDamaged()
+    toggleIsThereEnemy()
+    // setScene(RandScene)
   }
 
   function handleItemTransferred(item: InventoryNode) {
@@ -128,7 +163,10 @@ export default function GamePage() {
 
   return (
     <div className="relative flex flex-col w-full h-full">
-
+      {/* Dmg HUD */}
+      {isDamaged && (
+        <div className="absolute w-full h-full z-100 opacity-50 transition pointer-events-none" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+      )}
       <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
         <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
       </div> 
@@ -140,36 +178,30 @@ export default function GamePage() {
         </div>
 
         <div className="relative flex h-full w-full"> {/* scene */}
-          <div className="absolute h-full z-99">
+          <div className="absolute h-full z-50">
             <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
           </div>
 
           <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${getSceneBg(scene)})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
 
           {/* Enemy Encounter */}
-          {enemy && (
+          {isThereEnemy && (
             <div className="absolute flex h-full w-full z-1"> 
               <EnemyEncounter enemyName={"Slime"} health={80} maxHealth={100} enemyImg={slimeEnemy}/>
             </div>
           )}
 
-          {/* Dmg HUD */}
-          {dmg && (
-            <div className="absolute w-full h-full z-2 opacity-50 transition" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
-          )}
-
           {!rightPanel ? 
-          <div className="absolute right-1 top-1 z-99">
-            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel(rightPanel => !rightPanel)}/> 
+          <div className="absolute right-1 top-1 z-50">
+            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel()}/> 
           </div>
           : 
-          <div className="absolute flex right-0 h-full z-99">
+          <div className="absolute flex right-0 h-full z-50">
             <RightSideBar 
-              onClose={() => toggleRightPanel(false)} 
+              onClose={() => toggleRightPanel()} 
               onItemTransferred={handleItemTransferred} 
               lootInventoryRef={lootInventoryRef}
               atVillage={inVillage}
-
               />
           </div>
           }

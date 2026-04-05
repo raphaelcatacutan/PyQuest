@@ -19,7 +19,7 @@ import { useGameStore } from "@/src/game/store/gameStore"
 import { usePlayerStore } from "@/src/game/store"
 import { useEnemyStore } from "@/src/game/store/enemyStore"
 import { useShallow } from "zustand/shallow"
-import { SceneNameTypes } from "@/src/game/store/scene.types"
+import { SceneNameTypes } from "@/src/game/types/scene.types"
 import Test from "@/src/components/Test"
 
 const InitialPlayerInventory: InventoryNode[] = [

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { SceneNameTypes } from "./scene.types";
+import { SceneNameTypes } from "../types/scene.types";
 import { SceneBg } from "../data/scenes";
 import { villageBg } from "@/src/assets";
 

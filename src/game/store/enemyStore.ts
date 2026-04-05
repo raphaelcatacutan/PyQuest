@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { Enemy, Boss } from "./enemy.types";
+import { Enemy, Boss } from "../types/enemy.types";
 
 /**
  * 

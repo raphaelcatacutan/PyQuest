@@ -1,4 +1,4 @@
-import { SceneNameTypes } from '../store/scene.types'
+import { SceneNameTypes } from '../types/scene.types'
 import {
   villageBg,
   labyrinthBg,

@@ -1,5 +1,5 @@
-import { BossSceneTypes, EnemySceneTypes, SceneNameTypes } from '../store/scene.types';
-import { Enemy } from '../store/enemy.types';
+import { BossSceneTypes, EnemySceneTypes, SceneNameTypes } from '../types/scene.types';
+import { Enemy } from '../types/enemy.types';
 import { 
   slimeEnemy, 
   skeletonHeadEnemy 
@@ -11,7 +11,7 @@ import {
  */
 
 export const ForestEnemies: Record<string, Enemy> = {
-  
+
 }
 
 export const DungeonEnemies: Record<string, Enemy> = {

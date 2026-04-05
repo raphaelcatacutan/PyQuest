@@ -14,11 +14,13 @@ import {
   painHud,
 } from '@/src/assets'
 import { InventoryNode } from "@/src/domain/inventory/inventory.types"
-import { useSceneStore, type SceneName} from "@/src/game/store/sceneStore"
+import { useSceneStore } from "@/src/game/store/sceneStore"
 import { useGameStore } from "@/src/game/store/gameStore"
 import { usePlayerStore } from "@/src/game/store"
 import { useEnemyStore } from "@/src/game/store/enemyStore"
 import { useShallow } from "zustand/shallow"
+import { SceneNameTypes } from "@/src/game/store/scene.types"
+import Test from "@/src/components/Test"
 
 const InitialPlayerInventory: InventoryNode[] = [
   { 
@@ -37,6 +39,7 @@ const InitialPlayerInventory: InventoryNode[] = [
 
 
 export default function GamePage() {
+  const takeDamage = useEnemyStore(s => s.takeDamage)
   const { scene, setScene, getSceneBg } = useSceneStore()
   const { inVillage, toggleInVillage } = useGameStore(
     useShallow((state) => ({
@@ -68,21 +71,14 @@ export default function GamePage() {
       toggleIsDamaged: state.toggleIsDamaged
     }))
   )
-  const spawnEnemy = useEnemyStore((state) => state.spawnEnemy)
   
   // const isThereEnemy = useGameStore((state) => state.isThereEnemy)
   // const rightPanel = useGameStore((state) => state.rightPanel)
 
-  const bg: Array<SceneName> = ['village', 'labyrinth'] 
+  const bg: Array<SceneNameTypes> = ['village', 'labyrinth'] 
   const RandScene = bg[Math.floor(Math.random() * bg.length)]
 
-  // const [rightPanel, toggleRightPanel] = useState(false)
   const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
-  // const [enemy, setEnemy] = useState(false)
-  // const [dmg, isDmg] = useState(false)
-  // const [loot, isLoot] = useState(true)
-  // const [inVillage, setInVillage] = useState(true)
-  // const { bees, increaseBees } = useBeeStore()
   
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -173,6 +169,12 @@ export default function GamePage() {
       <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
         <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
       </div> 
+      
+      {/* DEBUGGER */}
+      <Test/>
+        {/* <div className='absolute'>
+          <button onClick={handleTest}>Test</button>
+        </div> */}
 
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 
@@ -190,7 +192,7 @@ export default function GamePage() {
           {/* Enemy Encounter */}
           {isThereEnemy && (
             <div className="absolute flex h-full w-full z-1"> 
-              <EnemyEncounter enemyName={"Slime"} health={80} maxHealth={100} enemyImg={slimeEnemy}/>
+              <EnemyEncounter/>
             </div>
           )}
 

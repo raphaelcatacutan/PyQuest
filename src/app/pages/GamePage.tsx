@@ -37,6 +37,7 @@ const InitialPlayerInventory: InventoryNode[] = [
   { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
 ];
 
+// TODO: Add Player HP UI
 
 export default function GamePage() {
   const takeDamage = useEnemyStore(s => s.takeDamage)

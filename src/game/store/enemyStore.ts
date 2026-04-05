@@ -1,12 +1,11 @@
 import { create } from "zustand"
-import { Enemy, Boss } from "../types/enemy.types";
+import { Enemy } from "../types/enemy.types";
 
 /**
  * 
  *  Enemy State
  */
 
-// Update your Store Props to use it
 interface EnemyStoreProps extends Enemy{
   spawnEnemy: (enemy: Enemy) => void; // Accepts ANY enemy
   takeDamage: (amount: number) => void;
@@ -23,7 +22,8 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   enemy_energy: 0,
   enemy_maxEnergy: 0,
   enemy_skills: [],
-
+  // TODO: Add Enemy Base Dmg
+  // TODO: Add Enemy Crit Chance
   spawnEnemy: (enemy) => set({ ...enemy }),
   takeDamage: (amount) => set((state) => ({ 
     enemy_hp: Math.max(0, state.enemy_hp - amount) 

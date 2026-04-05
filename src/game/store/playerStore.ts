@@ -45,7 +45,7 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   setUserId: (user_id) => set(({ user_id: user_id })),
   setUsername: (username) => set(({ username: username })),
   setPassword: (pass) => set(({ password: pass })),
-  takeDamage: (amount) => set((state) => ({ hp: state.hp - amount })),
+  takeDamage: (amount) => set((state) => ({ hp: Math.max(0, state.hp - amount) })),
   gainHealth: (amount) => set((state) => ({ hp: state.hp + amount })),
   gainXP: (amount) => set((state) => ({ XP: state.XP + amount })),
   gainEnergy: (amount) => set((state) => ({ energy: state.energy + amount})),

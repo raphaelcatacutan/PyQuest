@@ -17,6 +17,7 @@ import { InventoryNode } from "@/src/domain/inventory/inventory.types"
 import { useSceneStore, type SceneName} from "@/src/game/store/sceneStore"
 import { useGameStore } from "@/src/game/store/gameStore"
 import { usePlayerStore } from "@/src/game/store"
+import { useEnemyStore } from "@/src/game/store/enemyStore"
 import { useShallow } from "zustand/shallow"
 
 const InitialPlayerInventory: InventoryNode[] = [
@@ -67,6 +68,8 @@ export default function GamePage() {
       toggleIsDamaged: state.toggleIsDamaged
     }))
   )
+  const spawnEnemy = useEnemyStore((state) => state.spawnEnemy)
+  
   // const isThereEnemy = useGameStore((state) => state.isThereEnemy)
   // const rightPanel = useGameStore((state) => state.rightPanel)
 

@@ -17,6 +17,7 @@ export const Armors: Record<string, Armor> = {
     armorImg: '', // TODO: To be added
     class: "Warrior",
     rarity: "Common",
+    slotType: "body",
     
     def: 1,
     dmgReduction: 0.1,

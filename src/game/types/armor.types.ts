@@ -1,5 +1,7 @@
 import { itemClass, itemRarity } from "./item.types";
 
+type SlotType = 'head' | 'body' | ''
+
 export interface Armor {
   id: string;
   filename: string;         // wooden_armor (+ .py?)
@@ -8,6 +10,7 @@ export interface Armor {
   armorImg: string;         // 20x20?
   class: itemClass;        
   rarity: itemRarity;
+  slotType: SlotType;
   
   def: number;              // [0, 100]
   dmgReduction: number;     // [0, 1]

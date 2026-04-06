@@ -20,6 +20,7 @@ export const useArmorStore = create<ArmorStoreProps>((set) => ({
   armorImg: "",
   class: "",
   rarity: "Common",
+  slotType: "",
 
   def: 0,
   dmgReduction: 0.0,
@@ -49,6 +50,7 @@ export const useArmorStore = create<ArmorStoreProps>((set) => ({
     armorImg: "",
     class: "",
     rarity: "Common",
+    slotType: "",
 
     def: 0,
     dmgReduction: 0.0,

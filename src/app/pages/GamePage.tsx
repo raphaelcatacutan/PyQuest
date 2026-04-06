@@ -10,8 +10,6 @@ import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import { 
   exitIcon,
   rightPanelIcon,
-  skeletonHeadEnemy,
-  slimeEnemy,
   painHud,
 } from '@/src/assets'
 import { 
@@ -34,7 +32,7 @@ export default function GamePage() {
   const takeDamage = useEnemyStore(s => s.takeDamage)
   const displayDialogueBox = useDialogueBoxStore(s => s.displayDialogueBox)
   const toggleDisplayDialogueBox = useDialogueBoxStore(s => s.toggleDisplayDialogueBox)
-  const { scene, setScene, getSceneBg } = useSceneStore()
+  const { scene, sceneBg, setScene } = useSceneStore()
   const { inVillage, toggleInVillage } = useGameStore(
     useShallow((state) => ({
       inVillage: state.inVillage,
@@ -76,9 +74,6 @@ export default function GamePage() {
       moveInventoryItem: s.moveInventoryItem,
     }))
   )
-  
-  // const isThereEnemy = useGameStore((state) => state.isThereEnemy)
-  // const rightPanel = useGameStore((state) => state.rightPanel)
 
   const bg: Array<SceneNameTypes> = ['village', 'labyrinth'] 
   const RandScene = bg[Math.floor(Math.random() * bg.length)]
@@ -122,9 +117,9 @@ export default function GamePage() {
   function handleExitGame(){
 
     // Debug
-    toggleDisplayDialogueBox()
+    // toggleDisplayDialogueBox()
     // toggleIsDamaged()
-    // navigate('/login')
+    navigate('/login')
     // toggleIsThereEnemy()
     // setScene(RandScene)
   }
@@ -176,7 +171,7 @@ export default function GamePage() {
             />
           </div>
 
-          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${getSceneBg(scene)})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${sceneBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
 
           {/* Enemy Encounter */}
           {isThereEnemy && (

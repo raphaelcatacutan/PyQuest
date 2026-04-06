@@ -10,15 +10,9 @@ import {
  *  Scene Database
  */
 
-export const SceneBg: Record<SceneNameTypes, { imgBg: string }> = {
-  village: {
-    imgBg: villageBg
-  },
-  labyrinth: {
-    imgBg: labyrinthBg
-  },
-  dungeon: {
-    imgBg: dungeonBg
-  }
+export const Scene: Record<SceneNameTypes, string> = {
+  village: villageBg,
+  labyrinth: labyrinthBg,
+  dungeon: dungeonBg,
   // TODO: Follow-up other scenes 
 }

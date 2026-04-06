@@ -2,6 +2,7 @@
 interface Skill {
   name: string;
   dmg: number;
+  // energyCost: number;
   // TODO: Confirm Skill attributes
 }
 

@@ -32,6 +32,8 @@ export const useWeaponStore = create<WeaponStoreProps>((set) => ({
   atkSpeedBonus: 0,
 
   dropRate: 0,
+  sellCost: 0,
+  buyCost: 0,
 
   setWeapon: (weapon) => ({ ...weapon }),
   clearWeapon: () => ({
@@ -55,5 +57,7 @@ export const useWeaponStore = create<WeaponStoreProps>((set) => ({
     atkSpeedBonus: 0,
 
     dropRate: 0,
+    sellCost: 0,
+    buyCost: 0,
   })
 }))

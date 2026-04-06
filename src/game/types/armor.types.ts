@@ -25,4 +25,6 @@ export interface Armor {
   defBonus: number;         // [0, 1]
   
   dropRate: number;         // [0, 100]
+  sellCost: number;
+  buyCost: number;
 }

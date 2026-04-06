@@ -30,5 +30,7 @@ export const Weapons: Record<string, Weapon> = {
     atkSpeedBonus: 0,
 
     dropRate: 0,
+    sellCost: 0,
+    buyCost: 0,
   }
 }

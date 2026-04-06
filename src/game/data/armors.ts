@@ -34,6 +34,8 @@ export const Armors: Record<string, Armor> = {
     defBonus: 0,
     
     dropRate: 90,
+    sellCost: 0,
+    buyCost: 0,
   }
   // TODO: Add more armors
 }

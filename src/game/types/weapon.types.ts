@@ -26,4 +26,6 @@ export interface Weapon {
   // TODO: Add inflictions
 
   dropRate: number;     // [0, 100]
+  sellCost: number;
+  buyCost: number;
 }

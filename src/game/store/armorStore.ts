@@ -37,6 +37,8 @@ export const useArmorStore = create<ArmorStoreProps>((set) => ({
   defBonus: 0,
   
   dropRate: 0,
+  sellCost: 0,
+  buyCost: 0,
 
   setArmor: (armor) => set({ ...armor }),
   clearArmor: () => set({ 
@@ -62,6 +64,9 @@ export const useArmorStore = create<ArmorStoreProps>((set) => ({
     atkSpeedBonus: 0,
     healthBonus: 0,
     defBonus: 0,
+    
     dropRate: 0,
+    sellCost: 0,
+    buyCost: 0,
   }),
 })) 

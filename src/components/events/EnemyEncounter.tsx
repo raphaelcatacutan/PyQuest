@@ -22,35 +22,35 @@ export default function EnemyEncounter(){
   // const toggleIsThereEnemy = useGameStore((state) => state.toggleIsThereEnemy)
   const spawnEnemy = useEnemyStore((state) => state.spawnEnemy)
   const clearEnemy = useEnemyStore((state) => state.clearEnemy)
-  const { enemy_id, enemy_name, enemyImg, enemy_skills } = useEnemyStore(
+  const { id, name, enemyImg, skills } = useEnemyStore(
     useShallow((s) => ({
-      enemy_id: s.enemy_id,
-      enemy_name: s.enemy_name,
+      id: s.id,
+      name: s.name,
       enemyImg: s.enemyImg,
-      enemy_skills: s.enemy_skills
+      skills: s.skills
     }))
   )
-  const { enemy_hp, takeDamage} = useEnemyStore(
+  const { hp, takeDamage} = useEnemyStore(
     useShallow((state) => ({
-      enemy_hp: state.enemy_hp,
+      hp: state.hp,
       takeDamage: state.takeDamage
     }))
   )
-  const enemy_maxHp = useEnemyStore((state) => state.enemy_maxHp)
-  const { enemy_energy, takeEnergyCost } = useEnemyStore(
+  const maxHp = useEnemyStore((state) => state.maxHp)
+  const { energy, takeEnergyCost } = useEnemyStore(
     useShallow((state) => ({
-      enemy_energy: state.enemy_energy,
+      energy: state.energy,
       takeEnergyCost: state.takeEnergyCost
     }))
   )
-  const enemy_maxEnergy = useEnemyStore((state) => state.enemy_maxEnergy)
+  const maxEnergy = useEnemyStore((state) => state.maxEnergy)
 
-  const healthPercentage = (enemy_hp / enemy_maxHp) * 100;
-  const energyPercentage = (enemy_energy / enemy_maxEnergy) * 100;
+  const healthPercentage = (hp / maxHp) * 100;
+  const energyPercentage = (energy / maxEnergy) * 100;
 
   useEffect(() => {
     if (!isThereEnemy) return;
-    if (enemy_id) return; // Don't spawn if already spawned
+    if (id) return; // Don't spawn if already spawned
 
     const epsilon = 0.5
     if (Math.random() <= epsilon){ 
@@ -72,22 +72,22 @@ export default function EnemyEncounter(){
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       spawnEnemy(enemies[randomKey])
     }
-  }, [isThereEnemy, scene, spawnEnemy, enemy_id])
+  }, [isThereEnemy, scene, spawnEnemy, id])
 
   useEffect(() => {
-    if (enemy_hp <= 0) {
-      console.log(`Enemy Defeated: ${enemy_name}`)
+    if (hp <= 0) {
+      console.log(`Enemy Defeated: ${name}`)
       toggleIsThereEnemy()
       clearEnemy()
     }
-  }, [enemy_hp, enemy_name, toggleIsThereEnemy, clearEnemy])
+  }, [hp, name, toggleIsThereEnemy, clearEnemy])
 
   return (
     <> 
       {/* Enemy encounter */}
       <div className="absolute flex flex-col w-full h-full items-center">
         <span className="text-4xl mt-2">
-          {enemy_name}
+          {name}
         </span>
         <div className="relative w-48 bg-gray-800 border-2 border-gray-600 rounded h-8 overflow-hidden">
           <div 
@@ -95,7 +95,7 @@ export default function EnemyEncounter(){
             style={{ width: `${healthPercentage}%` }}
           />
           <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
-            {enemy_hp}/{enemy_maxHp}
+            {hp}/{maxHp}
           </span>
         </div>
       </div>

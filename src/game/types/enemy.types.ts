@@ -1,19 +1,32 @@
+import { LootDrop } from "./loot.types";
 
 interface Skill {
   name: string;
   dmg: number;
-  // energyCost: number;
+  energyCost: number;
   // TODO: Confirm Skill attributes
 }
 
 export interface Enemy {
-  enemy_id: string;
+  id: string;
+  name: string;
+  description: string;
   enemyImg: string;
-  enemy_name: string;
-  enemy_hp: number;
-  enemy_maxHp: number;
-  enemy_energy: number;
-  enemy_maxEnergy: number;
-  enemy_skills: Skill[];
+
+  hp: number;
+  maxHp: number;
+  energy: number;
+  maxEnergy: number;
+  def: number;
+  maxDef: number;
+  skills: Skill[];
+  dmg: number;
+  atkSpeed: number;
+  critDmg: number;
+  critChance: number;
+  evasion: number;
+
+  spawnRate: number;
+  lootDrop: LootDrop
   // TODO: Add rewards, coin range reward, 
 }

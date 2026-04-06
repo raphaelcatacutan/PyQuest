@@ -14,22 +14,41 @@ interface EnemyStoreProps extends Enemy{
 }
 
 export const useEnemyStore = create<EnemyStoreProps>((set) => ({
-  enemy_id: "",
-  enemy_name: "",
+  id: "",
+  name: "",
+  description: "",
   enemyImg: "",
-  enemy_hp: 0,
-  enemy_maxHp: 0,
-  enemy_energy: 0,
-  enemy_maxEnergy: 0,
-  enemy_skills: [],
-  // TODO: Add Enemy Base Dmg
-  // TODO: Add Enemy Crit Chance
+  hp: 0,
+  maxHp: 0,
+  energy: 0,
+  maxEnergy: 0,
+  def: 0,
+  maxDef: 0,
+  skills: [],
+  dmg: 0,
+  atkSpeed: 0,
+  critDmg: 0,
+  critChance: 0,
+  evasion: 0,
+  spawnRate: 0,
+  lootDrop: {
+    coinDropMin: 0,
+    coinDropMax: 0,
+    xpDropMin: 0,
+    xpDropMax: 0,
+    weapons: [],
+    armors: [],
+    consumables: [],
+  },
+  
   spawnEnemy: (enemy) => set({ ...enemy }),
+  
   takeDamage: (amount) => set((state) => ({ 
-    enemy_hp: Math.max(0, state.enemy_hp - amount) 
+    hp: Math.max(0, state.hp - amount) 
   })),
+  
   takeEnergyCost: (amount) => set((state) => ({ 
-    enemy_energy: Math.max(0, state.enemy_energy - amount) 
+    energy: Math.max(0, state.energy - amount) 
   })),
-  clearEnemy: () => set({ enemy_id: "" }), // TODO: Improve clearEnemy. When clearing out all attr, no enemy is being registered
+  clearEnemy: () => set({ id: "" }), // TODO: Improve clearEnemy. When clearing out all attr, no enemy is being registered
 }))

@@ -16,24 +16,64 @@ export const ForestEnemies: Record<string, Enemy> = {
 
 export const DungeonEnemies: Record<string, Enemy> = {
   slime: {
-    enemy_id: "1",
-    enemy_name: "Slime",
+    id: "slime",
+    name: "Slime",
+    description: "A gelatinous blob that bounces around.",
     enemyImg: slimeEnemy,
-    enemy_hp: 100,
-    enemy_maxHp: 100,
-    enemy_energy: 50,
-    enemy_maxEnergy: 50,
-    enemy_skills: [{ name: "Bouncing Tackle", dmg: 10 }]
+    hp: 100,
+    maxHp: 100,
+    energy: 50,
+    maxEnergy: 50,
+    def: 1,
+    maxDef: 1,
+    skills: [
+      { name: "Bouncing Tackle", dmg: 10, energyCost: 15 }
+    ],
+    dmg: 8,
+    atkSpeed: 1,
+    critDmg: 0,
+    critChance: 0,
+    evasion: 0.05,
+    spawnRate: 0.6,
+    lootDrop: {
+      coinDropMin: 0,
+      coinDropMax: 0,
+      xpDropMin: 0,
+      xpDropMax: 0,
+      weapons: [],
+      armors: [],
+      consumables: [],
+    },
   },
   skeleton: {
-    enemy_id: "2",
-    enemy_name: "Skeleton Archer",
+    id: "skeleton",
+    name: "Skeleton Archer",
+    description: "An undead skeleton wielding a bow.",
     enemyImg: skeletonHeadEnemy,
-    enemy_hp: 80,
-    enemy_maxHp: 80,
-    enemy_energy: 100,
-    enemy_maxEnergy: 100,
-    enemy_skills: [{ name: "Bone Arrow", dmg: 25 }]
+    hp: 80,
+    maxHp: 80,
+    energy: 100,
+    maxEnergy: 100,
+    def: 2,
+    maxDef: 2,
+    skills: [
+      { name: "Bone Arrow", dmg: 25, energyCost: 30 }
+    ],
+    dmg: 15,
+    atkSpeed: 1.2,
+    critDmg: 0.5,
+    critChance: 0.1,
+    evasion: 0.1,
+    spawnRate: 0.4,
+    lootDrop: {
+      coinDropMin: 0,
+      coinDropMax: 0,
+      xpDropMin: 0,
+      xpDropMax: 0,
+      weapons: [],
+      armors: [],
+      consumables: [],
+    },
   }
   // TODO: Add more enemies
 }

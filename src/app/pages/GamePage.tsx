@@ -21,7 +21,7 @@ import {
   useDialogueBoxStore,
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/domain/inventory/inventory.types"
-import { SceneNameTypes } from "@/src/game/types/scene.types"
+import { SceneTypes } from "@/src/game/types/scene.types"
 import DialogueBox from "@/src/components/ui/DialogueBox"
 import Test from "@/src/components/Test"
 
@@ -75,7 +75,7 @@ export default function GamePage() {
     }))
   )
 
-  const bg: Array<SceneNameTypes> = ['village', 'labyrinth'] 
+  const bg: Array<SceneTypes> = ['village', 'labyrinth'] 
   const RandScene = bg[Math.floor(Math.random() * bg.length)]
   
   const lootInventoryRef = useRef<{ 

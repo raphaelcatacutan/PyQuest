@@ -1,4 +1,4 @@
-import { SceneNameTypes } from '../types/scene.types';
+import { SceneTypes } from '../types/scene.types';
 import { Enemy } from '../types/enemy.types';
 import { 
   slimeEnemy, 
@@ -43,7 +43,7 @@ export const DungeonBosses: Record<string, Enemy> = {
 }
 
 /* INDEXES */
-export const EnemiesByScene: Record<SceneNameTypes, Record<string, Enemy> | null> = {
+export const EnemiesByScene: Record<SceneTypes, Record<string, Enemy> | null> = {
   // forest: null,
   // swamp: null,
   // temple: null,
@@ -56,7 +56,7 @@ export const EnemiesByScene: Record<SceneNameTypes, Record<string, Enemy> | null
   village: DungeonEnemies,
 }
 
-export const BossesByScene: Record<SceneNameTypes, Record<string, Enemy> | null> = { // TODO: Remove null once initialized
+export const BossesByScene: Record<SceneTypes, Record<string, Enemy> | null> = { // TODO: Remove null once initialized
   // forest: null,
   // swamp: null,
   // temple: null,

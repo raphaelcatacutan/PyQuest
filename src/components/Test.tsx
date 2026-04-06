@@ -6,7 +6,7 @@ import {
   useDialogueBoxStore,
   useSceneStore
 } from "../game/store"
-import { SceneNameTypes } from "../game/types/scene.types"
+import { SceneTypes } from "../game/types/scene.types"
 
 export default function Test(){
   const toggleIsThereEnemy = useGameStore(s => s.toggleIsThereEnemy)
@@ -32,7 +32,7 @@ export default function Test(){
       <Button text="Display Damage" onClick={toggleIsDamaged}/>
       <Button text="Dialogue Box" onClick={toggleDisplayDialogueBox}/>
       <Button text="Random Scene" onClick={() => {
-        const scenes: SceneNameTypes[] = ['village', 'labyrinth', 'dungeon'];
+        const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon'];
         const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
         setScene(randomScene)
       }}/>

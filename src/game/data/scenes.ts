@@ -1,4 +1,4 @@
-import { SceneNameTypes } from '../types/scene.types'
+import { SceneTypes } from '../types/scene.types'
 import {
   villageBg,
   labyrinthBg,
@@ -10,7 +10,7 @@ import {
  *  Scene Database
  */
 
-export const Scene: Record<SceneNameTypes, string> = {
+export const Scene: Record<SceneTypes, string> = {
   village: villageBg,
   labyrinth: labyrinthBg,
   dungeon: dungeonBg,

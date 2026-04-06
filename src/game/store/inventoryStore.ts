@@ -28,34 +28,76 @@ interface InventoryStoreProps {
   moveInventoryItem: (dragIds: string[], parentId: string | null, index: number) => void;
 }
 
-export const useInventoryStore = create<InventoryStoreProps>((set) => ({
-  player_id: "",
-  playerInventory: InitialPlayerInventory,
+// Helper to save inventory to localStorage
+const saveToLocalStorage = (playerId: string, inventory: InventoryNode[]) => {
+  if (playerId) {
+    localStorage.setItem(
+      `player-inventory-${playerId}`,
+      JSON.stringify(inventory)
+    );
+  }
+};
+
+export const useInventoryStore = create<InventoryStoreProps>()((set) => ({
+  player_id: (() => {
+    // Restore player_id from localStorage on init
+    return localStorage.getItem("current-player-id") || "";
+  })(),
+  playerInventory: (() => {
+    // Restore player_id and inventory from localStorage on init
+    const playerId = localStorage.getItem("current-player-id");
+    if (playerId) {
+      const saved = localStorage.getItem(`player-inventory-${playerId}`);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    }
+    return InitialPlayerInventory;
+  })(),
   
-  setPlayerId: (id) => set({ player_id: id }),
+  setPlayerId: (id) => set((state) => {
+    // Save current player's inventory under their own key before switching
+    if (state.player_id && state.player_id !== id) {
+      saveToLocalStorage(state.player_id, state.playerInventory);
+    }
+    
+    // Load new player's inventory
+    const savedInventory = localStorage.getItem(`player-inventory-${id}`);
+    const newInventory = savedInventory 
+      ? JSON.parse(savedInventory)
+      : JSON.parse(JSON.stringify(InitialPlayerInventory));
+    
+    // Save current player_id for next session
+    localStorage.setItem("current-player-id", id);
+    
+    return {
+      player_id: id,
+      playerInventory: newInventory
+    };
+  }),
   
   addInventoryItem: (parentId, item) => set((state) => {
     const newInventory = JSON.parse(JSON.stringify(state.playerInventory));
     
     if (!parentId) {
       newInventory.push(item);
-      return { playerInventory: newInventory };
+    } else {
+      const addToFolder = (items: InventoryNode[]): boolean => {
+        for (const node of items) {
+          if (node.id === parentId && node.kind === "folder") {
+            node.children.push(item);
+            return true;
+          }
+          if (node.kind === "folder" && addToFolder(node.children)) {
+            return true;
+          }
+        }
+        return false;
+      };
+      addToFolder(newInventory);
     }
     
-    const addToFolder = (items: InventoryNode[]): boolean => {
-      for (const node of items) {
-        if (node.id === parentId && node.kind === "folder") {
-          node.children.push(item);
-          return true;
-        }
-        if (node.kind === "folder" && addToFolder(node.children)) {
-          return true;
-        }
-      }
-      return false;
-    };
-    
-    addToFolder(newInventory);
+    saveToLocalStorage(state.player_id, newInventory);
     return { playerInventory: newInventory };
   }),
   
@@ -69,7 +111,10 @@ export const useInventoryStore = create<InventoryStoreProps>((set) => ({
             : item
         );
     };
-    return { playerInventory: deleteFromArray(state.playerInventory) };
+    const newInventory = deleteFromArray(state.playerInventory);
+    
+    saveToLocalStorage(state.player_id, newInventory);
+    return { playerInventory: newInventory };
   }),
   
   renameInventoryItem: (nodeId, newName) => set((state) => {
@@ -82,7 +127,10 @@ export const useInventoryStore = create<InventoryStoreProps>((set) => ({
           : item
       );
     };
-    return { playerInventory: renameInArray(state.playerInventory) };
+    const newInventory = renameInArray(state.playerInventory);
+    
+    saveToLocalStorage(state.player_id, newInventory);
+    return { playerInventory: newInventory };
   }),
   
   moveInventoryItem: (dragIds, parentId, index) => set((state) => {
@@ -126,6 +174,7 @@ export const useInventoryStore = create<InventoryStoreProps>((set) => ({
       newInventory = insertIntoParent(newInventory);
     }
     
+    saveToLocalStorage(state.player_id, newInventory);
     return { playerInventory: newInventory };
   }),
-}))
+}));

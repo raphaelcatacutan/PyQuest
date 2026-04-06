@@ -18,28 +18,15 @@ import { useSceneStore } from "@/src/game/store/sceneStore"
 import { useGameStore } from "@/src/game/store/gameStore"
 import { usePlayerStore } from "@/src/game/store"
 import { useEnemyStore } from "@/src/game/store/enemyStore"
+import { useInventoryStore } from "@/src/game/store/inventoryStore"
 import { useShallow } from "zustand/shallow"
 import { SceneNameTypes } from "@/src/game/types/scene.types"
 import Test from "@/src/components/Test"
 
-const InitialPlayerInventory: InventoryNode[] = [
-  { 
-    id: "root",
-    kind: "folder", 
-    name: "User", 
-    children: [
-      { id: "wp_folder", kind: "folder", name: "Weapons", children: [] },   
-      { id: "arm_folder", kind: "folder", name: "Armors", children: [] },   
-      { id: "cons_folder", kind: "folder", name: "Consumables", children: [] }
-    ]
-  },
-  { id: "misc_folder", kind: "folder", name: "Miscellaneous", children: [] },
-  { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
-];
-
 // TODO: Add Player HP UI
 
 export default function GamePage() {
+  const navigate = useNavigate()
   const takeDamage = useEnemyStore(s => s.takeDamage)
   const { scene, setScene, getSceneBg } = useSceneStore()
   const { inVillage, toggleInVillage } = useGameStore(
@@ -73,13 +60,22 @@ export default function GamePage() {
     }))
   )
   
+  const { player_id, playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
+    useShallow((s) => ({
+      player_id: s.player_id,
+      playerInventory: s.playerInventory,
+      addInventoryItem: s.addInventoryItem,
+      deleteInventoryItem: s.deleteInventoryItem,
+      renameInventoryItem: s.renameInventoryItem,
+      moveInventoryItem: s.moveInventoryItem,
+    }))
+  )
+  
   // const isThereEnemy = useGameStore((state) => state.isThereEnemy)
   // const rightPanel = useGameStore((state) => state.rightPanel)
 
   const bg: Array<SceneNameTypes> = ['village', 'labyrinth'] 
   const RandScene = bg[Math.floor(Math.random() * bg.length)]
-
-  const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
   
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -121,43 +117,20 @@ export default function GamePage() {
 
     // Debug
     // toggleIsDamaged()
-    toggleIsThereEnemy()
+    navigate('/login')
+    // toggleIsThereEnemy()
     // setScene(RandScene)
   }
 
   function handleItemTransferred(item: InventoryNode) {
     console.log("GamePage.handleItemTransferred called with item:", item);
     
-    // Use a unique counter to ensure each transferred item has a unique ID
     const uniqueId = `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     console.log("Generated unique ID:", uniqueId);
     
-    // Use functional state update to avoid stale closure issues
-    setPlayerInventory(prevInventory => {
-      // Add the transferred item to the "Picked-up" folder
-      const addToPickedUp = (items: InventoryNode[]): InventoryNode[] => {
-        return items.map(folderItem => {
-          if (folderItem.id === "pickedup_folder" && folderItem.kind === "folder") {
-            console.log("Found Picked-up folder, adding item:", item.name);
-            return {
-              ...folderItem,
-              children: [...folderItem.children, { ...item, id: uniqueId }]
-            };
-          }
-          if (folderItem.kind === "folder" && folderItem.children) {
-            return { ...folderItem, children: addToPickedUp(folderItem.children) };
-          }
-          return folderItem;
-        });
-      };
-      
-      const newInventory = addToPickedUp(prevInventory);
-      console.log("New inventory after adding item:", newInventory);
-      const pickedUpFolder = newInventory.find(i => i.kind === "folder" && i.id === "pickedup_folder");
-      if (pickedUpFolder && pickedUpFolder.kind === "folder") {
-        console.log("Picked-up folder children count:", pickedUpFolder.children.length);
-      }
-      return newInventory;
+    addInventoryItem("pickedup_folder", { 
+      ...item, 
+      id: uniqueId 
     });
   }
 
@@ -185,7 +158,13 @@ export default function GamePage() {
 
         <div className="relative flex h-full w-full"> {/* scene */}
           <div className="absolute h-full z-50">
-            <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
+            <LeftSideBar 
+              playerInventory={playerInventory} 
+              addInventoryItem={addInventoryItem}
+              deleteInventoryItem={deleteInventoryItem}
+              renameInventoryItem={renameInventoryItem}
+              moveInventoryItem={moveInventoryItem}
+            />
           </div>
 
           <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${getSceneBg(scene)})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>

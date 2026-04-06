@@ -2,15 +2,28 @@ import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "@/src/game/store";
 import { useState, useEffect } from "react";
 import showToast from '@/src/components/ui/Toast'
+import { useShallow } from "zustand/shallow";
+import { useInventoryStore } from "@/src/game/store/inventoryStore";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
-  const player = usePlayerStore()
+  const { user_id, setUserId} = usePlayerStore(
+    useShallow((s) => ({
+      user_id: s.user_id,
+      setUserId: s.setUserId
+    }))
+  )
+
+  const { player_id, setPlayerId } = useInventoryStore(
+    useShallow((s) => ({
+      player_id: s.player_id,
+      setPlayerId: s.setPlayerId
+    }))
+  )
+
   const navigate = useNavigate()
   
-  const setUserId = usePlayerStore((state) => state.setUserId)
   const canLogin = username.trim().length > 0 && password.length > 0;
 
 
@@ -19,20 +32,23 @@ export default function LoginPage() {
     
     // TODO: hook this into auth/status logic
     // TODO: Add authentication
-    
-    if (!player.user_id) {
+    // TODO: Hook user_id below, not username
+
+    if (!username) {
       showToast({ variant: "error", message: "Invalid Username and Password" });
       return;
     }
     
     setUserId(username);
+    setPlayerId(username)
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
   }
 
   useEffect(() => {
-    console.log("Player ID updated in component:", player.user_id);
-  }, [player.user_id]); // This fires every time user_id changes
+    console.log("Player ID updated in component:", user_id);
+    console.log("Player Inventory ID:", user_id);
+  }, [user_id]); // This fires every time user_id changes
 
   function handleCreateAccount(){
     navigate('/signup')

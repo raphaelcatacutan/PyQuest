@@ -20,7 +20,7 @@ interface LabyrinthStateProps {
   addsolvedHardDebug: () => void;
 }
 
-export const useLabyrinthState = create<LabyrinthStateProps>((set) => ({
+export const useLabyrinthStore = create<LabyrinthStateProps>((set) => ({
   currEasyDebug: "",
   currMediumDebug: "",
   currHardDebug: "",

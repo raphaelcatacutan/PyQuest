@@ -11,7 +11,7 @@ interface ConsumableStateProps extends Consumable {
   clearConsumable: () => void;
 }
 
-export const useConsumableState = create<ConsumableStateProps>((set) => ({
+export const useConsumableStore = create<ConsumableStateProps>((set) => ({
   id: "",
   filename: "",
   name: "",

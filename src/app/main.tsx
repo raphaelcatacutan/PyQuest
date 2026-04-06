@@ -27,6 +27,6 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/test" element={<WatcherTestPage />} />
         </Routes>
       </BrowserRouter>
-    </StrictMode>,
+    </StrictMode>
   </>
 )

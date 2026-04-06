@@ -1,4 +1,4 @@
-import { BossSceneTypes, EnemySceneTypes, SceneNameTypes } from '../types/scene.types';
+import { SceneNameTypes } from '../types/scene.types';
 import { Enemy } from '../types/enemy.types';
 import { 
   slimeEnemy, 
@@ -40,10 +40,6 @@ export const DungeonEnemies: Record<string, Enemy> = {
 
 export const DungeonBosses: Record<string, Enemy> = {
 
-}
-
-interface EnemiesCollection {
-  [key: string]: Enemy;
 }
 
 /* INDEXES */

@@ -16,8 +16,3 @@ export interface Enemy {
   enemy_skills: Skill[];
   // TODO: Add rewards, coin range reward, 
 }
-
-export interface Boss {
-  boss_id: string;
-  // TODO: Add Boss Attributes
-}

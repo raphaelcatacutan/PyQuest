@@ -16,12 +16,10 @@ import {
   useSceneStore,
   useGameStore,
   usePlayerStore,
-  useEnemyStore,
   useInventoryStore,
   useDialogueBoxStore,
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/domain/inventory/inventory.types"
-import { SceneTypes } from "@/src/game/types/scene.types"
 import DialogueBox from "@/src/components/ui/DialogueBox"
 import Test from "@/src/components/Test"
 
@@ -29,41 +27,18 @@ import Test from "@/src/components/Test"
 
 export default function GamePage() {
   const navigate = useNavigate()
-  const takeDamage = useEnemyStore(s => s.takeDamage)
   const displayDialogueBox = useDialogueBoxStore(s => s.displayDialogueBox)
-  const toggleDisplayDialogueBox = useDialogueBoxStore(s => s.toggleDisplayDialogueBox)
-  const { scene, sceneBg, setScene } = useSceneStore()
-  const { inVillage, toggleInVillage } = useGameStore(
-    useShallow((state) => ({
-      inVillage: state.inVillage,
-      toggleInVillage: state.toggleInVillage
-    }))
-  )
-  // const { isMerchant, setIsMerchant } = useGameStore(
-  //   useShallow((state) => ({
-  //     isMerchant: state.isMerchant,
-  //     setIsMerchant: state.setIsMerchant
-  //   }))
-  // )
-  const { isThereEnemy, toggleIsThereEnemy } = useGameStore(
-    useShallow((state) => ({
-      isThereEnemy: state.isThereEnemy,
-      toggleIsThereEnemy: state.toggleIsThereEnemy
-    }))
-  )
+  const inVillage = useGameStore(s => s.inVillage)
+  const isThereEnemy = useGameStore(s => s.isThereEnemy)
+  const isDamaged = usePlayerStore(s => s.isDamaged)
+  const logOut = usePlayerStore(s => s.logOut)
+  const { scene, sceneBg } = useSceneStore()
   const { rightPanel, toggleRightPanel } = useGameStore(
     useShallow((state) => ({
       rightPanel: state.rightPanel,
       toggleRightPanel: state.toggleRightPanel
     }))
   )
-  const { isDamaged, toggleIsDamaged } = usePlayerStore(
-    useShallow((state) => ({
-      isDamaged: state.isDamaged,
-      toggleIsDamaged: state.toggleIsDamaged
-    }))
-  )
-  
   const { player_id, playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
     useShallow((s) => ({
       player_id: s.player_id,
@@ -74,9 +49,6 @@ export default function GamePage() {
       moveInventoryItem: s.moveInventoryItem,
     }))
   )
-
-  const bg: Array<SceneTypes> = ['village', 'labyrinth'] 
-  const RandScene = bg[Math.floor(Math.random() * bg.length)]
   
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -115,13 +87,9 @@ export default function GamePage() {
   }, [scene])
 
   function handleExitGame(){
-
-    // Debug
-    // toggleDisplayDialogueBox()
-    // toggleIsDamaged()
+    // TODO: Add Confirmation Toast
+    logOut()
     navigate('/login')
-    // toggleIsThereEnemy()
-    // setScene(RandScene)
   }
 
   function handleItemTransferred(item: InventoryNode) {
@@ -144,15 +112,13 @@ export default function GamePage() {
       {isDamaged && (
         <div className="absolute w-full h-full z-100 opacity-50 transition pointer-events-none" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
       )}
+
       <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
         <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
       </div> 
       
       {/* DEBUGGER */}
       <Test/>
-        {/* <div className='absolute'>
-          <button onClick={handleTest}>Test</button>
-        </div> */}
 
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 
@@ -182,12 +148,12 @@ export default function GamePage() {
 
           {!rightPanel ? 
           <div className="absolute right-1 top-1 z-50">
-            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel()}/> 
+            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={toggleRightPanel}/> 
           </div>
           : 
           <div className="absolute flex right-0 h-full z-50">
             <RightSideBar 
-              onClose={() => toggleRightPanel()} 
+              onClose={toggleRightPanel} 
               onItemTransferred={handleItemTransferred} 
               lootInventoryRef={lootInventoryRef}
               atVillage={inVillage}

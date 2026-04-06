@@ -15,6 +15,7 @@ export default function Test(){
   const toggleIsDamaged = usePlayerStore(s => s.toggleIsDamaged)
   const toggleDisplayDialogueBox = useDialogueBoxStore(s => s.toggleDisplayDialogueBox)
   const setScene = useSceneStore(s => s.setScene)
+  const user_id = usePlayerStore(s => s.user_id)
 
   const handleTest = () => {
     takeDamage(20)
@@ -23,6 +24,7 @@ export default function Test(){
   return (
     <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900">
       <span>DevTool:</span>
+      <Button text="Display ID" onClick={() => {console.log(`Player: ${user_id}`)}}/>
       <Button text="Toggle Enemy" onClick={() => {
         toggleIsThereEnemy()
         clearEnemy()

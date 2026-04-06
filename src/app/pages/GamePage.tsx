@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import { useShallow } from "zustand/shallow"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
@@ -13,14 +14,17 @@ import {
   slimeEnemy,
   painHud,
 } from '@/src/assets'
+import { 
+  useSceneStore,
+  useGameStore,
+  usePlayerStore,
+  useEnemyStore,
+  useInventoryStore,
+  useDialogueBoxStore,
+} from "@/src/game/store"
 import { InventoryNode } from "@/src/domain/inventory/inventory.types"
-import { useSceneStore } from "@/src/game/store/sceneStore"
-import { useGameStore } from "@/src/game/store/gameStore"
-import { usePlayerStore } from "@/src/game/store"
-import { useEnemyStore } from "@/src/game/store/enemyStore"
-import { useInventoryStore } from "@/src/game/store/inventoryStore"
-import { useShallow } from "zustand/shallow"
 import { SceneNameTypes } from "@/src/game/types/scene.types"
+import DialogueBox from "@/src/components/ui/DialogueBox"
 import Test from "@/src/components/Test"
 
 // TODO: Add Player HP UI
@@ -28,6 +32,8 @@ import Test from "@/src/components/Test"
 export default function GamePage() {
   const navigate = useNavigate()
   const takeDamage = useEnemyStore(s => s.takeDamage)
+  const displayDialogueBox = useDialogueBoxStore(s => s.displayDialogueBox)
+  const toggleDisplayDialogueBox = useDialogueBoxStore(s => s.toggleDisplayDialogueBox)
   const { scene, setScene, getSceneBg } = useSceneStore()
   const { inVillage, toggleInVillage } = useGameStore(
     useShallow((state) => ({
@@ -116,8 +122,9 @@ export default function GamePage() {
   function handleExitGame(){
 
     // Debug
+    toggleDisplayDialogueBox()
     // toggleIsDamaged()
-    navigate('/login')
+    // navigate('/login')
     // toggleIsThereEnemy()
     // setScene(RandScene)
   }
@@ -136,6 +143,8 @@ export default function GamePage() {
 
   return (
     <div className="relative flex flex-col w-full h-full">
+      {displayDialogueBox && <DialogueBox/>}
+
       {/* Dmg HUD */}
       {isDamaged && (
         <div className="absolute w-full h-full z-100 opacity-50 transition pointer-events-none" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>

@@ -1,4 +1,4 @@
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 import { NodeRendererProps } from "react-arborist";
 import { useState } from "react";
 import Button from "../../../ui/Button";

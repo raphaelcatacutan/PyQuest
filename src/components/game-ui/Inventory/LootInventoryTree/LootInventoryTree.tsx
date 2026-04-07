@@ -1,6 +1,6 @@
 import { Tree } from "react-arborist";
 import { LootInventoryNode } from "./LootInventoryNode";
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 import { useState, forwardRef, useImperativeHandle } from "react";
 
 const data: InventoryNode[] = [

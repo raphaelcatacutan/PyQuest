@@ -1,6 +1,6 @@
 import { Tree, TreeApi } from "react-arborist";
 import { PlayerInventoryNode } from './PlayerInventoryNode'
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 import { useRef, useState, useEffect } from "react";
 import Button from "../../../ui/Button";
 import {

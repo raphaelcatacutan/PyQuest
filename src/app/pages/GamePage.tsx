@@ -19,7 +19,7 @@ import {
   useInventoryStore,
   useDialogueBoxStore,
 } from "@/src/game/store"
-import { InventoryNode } from "@/src/domain/inventory/inventory.types"
+import { InventoryNode } from "@/src/game/types/inventory.types"
 import DialogueBox from "@/src/components/ui/DialogueBox"
 import Test from "@/src/components/Test"
 

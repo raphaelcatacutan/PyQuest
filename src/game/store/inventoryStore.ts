@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 
 const InitialPlayerInventory: InventoryNode[] = [
   { 

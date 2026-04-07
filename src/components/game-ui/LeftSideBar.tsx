@@ -1,7 +1,7 @@
 import { PlayerInventoryTree } from "@/src/components/game-ui/Inventory/PlayerInventoryTree/PlayerInventoryTree"
 import { useState } from "react"
 import Button from "../ui/Button"
-import { InventoryNode } from "@/src/domain/inventory/inventory.types"
+import { InventoryNode } from "@/src/game/types/inventory.types"
 import {
   bagIcon,
   coinsIcon,

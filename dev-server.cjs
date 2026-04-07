@@ -10,11 +10,11 @@ app.use(cors());
 app.use(express.json());
 
 // Point this to your actual JSON file location
-const JSON_PATH = path.join(__dirname, 'src', 'game', 'data', 'bosses.json');
-const ENEMY_JSON_PATH = path.join(__dirname, 'src', 'game', 'data', 'enemies.json');
-const CONSUMABLE_PATH = path.join(__dirname, 'src/game/data/consumables.json');
-const ARMOR_PATH = path.join(__dirname, 'src/game/data/armors.json');
-const WEAPON_PATH = path.join(__dirname, 'src/game/data/weapons.json');
+const JSON_PATH = path.join(__dirname, 'src', 'game', 'json', 'bosses.json');
+const ENEMY_JSON_PATH = path.join(__dirname, 'src', 'game', 'json', 'enemies.json');
+const CONSUMABLE_PATH = path.join(__dirname, 'src/game/json/consumables.json');
+const ARMOR_PATH = path.join(__dirname, 'src/game/json/armors.json');
+const WEAPON_PATH = path.join(__dirname, 'src/game/json/weapons.json');
 
 app.post('/api/save-boss', (req, res) => {
   try {

@@ -1,5 +1,5 @@
 import { Armor } from "../types/armor.types";
-import armorData from "./armors.json"
+import armorData from "../json/armors.json"
 import {
 
 } from '@/src/assets'

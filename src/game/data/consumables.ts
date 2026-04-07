@@ -1,5 +1,5 @@
 import { Consumable } from "../types/consumable.types";
-import consumableData from "./consumables.json"
+import consumableData from "../json/consumables.json"
 
 /**
  * 

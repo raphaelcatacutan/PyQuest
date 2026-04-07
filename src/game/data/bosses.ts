@@ -1,5 +1,5 @@
 import { Boss } from "../types/boss.types"
-import bossData from './bosses.json'
+import bossData from '../json/bosses.json'
 import {
 
 } from '@/src/assets'

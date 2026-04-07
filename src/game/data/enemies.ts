@@ -1,6 +1,6 @@
 import { SceneTypes } from '../types/scene.types';
 import { Enemy } from '../types/enemy.types';
-import enemyData from './enemies.json'
+import enemyData from '../json/enemies.json'
 import { 
   slimeEnemy, 
   skeletonHeadEnemy 

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
 import { useInventoryStore } from "@/src/game/store/inventoryStore";
+import DevTool from "@/src/components/DevTool";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -56,6 +57,8 @@ export default function LoginPage() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
+      <DevTool/>
+
       <div className="absolute inset-0"></div>
 
       {/* Center container */}

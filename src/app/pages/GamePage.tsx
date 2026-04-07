@@ -21,7 +21,7 @@ import {
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/game/types/inventory.types"
 import DialogueBox from "@/src/components/ui/DialogueBox"
-import Test from "@/src/components/Test"
+import DevTool from "@/src/components/DevTool"
 
 // TODO: Add Player HP UI
 
@@ -118,7 +118,7 @@ export default function GamePage() {
       </div> 
       
       {/* DEBUGGER */}
-      <Test/>
+      <DevTool/>
 
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 

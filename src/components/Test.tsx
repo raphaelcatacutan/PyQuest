@@ -31,7 +31,7 @@ export default function Test(){
       }}
       />
       <Button text="Hit Enemy" onClick={handleTest}/>
-      <Button text="Display Damage" onClick={toggleIsDamaged}/>
+      <Button text="Dmg HUD" onClick={toggleIsDamaged}/>
       <Button text="Dialogue Box" onClick={toggleDisplayDialogueBox}/>
       <Button text="Random Scene" onClick={() => {
         const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon'];

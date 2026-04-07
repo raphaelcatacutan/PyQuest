@@ -83,8 +83,7 @@ export default function EnemyEncounter(){
   }, [hp, name, toggleIsThereEnemy, clearEnemy])
 
   return (
-    <> 
-      {/* Enemy encounter */}
+    <div className="relative flex h-full w-full z-1"> 
       <div className="absolute flex flex-col w-full h-full items-center">
         <span className="text-4xl mt-2">
           {name}
@@ -103,6 +102,6 @@ export default function EnemyEncounter(){
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
         <img src={enemyImg} className="w-80 h-80" draggable={false}></img>
       </div>
-    </>
+    </div>
   )
 }

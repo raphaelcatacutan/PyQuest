@@ -6,6 +6,7 @@ import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import showToast from "@/src/components/ui/Toast"
 import EnemyEncounter from "@/src/components/events/EnemyEncounter"
+import Combat from "@/src/components/events/Combat"
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import { 
   exitIcon,
@@ -118,6 +119,8 @@ export default function GamePage() {
         </div>
 
         <div className="relative flex h-full w-full"> {/* scene */}
+          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${sceneBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+          
           <div className="absolute h-full z-50">
             <LeftSideBar 
               playerInventory={playerInventory} 
@@ -127,15 +130,6 @@ export default function GamePage() {
               moveInventoryItem={moveInventoryItem}
             />
           </div>
-
-          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${sceneBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
-
-          {/* Enemy Encounter */}
-          {isThereEnemy && (
-            <div className="absolute flex h-full w-full z-1"> 
-              <EnemyEncounter/>
-            </div>
-          )}
 
           {!rightPanel ? 
           <div className="absolute right-1 top-1 z-50">
@@ -151,6 +145,9 @@ export default function GamePage() {
               />
           </div>
           }
+
+          <Combat/>
+
         </div>
       </div>
 

@@ -90,7 +90,7 @@ export default function EnemyArchitect() {
           <textarea style={styles.textarea} name="description" placeholder="description" value={enemy.description} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Enemy Image Asset</label>
-          <input style={styles.input} name="enemyImg" placeholder="enemyImg" value={enemy.enemyImg} onChange={handleChange} />
+          <input style={styles.input} name="enemyImg" placeholder="enemyImg path (Don't forget to upload the png to its respective folder in /src/assets" value={enemy.enemyImg} onChange={handleChange} />
         </section>
 
         {/* 2. VITALS SECTION (Synchronized) */}

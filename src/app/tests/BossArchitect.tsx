@@ -90,7 +90,7 @@ export default function BossArchitect() {
           <textarea style={styles.textarea} name="description" placeholder="description" value={boss.description} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Boss Image Asset</label>
-          <input style={styles.input} name="bossImg" placeholder="bossImg path" value={boss.bossImg} onChange={handleChange} />
+          <input style={styles.input} name="bossImg" placeholder="bossImg path (Don't forget to upload the png to its respective folder in /src/assets" value={boss.bossImg} onChange={handleChange} />
         </section>
 
         {/* 2. VITALS SECTION (Synchronized) */}

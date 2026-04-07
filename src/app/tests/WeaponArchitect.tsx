@@ -64,19 +64,19 @@ export default function WeaponArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" value={item.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={item.id} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Filename (Auto-syncs with ID)</label>
-          <input style={styles.input} name="filename" value={item.filename} onChange={handleChange} />
+          <input style={styles.input} name="filename" placeholder="filename" value={item.filename} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Display Name</label>
-          <input style={styles.input} name="name" value={item.name} onChange={handleChange} />
+          <input style={styles.input} name="name" placeholder="name" value={item.name} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Description</label>
-          <textarea style={styles.textarea} name="description" value={item.description} onChange={handleChange} />
+          <textarea style={styles.textarea} name="description" placeholder="description" value={item.description} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Image Path</label>
-          <input style={styles.input} name="weaponImg" value={item.weaponImg} onChange={handleChange} />
+          <input style={styles.input} name="weaponImg" placeholder="weaponImg path (Don't forget to upload the png to its respective folder in /src/assets" value={item.weaponImg} onChange={handleChange} />
         </section>
 
         {/* 2. CLASSIFICATION */}

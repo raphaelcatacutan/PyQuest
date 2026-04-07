@@ -41,7 +41,7 @@ export function RightSideBar({ onClose, onItemTransferred, lootInventoryRef, atV
         </div>
       }
       <div className="flex-1 overflow-hidden">
-        <Terminal messages={["[BATTLE_LOG]: You defeated a goblin! 76 exp rewarded.", "HI"]}/>
+        <Terminal/>
       </div>
     </div>
   );

@@ -29,10 +29,7 @@ import Damaged from "@/src/components/events/Damaged"
 
 export default function GamePage() {
   const navigate = useNavigate()
-  const displayDialogueBox = useDialogueBoxStore(s => s.displayDialogueBox)
   const inVillage = useGameStore(s => s.inVillage)
-  const isThereEnemy = useGameStore(s => s.isThereEnemy)
-  const isDamaged = usePlayerStore(s => s.isDamaged)
   const logOut = usePlayerStore(s => s.logOut)
   const { scene, sceneBg } = useSceneStore()
   const { rightPanel, toggleRightPanel } = useGameStore(

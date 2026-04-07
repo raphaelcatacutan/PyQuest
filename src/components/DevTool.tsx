@@ -31,6 +31,13 @@ export default function DevTool(){
   const user_id = usePlayerStore(s => s.user_id)
   const appendToLogs = useTerminalStore(s => s.appendToLog)
   const gainCoin = usePlayerStore(s => s.gainCoins)
+  const { hp, selfHarm, gainHP } = usePlayerStore(
+    useShallow((s) => ({
+      hp: s.hp,
+      selfHarm: s.takeDamage,
+      gainHP: s.gainHP
+    }))
+  )
 
 
   const handleTest = () => {
@@ -42,10 +49,13 @@ export default function DevTool(){
       {devTool && 
       <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900">
         <span>DevTool:</span>
+        <span>{hp}</span>
         <input type="text" className="border bg-zinc-800" value={input} onChange={(e) => setInput(e.target.value)}></input>
         <Button text="Print" onClick={() => {console.log(`Enemies: ${Enemies["crawler"].dmg}`)}}/>
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(1)}/>
+        <Button text="Hp-" onClick={() => selfHarm(20)}/>
+        <Button text="Hp+" onClick={() => gainHP(10)}/>
         <Button text="Display ID" onClick={() => {console.log(`Player: ${user_id}`)}}/>
         <Button text="Toggle Enemy" onClick={() => {
           toggleIsThereEnemy()
@@ -53,7 +63,7 @@ export default function DevTool(){
         }}
         />
         <Button text="Hit Enemy" onClick={handleTest}/>
-        <Button text="Dmg HUD" onClick={toggleIsDamaged}/>
+        <Button text="Dmg HUD" onClick={() => toggleIsDamaged(null)}/>
         <Button text="Dialogue Box" onClick={toggleDisplayDialogueBox}/>
         <Button text="Random Scene" onClick={() => {
           const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon'];

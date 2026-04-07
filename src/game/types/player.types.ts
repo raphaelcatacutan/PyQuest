@@ -25,4 +25,5 @@ export interface Player {
   xpRequirement: number;
   level: number;
   isDamaged: boolean;
+  isHealing: boolean;
 }

@@ -20,7 +20,7 @@ interface PlayerStoreProps extends Player {
 
   gainDef: (amount: number) => void;
   setMaxDef: (amount: number) => void;
-  resetMaxDef: (amount: number) => void;
+  resetMaxDef: () => void;
 
   gainEnergy: (amount: number) => void;
   setMaxEnergy: (amount: number) => void;
@@ -54,7 +54,8 @@ interface PlayerStoreProps extends Player {
   setXpRequirement: (amount: number) => void;
   levelUp: () => void;
 
-  toggleIsDamaged: () => void;
+  toggleIsDamaged: (state: boolean | null) => void;
+  toggleIsHealing: (state: boolean | null) => void;
   logOut: () => void;
 }
 
@@ -63,7 +64,7 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   username: "",
   password: "",
 
-  hp: 0,
+  hp: 100,
   maxHP: 100,
   def: 0,
   maxDef: 0,
@@ -85,6 +86,7 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   xpRequirement: 100,
   level: 1,
   isDamaged: false,
+  isHealing: false,
   setUserId: (user_id) => set(({ user_id: user_id })),
   setUsername: (username) => set(({ username: username })),
   setPassword: (pass) => set(({ password: pass })),
@@ -95,7 +97,7 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
 
   gainDef: (amount) => set((state) => ({ def: state.def + amount })),
   setMaxDef: (amount) => set((state) => ({ maxDef: state.maxDef + amount })),
-  resetMaxDef: (amount) => set({ def: 0, maxDef: 0 }),
+  resetMaxDef: () => set({ def: 0, maxDef: 0 }),
 
   gainEnergy: (amount) => set((state) => ({ energy: state.energy + amount})),
   setMaxEnergy: (amount) => set((state) => ({ maxEnergy: state.maxEnergy + amount })),
@@ -129,7 +131,21 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   setXpRequirement: (amount) => set({ xpRequirement: amount }),
   levelUp: () => set((state) => ({ level: state.level + 1 })),
 
-  toggleIsDamaged: () => set((state) => ({ isDamaged: !state.isDamaged })),
+  toggleIsDamaged: (bool) => { 
+    if (bool != null){
+      return set({ isDamaged: bool })
+    } else {
+      return set((s) => ({ isDamaged: !s.isDamaged })) 
+    } 
+  },
+  toggleIsHealing: (bool) => { 
+    if (bool != null){
+      return set({ isHealing: bool }) 
+    } else {
+      return set((s) => ({ isHealing: !s.isHealing })) 
+    } 
+  },
+
   logOut: () => {
     useInventoryStore.setState({ player_id: "" })
     set({ 

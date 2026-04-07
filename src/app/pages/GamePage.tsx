@@ -22,6 +22,7 @@ import {
 import { InventoryNode } from "@/src/game/types/inventory.types"
 import DialogueBox from "@/src/components/ui/DialogueBox"
 import DevTool from "@/src/components/DevTool"
+import Damaged from "@/src/components/events/Damaged"
 
 // TODO: Add Player HP UI
 
@@ -106,20 +107,10 @@ export default function GamePage() {
 
   return (
     <div className="relative flex flex-col w-full h-full">
-      {displayDialogueBox && <DialogueBox/>}
-
-      {/* Dmg HUD */}
-      {isDamaged && (
-        <div className="absolute w-full h-full z-100 opacity-50 transition pointer-events-none" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
-      )}
-
       <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
         <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
       </div> 
       
-      {/* DEBUGGER */}
-      <DevTool/>
-
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 
         <div className="relative w-150">  {/* CodeEditor div */}
@@ -162,6 +153,11 @@ export default function GamePage() {
           }
         </div>
       </div>
+
+      {/* Misc */}
+      <DialogueBox/>
+      <Damaged/>
+      <DevTool/>
     </div>
   )
 }

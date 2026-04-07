@@ -20,6 +20,7 @@ export interface Player {
   headSlot: string;
   bodySlot: string;
   
+  coins: number;
   XP: number;
   xpRequirement: number;
   level: number;

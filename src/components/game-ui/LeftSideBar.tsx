@@ -7,6 +7,7 @@ import {
   coinsIcon,
   playerInventoryBg,
 } from '@/src/assets'
+import { usePlayerStore } from "@/src/game/store"
 
 interface LeftSideBarProps {
   playerInventory: InventoryNode[];
@@ -18,8 +19,7 @@ interface LeftSideBarProps {
 
 export default function LeftSideBar({ playerInventory, deleteInventoryItem, renameInventoryItem, moveInventoryItem, addInventoryItem }: LeftSideBarProps){
   const [inv, toggleInv] = useState(false)
-  
-  const coin = 0;
+  const coins = usePlayerStore(s => s.coins);
 
   return (
     <div className="relative h-full flex flex-row">
@@ -36,7 +36,7 @@ export default function LeftSideBar({ playerInventory, deleteInventoryItem, rena
           </div>
           <div className="pt-1 pb-1">
             <img src={coinsIcon} draggable={false} className="w-7 h-7 inline"/> 
-            {coin}
+            {coins}
           </div>
         </div>
       </div>

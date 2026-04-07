@@ -48,6 +48,8 @@ interface PlayerStoreProps extends Player {
   unequipHeadArmor: () => void;
   unequipBodyArmor: () => void;
 
+  gainCoins: (amount: number) => void;
+  deductCoins: (amount: number) => void;
   gainXP: (amount: number) => void;
   setXpRequirement: (amount: number) => void;
   levelUp: () => void;
@@ -78,6 +80,7 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   headSlot: "",
   bodySlot: "",
   
+  coins: 0,
   XP: 0,
   xpRequirement: 100,
   level: 1,
@@ -120,6 +123,8 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
   unequipHeadArmor: () => set({ def: 0 }), // TODO: Figure out how to reduce a certain amount of def provided by the helmet
   unequipBodyArmor: () => set({ def: 0 }), // TODO: Figure out how to reduce a certain amount of def provided by the helmet
 
+  gainCoins: (amount) => set((s) => ({ coins: s.coins + amount })),
+  deductCoins: (amount) => set((s) => ({ coins: s.coins - amount })),
   gainXP: (amount) => set((state) => ({ XP: state.XP + amount })),
   setXpRequirement: (amount) => set({ xpRequirement: amount }),
   levelUp: () => set((state) => ({ level: state.level + 1 })),

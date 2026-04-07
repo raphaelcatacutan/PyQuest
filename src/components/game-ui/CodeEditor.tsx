@@ -83,7 +83,7 @@ export default function CodeEditor() {
   } 
 
   return (
-    <div className="flex flex-col w-full h-full relative bg-[#23100a]">
+    <div className="relative w-150 flex flex-col h-full bg-[#23100a]">
       <div className="flex flex-row-reverse m-1 gap-2">
         <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
         {/* <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/> */}

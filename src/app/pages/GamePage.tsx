@@ -114,9 +114,7 @@ export default function GamePage() {
       
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 
-        <div className="relative w-150">  {/* CodeEditor div */}
-          <CodeEditor/>
-        </div>
+        <CodeEditor/>
 
         <div className="relative flex h-full w-full"> {/* scene */}
           <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${sceneBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>

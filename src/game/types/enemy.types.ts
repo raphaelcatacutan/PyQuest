@@ -1,6 +1,6 @@
 import { LootDrop } from "./loot.types";
 
-interface Skill {
+export interface Skill {
   name: string;
   dmg: number;
   energyCost: number;

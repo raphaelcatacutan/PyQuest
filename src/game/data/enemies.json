@@ -1,0 +1,30 @@
+{
+  "crawler": {
+    "id": "crawler",
+    "name": "",
+    "description": "",
+    "enemyImg": "",
+    "hp": 100,
+    "maxHp": 100,
+    "energy": 50,
+    "maxEnergy": 50,
+    "def": 1,
+    "maxDef": 1,
+    "skills": [],
+    "dmg": 8,
+    "atkSpeed": 1,
+    "critDmg": 0,
+    "critChance": 0,
+    "evasion": 0.05,
+    "spawnRate": 0.6,
+    "lootDrop": {
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  }
+}

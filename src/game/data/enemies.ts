@@ -1,5 +1,6 @@
 import { SceneTypes } from '../types/scene.types';
 import { Enemy } from '../types/enemy.types';
+import enemyData from './enemies.json'
 import { 
   slimeEnemy, 
   skeletonHeadEnemy 
@@ -9,6 +10,8 @@ import {
  * 
  *  Enemy Database
  */
+
+export const Enemies: Record<string, Enemy> = enemyData as Record<string, Enemy>
 
 export const ForestEnemies: Record<string, Enemy> = {
 

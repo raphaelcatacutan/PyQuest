@@ -47,7 +47,7 @@ export default function ArmorArchitect() {
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitized = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+    const sanitized = e.target.value.replace(/[^a-z_]/g, '');
     setItem(prev => ({ ...prev, id: sanitized, filename: sanitized }));
   };
 

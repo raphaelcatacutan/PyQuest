@@ -51,7 +51,7 @@ export default function BossArchitect() {
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitized = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+    const sanitized = e.target.value.replace(/[^a-z_]/g, '');
     setBoss(prev => ({ ...prev, id: sanitized }));
   };
 

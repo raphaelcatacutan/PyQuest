@@ -1,16 +1,18 @@
 import { useEffect } from "react"
 import { useShallow } from "zustand/shallow"
 import { 
-  useEnemyStore,
+  useSceneStore,
+  useGameStore,
+  useBossStore,
 } from "@/src/game/store"
+import { getBossesByLocation } from "@/src/game/data/bosses"
 
 // TODO: Bug: terminal outputs double console, meaning useEffect is being performed twice.
 //            This affects which enemy/boss is being rendered
 // TODO: Add energy UI
 
-export default function EnemyEncounter(){
-  
-  const { id, name, hp, maxHp, energy, maxEnergy, enemyImg } = useEnemyStore(
+export default function BossEncounter(){
+  const { id, name, hp, maxHp, energy, maxEnergy, bossImg } = useBossStore(
     useShallow((s) => ({
       id: s.id,
       name: s.name,
@@ -18,7 +20,7 @@ export default function EnemyEncounter(){
       maxHp: s.maxHp,
       energy: s.energy,
       maxEnergy: s.maxEnergy,
-      enemyImg: s.enemyImg,
+      bossImg: s.bossImg,
       skills: s.skills
     }))
   )
@@ -44,7 +46,7 @@ export default function EnemyEncounter(){
       </div>
 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
-        <img src={enemyImg} className="w-80 h-80" draggable={false}></img>
+        <img src={bossImg} className="w-80 h-80" draggable={false}></img>
       </div>
     </div>
   )

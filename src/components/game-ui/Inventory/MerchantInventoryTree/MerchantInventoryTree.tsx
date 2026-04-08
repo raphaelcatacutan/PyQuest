@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tree } from "react-arborist";
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 import { MerchantInventoryNode } from "./MerchantInventoryNode";
 
 // TODO: Item must be accompanied with Buy and Sell value

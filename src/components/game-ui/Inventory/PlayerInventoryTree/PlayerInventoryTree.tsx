@@ -1,6 +1,6 @@
 import { Tree, TreeApi } from "react-arborist";
 import { PlayerInventoryNode } from './PlayerInventoryNode'
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 import { useRef, useState, useEffect } from "react";
 import Button from "../../../ui/Button";
 import {
@@ -16,11 +16,14 @@ import showToast from "@/src/components/ui/Toast"
 
 interface PlayerInventoryTreeProps {
   inventory: InventoryNode[];
-  setInventory: (inventory: InventoryNode[]) => void;
+  onDeleteItem: (nodeId: string) => void;
+  onRenameItem: (nodeId: string, newName: string) => void;
+  onMoveItem: (dragIds: string[], parentId: string | null, index: number) => void;
+  onAddItem?: (parentId: string | undefined, item: InventoryNode) => void;
   onItemTransferred?: (item: InventoryNode) => void;
 }
 
-export function PlayerInventoryTree({ inventory, setInventory, onItemTransferred }: PlayerInventoryTreeProps){
+export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onMoveItem, onAddItem, onItemTransferred }: PlayerInventoryTreeProps){
   const containerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<TreeApi<InventoryNode>>(null);
@@ -189,7 +192,8 @@ export function PlayerInventoryTree({ inventory, setInventory, onItemTransferred
   }
 
   function handleRefresh(){
-    setInventory([...inventory]);
+    // Zustand automatically handles re-renders when inventory changes via store methods
+    // No manual refresh needed
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
@@ -236,92 +240,19 @@ export function PlayerInventoryTree({ inventory, setInventory, onItemTransferred
 
   function handleMoveNode(args: { dragIds: string[]; parentId: string | null; index: number }) {
     const { dragIds, parentId, index } = args;
-    
-    // Deep clone inventory
-    let newInventory = JSON.parse(JSON.stringify(inventory)) as InventoryNode[];
-    
-    // Step 1: Collect and remove nodes being moved
-    const nodesToMove: InventoryNode[] = [];
-    const removeNodes = (items: InventoryNode[]): InventoryNode[] => {
-      const result: InventoryNode[] = [];
-      for (const item of items) {
-        if (dragIds.includes(item.id)) {
-          nodesToMove.push(item);
-        } else {
-          if (item.kind === "folder") {
-            result.push({ ...item, children: removeNodes(item.children) });
-          } else {
-            result.push(item);
-          }
-        }
-      }
-      return result;
-    };
-    
-    newInventory = removeNodes(newInventory);
-    
-    // Step 2: Insert nodes at target location
-    if (parentId === null) {
-      // Insert at root level
-      newInventory.splice(index, 0, ...nodesToMove);
-    } else {
-      // Insert into parent folder
-      const insertIntoParent = (items: InventoryNode[]): InventoryNode[] => {
-        return items.map(item => {
-          if (item.id === parentId && item.kind === "folder") {
-            const newChildren = [...item.children];
-            newChildren.splice(index, 0, ...nodesToMove);
-            return { ...item, children: newChildren };
-          }
-          if (item.kind === "folder") {
-            return { ...item, children: insertIntoParent(item.children) };
-          }
-          return item;
-        });
-      };
-      newInventory = insertIntoParent(newInventory);
-    }
-    
-    setInventory(newInventory);
+    onMoveItem(dragIds, parentId, index);
   }
 
   function handleDeleteNode(nodeId: string) {
-    const deleteFromArray = (items: InventoryNode[]): InventoryNode[] => {
-      return items
-        .filter(item => item.id !== nodeId)
-        .map(item => 
-          item.kind === "folder" 
-            ? { ...item, children: deleteFromArray(item.children) }
-            : item
-        );
-    };
-    setInventory(deleteFromArray(inventory));
+    onDeleteItem(nodeId);
   }
 
   function handleRenameNode(nodeId: string, newName: string) {
-    // Find parent to check for duplicates
-    const pathInfo = findNodePathToId(nodeId);
-    if (!pathInfo) return;
-
-    // Check for duplicate names in the same parent
-    if (hasDuplicateName(pathInfo.parentId, newName, nodeId)) {
-      showToast({ variant: "error", message: `A file or folder with the name "${newName}" already exists at this level.`})
-      return;
-    }
-
-    const renameInArray = (items: InventoryNode[]): InventoryNode[] => {
-      return items.map(item => 
-        item.id === nodeId
-          ? { ...item, name: newName }
-          : item.kind === "folder"
-          ? { ...item, children: renameInArray(item.children) }
-          : item
-      );
-    };
-    setInventory(renameInArray(inventory));
+    onRenameItem(nodeId, newName);
   }
 
   function handleNodeAddFolder(parentId?: string) {
+    if (!onAddItem) return;
     const nextNum = getNextNumberForPrefix(parentId, "New Folder");
     const newFolderName = `New Folder ${nextNum}`;
 
@@ -332,25 +263,11 @@ export function PlayerInventoryTree({ inventory, setInventory, onItemTransferred
       children: []
     };
 
-    if (!parentId) {
-      // Add to root
-      setInventory([...inventory, newFolder]);
-      return;
-    }
-
-    const addToFolder = (items: InventoryNode[]): InventoryNode[] => {
-      return items.map(item => 
-        item.id === parentId && item.kind === "folder"
-          ? { ...item, children: [...item.children, newFolder] }
-          : item.kind === "folder"
-          ? { ...item, children: addToFolder(item.children) }
-          : item
-      );
-    };
-    setInventory(addToFolder(inventory));
+    onAddItem(parentId, newFolder);
   }
 
   function handleNodeAddFile(parentId?: string) {
+    if (!onAddItem) return;
     const nextNum = getNextNumberForPrefix(parentId, "New Item");
     const newFileName = `New Item ${nextNum}`;
 
@@ -361,22 +278,7 @@ export function PlayerInventoryTree({ inventory, setInventory, onItemTransferred
       name: newFileName
     };
 
-    if (!parentId) {
-      // Add to root
-      setInventory([...inventory, newFile]);
-      return;
-    }
-
-    const addToFolder = (items: InventoryNode[]): InventoryNode[] => {
-      return items.map(item => 
-        item.id === parentId && item.kind === "folder"
-          ? { ...item, children: [...item.children, newFile] }
-          : item.kind === "folder"
-          ? { ...item, children: addToFolder(item.children) }
-          : item
-      );
-    };
-    setInventory(addToFolder(inventory));
+    onAddItem(parentId, newFile);
   }
 
   return (

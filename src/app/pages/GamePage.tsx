@@ -1,52 +1,53 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
+import { useShallow } from "zustand/shallow"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import showToast from "@/src/components/ui/Toast"
 import EnemyEncounter from "@/src/components/events/EnemyEncounter"
+import Combat from "@/src/components/events/Combat"
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import { 
   exitIcon,
   rightPanelIcon,
-  
-  skeletonHeadEnemy,
-  slimeEnemy,
-  
   painHud,
 } from '@/src/assets'
-import { InventoryNode } from "@/src/domain/inventory/inventory.types"
-import { useSceneStore, type SceneName} from "@/src/game/store/sceneStore"
+import { 
+  useSceneStore,
+  useGameStore,
+  usePlayerStore,
+  useInventoryStore,
+  useDialogueBoxStore,
+} from "@/src/game/store"
+import { InventoryNode } from "@/src/game/types/inventory.types"
+import DialogueBox from "@/src/components/ui/DialogueBox"
+import DevTool from "@/src/components/DevTool"
+import Damaged from "@/src/components/events/Damaged"
 
-const InitialPlayerInventory: InventoryNode[] = [
-  { 
-    id: "root",
-    kind: "folder", 
-    name: "User", 
-    children: [
-      { id: "wp_folder", kind: "folder", name: "Weapons", children: [] },   
-      { id: "arm_folder", kind: "folder", name: "Armors", children: [] },   
-      { id: "cons_folder", kind: "folder", name: "Consumables", children: [] }
-    ]
-  },
-  { id: "misc_folder", kind: "folder", name: "Miscellaneous", children: [] },
-  { id: "pickedup_folder", kind: "folder", name: "Picked-up", children: [] },
-];
-
+// TODO: Add Player HP UI
 
 export default function GamePage() {
-  const { scene, setScene, getSceneBg } = useSceneStore()
-
-  const bg: Array<SceneName> = ['village', 'labyrinth'] 
-  const RandScene = bg[Math.floor(Math.random() * bg.length)]
-
-  const [rightPanel, toggleRightPanel] = useState(false)
-  const [playerInventory, setPlayerInventory] = useState(InitialPlayerInventory)
-  const [enemy, setEnemy] = useState(false)
-  const [dmg, isDmg] = useState(false)
-  const [loot, isLoot] = useState(true)
-  const [inVillage, setInVillage] = useState(true)
-  // const { bees, increaseBees } = useBeeStore()
+  const navigate = useNavigate()
+  const inVillage = useGameStore(s => s.inVillage)
+  const logOut = usePlayerStore(s => s.logOut)
+  const { scene, sceneBg } = useSceneStore()
+  const { rightPanel, toggleRightPanel } = useGameStore(
+    useShallow((state) => ({
+      rightPanel: state.rightPanel,
+      toggleRightPanel: state.toggleRightPanel
+    }))
+  )
+  const { player_id, playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
+    useShallow((s) => ({
+      player_id: s.player_id,
+      playerInventory: s.playerInventory,
+      addInventoryItem: s.addInventoryItem,
+      deleteInventoryItem: s.deleteInventoryItem,
+      renameInventoryItem: s.renameInventoryItem,
+      moveInventoryItem: s.moveInventoryItem,
+    }))
+  )
   
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -85,96 +86,70 @@ export default function GamePage() {
   }, [scene])
 
   function handleExitGame(){
-
-    // Debug
-    setScene(RandScene)
+    // TODO: Add Confirmation Toast
+    logOut()
+    navigate('/login')
   }
 
   function handleItemTransferred(item: InventoryNode) {
     console.log("GamePage.handleItemTransferred called with item:", item);
     
-    // Use a unique counter to ensure each transferred item has a unique ID
     const uniqueId = `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     console.log("Generated unique ID:", uniqueId);
     
-    // Use functional state update to avoid stale closure issues
-    setPlayerInventory(prevInventory => {
-      // Add the transferred item to the "Picked-up" folder
-      const addToPickedUp = (items: InventoryNode[]): InventoryNode[] => {
-        return items.map(folderItem => {
-          if (folderItem.id === "pickedup_folder" && folderItem.kind === "folder") {
-            console.log("Found Picked-up folder, adding item:", item.name);
-            return {
-              ...folderItem,
-              children: [...folderItem.children, { ...item, id: uniqueId }]
-            };
-          }
-          if (folderItem.kind === "folder" && folderItem.children) {
-            return { ...folderItem, children: addToPickedUp(folderItem.children) };
-          }
-          return folderItem;
-        });
-      };
-      
-      const newInventory = addToPickedUp(prevInventory);
-      console.log("New inventory after adding item:", newInventory);
-      const pickedUpFolder = newInventory.find(i => i.kind === "folder" && i.id === "pickedup_folder");
-      if (pickedUpFolder && pickedUpFolder.kind === "folder") {
-        console.log("Picked-up folder children count:", pickedUpFolder.children.length);
-      }
-      return newInventory;
+    addInventoryItem("pickedup_folder", { 
+      ...item, 
+      id: uniqueId 
     });
   }
 
   return (
     <div className="relative flex flex-col w-full h-full">
-
       <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
         <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
       </div> 
-
+      
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 
-        <div className="relative w-150">  {/* CodeEditor div */}
-          <CodeEditor/>
-        </div>
+        <CodeEditor/>
 
         <div className="relative flex h-full w-full"> {/* scene */}
-          <div className="absolute h-full z-99">
-            <LeftSideBar playerInventory={playerInventory} setPlayerInventory={setPlayerInventory}/>
+          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${sceneBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
+          
+          <div className="absolute h-full z-50">
+            <LeftSideBar 
+              playerInventory={playerInventory} 
+              addInventoryItem={addInventoryItem}
+              deleteInventoryItem={deleteInventoryItem}
+              renameInventoryItem={renameInventoryItem}
+              moveInventoryItem={moveInventoryItem}
+            />
           </div>
-
-          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${getSceneBg(scene)})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
-
-          {/* Enemy Encounter */}
-          {enemy && (
-            <div className="absolute flex h-full w-full z-1"> 
-              <EnemyEncounter enemyName={"Slime"} health={80} maxHealth={100} enemyImg={slimeEnemy}/>
-            </div>
-          )}
-
-          {/* Dmg HUD */}
-          {dmg && (
-            <div className="absolute w-full h-full z-2 opacity-50 transition" style={{ backgroundImage: `url(${painHud})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
-          )}
 
           {!rightPanel ? 
-          <div className="absolute right-1 top-1 z-99">
-            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={() => toggleRightPanel(rightPanel => !rightPanel)}/> 
+          <div className="absolute right-1 top-1 z-50">
+            <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={toggleRightPanel}/> 
           </div>
           : 
-          <div className="absolute flex right-0 h-full z-99">
+          <div className="absolute flex right-0 h-full z-50">
             <RightSideBar 
-              onClose={() => toggleRightPanel(false)} 
+              onClose={toggleRightPanel} 
               onItemTransferred={handleItemTransferred} 
               lootInventoryRef={lootInventoryRef}
               atVillage={inVillage}
-
               />
           </div>
           }
+
+          <Combat/>
+
         </div>
       </div>
+
+      {/* Misc */}
+      <DialogueBox/>
+      <Damaged/>
+      <DevTool/>
     </div>
   )
 }

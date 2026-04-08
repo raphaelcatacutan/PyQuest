@@ -63,6 +63,13 @@ export default function EnemyArchitect() {
     setSkillInput({ name: "", dmg: 0, energyCost: 0 });
   };
 
+  const removeSkill = (index: number) => {
+    setEnemy(prev => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index)
+    }));
+  };
+
   const addLocation = () => {
     if (!locationInput.scene) return;
     setEnemy(prev => ({ ...prev, location: { ...prev.location, [locationInput.scene]: locationInput.spawnRate } }));
@@ -132,7 +139,12 @@ export default function EnemyArchitect() {
             <button style={styles.addButton} onClick={addSkill}>ADD SKILL</button>
           </div>
           <ul style={{ color: '#00ff88', fontSize: '13px' }}>
-            {enemy.skills.map((s, i) => <li key={i}>{s.name} (DMG: {s.dmg})</li>)}
+            {enemy.skills.map((s, i) => (
+              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <span>{s.name} (DMG: {s.dmg})</span>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeSkill(i)}>Remove</button>
+              </li>
+            ))}
           </ul>
         </section>
 

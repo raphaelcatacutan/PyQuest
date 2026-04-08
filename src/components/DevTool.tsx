@@ -60,7 +60,8 @@ export default function DevTool(){
       gainHP: s.gainHP
     }))
   )
-  
+  const gainXP = usePlayerStore(s => s.gainXP)
+
   const combatText = `Combat (${inCombat})`
   const dmgHUDText = `Dmg HUD (${isDamaged})`
   const dialogueBoxText = `Dialogue Box (${displayDialogueBox})`
@@ -78,6 +79,7 @@ export default function DevTool(){
         <Button text="Hp-" onClick={() => selfHarm(20)}/>
         <span>{hp}</span>
         <Button text="Hp+" onClick={() => gainHP(10)}/>
+        <Button text="XP+" onClick={() => gainXP(10)}/>
         <Button text="Display ID" onClick={() => {console.log(`Player: ${user_id}`)}}/>
         <Button text={combatText} onClick={() => { toggleInCombat(null) }}/>
         <Button text="Enemy/Boss" onClick={() => { 

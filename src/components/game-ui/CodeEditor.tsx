@@ -5,19 +5,32 @@ import Button from "../ui/Button";
 import {
   playIcon,
   clearIcon,
+  saveIcon
 } from '@/src/assets'
+import { usePlayerStore } from "@/src/game/store";
+import { useShallow } from "zustand/shallow";
 
 
 export default function CodeEditor() {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
     editorRef.current = editor;
-
     editor.addCommand(_monaco.KeyMod.CtrlCmd | _monaco.KeyCode.Enter, () => {
       handleRun();
     });
   };
+  const { hp, maxHP } = usePlayerStore(
+    useShallow((s) => ({
+      hp: s.hp,
+      maxHP: s.maxHP
+    }))
+  )
+  const { energy, maxEnergy } = usePlayerStore(
+    useShallow((s) => ({
+      energy: s.energy,
+      maxEnergy: s.maxEnergy
+    }))
+  )
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,18 +52,18 @@ export default function CodeEditor() {
 
   // TODO: Save changes to File Tree only
   function handleSave() {
-    if (editorRef.current) {
-      const code = editorRef.current.getValue();
-      const blob = new Blob([code], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
+    // if (editorRef.current) {
+    //   const code = editorRef.current.getValue();
+    //   const blob = new Blob([code], { type: "text/plain" });
+    //   const url = URL.createObjectURL(blob);
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "code.py";
-      a.click();
+    //   const a = document.createElement("a");
+    //   a.href = url;
+    //   a.download = "code.py";
+    //   a.click();
 
-      URL.revokeObjectURL(url);
-    }
+    //   URL.revokeObjectURL(url);
+    // }
   }
   
   function handleOpen() {
@@ -84,22 +97,32 @@ export default function CodeEditor() {
 
   return (
     <div className="relative w-150 flex flex-col h-full bg-[#23100a]">
-      <div className="flex flex-row-reverse m-1 gap-2">
-        <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
-        {/* <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/> */}
-        {/* <Button variant="icon-only-btn" icon={openIcon} iconSize={20} onClick={handleOpen} title="Open a file"/> */}
-        <Button variant="icon-only-btn" icon={playIcon} iconSize={20} onClick={handleRun} title="Execute code (Ctrl + Enter)"/>
+      <div className="flex flex-row m-1">
+        <div className="flex w-10/12 pl-1 gap-1">
+          <span className="truncate">Current File:</span>
+          <span className="truncate border rounded-lg px-2">Hello_World.py{}</span>
+        </div>
+        <div className="flex flex-row-reverse gap-2">
+          <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
+          <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/>
+          {/* <Button variant="icon-only-btn" icon={openIcon} iconSize={20} onClick={handleOpen} title="Open a file"/> */}
+          <Button variant="icon-only-btn" icon={playIcon} iconSize={20} onClick={handleRun} title="Execute code (Ctrl + Enter)"/>
+        </div>
       </div>
       <div className="flex-1 relative">
         <Editor
-          
           height="100%"
           defaultLanguage="python"
           defaultValue="# Welcome to PyQuest! 
 # Start writing your coding journey in Python here!"
           theme="vs-dark"
           onMount={handleEditorDidMount}
-          
+          options={{
+            minimap: { enabled: false},
+            glyphMargin: false,
+            lineNumbersMinChars: 4,
+            lineDecorationsWidth: 0,
+          }}
         />
 
         {/* {isDragging && (
@@ -107,6 +130,32 @@ export default function CodeEditor() {
             <span className="text-white font-semibold">Drop file to insert filename</span>
           </div>
         )} */}
+      </div>
+      <div className="absolute bottom-0 w-full p-2 flex gap-4 pointer-events-none z-50">
+        <div className="flex flex-col flex-1">
+          {/* <span className="text-xs text-gray-700 font-semibold">Health</span> */}
+          <div className="relative w-full bg-gray-200 border-2 border-gray-400 rounded h-6 overflow-hidden">
+            <div 
+              className="bg-red-600 h-full transition-all duration-300" 
+              style={{ width: `${(hp / maxHP) * 100}%` }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
+              {hp}/{maxHP}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col flex-1">
+          {/* <span className="text-xs text-gray-700 font-semibold">Energy</span> */}
+          <div className="relative w-full bg-gray-200 border-2 border-gray-400 rounded h-6 overflow-hidden">
+            <div 
+              className="bg-blue-500 h-full transition-all duration-300" 
+              style={{ width: `${(energy / maxEnergy) * 100}%` }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
+              {energy}/{maxEnergy}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

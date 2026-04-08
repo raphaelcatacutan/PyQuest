@@ -5,33 +5,34 @@ import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
 import showToast from "@/src/components/ui/Toast"
-import EnemyEncounter from "@/src/components/events/EnemyEncounter"
 import Combat from "@/src/components/events/Combat"
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import { 
   exitIcon,
   rightPanelIcon,
-  painHud,
 } from '@/src/assets'
 import { 
   useSceneStore,
   useGameStore,
   usePlayerStore,
   useInventoryStore,
-  useDialogueBoxStore,
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/game/types/inventory.types"
 import DialogueBox from "@/src/components/ui/DialogueBox"
 import DevTool from "@/src/components/DevTool"
 import Damaged from "@/src/components/events/Damaged"
-
-// TODO: Add Player HP UI
+import NavBar from "@/src/components/ui/NavBar"
 
 export default function GamePage() {
   const navigate = useNavigate()
   const inVillage = useGameStore(s => s.inVillage)
   const logOut = usePlayerStore(s => s.logOut)
-  const { scene, sceneBg } = useSceneStore()
+  const { scene, sceneBg } = useSceneStore(
+    useShallow((s) => ({
+      scene: s.scene,
+      sceneBg: s.sceneBg
+    }))
+  )
   const { rightPanel, toggleRightPanel } = useGameStore(
     useShallow((state) => ({
       rightPanel: state.rightPanel,
@@ -80,17 +81,7 @@ export default function GamePage() {
     window.addEventListener('loot-dropped-to-player', handleLootDrop);
     return () => window.removeEventListener('loot-dropped-to-player', handleLootDrop);
   }, []);
-
-  useEffect(() => {
-    console.log(scene)
-  }, [scene])
-
-  function handleExitGame(){
-    // TODO: Add Confirmation Toast
-    logOut()
-    navigate('/login')
-  }
-
+  
   function handleItemTransferred(item: InventoryNode) {
     console.log("GamePage.handleItemTransferred called with item:", item);
     
@@ -105,9 +96,7 @@ export default function GamePage() {
 
   return (
     <div className="relative flex flex-col w-full h-full">
-      <div className="flex flex-row-reverse h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)]">{/* nav div */}
-        <Button variant="icon-only-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
-      </div> 
+      <NavBar/>
       
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
 

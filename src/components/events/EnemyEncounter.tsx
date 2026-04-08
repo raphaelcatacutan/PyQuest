@@ -5,7 +5,7 @@ import {
   useGameStore,
   useEnemyStore,
 } from "@/src/game/store"
-import { BossesByScene, EnemiesByScene } from "@/src/game/data/enemies"
+import { Enemies, getEnemiesByLocation } from "@/src/game/data/enemies"
 
 // TODO: Bug: terminal outputs double console, meaning useEffect is being performed twice.
 //            This affects which enemy/boss is being rendered
@@ -56,21 +56,22 @@ export default function EnemyEncounter(){
     if (Math.random() <= epsilon){ 
       // Boss
       console.log('Boss')
-      const boss = BossesByScene[scene]
-      if (!boss) return;
+      const bosses = Enemies[scene]
+      if (!bosses) return;
 
-      const keys = Object.keys(boss);
+      const keys = Object.keys(bosses);
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       // TODO: spawnBoss(boss[randomKey])
     } else { 
       // Enemy
       console.log('Enemy')
-      const enemies = EnemiesByScene[scene];
+      // const testScene = 'swamp'
+      const enemies = getEnemiesByLocation(scene);
       if (!enemies) return;
       
       const keys = Object.keys(enemies);
-      const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      spawnEnemy(enemies[randomKey])
+      const randomEnemyKey = keys[Math.floor(Math.random() * keys.length)];
+      spawnEnemy(enemies[randomEnemyKey])
     }
   }, [isThereEnemy, scene, spawnEnemy, id])
 

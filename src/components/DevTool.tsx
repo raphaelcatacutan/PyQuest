@@ -13,7 +13,6 @@ import { useState } from "react"
 import { Enemies } from "../game/data/enemies"
 import { useShallow } from "zustand/shallow"
 
-
 export default function DevTool(){
   const { devTool, toggleDevTool } = useDevToolStore(
     useShallow((s) => ({
@@ -39,9 +38,11 @@ export default function DevTool(){
     }))
   )
 
-
-  const handleTest = () => {
-    takeDamage(20)
+  const handleTest = (scene: SceneTypes) => {
+    // const enem = Object.entries(Enemies).filter(([_, enemy]) => 
+    //   Object.keys(enemy.location).includes(scene)
+    // );
+    console.log(Enemies)
   }
   
   return (
@@ -50,7 +51,7 @@ export default function DevTool(){
       <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900">
         <span>DevTool:</span>
         <input type="text" className="border bg-zinc-800" value={input} onChange={(e) => setInput(e.target.value)}></input>
-        <Button text="Print" onClick={() => {console.log(`Enemies: ${Enemies["crawler"].dmg}`)}}/>
+        <Button text="Print" onClick={() => handleTest('swamp')}/>
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(1)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>
@@ -62,7 +63,7 @@ export default function DevTool(){
           clearEnemy()
         }}
         />
-        <Button text="Hit Enemy" onClick={handleTest}/>
+        <Button text="Hit Enemy" onClick={() => takeDamage(20)}/>
         <Button text="Dmg HUD" onClick={() => toggleIsDamaged(null)}/>
         <Button text="Dialogue Box" onClick={toggleDisplayDialogueBox}/>
         <Button text="Random Scene" onClick={() => {

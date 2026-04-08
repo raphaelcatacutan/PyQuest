@@ -11,14 +11,110 @@
     "def": 2,
     "maxDef": 2,
     "skills": [
-      { "name": "Bone Arrow", "dmg": 25, "energyCost": 30 }
+      {
+        "name": "Bone Arrow",
+        "dmg": 25,
+        "energyCost": 30
+      }
     ],
     "dmg": 15,
     "atkSpeed": 1.2,
     "critDmg": 0.5,
     "critChance": 0.1,
     "evasion": 0.1,
-    "location": [],
+    "location": {
+      "swamp": 0.1
+    },
+    "lootDrop": {
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "Dragon": {
+    "id": "Dragon",
+    "name": "",
+    "description": "",
+    "enemyImg": "",
+    "hp": 100,
+    "maxHp": 100,
+    "energy": 50,
+    "maxEnergy": 50,
+    "def": 1,
+    "maxDef": 1,
+    "skills": [],
+    "dmg": 8,
+    "atkSpeed": 1,
+    "critDmg": 0,
+    "critChance": 0,
+    "evasion": 0.05,
+    "location": {
+      "forest": 0.5
+    },
+    "lootDrop": {
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "Raph": {
+    "id": "Raph",
+    "name": "",
+    "description": "",
+    "enemyImg": "",
+    "hp": 100,
+    "maxHp": 100,
+    "energy": 50,
+    "maxEnergy": 50,
+    "def": 1,
+    "maxDef": 1,
+    "skills": [],
+    "dmg": 8,
+    "atkSpeed": 1,
+    "critDmg": 0,
+    "critChance": 0,
+    "evasion": 0.05,
+    "location": {
+      "swamp": 0.5
+    },
+    "lootDrop": {
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "prince": {
+    "id": "prince",
+    "name": "",
+    "description": "",
+    "enemyImg": "",
+    "hp": 100,
+    "maxHp": 100,
+    "energy": 50,
+    "maxEnergy": 50,
+    "def": 1,
+    "maxDef": 1,
+    "skills": [],
+    "dmg": 8,
+    "atkSpeed": 1,
+    "critDmg": 0,
+    "critChance": 0,
+    "evasion": 0.05,
+    "location": {
+      "swamp": 0.5
+    },
     "lootDrop": {
       "coinDropMin": 0,
       "coinDropMax": 0,

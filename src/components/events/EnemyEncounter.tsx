@@ -6,7 +6,6 @@ import {
 
 // TODO: Bug: terminal outputs double console, meaning useEffect is being performed twice.
 //            This affects which enemy/boss is being rendered
-// TODO: Add energy UI
 
 export default function EnemyEncounter(){
   
@@ -39,6 +38,15 @@ export default function EnemyEncounter(){
           />
           <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
             {hp}/{maxHp}
+          </span>
+        </div>
+        <div className="relative w-48 bg-gray-800 border-2 border-gray-600 rounded h-4 overflow-hidden mt-2">
+          <div 
+            className="bg-yellow-500 h-full transition-all duration-300" 
+            style={{ width: `${energyPercentage}%` }}
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
+            {energy}/{maxEnergy}
           </span>
         </div>
       </div>

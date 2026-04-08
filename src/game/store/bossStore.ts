@@ -33,7 +33,7 @@ export const useBossStore = create<BossStoreProps>((set) => ({
   critChance: 0,
   evasion: 0,
 
-  spawnRate: 0,
+  location: {},
   lootDrop: {
     xpDropMin: 0,
     xpDropMax: 0,
@@ -77,7 +77,7 @@ export const useBossStore = create<BossStoreProps>((set) => ({
     critChance: 0,
     evasion: 0,
 
-    spawnRate: 0,
+    location: {},
     lootDrop: {
       xpDropMin: 0,
       xpDropMax: 0,

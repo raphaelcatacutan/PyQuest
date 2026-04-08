@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Boss, Skill } from '../../game/types/boss.types';
+import { BossSceneTypes } from '../../game/types/scene.types';
 
 const INITIAL_BOSS: Boss = {
   id: "",
@@ -18,7 +19,7 @@ const INITIAL_BOSS: Boss = {
   critDmg: 1.5,
   critChance: 0.15,
   evasion: 0.2,
-  spawnRate: 0.15,
+  location: {},
   lootDrop: {
     xpDropMin: 0,
     xpDropMax: 0,
@@ -33,6 +34,7 @@ const INITIAL_BOSS: Boss = {
 export default function BossArchitect() {
   const [boss, setBoss] = useState<Boss>(INITIAL_BOSS);
   const [skillInput, setSkillInput] = useState<Skill>({ name: "", dmg: 0, energyCost: 0 });
+  const [locationInput, setLocationInput] = useState<{ scene: BossSceneTypes; spawnRate: number }>({ scene: '' as BossSceneTypes, spawnRate: 0.5 });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -60,6 +62,20 @@ export default function BossArchitect() {
     if (!skillInput.name) return;
     setBoss(prev => ({ ...prev, skills: [...prev.skills, skillInput] }));
     setSkillInput({ name: "", dmg: 0, energyCost: 0 });
+  };
+
+  const addLocation = () => {
+    if (!locationInput.scene) return;
+    setBoss(prev => ({ ...prev, location: { ...prev.location, [locationInput.scene]: locationInput.spawnRate } }));
+    setLocationInput({ scene: '' as BossSceneTypes, spawnRate: 0.5 });
+  };
+
+  const removeScene = (scene: BossSceneTypes) => {
+    setBoss(prev => {
+      const newLocation = { ...prev.location };
+      delete newLocation[scene];
+      return { ...prev, location: newLocation };
+    });
   };
 
   const saveBossToDisk = async (data: Boss) => {
@@ -130,13 +146,34 @@ export default function BossArchitect() {
             <label style={styles.gridItem}>Crit Dmg <input type="number" step="0.1" name="critDmg" style={styles.smallInput} value={boss.critDmg} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Crit % <input type="number" step="0.01" name="critChance" style={styles.smallInput} value={boss.critChance} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Evasion <input type="number" step="0.01" name="evasion" style={styles.smallInput} value={boss.evasion} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Spawn Rate <input type="number" step="0.01" name="spawnRate" style={styles.smallInput} value={boss.spawnRate} onChange={handleChange} /></label>
           </div>
         </section>
 
-        {/* 5. LOOT SECTION */}
+        {/* 5. SPAWN LOCATIONS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Loot Drop Table</h3>
+          <h3 style={styles.sectionLabel}>5. Spawn Locations</h3>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as BossSceneTypes})}>
+              <option value="">-- Select Scene --</option>
+              <option value="dungeon">dungeon</option>
+              <option value="labyrinth">labyrinth</option>
+            </select>
+            <input type="number" step="0.01" placeholder="Spawn Rate" style={{ ...styles.input, width: '100px' }} value={locationInput.spawnRate} onChange={e => setLocationInput({...locationInput, spawnRate: Number(e.target.value)})} />
+            <button style={styles.addButton} onClick={addLocation}>ADD LOCATION</button>
+          </div>
+          <ul style={{ color: '#ffcc00', fontSize: '13px' }}>
+            {Object.entries(boss.location).map(([scene, rate]) => (
+              <li key={scene} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <span>{scene} (Rate: {rate})</span>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as BossSceneTypes)}>Remove</button>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* 6. LOOT SECTION */}
+        <section style={styles.section}>
+          <h3 style={styles.sectionLabel}>6. Loot Drop Table</h3>
           <div style={styles.grid}>
             <label style={styles.gridItem}>XP Min <input type="number" name="xpDropMin" style={styles.smallInput} value={boss.lootDrop.xpDropMin} onChange={handleLootChange} /></label>
             <label style={styles.gridItem}>XP Max <input type="number" name="xpDropMax" style={styles.smallInput} value={boss.lootDrop.xpDropMax} onChange={handleLootChange} /></label>

@@ -1,4 +1,5 @@
 import { LootDrop } from "./loot.types";
+import { BossSceneTypes } from "./scene.types";
 
 export interface Skill {
   name: string;
@@ -25,7 +26,7 @@ export interface Boss {
   critChance: number;
   evasion: number;
 
-  spawnRate: number;
+  location: Partial<Record<BossSceneTypes, number>>;
   lootDrop: LootDrop;
   // TODO: Infliction
 }

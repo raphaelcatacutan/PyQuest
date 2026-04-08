@@ -1,19 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { 
     runPython, 
-    validatePythonCode, 
-    watchVariable, 
-    clearWatchers, 
-    getTrackedValue,
-    getAllTrackedValues 
+    validatePythonCode
 } from '../src/backend/mechanics/parser';
 
 describe('Python Parser and Runner', () => {
-    beforeEach(() => {
-        // Clear watchers before each test
-        clearWatchers();
-    });
-
     describe('validatePythonCode', () => {
         it('should allow simple print statement', () => {
             const code = 'print("Hello World")';
@@ -68,6 +59,18 @@ print(greet("World"))
             const code = 'print(undefined_variable)';
             const output = await runPython(code);
             expect(output).toContain('Error');
+        });
+
+        it('should expose builtin helpers and user modules', async () => {
+            const code = `
+from user.weapons import spear
+
+goTo("village")
+print("Buy")
+            `;
+
+            const output = await runPython(code);
+            expect(output).toContain('Buy');
         });
     });
 

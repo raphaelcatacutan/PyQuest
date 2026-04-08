@@ -127,7 +127,20 @@ export const usePlayerStore = create<PlayerStoreProps>((set) => ({
 
   gainCoins: (amount) => set((s) => ({ coins: s.coins + amount })),
   deductCoins: (amount) => set((s) => ({ coins: s.coins - amount })),
-  gainXP: (amount) => set((state) => ({ XP: state.XP + amount })),
+  gainXP: (amount) => set((state) => {
+    let newXP = state.XP + amount;
+    let newLevel = state.level;
+    let newXpRequirement = state.xpRequirement;
+
+    // Check if XP meets requirement and level up
+    while (newXP >= newXpRequirement) {
+      newXP -= newXpRequirement;
+      newLevel += 1;
+      newXpRequirement = Math.floor(newXpRequirement * 1.2); // Increase requirement by 20% per level (TODO: Modify)
+    }
+
+    return { XP: newXP, level: newLevel, xpRequirement: newXpRequirement };
+  }),
   setXpRequirement: (amount) => set({ xpRequirement: amount }),
   levelUp: () => set((state) => ({ level: state.level + 1 })),
 

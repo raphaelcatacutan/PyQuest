@@ -4,7 +4,6 @@ import { usePlayerStore } from "@/src/game/store"
 import { useShallow } from "zustand/shallow"
 import { useNavigate } from "react-router-dom"
 
-// TODO: XP Logic
 
 export default function NavBar(){
   const navigate = useNavigate()
@@ -22,7 +21,9 @@ export default function NavBar(){
     logOut()
     navigate('/login')
   }
-  
+
+  // TODO: XP Logic
+
   return (
     <div className="flex flex-row h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)] gap-4 items-center justify-center">{/* nav div */}
       <Button variant="exit-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>

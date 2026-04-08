@@ -50,6 +50,11 @@ export default function BossArchitect() {
     });
   };
 
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+    setBoss(prev => ({ ...prev, id: sanitized }));
+  };
+
   const handleLootChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setBoss(prev => ({
@@ -104,7 +109,7 @@ export default function BossArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity & Visuals</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={boss.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={boss.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Name</label>
           <input style={styles.input} name="name" placeholder="name" value={boss.name} onChange={handleChange} />

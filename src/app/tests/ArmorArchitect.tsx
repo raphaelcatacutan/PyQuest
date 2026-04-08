@@ -46,6 +46,11 @@ export default function ArmorArchitect() {
     });
   };
 
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+    setItem(prev => ({ ...prev, id: sanitized, filename: sanitized }));
+  };
+
   const saveToDisk = async (data: Armor) => {
     if (!data.id) return alert("ID is required!");
     try {
@@ -69,7 +74,7 @@ export default function ArmorArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={item.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={item.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Filename (Auto-syncs with ID)</label>
           <input style={styles.input} name="filename" placeholder="filename" value={item.filename} onChange={handleChange} />

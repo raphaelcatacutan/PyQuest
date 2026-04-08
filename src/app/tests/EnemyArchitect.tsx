@@ -49,6 +49,11 @@ export default function EnemyArchitect() {
     });
   };
 
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-zA-Z0-9_]/g, '');
+    setEnemy(prev => ({ ...prev, id: sanitized }));
+  };
+
   const handleLootChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEnemy(prev => ({
@@ -103,7 +108,7 @@ export default function EnemyArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity & Visuals</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={enemy.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={enemy.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Name</label>
           <input style={styles.input} name="name" placeholder="name" value={enemy.name} onChange={handleChange} />

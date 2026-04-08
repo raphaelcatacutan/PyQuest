@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Boss, Skill } from '../../game/types/boss.types';
-import { BossSceneTypes } from '../../game/types/scene.types';
+import { SceneTypes } from '../../game/types/scene.types';
 
 const INITIAL_BOSS: Boss = {
   id: "",
@@ -34,7 +34,7 @@ const INITIAL_BOSS: Boss = {
 export default function BossArchitect() {
   const [boss, setBoss] = useState<Boss>(INITIAL_BOSS);
   const [skillInput, setSkillInput] = useState<Skill>({ name: "", dmg: 0, energyCost: 0 });
-  const [locationInput, setLocationInput] = useState<{ scene: BossSceneTypes; spawnRate: number }>({ scene: '' as BossSceneTypes, spawnRate: 0.5 });
+  const [locationInput, setLocationInput] = useState<{ scene: SceneTypes; spawnRate: number }>({ scene: '' as SceneTypes, spawnRate: 0.5 });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -67,10 +67,10 @@ export default function BossArchitect() {
   const addLocation = () => {
     if (!locationInput.scene) return;
     setBoss(prev => ({ ...prev, location: { ...prev.location, [locationInput.scene]: locationInput.spawnRate } }));
-    setLocationInput({ scene: '' as BossSceneTypes, spawnRate: 0.5 });
+    setLocationInput({ scene: '' as SceneTypes, spawnRate: 0.5 });
   };
 
-  const removeScene = (scene: BossSceneTypes) => {
+  const removeScene = (scene: SceneTypes) => {
     setBoss(prev => {
       const newLocation = { ...prev.location };
       delete newLocation[scene];
@@ -126,7 +126,7 @@ export default function BossArchitect() {
 
         {/* 3. SKILLS SECTION */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Skills List</h3>
+          <h3 style={styles.sectionLabel}>3. Skills List (Skill Name & Skill Damage)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
             <input placeholder="Skill Name" style={styles.input} value={skillInput.name} onChange={e => setSkillInput({...skillInput, name: e.target.value})} />
             <input type="number" placeholder="Dmg" style={{ ...styles.input, width: '80px' }} value={skillInput.dmg} onChange={e => setSkillInput({...skillInput, dmg: Number(e.target.value)})} />
@@ -151,12 +151,19 @@ export default function BossArchitect() {
 
         {/* 5. SPAWN LOCATIONS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Spawn Locations</h3>
+          <h3 style={styles.sectionLabel}>5. Spawn Locations (SPAWN LOCATION & SPAWN RATE)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as BossSceneTypes})}>
+            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as SceneTypes})}>
               <option value="">-- Select Scene --</option>
               <option value="dungeon">dungeon</option>
               <option value="labyrinth">labyrinth</option>
+              <option value="forest">forest</option>
+              <option value="desert">desert</option>
+              <option value="swamp">swamp</option>
+              <option value="cemetery">cemetery</option>
+              <option value="tundra">tundra</option>
+              <option value="jungle">jungle</option>
+              <option value="temple">temple</option>
             </select>
             <input type="number" step="0.01" placeholder="Spawn Rate" style={{ ...styles.input, width: '100px' }} value={locationInput.spawnRate} onChange={e => setLocationInput({...locationInput, spawnRate: Number(e.target.value)})} />
             <button style={styles.addButton} onClick={addLocation}>ADD LOCATION</button>
@@ -165,7 +172,7 @@ export default function BossArchitect() {
             {Object.entries(boss.location).map(([scene, rate]) => (
               <li key={scene} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                 <span>{scene} (Rate: {rate})</span>
-                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as BossSceneTypes)}>Remove</button>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as SceneTypes)}>Remove</button>
               </li>
             ))}
           </ul>

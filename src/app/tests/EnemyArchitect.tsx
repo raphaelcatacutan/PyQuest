@@ -125,7 +125,7 @@ export default function EnemyArchitect() {
 
         {/* 3. SKILLS SECTION */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Skills List</h3>
+          <h3 style={styles.sectionLabel}>3. Skills List (Skill Name & Skill Damage)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
             <input placeholder="Skill Name" style={styles.input} value={skillInput.name} onChange={e => setSkillInput({...skillInput, name: e.target.value})} />
             <input type="number" placeholder="Dmg" style={{ ...styles.input, width: '80px' }} value={skillInput.dmg} onChange={e => setSkillInput({...skillInput, dmg: Number(e.target.value)})} />
@@ -150,7 +150,7 @@ export default function EnemyArchitect() {
 
         {/* 5. SPAWN LOCATIONS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Spawn Locations</h3>
+          <h3 style={styles.sectionLabel}>5. Spawn Locations (SPAWN LOCATION & SPAWN RATE)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
             <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as SceneTypes})}>
               <option value="">-- Select Scene --</option>

@@ -7,6 +7,7 @@ import WatcherTestPage from './tests/backend-test.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import GamePage from './pages/GamePage.tsx'
 import SignupPage from './pages/SignupPage.tsx'
+import UnifiedArchitect from './tests/UnifiedArchitect.tsx'
 import { ToastContainer } from "react-toastify"
 
 /**
@@ -25,8 +26,9 @@ createRoot(document.getElementById('root')!).render(
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path="/test" element={<WatcherTestPage />} />
+          <Route path="/architect" element={<UnifiedArchitect/>}/>
         </Routes>
       </BrowserRouter>
-    </StrictMode>,
+    </StrictMode>
   </>
 )

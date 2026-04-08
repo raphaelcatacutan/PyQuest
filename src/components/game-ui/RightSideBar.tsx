@@ -5,7 +5,7 @@ import {
 } from '@/src/assets'
 import Terminal from "./Terminal";
 import { LootInventoryTree } from "@/src/components/game-ui/Inventory/LootInventoryTree/LootInventoryTree";
-import { InventoryNode } from "@/src/domain/inventory/inventory.types";
+import { InventoryNode } from "@/src/game/types/inventory.types";
 import { useState, Ref } from "react";
 import { MerchantInventoryTree } from "./Inventory/MerchantInventoryTree/MerchantInventoryTree";
 
@@ -41,7 +41,7 @@ export function RightSideBar({ onClose, onItemTransferred, lootInventoryRef, atV
         </div>
       }
       <div className="flex-1 overflow-hidden">
-        <Terminal messages={["[BATTLE_LOG]: You defeated a goblin! 76 exp rewarded.", "HI"]}/>
+        <Terminal/>
       </div>
     </div>
   );

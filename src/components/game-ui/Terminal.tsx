@@ -1,18 +1,15 @@
 import { useEffect, useRef } from "react";
+import { useTerminalStore } from "@/src/game/store/terminalStore";
 
-interface TerminalProps {
-  messages?: string[];
-}
 
-export default function Terminal({ messages = [] }: TerminalProps){
+export default function Terminal(){
+  const logs = useTerminalStore(s => s.logs)
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // TODO: A handler that handles maximum cap of terminal messages
-  //       If capacity reached, pop off last element.
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [logs]);
 
   return (
     <div className="flex flex-col h-full border">
@@ -21,8 +18,8 @@ export default function Terminal({ messages = [] }: TerminalProps){
       </div>
       <div className="flex-1 w-full bg-black/50 text-white font-mono text-sm p-3 overflow-y-auto">
         <div className="space-y-1">
-          {messages.map((message, index) => (
-            <div key={index} className="break-words">
+          {logs.map((message, index) => (
+            <div key={index} className="break-words hover:underline">
               {message}
             </div>
           ))}

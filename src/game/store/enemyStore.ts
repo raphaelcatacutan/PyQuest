@@ -30,7 +30,7 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   critDmg: 0,
   critChance: 0,
   evasion: 0,
-  spawnRate: 0,
+  location: [],
   lootDrop: {
     coinDropMin: 0,
     coinDropMax: 0,

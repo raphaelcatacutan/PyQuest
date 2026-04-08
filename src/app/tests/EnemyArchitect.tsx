@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Enemy, Skill } from '../../game/types/enemy.types';
+import { EnemySceneTypes } from '../../game/types/scene.types';
 
 const INITIAL_ENEMY: Enemy = {
   id: "",
@@ -18,7 +19,7 @@ const INITIAL_ENEMY: Enemy = {
   critDmg: 0,
   critChance: 0,
   evasion: 0.05,
-  spawnRate: 0.6,
+  location: {},
   lootDrop: {
     coinDropMin: 0,
     coinDropMax: 0,
@@ -33,7 +34,7 @@ const INITIAL_ENEMY: Enemy = {
 export default function EnemyArchitect() {
   const [enemy, setEnemy] = useState<Enemy>(INITIAL_ENEMY);
   const [skillInput, setSkillInput] = useState<Skill>({ name: "", dmg: 0, energyCost: 0 });
-
+  const [locationInput, setLocationInput] = useState<{ scene: EnemySceneTypes; spawnRate: number }>({ scene: '' as EnemySceneTypes, spawnRate: 0.5 });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const finalValue = type === 'number' ? Number(value) : value;
@@ -60,6 +61,20 @@ export default function EnemyArchitect() {
     if (!skillInput.name) return;
     setEnemy(prev => ({ ...prev, skills: [...prev.skills, skillInput] }));
     setSkillInput({ name: "", dmg: 0, energyCost: 0 });
+  };
+
+  const addLocation = () => {
+    if (!locationInput.scene) return;
+    setEnemy(prev => ({ ...prev, location: { ...prev.location, [locationInput.scene]: locationInput.spawnRate } }));
+    setLocationInput({ scene: '' as EnemySceneTypes, spawnRate: 0.5 });
+  };
+
+  const removeScene = (scene: EnemySceneTypes) => {
+    setEnemy(prev => {
+      const newLocation = { ...prev.location };
+      delete newLocation[scene];
+      return { ...prev, location: newLocation };
+    });
   };
 
   const saveEnemyToDisk = async (data: Enemy) => {
@@ -114,29 +129,57 @@ export default function EnemyArchitect() {
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
             <input placeholder="Skill Name" style={styles.input} value={skillInput.name} onChange={e => setSkillInput({...skillInput, name: e.target.value})} />
             <input type="number" placeholder="Dmg" style={{ ...styles.input, width: '80px' }} value={skillInput.dmg} onChange={e => setSkillInput({...skillInput, dmg: Number(e.target.value)})} />
-            <button style={styles.addButton} onClick={addSkill}>ADD</button>
+            <button style={styles.addButton} onClick={addSkill}>ADD SKILL</button>
           </div>
           <ul style={{ color: '#00ff88', fontSize: '13px' }}>
             {enemy.skills.map((s, i) => <li key={i}>{s.name} (DMG: {s.dmg})</li>)}
           </ul>
         </section>
 
-        {/* 4. STATS SECTION */}
+        {/* 4. COMBAT STATS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>4. Combat Stats & Spawning</h3>
+          <h3 style={styles.sectionLabel}>4. Combat Stats</h3>
           <div style={styles.grid}>
             <label style={styles.gridItem}>Damage <input type="number" name="dmg" style={styles.smallInput} value={enemy.dmg} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Atk Speed <input type="number" step="0.1" name="atkSpeed" style={styles.smallInput} value={enemy.atkSpeed} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Crit Dmg <input type="number" step="0.1" name="critDmg" style={styles.smallInput} value={enemy.critDmg} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Crit % <input type="number" step="0.01" name="critChance" style={styles.smallInput} value={enemy.critChance} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Evasion <input type="number" step="0.01" name="evasion" style={styles.smallInput} value={enemy.evasion} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Spawn Rate <input type="number" step="0.01" name="spawnRate" style={styles.smallInput} value={enemy.spawnRate} onChange={handleChange} /></label>
           </div>
         </section>
 
-        {/* 5. LOOT SECTION */}
+        {/* 5. SPAWN LOCATIONS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Loot Drop Table</h3>
+          <h3 style={styles.sectionLabel}>5. Spawn Locations</h3>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as EnemySceneTypes})}>
+              <option value="">-- Select Scene --</option>
+              <option value="forest">forest</option>
+              <option value="desert">desert</option>
+              <option value="swamp">swamp</option>
+              <option value="cemetery">cemetery</option>
+              <option value="tundra">tundra</option>
+              <option value="jungle">jungle</option>
+              <option value="temple">temple</option>
+              <option value="dungeon">dungeon</option>
+              <option value="labyrinth">labyrinth</option>
+            </select>
+            <input type="number" step="0.01" placeholder="Spawn Rate" style={{ ...styles.input, width: '100px' }} value={locationInput.spawnRate} onChange={e => setLocationInput({...locationInput, spawnRate: Number(e.target.value)})} />
+            <button style={styles.addButton} onClick={addLocation}>ADD LOCATION</button>
+          </div>
+          <ul style={{ color: '#00ff88', fontSize: '13px' }}>
+            {Object.entries(enemy.location).map(([scene, rate]) => (
+              <li key={scene} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <span>{scene} (Rate: {rate})</span>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as EnemySceneTypes)}>Remove</button>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* 6. LOOT SECTION */}
+        <section style={styles.section}>
+          <h3 style={styles.sectionLabel}>6. Loot Drop Table</h3>
           <div style={styles.grid}>
             <label style={styles.gridItem}>Coin Min <input type="number" name="coinDropMin" style={styles.smallInput} value={enemy.lootDrop.coinDropMin} onChange={handleLootChange} /></label>
             <label style={styles.gridItem}>Coin Max <input type="number" name="coinDropMax" style={styles.smallInput} value={enemy.lootDrop.coinDropMax} onChange={handleLootChange} /></label>

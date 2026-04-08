@@ -1,4 +1,5 @@
 import { LootDrop } from "./loot.types";
+import { EnemySceneTypes } from "./scene.types";
 
 export interface Skill {
   name: string;
@@ -26,7 +27,7 @@ export interface Enemy {
   critChance: number;
   evasion: number;
 
-  spawnRate: number;
+  location: Partial<Record<EnemySceneTypes, number>>;
   lootDrop: LootDrop
   // TODO: Add rewards, coin range reward, 
 }

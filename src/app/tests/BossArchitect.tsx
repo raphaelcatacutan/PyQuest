@@ -50,6 +50,11 @@ export default function BossArchitect() {
     });
   };
 
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-z_]/g, '');
+    setBoss(prev => ({ ...prev, id: sanitized }));
+  };
+
   const handleLootChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setBoss(prev => ({
@@ -104,7 +109,7 @@ export default function BossArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity & Visuals</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={boss.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={boss.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Name</label>
           <input style={styles.input} name="name" placeholder="name" value={boss.name} onChange={handleChange} />
@@ -112,8 +117,8 @@ export default function BossArchitect() {
           <label style={styles.fieldLabel}>Description</label>
           <textarea style={styles.textarea} name="description" placeholder="description" value={boss.description} onChange={handleChange} />
           
-          <label style={styles.fieldLabel}>Boss Image Asset</label>
-          <input style={styles.input} name="bossImg" placeholder="bossImg path (Don't forget to upload the png to its respective folder in /src/assets" value={boss.bossImg} onChange={handleChange} />
+          <label style={styles.fieldLabel}>Boss Image Asset **Don't forget to upload the png in its respective folder in the assets**</label>
+          <input style={styles.input} name="bossImg" placeholder="/src/assets/bosses/__.png" value={boss.bossImg} onChange={handleChange} />
         </section>
 
         {/* 2. VITALS SECTION (Synchronized) */}

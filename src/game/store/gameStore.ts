@@ -8,21 +8,38 @@ import { create } from "zustand";
 interface GameStateProps {
   inVillage: boolean;
   isMerchant: boolean;          // Loot Inventory | Merchant Inventory
-  isThereEnemy: boolean;        // Enemy Display  
+  isEnemy: boolean;             // Enemy or Boss
+  inCombat: boolean;
   rightPanel: boolean;          // Right Panel Visibility
   toggleInVillage: () => void;
   toggleIsMerchant: () => void;
-  toggleIsThereEnemy: () => void;
+  toggleIsEnemy: (state: boolean | null) => void;
+  toggleInCombat: (state: boolean | null) => void;
   toggleRightPanel: () => void;
 }
 
 export const useGameStore = create<GameStateProps>((set) => ({
   inVillage: true,
   isMerchant: false,
-  isThereEnemy: true,
+  // isThereEnemy: true,
+  isEnemy: true,
+  inCombat: false,
   rightPanel: false,
   toggleInVillage: () => set((state) => ({ inVillage: !state.inVillage })),
   toggleIsMerchant: () => set((state) => ({ isMerchant: !state.isMerchant })),
-  toggleIsThereEnemy: () => set((state) => ({ isThereEnemy: !state.isThereEnemy })),
+  toggleIsEnemy: (state) => { 
+    if (state != null){
+      return set({ isEnemy: state }) 
+    } else {
+      return set((s) => ({ isEnemy: !s.isEnemy })) 
+    } 
+  },
+  toggleInCombat: (state) => { 
+    if (state != null){
+      return set({ inCombat: state }) 
+    } else {
+      return set((s) => ({ inCombat: !s.inCombat })) 
+    } 
+  },
   toggleRightPanel: () => set((state) => ({ rightPanel: !state.rightPanel })),
 }))

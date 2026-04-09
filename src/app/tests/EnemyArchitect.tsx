@@ -49,6 +49,11 @@ export default function EnemyArchitect() {
     });
   };
 
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-z_]/g, '');
+    setEnemy(prev => ({ ...prev, id: sanitized }));
+  };
+
   const handleLootChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEnemy(prev => ({
@@ -103,7 +108,7 @@ export default function EnemyArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity & Visuals</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={enemy.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={enemy.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Name</label>
           <input style={styles.input} name="name" placeholder="name" value={enemy.name} onChange={handleChange} />
@@ -111,8 +116,8 @@ export default function EnemyArchitect() {
           <label style={styles.fieldLabel}>Description</label>
           <textarea style={styles.textarea} name="description" placeholder="description" value={enemy.description} onChange={handleChange} />
           
-          <label style={styles.fieldLabel}>Enemy Image Asset</label>
-          <input style={styles.input} name="enemyImg" placeholder="enemyImg path (Don't forget to upload the png to its respective folder in /src/assets" value={enemy.enemyImg} onChange={handleChange} />
+          <label style={styles.fieldLabel}>Enemy Image Asset **Don't forget to upload the png in its respective folder in the assets**</label>
+          <input style={styles.input} name="enemyImg" placeholder="/src/assets/enemies/__.png" value={enemy.enemyImg} onChange={handleChange} />
         </section>
 
         {/* 2. VITALS SECTION (Synchronized) */}

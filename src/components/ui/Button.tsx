@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 
 interface ButtonProps {
-  variant?: 'primary' | 'login-btn' | 'run-btn' | 'bag-btn' | 'icon-only-btn';
+  variant?: 'primary' | 'login-btn' | 'run-btn' | 'bag-btn' | 'exit-btn' | 'icon-only-btn';
   text?: string;
   icon?: ReactNode;
   iconSize?: number;
@@ -22,6 +22,8 @@ export default function Button({variant, text, icon, iconSize, onClick, alt_text
         return "w-fit p-2 rounded-lg cursor-pointer transition-colors duration-250 hover:bg-amber-500 hover:bg-opacity-30"
       case 'bag-btn':
         return "w-fit cursor-pointer border bg-[#23100a] px-1 rounded-r-2xl"
+      case 'exit-btn':
+        return "absolute right-1 w-fit cursor-pointer p-0.5 rounded-lg transition-colors duration-250 hover:bg-gray-600 hover:bg-opacity-30 active:bg-gray-800"
       case 'icon-only-btn':
         return "w-fit cursor-pointer p-0.5 rounded-lg transition-colors duration-250 hover:bg-gray-600 hover:bg-opacity-30 active:bg-gray-800"
       default:

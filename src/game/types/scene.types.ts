@@ -1,4 +1,2 @@
-export type SceneTypes = 'village' | 'labyrinth' | 'dungeon'
-export type BossSceneTypes = '' | 'dungeon' | 'labyrinth' 
-export type EnemySceneTypes = '' | 'forest' | 'desert' | 'swamp' | 'cemetery' | 'tundra' | 'jungle' | 'temple' |
-                          'dungeon' | 'labyrinth' // for testing
+export type SceneTypes = '' | 'forest' | 'desert' | 'swamp' | 'cemetery' | 'tundra' | 
+                        'jungle' | 'temple' | 'village' | 'labyrinth' | 'dungeon'

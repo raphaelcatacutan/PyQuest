@@ -1,18 +1,16 @@
 import { useEffect } from "react"
 import { useShallow } from "zustand/shallow"
 import { 
-  useSceneStore,
-  useGameStore,
   useEnemyStore,
   useBossStore
 } from "@/src/game/store"
-import { BossesByScene, EnemiesByScene } from "@/src/game/data/enemies"
 
 // TODO: Bug: terminal outputs double console, meaning useEffect is being performed twice.
 //            This affects which enemy/boss is being rendered
-// TODO: Add energy UI
 
 export default function EnemyEncounter(){
+  
+  const { id, name, hp, maxHp, energy, maxEnergy, enemyImg } = useEnemyStore(
   const scene = useSceneStore((s) => s.scene)
   const { isThereEnemy, toggleIsThereEnemy } = useGameStore(
     useShallow((s) => ({
@@ -29,9 +27,16 @@ export default function EnemyEncounter(){
     useShallow((s) => ({
       id: s.id,
       name: s.name,
+      hp: s.hp,
+      maxHp: s.maxHp,
+      energy: s.energy,
+      maxEnergy: s.maxEnergy,
       enemyImg: s.enemyImg,
     }))
   )
+
+  const healthPercentage = (hp / maxHp) * 100;
+  const energyPercentage = (energy / maxEnergy) * 100;
   const { hp } = useEnemyStore(
     useShallow((state) => ({
       hp: state.hp
@@ -105,6 +110,15 @@ export default function EnemyEncounter(){
           />
           <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
             {displayHp}/{displayMaxHp}
+          </span>
+        </div>
+        <div className="relative w-48 bg-gray-800 border-2 border-gray-600 rounded h-4 overflow-hidden mt-2">
+          <div 
+            className="bg-yellow-500 h-full transition-all duration-300" 
+            style={{ width: `${energyPercentage}%` }}
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
+            {energy}/{maxEnergy}
           </span>
         </div>
       </div>

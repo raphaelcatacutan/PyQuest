@@ -1,38 +1,56 @@
 {
-  "tarantula": {
-    "id": "tarantula",
-    "name": "Giant Tarantula",
-    "description": "A massive eight-legged arachnid with a venomous bite and surprising speed",
-    "bossImg": "",
+  "worm": {
+    "id": "Worm",
+    "name": "Worm",
+    "description": "",
+    "bossImg": "/src/assets/bosses/worm.png",
     "hp": 120,
     "maxHp": 120,
     "energy": 80,
     "maxEnergy": 80,
     "def": 15,
     "maxDef": 15,
-    "skills": [
-      {
-        "name": "Venomous Bite",
-        "dmg": 25,
-        "energyCost": 30
-      },
-      {
-        "name": "Web Shot",
-        "dmg": 18,
-        "energyCost": 10
-      },
-      {
-        "name": "Frenzied Attack",
-        "dmg": 30,
-        "energyCost": 35
-      }
-    ],
+    "skills": [],
     "dmg": 20,
     "atkSpeed": 1.2,
     "critDmg": 1.5,
     "critChance": 0.15,
     "evasion": 0.2,
-    "location": {},
+    "location": {
+      "dungeon": 0.5,
+      "village": 0.5
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "red_skull": {
+    "id": "red_skull",
+    "name": "Red Skull",
+    "description": "",
+    "bossImg": "/src/assets/bosses/skull.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 80,
+    "maxEnergy": 80,
+    "def": 15,
+    "maxDef": 15,
+    "skills": [],
+    "dmg": 20,
+    "atkSpeed": 1.2,
+    "critDmg": 1.5,
+    "critChance": 0.15,
+    "evasion": 0.2,
+    "location": {
+      "dungeon": 0.5,
+      "village": 0.5
+    },
     "lootDrop": {
       "xpDropMin": 0,
       "xpDropMax": 0,

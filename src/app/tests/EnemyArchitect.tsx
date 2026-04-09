@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Enemy, Skill } from '../../game/types/enemy.types';
-import { EnemySceneTypes } from '../../game/types/scene.types';
+import { SceneTypes } from '../../game/types/scene.types';
 
 const INITIAL_ENEMY: Enemy = {
   id: "",
@@ -34,7 +34,7 @@ const INITIAL_ENEMY: Enemy = {
 export default function EnemyArchitect() {
   const [enemy, setEnemy] = useState<Enemy>(INITIAL_ENEMY);
   const [skillInput, setSkillInput] = useState<Skill>({ name: "", dmg: 0, energyCost: 0 });
-  const [locationInput, setLocationInput] = useState<{ scene: EnemySceneTypes; spawnRate: number }>({ scene: '' as EnemySceneTypes, spawnRate: 0.5 });
+  const [locationInput, setLocationInput] = useState<{ scene: SceneTypes; spawnRate: number }>({ scene: '' as SceneTypes, spawnRate: 0.5 });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const finalValue = type === 'number' ? Number(value) : value;
@@ -47,6 +47,11 @@ export default function EnemyArchitect() {
       if (name === 'def') next.maxDef = Number(value);
       return next;
     });
+  };
+
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-z_]/g, '');
+    setEnemy(prev => ({ ...prev, id: sanitized }));
   };
 
   const handleLootChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,13 +68,20 @@ export default function EnemyArchitect() {
     setSkillInput({ name: "", dmg: 0, energyCost: 0 });
   };
 
+  const removeSkill = (index: number) => {
+    setEnemy(prev => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index)
+    }));
+  };
+
   const addLocation = () => {
     if (!locationInput.scene) return;
     setEnemy(prev => ({ ...prev, location: { ...prev.location, [locationInput.scene]: locationInput.spawnRate } }));
-    setLocationInput({ scene: '' as EnemySceneTypes, spawnRate: 0.5 });
+    setLocationInput({ scene: '' as SceneTypes, spawnRate: 0.5 });
   };
 
-  const removeScene = (scene: EnemySceneTypes) => {
+  const removeScene = (scene: SceneTypes) => {
     setEnemy(prev => {
       const newLocation = { ...prev.location };
       delete newLocation[scene];
@@ -96,7 +108,7 @@ export default function EnemyArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity & Visuals</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={enemy.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={enemy.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Name</label>
           <input style={styles.input} name="name" placeholder="name" value={enemy.name} onChange={handleChange} />
@@ -104,8 +116,8 @@ export default function EnemyArchitect() {
           <label style={styles.fieldLabel}>Description</label>
           <textarea style={styles.textarea} name="description" placeholder="description" value={enemy.description} onChange={handleChange} />
           
-          <label style={styles.fieldLabel}>Enemy Image Asset</label>
-          <input style={styles.input} name="enemyImg" placeholder="enemyImg path (Don't forget to upload the png to its respective folder in /src/assets" value={enemy.enemyImg} onChange={handleChange} />
+          <label style={styles.fieldLabel}>Enemy Image Asset **Don't forget to upload the png in its respective folder in the assets**</label>
+          <input style={styles.input} name="enemyImg" placeholder="/src/assets/enemies/__.png" value={enemy.enemyImg} onChange={handleChange} />
         </section>
 
         {/* 2. VITALS SECTION (Synchronized) */}
@@ -125,14 +137,19 @@ export default function EnemyArchitect() {
 
         {/* 3. SKILLS SECTION */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Skills List</h3>
+          <h3 style={styles.sectionLabel}>3. Skills List (Skill Name & Skill Damage)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
             <input placeholder="Skill Name" style={styles.input} value={skillInput.name} onChange={e => setSkillInput({...skillInput, name: e.target.value})} />
             <input type="number" placeholder="Dmg" style={{ ...styles.input, width: '80px' }} value={skillInput.dmg} onChange={e => setSkillInput({...skillInput, dmg: Number(e.target.value)})} />
             <button style={styles.addButton} onClick={addSkill}>ADD SKILL</button>
           </div>
           <ul style={{ color: '#00ff88', fontSize: '13px' }}>
-            {enemy.skills.map((s, i) => <li key={i}>{s.name} (DMG: {s.dmg})</li>)}
+            {enemy.skills.map((s, i) => (
+              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <span>{s.name} (DMG: {s.dmg})</span>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeSkill(i)}>Remove</button>
+              </li>
+            ))}
           </ul>
         </section>
 
@@ -150,9 +167,9 @@ export default function EnemyArchitect() {
 
         {/* 5. SPAWN LOCATIONS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Spawn Locations</h3>
+          <h3 style={styles.sectionLabel}>5. Spawn Locations (SPAWN LOCATION & SPAWN RATE)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as EnemySceneTypes})}>
+            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as SceneTypes})}>
               <option value="">-- Select Scene --</option>
               <option value="forest">forest</option>
               <option value="desert">desert</option>
@@ -161,8 +178,6 @@ export default function EnemyArchitect() {
               <option value="tundra">tundra</option>
               <option value="jungle">jungle</option>
               <option value="temple">temple</option>
-              <option value="dungeon">dungeon</option>
-              <option value="labyrinth">labyrinth</option>
             </select>
             <input type="number" step="0.01" placeholder="Spawn Rate" style={{ ...styles.input, width: '100px' }} value={locationInput.spawnRate} onChange={e => setLocationInput({...locationInput, spawnRate: Number(e.target.value)})} />
             <button style={styles.addButton} onClick={addLocation}>ADD LOCATION</button>
@@ -171,7 +186,7 @@ export default function EnemyArchitect() {
             {Object.entries(enemy.location).map(([scene, rate]) => (
               <li key={scene} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                 <span>{scene} (Rate: {rate})</span>
-                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as EnemySceneTypes)}>Remove</button>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as SceneTypes)}>Remove</button>
               </li>
             ))}
           </ul>

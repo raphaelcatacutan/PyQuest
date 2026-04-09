@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Boss, Skill } from '../../game/types/boss.types';
-import { BossSceneTypes } from '../../game/types/scene.types';
+import { SceneTypes } from '../../game/types/scene.types';
 
 const INITIAL_BOSS: Boss = {
   id: "",
@@ -34,7 +34,7 @@ const INITIAL_BOSS: Boss = {
 export default function BossArchitect() {
   const [boss, setBoss] = useState<Boss>(INITIAL_BOSS);
   const [skillInput, setSkillInput] = useState<Skill>({ name: "", dmg: 0, energyCost: 0 });
-  const [locationInput, setLocationInput] = useState<{ scene: BossSceneTypes; spawnRate: number }>({ scene: '' as BossSceneTypes, spawnRate: 0.5 });
+  const [locationInput, setLocationInput] = useState<{ scene: SceneTypes; spawnRate: number }>({ scene: '' as SceneTypes, spawnRate: 0.5 });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -48,6 +48,11 @@ export default function BossArchitect() {
       if (name === 'def') next.maxDef = Number(value);
       return next;
     });
+  };
+
+  const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value.replace(/[^a-z_]/g, '');
+    setBoss(prev => ({ ...prev, id: sanitized }));
   };
 
   const handleLootChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,13 +69,20 @@ export default function BossArchitect() {
     setSkillInput({ name: "", dmg: 0, energyCost: 0 });
   };
 
+  const removeSkill = (index: number) => {
+    setBoss(prev => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index)
+    }));
+  };
+
   const addLocation = () => {
     if (!locationInput.scene) return;
     setBoss(prev => ({ ...prev, location: { ...prev.location, [locationInput.scene]: locationInput.spawnRate } }));
-    setLocationInput({ scene: '' as BossSceneTypes, spawnRate: 0.5 });
+    setLocationInput({ scene: '' as SceneTypes, spawnRate: 0.5 });
   };
 
-  const removeScene = (scene: BossSceneTypes) => {
+  const removeScene = (scene: SceneTypes) => {
     setBoss(prev => {
       const newLocation = { ...prev.location };
       delete newLocation[scene];
@@ -97,7 +109,7 @@ export default function BossArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>1. Identity & Visuals</h3>
           <label style={styles.fieldLabel}>ID</label>
-          <input style={styles.input} name="id" placeholder="id" value={boss.id} onChange={handleChange} />
+          <input style={styles.input} name="id" placeholder="id" value={boss.id} onChange={handleIdChange} />
           
           <label style={styles.fieldLabel}>Name</label>
           <input style={styles.input} name="name" placeholder="name" value={boss.name} onChange={handleChange} />
@@ -105,8 +117,8 @@ export default function BossArchitect() {
           <label style={styles.fieldLabel}>Description</label>
           <textarea style={styles.textarea} name="description" placeholder="description" value={boss.description} onChange={handleChange} />
           
-          <label style={styles.fieldLabel}>Boss Image Asset</label>
-          <input style={styles.input} name="bossImg" placeholder="bossImg path (Don't forget to upload the png to its respective folder in /src/assets" value={boss.bossImg} onChange={handleChange} />
+          <label style={styles.fieldLabel}>Boss Image Asset **Don't forget to upload the png in its respective folder in the assets**</label>
+          <input style={styles.input} name="bossImg" placeholder="/src/assets/bosses/__.png" value={boss.bossImg} onChange={handleChange} />
         </section>
 
         {/* 2. VITALS SECTION (Synchronized) */}
@@ -126,14 +138,19 @@ export default function BossArchitect() {
 
         {/* 3. SKILLS SECTION */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Skills List</h3>
+          <h3 style={styles.sectionLabel}>3. Skills List (Skill Name & Skill Damage)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
             <input placeholder="Skill Name" style={styles.input} value={skillInput.name} onChange={e => setSkillInput({...skillInput, name: e.target.value})} />
             <input type="number" placeholder="Dmg" style={{ ...styles.input, width: '80px' }} value={skillInput.dmg} onChange={e => setSkillInput({...skillInput, dmg: Number(e.target.value)})} />
             <button style={styles.addButton} onClick={addSkill}>ADD SKILL</button>
           </div>
           <ul style={{ color: '#ffcc00', fontSize: '13px' }}>
-            {boss.skills.map((s, i) => <li key={i}>{s.name} (DMG: {s.dmg})</li>)}
+            {boss.skills.map((s, i) => (
+              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                <span>{s.name} (DMG: {s.dmg})</span>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeSkill(i)}>Remove</button>
+              </li>
+            ))}
           </ul>
         </section>
 
@@ -151,12 +168,19 @@ export default function BossArchitect() {
 
         {/* 5. SPAWN LOCATIONS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Spawn Locations</h3>
+          <h3 style={styles.sectionLabel}>5. Spawn Locations (SPAWN LOCATION & SPAWN RATE)</h3>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as BossSceneTypes})}>
+            <select style={{...styles.input, flex: 1}} value={locationInput.scene} onChange={e => setLocationInput({...locationInput, scene: e.target.value as SceneTypes})}>
               <option value="">-- Select Scene --</option>
               <option value="dungeon">dungeon</option>
               <option value="labyrinth">labyrinth</option>
+              <option value="forest">forest</option>
+              <option value="desert">desert</option>
+              <option value="swamp">swamp</option>
+              <option value="cemetery">cemetery</option>
+              <option value="tundra">tundra</option>
+              <option value="jungle">jungle</option>
+              <option value="temple">temple</option>
             </select>
             <input type="number" step="0.01" placeholder="Spawn Rate" style={{ ...styles.input, width: '100px' }} value={locationInput.spawnRate} onChange={e => setLocationInput({...locationInput, spawnRate: Number(e.target.value)})} />
             <button style={styles.addButton} onClick={addLocation}>ADD LOCATION</button>
@@ -165,7 +189,7 @@ export default function BossArchitect() {
             {Object.entries(boss.location).map(([scene, rate]) => (
               <li key={scene} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
                 <span>{scene} (Rate: {rate})</span>
-                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as BossSceneTypes)}>Remove</button>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeScene(scene as SceneTypes)}>Remove</button>
               </li>
             ))}
           </ul>

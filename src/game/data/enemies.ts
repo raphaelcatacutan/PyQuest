@@ -1,6 +1,8 @@
 import { SceneTypes } from '../types/scene.types';
 import { Enemy } from '../types/enemy.types';
+import { Boss } from '../types/boss.types';
 import enemyData from '../json/enemies.json'
+import bossData from '../json/bosses.json'
 import { 
   slimeEnemy, 
   skeletonHeadEnemy 
@@ -12,6 +14,7 @@ import {
  */
 
 export const Enemies: Record<string, Enemy> = enemyData as Record<string, Enemy>
+export const Bosses: Record<string, Boss> = bossData as Record<string, Boss>
 
 
 export const DungeonEnemies: Record<string, Enemy> = {
@@ -86,7 +89,7 @@ export const ForestEnemies: Record<string, Enemy> = {
 //   // TODO: Add more enemies
 // }
 
-export const DungeonBosses: Record<string, Enemy> = {
+export const DungeonBosses: Record<string, Boss> = {
 
 }
 
@@ -104,7 +107,7 @@ export const EnemiesByScene: Record<SceneTypes, Record<string, Enemy> | null> = 
   village: DungeonEnemies,
 }
 
-export const BossesByScene: Record<SceneTypes, Record<string, Enemy> | null> = { // TODO: Remove null once initialized
+export const BossesByScene: Record<SceneTypes, Record<string, Boss> | null> = { // TODO: Remove null once initialized
   // forest: null,
   // swamp: null,
   // temple: null,
@@ -113,6 +116,6 @@ export const BossesByScene: Record<SceneTypes, Record<string, Enemy> | null> = {
   // cemetery: null,
   // jungle: null,
   labyrinth: null,
-  dungeon: DungeonEnemies,
+  dungeon: Bosses,
   village: null,
 }

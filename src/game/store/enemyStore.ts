@@ -9,7 +9,9 @@ import { Enemy } from "../types/enemy.types";
 interface EnemyStoreProps extends Enemy{
   spawnEnemy: (enemy: Enemy) => void; // Accepts ANY enemy
   takeDamage: (amount: number) => void;
+  gainHp: (amount: number) => void;
   takeEnergyCost: (amount: number) => void;
+  gainEnergy: (amount: number) => void;
   clearEnemy: () => void;
 }
 
@@ -46,9 +48,17 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   takeDamage: (amount) => set((state) => ({ 
     hp: Math.max(0, state.hp - amount) 
   })),
+
+  gainHp: (amount) => set((state) => ({
+    hp: Math.min(state.maxHp, state.hp + amount)
+  })),
   
   takeEnergyCost: (amount) => set((state) => ({ 
     energy: Math.max(0, state.energy - amount) 
+  })),
+
+  gainEnergy: (amount) => set((state) => ({
+    energy: Math.min(state.maxEnergy, state.energy + amount)
   })),
   clearEnemy: () => set({ id: "" }), // TODO: Improve clearEnemy. When clearing out all attr, no enemy is being registered
 }))

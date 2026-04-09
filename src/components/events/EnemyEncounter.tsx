@@ -4,6 +4,7 @@ import {
   useSceneStore,
   useGameStore,
   useEnemyStore,
+  useBossStore
 } from "@/src/game/store"
 import { BossesByScene, EnemiesByScene } from "@/src/game/data/enemies"
 
@@ -22,35 +23,33 @@ export default function EnemyEncounter(){
   // const toggleIsThereEnemy = useGameStore((state) => state.toggleIsThereEnemy)
   const spawnEnemy = useEnemyStore((state) => state.spawnEnemy)
   const clearEnemy = useEnemyStore((state) => state.clearEnemy)
-  const { id, name, enemyImg, skills } = useEnemyStore(
+  const spawnBoss = useBossStore((state) => state.spawnBoss)
+  const clearBoss = useBossStore((state) => state.clearBoss)
+  const { id, name, enemyImg } = useEnemyStore(
     useShallow((s) => ({
       id: s.id,
       name: s.name,
       enemyImg: s.enemyImg,
-      skills: s.skills
     }))
   )
-  const { hp, takeDamage} = useEnemyStore(
+  const { hp } = useEnemyStore(
     useShallow((state) => ({
-      hp: state.hp,
-      takeDamage: state.takeDamage
+      hp: state.hp
     }))
   )
   const maxHp = useEnemyStore((state) => state.maxHp)
-  const { energy, takeEnergyCost } = useEnemyStore(
+  const bossState = useBossStore(
     useShallow((state) => ({
-      energy: state.energy,
-      takeEnergyCost: state.takeEnergyCost
+      id: state.id,
+      name: state.name,
+      bossImg: state.bossImg,
+      hp: state.hp,
+      maxHp: state.maxHp
     }))
   )
-  const maxEnergy = useEnemyStore((state) => state.maxEnergy)
-
-  const healthPercentage = (hp / maxHp) * 100;
-  const energyPercentage = (energy / maxEnergy) * 100;
-
   useEffect(() => {
     if (!isThereEnemy) return;
-    if (id) return; // Don't spawn if already spawned
+    if (id || bossState.id) return; // Don't spawn if already spawned
 
     const epsilon = 0.5
     if (Math.random() <= epsilon){ 
@@ -61,7 +60,8 @@ export default function EnemyEncounter(){
 
       const keys = Object.keys(boss);
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
-      // TODO: spawnBoss(boss[randomKey])
+      spawnBoss(boss[randomKey])
+      clearEnemy()
     } else { 
       // Enemy
       console.log('Enemy')
@@ -71,36 +71,46 @@ export default function EnemyEncounter(){
       const keys = Object.keys(enemies);
       const randomKey = keys[Math.floor(Math.random() * keys.length)];
       spawnEnemy(enemies[randomKey])
+      clearBoss()
     }
-  }, [isThereEnemy, scene, spawnEnemy, id])
+  }, [isThereEnemy, scene, spawnEnemy, id, bossState.id, spawnBoss, clearEnemy, clearBoss])
 
   useEffect(() => {
-    if (hp <= 0) {
+    if (bossState.id && bossState.hp <= 0) {
+      console.log(`Boss Defeated: ${bossState.name}`)
+      toggleIsThereEnemy()
+      clearBoss()
+    } else if (!bossState.id && hp <= 0) {
       console.log(`Enemy Defeated: ${name}`)
       toggleIsThereEnemy()
       clearEnemy()
     }
-  }, [hp, name, toggleIsThereEnemy, clearEnemy])
+  }, [hp, name, toggleIsThereEnemy, clearEnemy, bossState, clearBoss])
+
+  const displayName = bossState.id ? bossState.name : name
+  const displayImg = bossState.id ? bossState.bossImg : enemyImg
+  const displayHp = bossState.id ? bossState.hp : hp
+  const displayMaxHp = bossState.id ? bossState.maxHp : maxHp
 
   return (
     <div className="relative flex h-full w-full z-1"> 
       <div className="absolute flex flex-col w-full h-full items-center">
         <span className="text-4xl mt-2">
-          {name}
+          {displayName}
         </span>
         <div className="relative w-48 bg-gray-800 border-2 border-gray-600 rounded h-8 overflow-hidden">
           <div 
             className="bg-red-600 h-full transition-all duration-300" 
-            style={{ width: `${healthPercentage}%` }}
+            style={{ width: `${(displayHp / displayMaxHp) * 100}%` }}
           />
           <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
-            {hp}/{maxHp}
+            {displayHp}/{displayMaxHp}
           </span>
         </div>
       </div>
 
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
-        <img src={enemyImg} className="w-80 h-80" draggable={false}></img>
+        <img src={displayImg} className="w-80 h-80" draggable={false}></img>
       </div>
     </div>
   )

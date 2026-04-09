@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { usePlayerStore } from "@/src/game/store";
 import showToast from "@/src/components/ui/Toast";
+import { registerUser, userExists } from "@/src/game/services/authService";
 
 export default function SignupPage() {
   const navigate = useNavigate()
-  const { username, setUsername } = usePlayerStore()
-  const { password, setPassword } = usePlayerStore()
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const canSignup =
@@ -18,13 +18,24 @@ export default function SignupPage() {
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // TODO: hook this into your auth/status logic
-    if (!canSignup){
-      showToast({ variant: "error", message: "Please recheck each field"})
+    if (!canSignup) {
+      showToast({ variant: "error", message: "Please recheck each field" })
+      return;
+    }
+
+    // Check if username already exists
+    if (userExists(username)) {
+      showToast({ variant: "error", message: "Username already taken. Please choose another." })
+      return;
     }
     
-    showToast({ variant: "success", message: "Account creation successful! Please login again" });
-    navigate('/login');
+    // Register the new user
+    if (registerUser(username, password)) {
+      showToast({ variant: "success", message: "Account created successfully! Please login." });
+      navigate('/login');
+    } else {
+      showToast({ variant: "error", message: "Account creation failed. Please try again." })
+    }
   }
 
   return (
@@ -106,7 +117,7 @@ export default function SignupPage() {
               <button
                 type="button"
                 className="underline decoration-white/20 underline-offset-4 hover:text-gray-200"
-                onClick={() => alert("Back to login coming soon!")}
+                onClick={() => navigate('/login')}
               >
                 Already have an account? Login here
               </button>

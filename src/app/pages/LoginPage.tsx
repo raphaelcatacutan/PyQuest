@@ -5,6 +5,7 @@ import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
 import { useInventoryStore } from "@/src/game/store/inventoryStore";
 import DevTool from "@/src/components/DevTool";
+import { authenticateUser } from "@/src/game/services/authService";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -31,17 +32,15 @@ export default function LoginPage() {
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     
-    // TODO: hook this into auth/status logic
-    // TODO: Add authentication
-    // TODO: Hook user_id below, not username
-
-    if (!username) {
-      showToast({ variant: "error", message: "Invalid Username and Password" });
+    // Authenticate user against localStorage
+    if (!authenticateUser(username, password)) {
+      showToast({ variant: "error", message: "Invalid Username or Password" });
       return;
     }
     
+    // Login successful
     setUserId(username);
-    setPlayerId(username)
+    setPlayerId(username);
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
   }

@@ -27,3 +27,7 @@ export interface Player {
   isDamaged: boolean;
   isHealing: boolean;
 }
+
+export interface Status {
+ isFirstEntry: boolean;
+}

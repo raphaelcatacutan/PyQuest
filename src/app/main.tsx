@@ -9,6 +9,7 @@ import GamePage from './pages/GamePage.tsx'
 import SignupPage from './pages/SignupPage.tsx'
 import UnifiedArchitect from './tests/UnifiedArchitect.tsx'
 import { ToastContainer } from "react-toastify"
+import { Guide } from '../components/ui/Guide.tsx'
 
 /**
  *  
@@ -17,6 +18,7 @@ import { ToastContainer } from "react-toastify"
 
 createRoot(document.getElementById('root')!).render(
   <>
+    <Guide/>
     <ToastContainer stacked/>
     <StrictMode>
       <BrowserRouter>

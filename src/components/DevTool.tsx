@@ -8,6 +8,7 @@ import {
   useDialogueBoxStore,
   useSceneStore,
   useTerminalStore,
+  useGuideStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
@@ -60,6 +61,8 @@ export default function DevTool(){
       gainHP: s.gainHP
     }))
   )
+  const guide = useGuideStore()
+
   const gainXP = usePlayerStore(s => s.gainXP)
 
   const combatText = `Combat (${inCombat})`
@@ -98,6 +101,7 @@ export default function DevTool(){
           const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
           setScene(randomScene)
         }}/>
+        <Button text="Guide" onClick={() => guide.toggleGuide(null)}/>
       </div>
       }
     </>

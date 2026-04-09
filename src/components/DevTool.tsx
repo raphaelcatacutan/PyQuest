@@ -13,6 +13,7 @@ import {
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
 import { Enemies } from "../game/data/enemies"
+import { MachineProblems } from "../game/data/dungeon"
 import { useShallow } from "zustand/shallow"
 
 export default function DevTool(){
@@ -76,7 +77,7 @@ export default function DevTool(){
       <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900">
         <span>DevTool:</span>
         <input type="text" className="border bg-zinc-800" value={input} onChange={(e) => setInput(e.target.value)}></input>
-        <Button text="Print" onClick={() => {console.log("Test")}}/>
+        <Button text="Print" onClick={() => {console.log(MachineProblems[0].problem)}}/>
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(1)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>
@@ -94,7 +95,7 @@ export default function DevTool(){
           if (isEnemy){ enemyTakeDamage(20) }
           else { bossTakeDamage(20) }
         }}/>
-        <Button text={dmgHUDText} onClick={() => toggleIsDamaged(null)}/>
+        {/* <Button text={dmgHUDText} onClick={() => toggleIsDamaged(null)}/> */}
         <Button text={dialogueBoxText} onClick={toggleDisplayDialogueBox}/>
         <Button text={sceneText} onClick={() => {
           const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon'];

@@ -1,39 +1,39 @@
 /**
  * Module System Initialization
- * Sets up all built-in game modules for the Python environment
+ * Sets up all built-in Python modules for the runtime.
  */
 
-import { registerModules, clearModules, getAllModules } from './parser';
-import { gameModules } from './game-modules';
+import {
+    clearPythonModules,
+    getPublicPythonModuleNames,
+    initializePythonModules
+} from './python-modules.ts';
+import { getAllModules } from './parser';
 
 /**
- * Initialize the module system with all built-in game modules
+ * Initialize the module system with all built-in Python modules
  * Call this before running any Python code
  */
 export function initializeModules(): void {
-    // Clear any existing modules
-    clearModules();
-    
-    // Register all game modules
-    registerModules(gameModules);
-    
-    console.log('Module system initialized');
-    console.log(`Registered modules: ${getAllModules().map(m => m.name).join(', ')}`);
+    clearPythonModules();
+    initializePythonModules();
 }
 
 /**
  * Get a list of all available module names
  */
 export function getAvailableModules(): string[] {
-    return getAllModules().map(m => m.name);
+    return getPublicPythonModuleNames();
 }
 
 /**
  * Get module documentation
  */
 export function getModuleDocumentation(): Array<{ name: string; description: string }> {
-    return getAllModules().map(m => ({
-        name: m.name,
-        description: m.description || 'No description available'
-    }));
+    return getAllModules()
+        .filter((module) => getAvailableModules().includes(module.name))
+        .map((module) => ({
+            name: module.name,
+            description: module.description || 'No description available'
+        }));
 }

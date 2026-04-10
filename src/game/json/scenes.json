@@ -1,0 +1,6 @@
+{
+  "village": "/src/assets/maps/village.png",
+  "dungeon": "/src/assets/maps/dungeon.png",
+  "labyrinth": "/src/assets/maps/labyrinth.png",
+  "trials": "/src/assets/maps/trials.png"
+}

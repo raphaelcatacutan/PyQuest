@@ -8,13 +8,17 @@ import {
   useDialogueBoxStore,
   useSceneStore,
   useTerminalStore,
-  useGuideStore
+  useGuideStore,
+  useInventoryStore,
+  useTrialsStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
 import { Enemies } from "../game/data/enemies"
 import { MachineProblems } from "../game/data/dungeon"
 import { useShallow } from "zustand/shallow"
+import showToast from "./ui/Toast"
+import { getDPByDifficulty } from "../game/data/trials"
 
 export default function DevTool(){
   const { devTool, toggleDevTool } = useDevToolStore(
@@ -24,6 +28,11 @@ export default function DevTool(){
     }))
   )
   const [input, setInput] = useState("")
+  const { playerId } = useInventoryStore(
+  useShallow((s) => ({
+    playerId: s.player_id
+  }))
+  );
   const { inCombat, toggleInCombat } = useGameStore(
     useShallow((s) => ({
       inCombat: s.inCombat,
@@ -63,21 +72,38 @@ export default function DevTool(){
     }))
   )
   const guide = useGuideStore()
+  const trials = useTrialsStore()
 
   const gainXP = usePlayerStore(s => s.gainXP)
 
+  const easyDP = getDPByDifficulty("easy")
+  const easyLength = easyDP.length
+  const mediumDP = getDPByDifficulty("medium")
+  const hardDP = getDPByDifficulty("hard")
+
   const combatText = `Combat (${inCombat})`
   const dmgHUDText = `Dmg HUD (${isDamaged})`
+  // const toastText = `Toast (${})`
   const dialogueBoxText = `Dialogue Box (${displayDialogueBox})`
   const sceneText = `Scene: ${scene}`
+  const playerDataText = `UserId: ${user_id} | PlayerId: ${playerId}`
 
   return (
     <>
       {devTool && 
-      <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900">
+      <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900 flex-wrap">
         <span>DevTool:</span>
+        {/* <span className="text-yellow-300">{playerDataText}</span> */}
         <input type="text" className="border bg-zinc-800" value={input} onChange={(e) => setInput(e.target.value)}></input>
-        <Button text="Print" onClick={() => {console.log(MachineProblems[0].problem)}}/>
+        <Button text="Print All" onClick={() => {
+          console.log("=== PLAYER DATA ===");
+          console.log("user_id:", user_id);
+          console.log("playerId:", playerId);
+          console.log("localStorage keys:", Object.keys(localStorage));
+          console.log("Full inventoryStore:", useInventoryStore.getState());
+          console.log("Full playerStore:", usePlayerStore.getState());
+        }}/>
+        <Button text="Print" onClick={() => console.log(trials.mode)}/>
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(1)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>
@@ -85,6 +111,7 @@ export default function DevTool(){
         <Button text="Hp+" onClick={() => gainHP(10)}/>
         <Button text="XP+" onClick={() => gainXP(10)}/>
         <Button text="Display ID" onClick={() => {console.log(`Player: ${user_id}`)}}/>
+        <Button text="Toast" onClick={() => {showToast({variant: "info", message: "Test"})}}/>
         <Button text={combatText} onClick={() => { toggleInCombat(null) }}/>
         <Button text="Enemy/Boss" onClick={() => { 
           toggleIsEnemy(null)
@@ -98,7 +125,7 @@ export default function DevTool(){
         {/* <Button text={dmgHUDText} onClick={() => toggleIsDamaged(null)}/> */}
         <Button text={dialogueBoxText} onClick={toggleDisplayDialogueBox}/>
         <Button text={sceneText} onClick={() => {
-          const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon'];
+          const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon', 'trials'];
           const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
           setScene(randomScene)
         }}/>

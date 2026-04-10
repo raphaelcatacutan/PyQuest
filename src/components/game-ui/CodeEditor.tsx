@@ -122,6 +122,17 @@ export default function CodeEditor() {
             glyphMargin: false,
             lineNumbersMinChars: 4,
             lineDecorationsWidth: 0,
+            quickSuggestions: {
+              other: false,
+              comments: false,
+              strings: false
+            },
+            suggestOnTriggerCharacters: false,
+            parameterHints: {
+              enabled: false
+            },
+            wordBasedSuggestions: "off", // Prevents suggesting words found in the document
+            snippetSuggestions: "none",  // Prevents code snippets from popping up
           }}
         />
 

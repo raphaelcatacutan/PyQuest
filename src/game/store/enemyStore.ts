@@ -17,7 +17,7 @@ interface EnemyStoreProps extends Enemy{
 
 export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   id: "",
-  name: "",
+  name: "...",
   description: "",
   enemyImg: "",
   hp: 0,

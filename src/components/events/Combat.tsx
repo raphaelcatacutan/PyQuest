@@ -90,17 +90,20 @@ export default function Combat() {
     const canSpawnBoss = bossKeys.length > 0;
     if (!canSpawnEnemy && !canSpawnBoss) return;
 
-    const shouldSpawnBoss = canSpawnBoss && (!canSpawnEnemy || Math.random() <= 0.5);
+    const shouldSpawnBoss =
+      canSpawnBoss && (!canSpawnEnemy || Math.random() <= 0.5);
 
     if (shouldSpawnBoss) {
-      const randomBossKey = bossKeys[Math.floor(Math.random() * bossKeys.length)];
+      const randomBossKey =
+        bossKeys[Math.floor(Math.random() * bossKeys.length)];
       spawnBoss(bosses[randomBossKey]);
       clearEnemy();
       toggleIsEnemy(false);
       return;
     }
 
-    const randomEnemyKey = enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
+    const randomEnemyKey =
+      enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
     spawnEnemy(enemies[randomEnemyKey]);
     clearBoss();
     toggleIsEnemy(true);
@@ -155,7 +158,9 @@ export default function Combat() {
 
     const key = `${isEnemy ? "enemy" : "boss"}:${activeId}`;
     if (activeKeyRef.current !== key) {
-      const target = isEnemy ? useEnemyStore.getState() : useBossStore.getState();
+      const target = isEnemy
+        ? useEnemyStore.getState()
+        : useBossStore.getState();
       controllerRef.current = createEncounterController({
         kind: isEnemy ? "mob" : "boss",
         enemy: {
@@ -185,7 +190,9 @@ export default function Combat() {
         lastTickRef.current = now;
 
         const player = usePlayerStore.getState();
-        const target = isEnemy ? useEnemyStore.getState() : useBossStore.getState();
+        const target = isEnemy
+          ? useEnemyStore.getState()
+          : useBossStore.getState();
         if (!target.id) return;
 
         const result = controller.tick({
@@ -248,7 +255,9 @@ export default function Combat() {
 
         if (DEBUG_AI) {
           const playerAfter = usePlayerStore.getState();
-          const enemyAfter = isEnemy ? useEnemyStore.getState() : useBossStore.getState();
+          const enemyAfter = isEnemy
+            ? useEnemyStore.getState()
+            : useBossStore.getState();
           setDebugState({
             isBoss: !isEnemy,
             enemyId: target.id,

@@ -17,7 +17,7 @@ interface BossStoreProps extends Boss {
 
 export const useBossStore = create<BossStoreProps>((set) => ({
   id: "",
-  name: "",
+  name: "...",
   description: "",
   bossImg: "",
 
@@ -65,7 +65,7 @@ export const useBossStore = create<BossStoreProps>((set) => ({
 
   clearBoss: () => set({
     id: "",
-    name: "",
+    name: "...",
     description: "",
     bossImg: "",
 

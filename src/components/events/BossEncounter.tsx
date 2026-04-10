@@ -5,7 +5,7 @@ import { useBossStore } from "@/src/game/store"
 //            This affects which enemy/boss is being rendered
 
 export default function BossEncounter(){
-  const { id, name, hp, maxHp, energy, maxEnergy, bossImg } = useBossStore(
+  const { name, hp, maxHp, energy, maxEnergy, bossImg } = useBossStore(
     useShallow((s) => ({
       id: s.id,
       name: s.name,

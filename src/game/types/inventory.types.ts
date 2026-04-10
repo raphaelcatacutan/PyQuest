@@ -8,7 +8,7 @@ export type InventoryNode =
     }
   | { // Item Node
       id: string;
-      kind: "weapon" | "armor" | "consumable" | "misc" ;
+      kind: "weapon" | "armor" | "consumable" | "misc" | "" ;
       itemId: string;        // points to registry
       name: string;
       

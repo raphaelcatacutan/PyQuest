@@ -10,7 +10,8 @@ import {
   useTerminalStore,
   useGuideStore,
   useInventoryStore,
-  useTrialsStore
+  useTrialsStore,
+  useTutorialStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
@@ -19,6 +20,7 @@ import { MachineProblems } from "../game/data/dungeon"
 import { useShallow } from "zustand/shallow"
 import showToast from "./ui/Toast"
 import { getDPByDifficulty } from "../game/data/trials"
+import { Tutorials } from "../game/data/tutorial"
 
 export default function DevTool(){
   const { devTool, toggleDevTool } = useDevToolStore(
@@ -88,6 +90,8 @@ export default function DevTool(){
   const sceneText = `Scene: ${scene}`
   const playerDataText = `UserId: ${user_id} | PlayerId: ${playerId}`
 
+  const tuts = useTutorialStore()
+
   return (
     <>
       {devTool && 
@@ -103,7 +107,8 @@ export default function DevTool(){
           console.log("Full inventoryStore:", useInventoryStore.getState());
           console.log("Full playerStore:", usePlayerStore.getState());
         }}/>
-        <Button text="Print" onClick={() => console.log(trials.mode)}/>
+        <Button text="Print" onClick={() => console.log(tuts.instruction)}/>
+        {/* <Button text="Next" onClick={() => tuts.nextStep()}/> */}
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(1)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>

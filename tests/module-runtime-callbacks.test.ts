@@ -74,6 +74,41 @@ log("script-hook")
         );
     });
 
+    it('emits statement traces with per-instruction delay metadata', async () => {
+        const events: PythonModuleCallEvent[] = [];
+
+        setPythonRuntimeHooks({
+            onFunctionCall: (event) => {
+                events.push(event);
+            }
+        });
+
+        await runPython(`
+set_delay(10)
+counter = 0
+while counter < 1: # delay=120
+    print(counter) # delay=40
+    counter = counter + 1
+        `);
+
+        const statementEvents = events.filter((event) => event.name === 'python.statement');
+
+        const whileTrace = statementEvents.find((event) => {
+            const payload = event.payload as Record<string, unknown>;
+            return payload.statementType === 'WhileLoop';
+        });
+
+        const printTrace = statementEvents.find((event) => {
+            const payload = event.payload as Record<string, unknown>;
+            return payload.statementType === 'PrintStatement';
+        });
+
+        expect(whileTrace).toBeDefined();
+        expect((whileTrace?.payload as Record<string, unknown>).delayMs).toBe(120);
+        expect(printTrace).toBeDefined();
+        expect((printTrace?.payload as Record<string, unknown>).delayMs).toBe(40);
+    });
+
     it('reads abstracted player values from runtime state hook', async () => {
         const getStateValue = vi.fn((path: string, fallback?: unknown) => {
             const state: Record<string, unknown> = {

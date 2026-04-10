@@ -49,10 +49,23 @@ const builtins: any = {};
     const emitCallback = (eventName: string, payload?: unknown) => {
       callbackBridge?.(eventName, payload);
     };
+
+    let match;
+
+    const tickRegex = /^\s*__pyquest_tick\((\d+),\s*"([A-Za-z0-9_]+)"(?:,\s*([^)]+))?\)\s*$/gm;
+    while ((match = tickRegex.exec(code)) !== null) {
+      const lineNumber = Number(match[1]);
+      const statementType = match[2];
+      const delayMs = match[3] ? Number(parseLiteral(match[3])) : 0;
+      emitCallback('python.statement', {
+        lineNumber,
+        statementType,
+        delayMs: Number.isFinite(delayMs) ? delayMs : 0
+      });
+    }
     
     // Execute variable assignments (Player.Health = 100, etc)
     const assignmentRegex = /(\w+)\.(\w+)\s*=\s*([^\n]+)/g;
-    let match;
     while ((match = assignmentRegex.exec(code)) !== null) {
       const objName = match[1];
       const propName = match[2];

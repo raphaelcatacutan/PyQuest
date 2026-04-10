@@ -33,7 +33,13 @@ const INITIAL_BOSS: Boss = {
 
 export default function BossArchitect() {
   const [boss, setBoss] = useState<Boss>(INITIAL_BOSS);
-  const [skillInput, setSkillInput] = useState<Skill>({ name: "", dmg: 0, energyCost: 0 });
+  const [skillInput, setSkillInput] = useState<Skill>({
+    name: "",
+    description: "",
+    energyCost: 0,
+    effect: { type: 'heal', healAmount: 0 } as any,
+  });
+  const [effectType, setEffectType] = useState<string>('heal');
   const [locationInput, setLocationInput] = useState<{ scene: SceneTypes; spawnRate: number }>({ scene: '' as SceneTypes, spawnRate: 0.5 });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -63,10 +69,29 @@ export default function BossArchitect() {
     }));
   };
 
+  const buildEffect = (type: string, newValue: number): any => {
+    switch(type) {
+      case 'heal': return { type: 'heal', healAmount: newValue };
+      case 'stun': return { type: 'stun', duration: newValue };
+      case 'poison': return { type: 'poison', dmgPerSecond: newValue };
+      case 'bleed': return { type: 'bleed', dmgPerSecond: newValue };
+      case 'empower': return { type: 'empower', dmgMultiplier: newValue };
+      case 'speedup': return { type: 'speedup', speedUp: newValue };
+      case 'confusion': return { type: 'confusion', dmg: newValue };
+      default: return { type: 'heal', healAmount: 0 };
+    }
+  };
+
   const addSkill = () => {
     if (!skillInput.name) return;
     setBoss(prev => ({ ...prev, skills: [...prev.skills, skillInput] }));
-    setSkillInput({ name: "", dmg: 0, energyCost: 0 });
+    setSkillInput({
+      name: "",
+      description: "",
+      energyCost: 0,
+      effect: { type: 'heal', healAmount: 0 } as any,
+    });
+    setEffectType('heal');
   };
 
   const removeSkill = (index: number) => {
@@ -102,6 +127,19 @@ export default function BossArchitect() {
 
   return (
     <div style={styles.container}>
+      <style>{`
+        input::placeholder {
+          color: #666;
+          opacity: 1;
+        }
+        input::-webkit-input-placeholder {
+          color: #666;
+          opacity: 1;
+        }
+        select option:first-child {
+          color: #666;
+        }
+      `}</style>
       <div style={styles.formSection}>
         <h1 style={styles.title}>Boss Architect</h1>
 
@@ -138,16 +176,55 @@ export default function BossArchitect() {
 
         {/* 3. SKILLS SECTION */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Skills List (Skill Name & Skill Damage)</h3>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+          <h3 style={styles.sectionLabel}>3. Skills List</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
             <input placeholder="Skill Name" style={styles.input} value={skillInput.name} onChange={e => setSkillInput({...skillInput, name: e.target.value})} />
-            <input type="number" placeholder="Dmg" style={{ ...styles.input, width: '80px' }} value={skillInput.dmg} onChange={e => setSkillInput({...skillInput, dmg: Number(e.target.value)})} />
+            <textarea placeholder="Skill Description" style={{...styles.textarea, height: '40px'}} value={skillInput.description} onChange={e => setSkillInput({...skillInput, description: e.target.value})} />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Energy Cost" style={{...styles.input, flex: 1}} value={skillInput.energyCost || ''} onChange={e => setSkillInput({...skillInput, energyCost: Number(e.target.value) || 0})} />
+              <select style={{...styles.input, flex: 1}} value={effectType} onChange={e => {
+                setEffectType(e.target.value);
+                let newEffect: any;
+                switch(e.target.value) {
+                  case 'heal': newEffect = { type: 'heal', healAmount: 0 }; break;
+                  case 'stun': newEffect = { type: 'stun', duration: 0 }; break;
+                  case 'poison': newEffect = { type: 'poison', dmgPerSecond: 0 }; break;
+                  case 'bleed': newEffect = { type: 'bleed', dmgPerSecond: 0 }; break;
+                  case 'empower': newEffect = { type: 'empower', dmgMultiplier: 0 }; break;
+                  case 'speedup': newEffect = { type: 'speedup', speedUp: 0 }; break;
+                  case 'confusion': newEffect = { type: 'confusion', dmg: 0 }; break;
+                  default: newEffect = { type: 'heal', healAmount: 0 };
+                }
+                setSkillInput({...skillInput, effect: newEffect});
+              }}>
+                <option value="" disabled>-- Select Effect Type --</option>
+                <option value="heal">Heal</option>
+                <option value="stun">Stun</option>
+                <option value="poison">Poison</option>
+                <option value="bleed">Bleed</option>
+                <option value="empower">Empower</option>
+                <option value="speedup">Speed Up</option>
+                <option value="confusion">Confusion</option>
+              </select>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {effectType === 'heal' && <input type="number" placeholder="Heal Amount" style={{...styles.input, flex: 1}} value={(skillInput.effect as any).healAmount} onChange={e => setSkillInput({...skillInput, effect: buildEffect('heal', Number(e.target.value))})} />}
+              {effectType === 'stun' && <input type="number" placeholder="Duration" style={{...styles.input, flex: 1}} value={(skillInput.effect as any).duration} onChange={e => setSkillInput({...skillInput, effect: buildEffect('stun', Number(e.target.value))})} />}
+              {(effectType === 'poison' || effectType === 'bleed') && <input type="number" placeholder="Dmg Per Second" style={{...styles.input, flex: 1}} value={(skillInput.effect as any).dmgPerSecond} onChange={e => setSkillInput({...skillInput, effect: buildEffect(effectType, Number(e.target.value))})} />}
+              {effectType === 'empower' && <input type="number" step="0.1" placeholder="Dmg Multiplier" style={{...styles.input, flex: 1}} value={(skillInput.effect as any).dmgMultiplier} onChange={e => setSkillInput({...skillInput, effect: buildEffect('empower', Number(e.target.value))})} />}
+              {effectType === 'speedup' && <input type="number" step="0.1" placeholder="Speed Up" style={{...styles.input, flex: 1}} value={(skillInput.effect as any).speedUp} onChange={e => setSkillInput({...skillInput, effect: buildEffect('speedup', Number(e.target.value))})} />}
+              {effectType === 'confusion' && <input type="number" placeholder="Damage" style={{...styles.input, flex: 1}} value={(skillInput.effect as any).dmg} onChange={e => setSkillInput({...skillInput, effect: buildEffect('confusion', Number(e.target.value))})} />}
+            </div>
             <button style={styles.addButton} onClick={addSkill}>ADD SKILL</button>
           </div>
           <ul style={{ color: '#ffcc00', fontSize: '13px' }}>
             {boss.skills.map((s, i) => (
-              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                <span>{s.name} (DMG: {s.dmg})</span>
+              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', padding: '8px', backgroundColor: '#0a0a0a', borderRadius: '4px' }}>
+                <div>
+                  <div><strong>{s.name}</strong></div>
+                  <div style={{ fontSize: '11px', color: '#888' }}>{s.description}</div>
+                  <div style={{ fontSize: '11px', color: '#666' }}>Cost: {s.energyCost} | Effect: {(s.effect as any).type}</div>
+                </div>
                 <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeSkill(i)}>Remove</button>
               </li>
             ))}

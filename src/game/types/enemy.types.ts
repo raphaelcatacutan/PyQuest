@@ -1,11 +1,29 @@
 import { LootDrop } from "./loot.types";
 import { SceneTypes } from "./scene.types";
 
+
+interface HealEffect { type: 'heal'; healAmount: number; }
+interface StunEffect { type: 'stun'; duration: number; }
+interface PoisonEffect { type: 'poison'; dmgPerSecond: number; }
+interface BleedEffect { type: 'bleed'; dmgPerSecond: number; }
+interface EmpowerEffect { type: 'empower'; dmgMultiplier: number; }
+interface SpeedUpEffect { type: 'speedup'; speedUp: number; }
+interface ConfusionEffect { type: 'confusion'; dmg: number; }
+
+type SkillEffect = 
+  | HealEffect 
+  | StunEffect 
+  | PoisonEffect 
+  | BleedEffect 
+  | EmpowerEffect 
+  | SpeedUpEffect 
+  | ConfusionEffect;
+
 export interface Skill {
   name: string;
-  dmg: number;
+  description: string;
   energyCost: number;
-  // TODO: Confirm Skill attributes
+  effect: SkillEffect;
 }
 
 export interface Enemy {
@@ -28,6 +46,5 @@ export interface Enemy {
   evasion: number;
 
   location: Partial<Record<SceneTypes, number>>;
-  lootDrop: LootDrop
-  // TODO: Add rewards, coin range reward, 
+  lootDrop: LootDrop 
 }

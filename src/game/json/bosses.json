@@ -72,13 +72,7 @@
     "maxEnergy": 80,
     "def": 15,
     "maxDef": 15,
-    "skills": [
-      {
-        "name": "test",
-        "dmg": 0,
-        "energyCost": 0
-      }
-    ],
+    "skills": [],
     "dmg": 20,
     "atkSpeed": 1.2,
     "critDmg": 1.5,

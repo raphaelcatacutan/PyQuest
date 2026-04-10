@@ -2,66 +2,57 @@ import { create } from "zustand";
 import { Consumable } from "../types/consumable.types";
 
 /**
- * 
- *  Consumable State
+ * Consumable Store
+ * Manages current consumable state and consumed consumables tracking
  */
 
-interface ConsumableStateProps extends Consumable {
+interface ConsumableStoreProps {
+  // Current consumable being used/viewed
+  consumable: Consumable | null;
+  
+  // Track consumables on cooldown: { consumableId: cooldownRemaining }
+  consumablesCooldown: Record<string, number>;
+  
+  // Methods
   setConsumable: (consumable: Consumable) => void;
   clearConsumable: () => void;
+  
+  // Cooldown management
+  addCooldown: (consumableId: string, cooldownTime: number) => void;
+  reduceCooldown: (consumableId: string) => void;
+  
+  // Check if consumable is on cooldown
+  isOnCooldown: (consumableId: string) => boolean;
 }
 
-export const useConsumableStore = create<ConsumableStateProps>((set) => ({
-  id: "",
-  filename: "",
-  name: "",
-  description: "",
-  consumableImg: "",
+export const useConsumableStore = create<ConsumableStoreProps>((set, get) => ({
+  consumable: null,
+  consumablesCooldown: {},
 
-  cooldown: 0,
-  
-  heal: 0,
-  dmgIncrease: 0,
-  defIncrease: 0,
-  energyIncrease: 0,
-  atkSpeedIncrease: 0,
+  setConsumable: (consumable: Consumable) =>
+    set({ consumable }),
 
-  healthInflict: 0,
-  dmgInflict: 0,
-  defInflict: 0,
-  energyInflict: 0,
-  atkSpeedInflict: 0,
-  duration: 0,
+  clearConsumable: () =>
+    set({ consumable: null }),
 
-  dropRate: 0,
-  sellCost: 0,
-  buyCost: 0,
+  addCooldown: (consumableId: string, cooldownTime: number) =>
+    set((state) => ({
+      consumablesCooldown: {
+        ...state.consumablesCooldown,
+        [consumableId]: cooldownTime,
+      },
+    })),
 
-  setConsumable: (consumable) => ({ ...consumable }),
-  clearConsumable: () => ({
-    id: "",
-    filename: "",
-    name: "",
-    description: "",
-    consumableImg: "",
+  reduceCooldown: (consumableId: string) =>
+    set((state) => ({
+      consumablesCooldown: {
+        ...state.consumablesCooldown,
+        [consumableId]: Math.max(0, (state.consumablesCooldown[consumableId] || 0) - 1),
+      },
+    })),
 
-    cooldown: 0,
-    
-    heal: 0,
-    dmgIncrease: 0,
-    defIncrease: 0,
-    energyIncrease: 0,
-    atkSpeedIncrease: 0,
-
-    healthInflict: 0,
-    dmgInflict: 0,
-    defInflict: 0,
-    energyInflict: 0,
-    atkSpeedInflict: 0,
-    duration: 0,
-
-    dropRate: 0,
-    sellCost: 0,
-    buyCost: 0,
-  })
+  isOnCooldown: (consumableId: string) => {
+    const cooldownTime = get().consumablesCooldown[consumableId];
+    return cooldownTime ? cooldownTime > 0 : false;
+  },
 }))

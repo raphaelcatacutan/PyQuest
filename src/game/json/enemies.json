@@ -10,13 +10,7 @@
     "maxEnergy": 100,
     "def": 2,
     "maxDef": 2,
-    "skills": [
-      {
-        "name": "Bone Arrow",
-        "dmg": 25,
-        "energyCost": 30
-      }
-    ],
+    "skills": [],
     "dmg": 15,
     "atkSpeed": 1.2,
     "critDmg": 0.5,
@@ -46,13 +40,7 @@
     "maxEnergy": 100,
     "def": 2,
     "maxDef": 2,
-    "skills": [
-      {
-        "name": "Bone Arrow",
-        "dmg": 25,
-        "energyCost": 30
-      }
-    ],
+    "skills": [],
     "dmg": 15,
     "atkSpeed": 1.2,
     "critDmg": 0.5,

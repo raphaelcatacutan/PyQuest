@@ -3,45 +3,93 @@ import { Consumable } from '@/src/game/types/consumable.types';
 
 const INITIAL_CONSUMABLE: Consumable = {
   id: "",
-  filename: "",
   name: "",
   description: "",
   consumableImg: "",
   cooldown: 5000,
-  heal: 0,
-  dmgIncrease: 0,
-  defIncrease: 0,
-  energyIncrease: 0,
-  atkSpeedIncrease: 0,
-  healthInflict: 0,
-  dmgInflict: 0,
-  defInflict: 0,
-  energyInflict: 0,
-  atkSpeedInflict: 0,
-  duration: 0,
+  effects: [],
   dropRate: 0.1,
   sellCost: 0,
   buyCost: 0,
 };
 
+type EffectType = 'restore' | 'buff' | 'debuff';
+
+const INITIAL_EFFECT_INPUT = {
+  type: 'restore' as EffectType,
+  restoreStat: 'hp' as 'hp' | 'energy' | 'def',
+  restoreAmount: 0,
+  buffStat: 'dmg' as 'dmg' | 'def' | 'speed',
+  buffMultiplier: 1,
+  buffDuration: 0,
+  debuffStat: 'hp' as 'hp' | 'energy' | 'speed',
+  debuffAmount: 0,
+  debuffDuration: 0,
+};
+
 export default function ConsumableArchitect() {
   const [item, setItem] = useState<Consumable>(INITIAL_CONSUMABLE);
+  const [effectInput, setEffectInput] = useState(INITIAL_EFFECT_INPUT);
+  const [effectType, setEffectType] = useState<EffectType>('restore');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const finalValue = type === 'number' ? Number(value) : value;
 
-    setItem((prev) => {
-      const next = { ...prev, [name]: finalValue };
-      // Sync filename with id automatically for convenience
-      if (name === 'id') next.filename = value;
-      return next;
-    });
+    setItem((prev) => ({
+      ...prev,
+      [name]: finalValue,
+    }));
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitized = e.target.value.replace(/[^a-z_]/g, '');
-    setItem(prev => ({ ...prev, id: sanitized, filename: sanitized }));
+    setItem(prev => ({ ...prev, id: sanitized }));
+  };
+
+  const buildEffect = (type: EffectType): any => {
+    switch (type) {
+      case 'restore':
+        return {
+          type: 'restore',
+          stat: effectInput.restoreStat,
+          amount: effectInput.restoreAmount,
+        };
+      case 'buff':
+        return {
+          type: 'buff',
+          stat: effectInput.buffStat,
+          multiplier: effectInput.buffMultiplier,
+          duration: effectInput.buffDuration,
+        };
+      case 'debuff':
+        return {
+          type: 'debuff',
+          stat: effectInput.debuffStat,
+          amount: effectInput.debuffAmount,
+          duration: effectInput.debuffDuration,
+        };
+      default:
+        return null;
+    }
+  };
+
+  const addEffect = () => {
+    const newEffect = buildEffect(effectType);
+    if (!newEffect) return;
+    setItem(prev => ({
+      ...prev,
+      effects: [...prev.effects, newEffect],
+    }));
+    setEffectInput(INITIAL_EFFECT_INPUT);
+    setEffectType('restore');
+  };
+
+  const removeEffect = (index: number) => {
+    setItem(prev => ({
+      ...prev,
+      effects: prev.effects.filter((_, i) => i !== index),
+    }));
   };
 
   const saveToDisk = async (data: Consumable) => {
@@ -60,6 +108,19 @@ export default function ConsumableArchitect() {
 
   return (
     <div style={styles.container}>
+      <style>{`
+        input::placeholder {
+          color: #666;
+          opacity: 1;
+        }
+        input::-webkit-input-placeholder {
+          color: #666;
+          opacity: 1;
+        }
+        select option:first-child {
+          color: #666;
+        }
+      `}</style>
       <div style={styles.formSection}>
         <h1 style={styles.title}>Consumable Architect</h1>
 
@@ -69,9 +130,6 @@ export default function ConsumableArchitect() {
           <label style={styles.fieldLabel}>ID</label>
           <input style={styles.input} name="id" placeholder="id" value={item.id} onChange={handleIdChange} />
           
-          <label style={styles.fieldLabel}>Filename (Auto-syncs with ID)</label>
-          <input style={styles.input} name="filename" placeholder="filename" value={item.filename} onChange={handleChange} />
-          
           <label style={styles.fieldLabel}>Display Name</label>
           <input style={styles.input} name="name" placeholder="name" value={item.name} onChange={handleChange} />
           
@@ -79,45 +137,89 @@ export default function ConsumableArchitect() {
           <textarea style={styles.textarea} name="description" placeholder="description" value={item.description} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Image Path</label>
-          <input style={styles.input} name="consumableImg" placeholder="consumableImg path (Don't forget to upload the png to its respective folder in /src/assets" value={item.consumableImg} onChange={handleChange} />
+          <input style={styles.input} name="consumableImg" placeholder="/src/assets/consumables/__.png" value={item.consumableImg} onChange={handleChange} />
         </section>
 
         {/* 2. BASE MECHANICS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>2. Mechanics & Vitals</h3>
+          <h3 style={styles.sectionLabel}>2. Base Settings</h3>
           <div style={styles.grid}>
             <label style={styles.gridItem}>Cooldown (ms) <input type="number" name="cooldown" style={styles.smallInput} value={item.cooldown} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Heal Amount <input type="number" name="heal" style={styles.smallInput} value={item.heal} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Duration (ms) <input type="number" name="duration" style={styles.smallInput} value={item.duration} onChange={handleChange} /></label>
           </div>
         </section>
 
-        {/* 3. BUFFS (Self Increases) */}
+        {/* 3. EFFECTS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Stat Increases (Buffs)</h3>
-          <div style={styles.grid}>
-            <label style={styles.gridItem}>DMG Inc <input type="number" name="dmgIncrease" style={styles.smallInput} value={item.dmgIncrease} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>DEF Inc <input type="number" name="defIncrease" style={styles.smallInput} value={item.defIncrease} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Energy Inc <input type="number" name="energyIncrease" style={styles.smallInput} value={item.energyIncrease} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Atk Spd Inc <input type="number" name="atkSpeedIncrease" style={styles.smallInput} value={item.atkSpeedIncrease} onChange={handleChange} /></label>
+          <h3 style={styles.sectionLabel}>3. Effects</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+            <select style={styles.input} value={effectType} onChange={e => {
+              setEffectType(e.target.value as EffectType);
+              setEffectInput(INITIAL_EFFECT_INPUT);
+            }}>
+              <option value="" disabled>-- Select Effect Type --</option>
+              <option value="restore">Restore (HP/Energy/Def)</option>
+              <option value="buff">Buff (Dmg/Def/Speed)</option>
+              <option value="debuff">Debuff (HP/Energy/Speed)</option>
+            </select>
+
+            {effectType === 'restore' && (
+              <>
+                <select style={styles.input} value={effectInput.restoreStat} onChange={e => setEffectInput({...effectInput, restoreStat: e.target.value as any})}>
+                  <option value="hp">HP</option>
+                  <option value="energy">Energy</option>
+                  <option value="def">Defense</option>
+                </select>
+                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Restore Amount" style={styles.input} value={effectInput.restoreAmount || ''} onChange={e => setEffectInput({...effectInput, restoreAmount: Number(e.target.value) || 0})} />
+              </>
+            )}
+
+            {effectType === 'buff' && (
+              <>
+                <select style={styles.input} value={effectInput.buffStat} onChange={e => setEffectInput({...effectInput, buffStat: e.target.value as any})}>
+                  <option value="dmg">Damage</option>
+                  <option value="def">Defense</option>
+                  <option value="speed">Speed</option>
+                </select>
+                <input type="text" inputMode="numeric" pattern="[0-9.]*" placeholder="Multiplier (e.g. 1.5)" style={styles.input} value={effectInput.buffMultiplier || ''} onChange={e => setEffectInput({...effectInput, buffMultiplier: Number(e.target.value) || 1})} />
+                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (ms)" style={styles.input} value={effectInput.buffDuration || ''} onChange={e => setEffectInput({...effectInput, buffDuration: Number(e.target.value) || 0})} />
+              </>
+            )}
+
+            {effectType === 'debuff' && (
+              <>
+                <select style={styles.input} value={effectInput.debuffStat} onChange={e => setEffectInput({...effectInput, debuffStat: e.target.value as any})}>
+                  <option value="hp">HP</option>
+                  <option value="energy">Energy</option>
+                  <option value="speed">Speed</option>
+                </select>
+                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Damage Amount" style={styles.input} value={effectInput.debuffAmount || ''} onChange={e => setEffectInput({...effectInput, debuffAmount: Number(e.target.value) || 0})} />
+                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (ms)" style={styles.input} value={effectInput.debuffDuration || ''} onChange={e => setEffectInput({...effectInput, debuffDuration: Number(e.target.value) || 0})} />
+              </>
+            )}
+
+            <button style={styles.addButton} onClick={addEffect}>ADD EFFECT</button>
           </div>
+
+          <ul style={{ color: '#00d4ff', fontSize: '12px' }}>
+            {item.effects.map((effect, i) => (
+              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', padding: '8px', backgroundColor: '#0a0a0a', borderRadius: '4px' }}>
+                <div>
+                  <div><strong>{(effect as any).type.toUpperCase()}</strong></div>
+                  <div style={{ fontSize: '11px', color: '#888' }}>
+                    {(effect as any).type === 'restore' && `${(effect as any).stat}: +${(effect as any).amount}`}
+                    {(effect as any).type === 'buff' && `${(effect as any).stat}: x${(effect as any).multiplier} for ${(effect as any).duration}ms`}
+                    {(effect as any).type === 'debuff' && `${(effect as any).stat}: -${(effect as any).amount} for ${(effect as any).duration}ms`}
+                  </div>
+                </div>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeEffect(i)}>Remove</button>
+              </li>
+            ))}
+          </ul>
         </section>
 
-        {/* 4. DEBUFFS (Target Infliction) */}
+        {/* 4. ECONOMY */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>4. Stat Infliction (Debuffs)</h3>
-          <div style={styles.grid}>
-            <label style={styles.gridItem}>HP Inflict <input type="number" name="healthInflict" style={styles.smallInput} value={item.healthInflict} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>DMG Inflict <input type="number" name="dmgInflict" style={styles.smallInput} value={item.dmgInflict} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>DEF Inflict <input type="number" name="defInflict" style={styles.smallInput} value={item.defInflict} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Energy Infl <input type="number" name="energyInflict" style={styles.smallInput} value={item.energyInflict} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Atk Spd Infl <input type="number" name="atkSpeedInflict" style={styles.smallInput} value={item.atkSpeedInflict} onChange={handleChange} /></label>
-          </div>
-        </section>
-
-        {/* 5. ECONOMY */}
-        <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Economy & Spawning</h3>
+          <h3 style={styles.sectionLabel}>4. Economy & Spawning</h3>
           <div style={styles.grid}>
             <label style={styles.gridItem}>Drop Rate <input type="number" step="0.01" name="dropRate" style={styles.smallInput} value={item.dropRate} onChange={handleChange} /></label>
             <label style={styles.gridItem}>Buy Cost <input type="number" name="buyCost" style={styles.smallInput} value={item.buyCost} onChange={handleChange} /></label>
@@ -151,6 +253,7 @@ const styles: Record<string, React.CSSProperties> = {
   grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' },
   gridItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' },
   smallInput: { width: '80px', padding: '6px', backgroundColor: '#1a1a1a', border: '1px solid #333', color: '#00d4ff', textAlign: 'right' },
+  addButton: { padding: '0 20px', backgroundColor: '#333', color: 'white', border: 'none', cursor: 'pointer' },
   saveButton: { width: '100%', padding: '20px', backgroundColor: '#00d4ff', color: 'black', fontWeight: 'bold', border: 'none', cursor: 'pointer' },
   codeBlock: { color: '#00d4ff', fontSize: '12px', lineHeight: '1.4' }
 };

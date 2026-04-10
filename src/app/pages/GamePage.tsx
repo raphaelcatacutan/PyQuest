@@ -21,6 +21,7 @@ import Damaged from "@/src/components/events/Damaged"
 import NavBar from "@/src/components/ui/NavBar"
 import Dungeon from "@/src/components/events/Dungeon"
 import Labyrinth from "@/src/components/events/Labyrinth"
+import Trials from "@/src/components/events/Trials"
 
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -154,6 +155,8 @@ export default function GamePage() {
         <div className="relative flex h-full w-full bg-black"> {/* scene */}
           
           {/* <Labyrinth/> */}
+          {/* <Dungeon/> */}
+          <Trials/>
           <div 
             className="absolute flex w-full h-full z-1" 
             style={{ 
@@ -166,7 +169,6 @@ export default function GamePage() {
               filter: isTransitioning ? 'brightness(0)' : 'brightness(1)'
             }}
           />
-          {/* <Dungeon/> */}
           
           <div className="absolute h-full z-50">
             <LeftSideBar 

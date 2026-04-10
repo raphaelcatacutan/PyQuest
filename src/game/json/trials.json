@@ -1,0 +1,92 @@
+[
+  {
+    "difficulty": "easy",
+    "incorrectCode": "function addNumbers(a, b) {\n  return a - b;\n}",
+    "correctCode": "function addNumbers(a, b) {\n  return a + b;\n}",
+    "expectedOutput": "10",
+    "reward": {
+      "xpDropMin": 50,
+      "xpDropMax": 100,
+      "coinDropMin": 25,
+      "coinDropMax": 50,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "incorrectCode": "function isEven(num) {\n  return num % 2 === 1;\n}",
+    "correctCode": "function isEven(num) {\n  return num % 2 === 0;\n}",
+    "expectedOutput": "true",
+    "reward": {
+      "xpDropMin": 50,
+      "xpDropMax": 100,
+      "coinDropMin": 25,
+      "coinDropMax": 50,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "incorrectCode": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] > max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}\n// Called with: findMax([5, 2, 8, 1])",
+    "correctCode": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] > max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}\n// Called with: findMax([5, 2, 8, 1])\n// Returns 8",
+    "expectedOutput": "8",
+    "reward": {
+      "xpDropMin": 150,
+      "xpDropMax": 250,
+      "coinDropMin": 75,
+      "coinDropMax": 150,
+      "weapons": [{"itemId": "iron_sword", "dropRate": 0.3}],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "incorrectCode": "function reverseString(str) {\n  let reversed = '';\n  for (let i = str.length; i >= 0; i--) {\n    reversed += str[i];\n  }\n  return reversed;\n}\n// Called with: reverseString('hello')",
+    "correctCode": "function reverseString(str) {\n  let reversed = '';\n  for (let i = str.length - 1; i >= 0; i--) {\n    reversed += str[i];\n  }\n  return reversed;\n}\n// Called with: reverseString('hello')",
+    "expectedOutput": "olleh",
+    "reward": {
+      "xpDropMin": 150,
+      "xpDropMax": 250,
+      "coinDropMin": 75,
+      "coinDropMax": 150,
+      "weapons": [],
+      "armors": [{"itemId": "leather_armor", "dropRate": 0.25}],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "incorrectCode": "function fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 3);\n}\n// Called with: fibonacci(5)",
+    "correctCode": "function fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n// Called with: fibonacci(5)",
+    "expectedOutput": "5",
+    "reward": {
+      "xpDropMin": 300,
+      "xpDropMax": 500,
+      "coinDropMin": 150,
+      "coinDropMax": 300,
+      "weapons": [{"itemId": "steel_sword", "dropRate": 0.25}],
+      "armors": [{"itemId": "iron_armor", "dropRate": 0.2}],
+      "consumables": [{"itemId": "health_potion", "dropRate": 0.5, "quantity": 2}]
+    }
+  },
+  {
+    "difficulty": "hard",
+    "incorrectCode": "function countOccurrences(arr, target) {\n  let count = 0;\n  for (let i = 0; i <= arr.length; i++) {\n    if (arr[i] === target) count++;\n  }\n  return count;\n}\n// Called with: countOccurrences([1, 2, 2, 3, 2, 4], 2)",
+    "correctCode": "function countOccurrences(arr, target) {\n  let count = 0;\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] === target) count++;\n  }\n  return count;\n}\n// Called with: countOccurrences([1, 2, 2, 3, 2, 4], 2)",
+    "expectedOutput": "3",
+    "reward": {
+      "xpDropMin": 300,
+      "xpDropMax": 500,
+      "coinDropMin": 150,
+      "coinDropMax": 300,
+      "weapons": [],
+      "armors": [],
+      "consumables": [{"itemId": "mana_potion", "dropRate": 0.6, "quantity": 3}]
+    }
+  }
+]

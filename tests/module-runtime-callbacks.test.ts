@@ -42,6 +42,38 @@ player.unequip()
         expect(goToEvent?.payload).toEqual({ locationId: 'village' });
     });
 
+    it('supports player and combat abstraction callbacks', async () => {
+        const events: PythonModuleCallEvent[] = [];
+
+        setPythonRuntimeHooks({
+            onFunctionCall: (event) => {
+                events.push(event);
+            }
+        });
+
+        await runPython(`
+gain_hp(25)
+take_damage(8)
+gain_coins(3)
+gain_xp(17)
+combat(True)
+target_enemy(False)
+log("script-hook")
+        `);
+
+        expect(events.map((event) => event.name)).toEqual(
+            expect.arrayContaining([
+                'player.gain_hp',
+                'player.take_damage',
+                'player.gain_coins',
+                'player.gain_xp',
+                'game.combat',
+                'game.is_enemy',
+                'terminal.log'
+            ])
+        );
+    });
+
     it('reads abstracted player values from runtime state hook', async () => {
         const getStateValue = vi.fn((path: string, fallback?: unknown) => {
             const state: Record<string, unknown> = {

@@ -54,11 +54,39 @@ def clamp(value, min_value, max_value):
 
 
 def goTo(locationId: str):
-    return _emit("builtin.goTo", {"locationId": locationId})
+    return _emit("builtin.goTo", {"locationId": locationId, "from": _state("scene.scene", "")})
+
+
+def gain_hp(amount=10):
+    return _emit("player.gain_hp", {"amount": amount})
+
+
+def take_damage(amount=10):
+    return _emit("player.take_damage", {"amount": amount})
+
+
+def gain_coins(amount=1):
+    return _emit("player.gain_coins", {"amount": amount})
+
+
+def gain_xp(amount=10):
+    return _emit("player.gain_xp", {"amount": amount})
+
+
+def combat(state=True):
+    return _emit("game.combat", {"state": state})
+
+
+def target_enemy(state=True):
+    return _emit("game.is_enemy", {"state": state})
+
+
+def log(message=""):
+    return _emit("terminal.log", {"message": str(message)})
 
 
 def scavenge():
-    return _emit("builtin.scavenge", {"scene": _state("scene.scene", "")})
+    return _emit("builtin.scavenge", {"scene": _state("scene.scene", ""), "coins": 1})
 
 
 def explore():
@@ -129,6 +157,21 @@ class Player:
 
     def unequip(self):
         return _emit("player.unequip", None)
+
+    def gain_hp(self, amount=10):
+        return _emit("player.gain_hp", {"amount": amount})
+
+    def take_damage(self, amount=10):
+        return _emit("player.take_damage", {"amount": amount})
+
+    def gain_coins(self, amount=1):
+        return _emit("player.gain_coins", {"amount": amount})
+
+    def gain_xp(self, amount=10):
+        return _emit("player.gain_xp", {"amount": amount})
+
+    def go_to(self, location_id):
+        return _emit("builtin.goTo", {"locationId": location_id})
 
 class Enemy(Entity):
     pass

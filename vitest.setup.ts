@@ -98,9 +98,46 @@ const builtins: any = {};
     while ((match = playerUnequipRegex.exec(code)) !== null) {
       emitCallback('player.unequip', null);
     }
+
+    const gainHpRegex = /^\s*gain_hp\((.*)\)\s*$/gm;
+    while ((match = gainHpRegex.exec(code)) !== null) {
+      emitCallback('player.gain_hp', { amount: parseLiteral(match[1]) });
+    }
+
+    const takeDamageRegex = /^\s*take_damage\((.*)\)\s*$/gm;
+    while ((match = takeDamageRegex.exec(code)) !== null) {
+      emitCallback('player.take_damage', { amount: parseLiteral(match[1]) });
+    }
+
+    const gainCoinsRegex = /^\s*gain_coins\((.*)\)\s*$/gm;
+    while ((match = gainCoinsRegex.exec(code)) !== null) {
+      emitCallback('player.gain_coins', { amount: parseLiteral(match[1]) });
+    }
+
+    const gainXpRegex = /^\s*gain_xp\((.*)\)\s*$/gm;
+    while ((match = gainXpRegex.exec(code)) !== null) {
+      emitCallback('player.gain_xp', { amount: parseLiteral(match[1]) });
+    }
+
+    const combatRegex = /^\s*combat\((.*)\)\s*$/gm;
+    while ((match = combatRegex.exec(code)) !== null) {
+      const value = String(parseLiteral(match[1])).toLowerCase() === 'true';
+      emitCallback('game.combat', { state: value });
+    }
+
+    const targetEnemyRegex = /^\s*target_enemy\((.*)\)\s*$/gm;
+    while ((match = targetEnemyRegex.exec(code)) !== null) {
+      const value = String(parseLiteral(match[1])).toLowerCase() === 'true';
+      emitCallback('game.is_enemy', { state: value });
+    }
+
+    const logRegex = /^\s*log\((.*)\)\s*$/gm;
+    while ((match = logRegex.exec(code)) !== null) {
+      emitCallback('terminal.log', { message: parseLiteral(match[1]) });
+    }
     
     // Handle simple print statements
-    const printRegex = /print\((.*)\)/g;
+    const printRegex = /^\s*print\((.*)\)\s*$/gm;
     while ((match = printRegex.exec(code)) !== null) {
       try {
         let value = match[1].trim();

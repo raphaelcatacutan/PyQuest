@@ -1,0 +1,12 @@
+{
+    "PrintStatement": 0,
+    "WhileLoop": 0,
+    "ForLoop": 0,
+    "IfStatement": 0,
+    "FunctionDefinition": 0,
+    "ClassDefinition": 0,
+    "ReturnStatement": 0,
+    "TryStatement": 0,
+    "WithStatement": 0,
+    "Statement": 0
+}

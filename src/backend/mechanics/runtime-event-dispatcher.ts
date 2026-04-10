@@ -189,6 +189,15 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             return;
         }
 
+        case "python.statement": {
+            const statementType = readString(payload, "statementType", "Statement");
+            const lineNumber = Math.max(0, readNumber(payload, "lineNumber", 0));
+            const delayValue = Math.max(0, readNumber(payload, "delayMs", 0));
+            const delaySuffix = delayValue > 0 ? ` | delay ${delayValue}ms` : "";
+            appendRuntimeLog(`[TRACE] ${statementType} @ line ${lineNumber}${delaySuffix}`);
+            return;
+        }
+
         case "spear.attack":
         case "spear.attack.quick":
         case "spear.thrust":

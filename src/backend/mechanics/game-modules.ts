@@ -21,6 +21,14 @@ def _state(path, fallback=None):
     return __pyquest_state(path, fallback)
 
 
+def set_delay(milliseconds=0):
+    return __pyquest_set_delay(milliseconds)
+
+
+def sleep(milliseconds=0):
+    return __pyquest_sleep(milliseconds)
+
+
 def roll_dice(sides=6, count=1):
     result = sides * count
     _emit("builtin.roll_dice", {"sides": sides, "count": count, "result": result})

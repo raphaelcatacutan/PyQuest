@@ -37,7 +37,17 @@ export type PythonRuntimeHooks = {
     getStateValue?: (path: string, fallback?: unknown) => unknown;
 };
 
+export type PythonExecutionOptions = {
+    defaultInstructionDelayMs?: number;
+    enableStatementLogging?: boolean;
+};
+
 let runtimeHooks: PythonRuntimeHooks = {};
+let runtimeExecutionOptions: Required<PythonExecutionOptions> = {
+    defaultInstructionDelayMs: 1000,
+    enableStatementLogging: true
+};
+let activeInstructionDelayMs = 0;
 
 export function setPythonRuntimeHooks(hooks: PythonRuntimeHooks): void {
     runtimeHooks = {
@@ -48,6 +58,41 @@ export function setPythonRuntimeHooks(hooks: PythonRuntimeHooks): void {
 
 export function clearPythonRuntimeHooks(): void {
     runtimeHooks = {};
+}
+
+export function setPythonExecutionOptions(options: PythonExecutionOptions): void {
+    runtimeExecutionOptions = {
+        ...runtimeExecutionOptions,
+        ...options,
+        defaultInstructionDelayMs: normalizeDelay(options.defaultInstructionDelayMs, runtimeExecutionOptions.defaultInstructionDelayMs)
+    };
+}
+
+export function getPythonExecutionOptions(): Required<PythonExecutionOptions> {
+    return {
+        ...runtimeExecutionOptions
+    };
+}
+
+function normalizeDelay(value: unknown, fallback = 0): number {
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return Math.max(0, Math.floor(value));
+    }
+
+    if (typeof value === "string") {
+        const parsed = Number(value);
+        if (Number.isFinite(parsed)) {
+            return Math.max(0, Math.floor(parsed));
+        }
+    }
+
+    return Math.max(0, Math.floor(fallback));
+}
+
+function delayMs(ms: number): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
 }
 
 function remapToJs(value: any): unknown {
@@ -75,6 +120,11 @@ function createSkBuiltinFunction(fn: (...args: unknown[]) => unknown): any {
         return new Sk.builtin.func((...pythonArgs: any[]) => {
             const jsArgs = pythonArgs.map((arg) => remapToJs(arg));
             const result = fn(...jsArgs);
+
+            if (result && typeof (result as Promise<unknown>).then === "function" && Sk?.misceval?.promiseToSuspension) {
+                return Sk.misceval.promiseToSuspension((result as Promise<unknown>).then((resolvedValue) => remapToPy(resolvedValue)));
+            }
+
             return remapToPy(result);
         });
     }
@@ -86,6 +136,8 @@ function installRuntimeBridgeBuiltins(): void {
     if (!Sk) {
         return;
     }
+
+    activeInstructionDelayMs = runtimeExecutionOptions.defaultInstructionDelayMs;
 
     const builtins = Sk.builtins ?? (Sk.builtins = {});
 
@@ -104,6 +156,199 @@ function installRuntimeBridgeBuiltins(): void {
 
         return value === undefined ? fallback : value;
     });
+
+    builtins.__pyquest_set_delay = createSkBuiltinFunction((delay?: unknown) => {
+        activeInstructionDelayMs = normalizeDelay(delay, activeInstructionDelayMs);
+        return activeInstructionDelayMs;
+    });
+
+    builtins.__pyquest_sleep = createSkBuiltinFunction((delay?: unknown) => {
+        const normalizedDelay = normalizeDelay(delay, 0);
+        if (normalizedDelay <= 0) {
+            return null;
+        }
+
+        return delayMs(normalizedDelay);
+    });
+
+    builtins.__pyquest_tick = createSkBuiltinFunction((lineNumber: unknown, statementType: unknown, explicitDelay?: unknown) => {
+        const resolvedLineNumber = normalizeDelay(lineNumber, 0);
+        const resolvedStatementType = typeof statementType === "string" ? statementType : "Statement";
+        const hasExplicitDelay = explicitDelay !== undefined && explicitDelay !== null;
+        const resolvedDelay = hasExplicitDelay
+            ? normalizeDelay(explicitDelay, activeInstructionDelayMs)
+            : activeInstructionDelayMs;
+
+        if (runtimeExecutionOptions.enableStatementLogging) {
+            runtimeHooks.onFunctionCall?.({
+                name: "python.statement",
+                payload: {
+                    lineNumber: resolvedLineNumber,
+                    statementType: resolvedStatementType,
+                    delayMs: resolvedDelay
+                }
+            });
+        }
+
+        if (resolvedDelay <= 0) {
+            return null;
+        }
+
+        return delayMs(resolvedDelay);
+    });
+}
+
+function stripInlineComment(line: string): string {
+    let inSingleQuote = false;
+    let inDoubleQuote = false;
+    let escaped = false;
+
+    for (let index = 0; index < line.length; index += 1) {
+        const char = line[index];
+
+        if (escaped) {
+            escaped = false;
+            continue;
+        }
+
+        if (char === "\\") {
+            escaped = true;
+            continue;
+        }
+
+        if (char === "'" && !inDoubleQuote) {
+            inSingleQuote = !inSingleQuote;
+            continue;
+        }
+
+        if (char === '"' && !inSingleQuote) {
+            inDoubleQuote = !inDoubleQuote;
+            continue;
+        }
+
+        if (char === "#" && !inSingleQuote && !inDoubleQuote) {
+            return line.slice(0, index);
+        }
+    }
+
+    return line;
+}
+
+function extractInlineDelayOverride(line: string): number | undefined {
+    const match = line.match(/#\s*delay\s*[:=]\s*(\d+)/i);
+
+    if (!match) {
+        return undefined;
+    }
+
+    return normalizeDelay(Number(match[1]), 0);
+}
+
+function inferStatementType(trimmedLine: string): string {
+    if (/^print\s*\(/.test(trimmedLine)) {
+        return "PrintStatement";
+    }
+
+    if (/^while\b/.test(trimmedLine)) {
+        return "WhileLoop";
+    }
+
+    if (/^for\b/.test(trimmedLine)) {
+        return "ForLoop";
+    }
+
+    if (/^if\b/.test(trimmedLine)) {
+        return "IfStatement";
+    }
+
+    if (/^def\b/.test(trimmedLine)) {
+        return "FunctionDefinition";
+    }
+
+    if (/^class\b/.test(trimmedLine)) {
+        return "ClassDefinition";
+    }
+
+    if (/^return\b/.test(trimmedLine)) {
+        return "ReturnStatement";
+    }
+
+    if (/^(import\b|from\b)/.test(trimmedLine)) {
+        return "ImportStatement";
+    }
+
+    if (/^try\b/.test(trimmedLine)) {
+        return "TryStatement";
+    }
+
+    if (/^with\b/.test(trimmedLine)) {
+        return "WithStatement";
+    }
+
+    return "Statement";
+}
+
+function countChar(text: string, char: string): number {
+    return (text.match(new RegExp(`\\${char}`, "g")) ?? []).length;
+}
+
+function instrumentPythonInstructions(code: string): string {
+    const lines = code.split(/\r?\n/);
+    const instrumentedLines: string[] = [];
+
+    let bracketDepth = 0;
+    let previousLineContinues = false;
+    let previousDecorator = false;
+
+    for (let index = 0; index < lines.length; index += 1) {
+        const originalLine = lines[index];
+        const trimmedLine = originalLine.trim();
+        const isBlank = trimmedLine.length === 0;
+        const isComment = trimmedLine.startsWith("#");
+        const isDecorator = trimmedLine.startsWith("@");
+        const isContinuationBranch = /^(elif\b|else\b|except\b|finally\b|case\b)/.test(trimmedLine);
+        const isDocStringLine = /^("""|''')/.test(trimmedLine);
+        const inMultilineExpression = previousLineContinues || bracketDepth > 0;
+
+        const shouldInstrument = !isBlank
+            && !isComment
+            && !isDecorator
+            && !isContinuationBranch
+            && !isDocStringLine
+            && !inMultilineExpression
+            && !previousDecorator;
+
+        if (shouldInstrument) {
+            const indentation = originalLine.match(/^\s*/) ? (originalLine.match(/^\s*/) as RegExpMatchArray)[0] : "";
+            const statementType = inferStatementType(trimmedLine);
+            const delayOverride = extractInlineDelayOverride(originalLine);
+            const tickCall = delayOverride === undefined
+                ? `${indentation}__pyquest_tick(${index + 1}, "${statementType}")`
+                : `${indentation}__pyquest_tick(${index + 1}, "${statementType}", ${delayOverride})`;
+            instrumentedLines.push(tickCall);
+        }
+
+        instrumentedLines.push(originalLine);
+
+        if (isDecorator) {
+            previousDecorator = true;
+        } else if (!isBlank && !isComment) {
+            previousDecorator = false;
+        }
+
+        const withoutInlineComment = stripInlineComment(originalLine);
+        bracketDepth += countChar(withoutInlineComment, "(")
+            + countChar(withoutInlineComment, "[")
+            + countChar(withoutInlineComment, "{")
+            - countChar(withoutInlineComment, ")")
+            - countChar(withoutInlineComment, "]")
+            - countChar(withoutInlineComment, "}");
+
+        bracketDepth = Math.max(0, bracketDepth);
+        previousLineContinues = /\\\s*$/.test(withoutInlineComment.trimEnd()) || bracketDepth > 0;
+    }
+
+    return instrumentedLines.join("\n");
 }
 
 function ensurePythonModulesInitialized(): void {
@@ -257,7 +502,8 @@ export function runPython(code: string): Promise<string> {
         let output = "";
         const builtinPrelude = getBuiltinPreludeCode();
         const transformedCode = expandCustomModuleImports(code);
-        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${transformedCode}` : transformedCode;
+        const instrumentedCode = instrumentPythonInstructions(transformedCode);
+        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${instrumentedCode}` : instrumentedCode;
 
         // Ensure each run starts from a clean import/compiler state so newly loaded modules are used.
         if (Sk?.builtin?.dict) {
@@ -294,7 +540,7 @@ export function runPython(code: string): Promise<string> {
             }
         });
 
-        Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, sourceCode))
+        Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, sourceCode, true))
             .then(() => {
                 resolve(output);
             })

@@ -8,8 +8,8 @@ import {
 } from "@/src/game/store"
 import { useShallow } from "zustand/shallow"
 import { useEffect } from "react"
-import { Bosses, getBossesByLocation } from "@/src/game/data/bosses"
-import { Enemies, getEnemiesByLocation } from "@/src/game/data/enemies"
+import { getBossesByLocation } from "@/src/game/data/bosses"
+import { getEnemiesByLocation } from "@/src/game/data/enemies"
 
 export default function Combat(){
   const scene = useSceneStore(s => s.scene)

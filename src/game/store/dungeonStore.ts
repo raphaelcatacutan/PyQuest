@@ -1,285 +1,85 @@
 import { create } from "zustand"
+import { persist, createJSONStorage } from "zustand/middleware"
 import { Dungeon, DungeonDifficultyTypes } from "../types/dungeon.types"
 
 /**
  * 
- *  Dungeon State
+ *  Dungeon Store
  */
+
+export const loadDungeonProfile = async (playerId: string) => {
+  if (!playerId) return;
+  useDungeonStore.persist.setOptions({
+    name: `player-dungeon-${playerId}`,
+  });
+  await useDungeonStore.persist.rehydrate();
+  useDungeonStore.setState({ playerId });
+};
 
 interface DungeonStoreProps extends Dungeon {
   setPlayerId: (id: string) => void;
 
-  toggleInDungeon: () => void;
+  toggleInDungeon: (state?: boolean | null) => void;
   setMode: (mode: DungeonDifficultyTypes) => void;
   setMachineProblem: (problem: string) => void;
 
   addSolvedEasy: () => void;
-  setMaxEasy: (max: string) => void;
+  setMaxEasy: (max: number) => void;
   
   addSolvedMedium: () => void;
-  setMaxMedium: (max: string) => void;
+  setMaxMedium: (max: number) => void;
 
   addSolvedHard: () => void;
-  setMaxHard: (max: string) => void;
+  setMaxHard: (max: number) => void;
   
   incrementAttempt: () => void;
   resetDungeon: () => void;
 }
 
-// Helper to save dungeon data to localStorage
-const saveDungeonToLocalStorage = (playerId: string, dungeonData: Omit<Dungeon, 'playerId'>) => {
-  if (playerId) {
-    localStorage.setItem(
-      `player-dungeon-${playerId}`,
-      JSON.stringify(dungeonData)
-    );
-  }
-};
-
-export const useDungeonStore = create<DungeonStoreProps>((set) => ({
-  playerId: "",
-  inDungeon: false,
-  mode: "easy",
-  machineProblem: "",
-  currEasy: 0,
-  maxEasy: 5,
-  currMedium: 0,
-  maxMedium: 5,
-  currHard: 0,
-  maxHard: 5,
-  currAttempt: 0,
-  maxAttempts: 3,
-
-  setPlayerId: (id) => set((state) => {
-    // Save current player's dungeon data before switching
-    if (state.playerId && state.playerId !== id) {
-      saveDungeonToLocalStorage(state.playerId, {
-        inDungeon: state.inDungeon,
-        mode: state.mode,
-        machineProblem: state.machineProblem,
-        currEasy: state.currEasy,
-        maxEasy: state.maxEasy,
-        currMedium: state.currMedium,
-        maxMedium: state.maxMedium,
-        currHard: state.currHard,
-        maxHard: state.maxHard,
-        currAttempt: state.currAttempt,
-        maxAttempts: state.maxAttempts,
-      });
-    }
-
-    // Load new player's dungeon data
-    const savedData = localStorage.getItem(`player-dungeon-${id}`);
-    const newDungeonData = savedData
-      ? JSON.parse(savedData)
-      : {
-          inDungeon: false,
-          mode: "easy",
-          machineProblem: "",
-          currEasy: 0,
-          maxEasy: 5,
-          currMedium: 0,
-          maxMedium: 5,
-          currHard: 0,
-          maxHard: 5,
-          currAttempt: 0,
-          maxAttempts: 3,
-        };
-
-    return {
-      playerId: id,
-      ...newDungeonData
-    };
-  }),
-
-  toggleInDungeon: () => set((state) => {
-    const newData = { inDungeon: !state.inDungeon };
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: newData.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return newData;
-  }),
-
-  setMode: (mode) => set((state) => {
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { mode };
-  }),
-
-  setMachineProblem: (problem) => set((state) => {
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: problem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { machineProblem: problem };
-  }),
-
-  addSolvedEasy: () => set((state) => {
-    const newEasy = Math.min(state.currEasy + 1, state.maxEasy);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: newEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { currEasy: newEasy };
-  }),
-
-  setMaxEasy: (max) => set((state) => {
-    const newMax = parseInt(max);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: newMax,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { maxEasy: newMax };
-  }),
-
-  addSolvedMedium: () => set((state) => {
-    const newMedium = Math.min(state.currMedium + 1, state.maxMedium);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: newMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { currMedium: newMedium };
-  }),
-
-  setMaxMedium: (max) => set((state) => {
-    const newMax = parseInt(max);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: newMax,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { maxMedium: newMax };
-  }),
-
-  addSolvedHard: () => set((state) => {
-    const newHard = Math.min(state.currHard + 1, state.maxHard);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: newHard,
-      maxHard: state.maxHard,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { currHard: newHard };
-  }),
-
-  setMaxHard: (max) => set((state) => {
-    const newMax = parseInt(max);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: newMax,
-      currAttempt: state.currAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { maxHard: newMax };
-  }),
-
-  incrementAttempt: () => set((state) => {
-    const newAttempt = Math.min(state.currAttempt + 1, state.maxAttempts);
-    saveDungeonToLocalStorage(state.playerId, {
-      inDungeon: state.inDungeon,
-      mode: state.mode,
-      machineProblem: state.machineProblem,
-      currEasy: state.currEasy,
-      maxEasy: state.maxEasy,
-      currMedium: state.currMedium,
-      maxMedium: state.maxMedium,
-      currHard: state.currHard,
-      maxHard: state.maxHard,
-      currAttempt: newAttempt,
-      maxAttempts: state.maxAttempts,
-    });
-    return { currAttempt: newAttempt };
-  }),
-
-  resetDungeon: () => set(() => {
-    const resetData = {
+export const useDungeonStore = create<DungeonStoreProps>()(
+  persist(
+    (set) => ({
+      playerId: "",
       inDungeon: false,
-      mode: "easy" as DungeonDifficultyTypes,
+      mode: "",
       machineProblem: "",
       currEasy: 0,
+      maxEasy: 5,
       currMedium: 0,
+      maxMedium: 5,
       currHard: 0,
+      maxHard: 5,
       currAttempt: 0,
-    };
-    return resetData;
-  }),
-}))
+      maxAttempts: 3,
+
+      setPlayerId: (id: string) => set({ playerId: id }),
+
+      toggleInDungeon: (state) => set((s) => ({ inDungeon: state ?? !s.inDungeon })),
+      setMode: (mode) => set({ mode }),
+      setMachineProblem: (problem) => set({ machineProblem: problem }),
+
+      addSolvedEasy: () => set((s) => ({ currEasy: Math.min(s.currEasy + 1, s.maxEasy) })),
+      setMaxEasy: (max) => set({ maxEasy: max }),
+
+      addSolvedMedium: () => set((s) => ({ currMedium: Math.min(s.currMedium + 1, s.maxMedium) })),
+      setMaxMedium: (max) => set({ maxMedium: max }),
+
+      addSolvedHard: () => set((s) => ({ currHard: Math.min(s.currHard + 1, s.maxHard) })),
+      setMaxHard: (max) => set({ maxHard: max }),
+      
+      incrementAttempt: () => set((s) => ({ currAttempt: Math.min(s.currAttempt + 1, s.maxAttempts) })),
+      
+      resetDungeon: () => set({ 
+        inDungeon: false, 
+        mode: "", 
+        machineProblem: "", 
+        currAttempt: 0 
+      }),
+    }),
+    {
+      name: "player-dungeon-default",
+      storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
+    }
+  )
+);

@@ -4,8 +4,10 @@ import EnemyArchitect from './EnemyArchitect';
 import ConsumableArchitect from './ConsumableArchitect';
 import ArmorArchitect from './ArmorArchitect';
 import WeaponArchitect from './WeaponArchitect';
+import DungeonArchitect from './DungeonArchitect';
+import TrialsArchitect from './TrialsArchitect';
 
-type ArchitectType = 'boss' | 'enemy' | 'consumable' | 'armor' | 'weapon';
+type ArchitectType = 'boss' | 'enemy' | 'consumable' | 'armor' | 'weapon' | 'dungeon' | 'trials';
 
 export default function UnifiedArchitect() {
   const [activeTab, setActiveTab] = useState<ArchitectType>('boss');
@@ -16,6 +18,8 @@ export default function UnifiedArchitect() {
     { id: 'consumable', label: 'Consumable', color: '#00d4ff' },
     { id: 'armor', label: 'Armor', color: '#00d4ff' },
     { id: 'weapon', label: 'Weapon', color: '#00d4ff' },
+    { id: 'dungeon', label: 'Dungeon', color: '#ff9d00' },
+    { id: 'trials', label: 'Trials', color: '#ff6b9d' },
   ];
 
   const renderArchitect = () => {
@@ -30,6 +34,10 @@ export default function UnifiedArchitect() {
         return <ArmorArchitect />;
       case 'weapon':
         return <WeaponArchitect />;
+      case 'dungeon':
+        return <DungeonArchitect />;
+      case 'trials':
+        return <TrialsArchitect />;
       default:
         return <BossArchitect />;
     }

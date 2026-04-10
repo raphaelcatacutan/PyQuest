@@ -1,41 +1,49 @@
-import { useEffect, useRef, useState } from "react"
-import EnemyEncounter from "./EnemyEncounter"
-import { useGameStore, useEnemyStore, useBossStore, usePlayerStore } from "@/src/game/store"
-import BossEncounter from "./BossEncounter"
-import { 
-  useGameStore,
-  useSceneStore, 
+import { useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/shallow";
+import EnemyEncounter from "./EnemyEncounter";
+import BossEncounter from "./BossEncounter";
+import {
+  useBossStore,
   useEnemyStore,
-  useBossStore
-} from "@/src/game/store"
-import { useShallow } from "zustand/shallow"
-import { createEncounterController, EncounterController } from "@/src/backend/mechanics/combat"
-import { useEffect } from "react"
-import { Bosses, getBossesByLocation } from "@/src/game/data/bosses"
-import { Enemies, getEnemiesByLocation } from "@/src/game/data/enemies"
+  useGameStore,
+  usePlayerStore,
+  useSceneStore,
+} from "@/src/game/store";
+import {
+  createEncounterController,
+  EncounterController,
+} from "@/src/backend/mechanics/combat";
+import { getEnemiesByLocation } from "@/src/game/data/enemies";
+import { getBossesByLocation } from "@/src/game/data/bosses";
 
-export default function Combat(){
-  const DEBUG_AI = true
-  const { isThereEnemy } = useGameStore(
-  const scene = useSceneStore(s => s.scene)
-  const { inCombat, toggleInCombat } = useGameStore(
+const DEBUG_AI = true;
+
+export default function Combat() {
+  const scene = useSceneStore((s) => s.scene);
+  const { inCombat, isEnemy, toggleInCombat, toggleIsEnemy } = useGameStore(
     useShallow((s) => ({
       inCombat: s.inCombat,
-      toggleInCombat: s.toggleInCombat
-    }))
-  )
-  const { isEnemy, toggleIsEnemy} = useGameStore(
-    useShallow((s) => ({
-      isThereEnemy: s.isThereEnemy,
-    }))
-  )
-  const enemyId = useEnemyStore((s) => s.id)
-  const bossId = useBossStore((s) => s.id)
+      isEnemy: s.isEnemy,
+      toggleInCombat: s.toggleInCombat,
+      toggleIsEnemy: s.toggleIsEnemy,
+    })),
+  );
 
-  const controllerRef = useRef<EncounterController | null>(null)
-  const activeKeyRef = useRef<string>("")
-  const timerRef = useRef<number | null>(null)
-  const lastTickRef = useRef<number>(0)
+  const enemyId = useEnemyStore((s) => s.id);
+  const bossId = useBossStore((s) => s.id);
+  const enemyHp = useEnemyStore((s) => s.hp);
+  const bossHp = useBossStore((s) => s.hp);
+
+  const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
+  const clearEnemy = useEnemyStore((s) => s.clearEnemy);
+  const spawnBoss = useBossStore((s) => s.spawnBoss);
+  const clearBoss = useBossStore((s) => s.clearBoss);
+
+  const controllerRef = useRef<EncounterController | null>(null);
+  const activeKeyRef = useRef<string>("");
+  const timerRef = useRef<number | null>(null);
+  const lastTickRef = useRef<number>(0);
+
   const [debugState, setDebugState] = useState<{
     isBoss: boolean;
     enemyId: string;
@@ -50,55 +58,135 @@ export default function Combat(){
     enemyEnergy: number;
     tickMs: number;
     done: boolean;
-  } | null>(null)
+  } | null>(null);
+
+  const stopLoop = () => {
+    if (controllerRef.current) {
+      controllerRef.current.endEncounter();
+      controllerRef.current = null;
+      activeKeyRef.current = "";
+    }
+
+    if (timerRef.current != null) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
   useEffect(() => {
-    if (!isThereEnemy) {
-      stopLoop()
-      return
+    if (!inCombat) {
+      stopLoop();
+      return;
     }
 
-    const isBoss = bossId !== ""
-    const activeId = isBoss ? bossId : enemyId
+    if (enemyId || bossId) return;
+
+    const enemies = getEnemiesByLocation(scene);
+    const bosses = getBossesByLocation(scene);
+    const enemyKeys = Object.keys(enemies);
+    const bossKeys = Object.keys(bosses);
+
+    const canSpawnEnemy = enemyKeys.length > 0;
+    const canSpawnBoss = bossKeys.length > 0;
+    if (!canSpawnEnemy && !canSpawnBoss) return;
+
+    const shouldSpawnBoss = canSpawnBoss && (!canSpawnEnemy || Math.random() <= 0.5);
+
+    if (shouldSpawnBoss) {
+      const randomBossKey = bossKeys[Math.floor(Math.random() * bossKeys.length)];
+      spawnBoss(bosses[randomBossKey]);
+      clearEnemy();
+      toggleIsEnemy(false);
+      return;
+    }
+
+    const randomEnemyKey = enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
+    spawnEnemy(enemies[randomEnemyKey]);
+    clearBoss();
+    toggleIsEnemy(true);
+  }, [
+    inCombat,
+    enemyId,
+    bossId,
+    scene,
+    spawnEnemy,
+    clearEnemy,
+    spawnBoss,
+    clearBoss,
+    toggleIsEnemy,
+  ]);
+
+  useEffect(() => {
+    if (!inCombat) return;
+
+    if (isEnemy && enemyId && enemyHp <= 0) {
+      toggleInCombat(false);
+      clearEnemy();
+      return;
+    }
+
+    if (!isEnemy && bossId && bossHp <= 0) {
+      toggleInCombat(false);
+      clearBoss();
+    }
+  }, [
+    inCombat,
+    isEnemy,
+    enemyId,
+    bossId,
+    enemyHp,
+    bossHp,
+    clearEnemy,
+    clearBoss,
+    toggleInCombat,
+  ]);
+
+  useEffect(() => {
+    if (!inCombat) {
+      stopLoop();
+      return;
+    }
+
+    const activeId = isEnemy ? enemyId : bossId;
     if (!activeId) {
-      stopLoop()
-      return
+      stopLoop();
+      return;
     }
 
-    const key = `${isBoss ? "boss" : "enemy"}:${activeId}`
+    const key = `${isEnemy ? "enemy" : "boss"}:${activeId}`;
     if (activeKeyRef.current !== key) {
-      const enemy = isBoss ? useBossStore.getState() : useEnemyStore.getState()
+      const target = isEnemy ? useEnemyStore.getState() : useBossStore.getState();
       controllerRef.current = createEncounterController({
-        kind: isBoss ? "boss" : "mob",
+        kind: isEnemy ? "mob" : "boss",
         enemy: {
-          hp: enemy.hp,
-          maxHp: enemy.maxHp,
-          energy: enemy.energy,
-          maxEnergy: enemy.maxEnergy,
-          def: enemy.def,
-          dmg: enemy.dmg,
-          critChance: enemy.critChance,
-          critDmg: enemy.critDmg,
-          atkSpeed: enemy.atkSpeed,
-          skills: enemy.skills
-        }
-      })
-      activeKeyRef.current = key
+          hp: target.hp,
+          maxHp: target.maxHp,
+          energy: target.energy,
+          maxEnergy: target.maxEnergy,
+          def: target.def,
+          dmg: target.dmg,
+          critChance: target.critChance,
+          critDmg: target.critDmg,
+          atkSpeed: target.atkSpeed,
+          skills: target.skills,
+        },
+      });
+      activeKeyRef.current = key;
     }
 
     if (timerRef.current == null) {
-      lastTickRef.current = performance.now()
+      lastTickRef.current = performance.now();
       timerRef.current = window.setInterval(() => {
-        const controller = controllerRef.current
-        if (!controller) return
+        const controller = controllerRef.current;
+        if (!controller) return;
 
-        const now = performance.now()
-        const deltaMs = now - lastTickRef.current
-        lastTickRef.current = now
+        const now = performance.now();
+        const deltaMs = now - lastTickRef.current;
+        lastTickRef.current = now;
 
-        const player = usePlayerStore.getState()
-        const enemy = isBoss ? useBossStore.getState() : useEnemyStore.getState()
-        if (!enemy.id) return
+        const player = usePlayerStore.getState();
+        const target = isEnemy ? useEnemyStore.getState() : useBossStore.getState();
+        if (!target.id) return;
 
         const result = controller.tick({
           player: {
@@ -109,61 +197,61 @@ export default function Combat(){
             baseCritChance: player.baseCritChance,
             baseCritDmg: player.baseCritDmg,
             atkSpeed: player.atkSpeed,
-            level: player.level
+            level: player.level,
           },
           enemy: {
-            hp: enemy.hp,
-            maxHp: enemy.maxHp,
-            energy: enemy.energy,
-            maxEnergy: enemy.maxEnergy,
-            def: enemy.def,
-            dmg: enemy.dmg,
-            critChance: enemy.critChance,
-            critDmg: enemy.critDmg,
-            atkSpeed: enemy.atkSpeed,
-            skills: enemy.skills
+            hp: target.hp,
+            maxHp: target.maxHp,
+            energy: target.energy,
+            maxEnergy: target.maxEnergy,
+            def: target.def,
+            dmg: target.dmg,
+            critChance: target.critChance,
+            critDmg: target.critDmg,
+            atkSpeed: target.atkSpeed,
+            skills: target.skills,
           },
-          deltaMs
-        })
+          deltaMs,
+        });
 
         if (result.damageToPlayer > 0) {
-          usePlayerStore.getState().takeDamage(result.damageToPlayer)
+          usePlayerStore.getState().takeDamage(result.damageToPlayer);
         }
 
         if (result.damageToEnemy > 0) {
-          const takeDamage = isBoss
-            ? useBossStore.getState().takeDamage
-            : useEnemyStore.getState().takeDamage
-          takeDamage(result.damageToEnemy)
+          const applyDamage = isEnemy
+            ? useEnemyStore.getState().takeDamage
+            : useBossStore.getState().takeDamage;
+          applyDamage(result.damageToEnemy);
         }
 
         if (result.healEnemy > 0) {
-          const gainHp = isBoss
-            ? useBossStore.getState().gainHp
-            : useEnemyStore.getState().gainHp
-          gainHp(result.healEnemy)
+          const applyHeal = isEnemy
+            ? useEnemyStore.getState().gainHp
+            : useBossStore.getState().gainHp;
+          applyHeal(result.healEnemy);
         }
 
         if (result.energyDelta !== 0) {
           if (result.energyDelta < 0) {
-            const spend = isBoss
-              ? useBossStore.getState().takeEnergyCost
-              : useEnemyStore.getState().takeEnergyCost
-            spend(Math.abs(result.energyDelta))
+            const spendEnergy = isEnemy
+              ? useEnemyStore.getState().takeEnergyCost
+              : useBossStore.getState().takeEnergyCost;
+            spendEnergy(Math.abs(result.energyDelta));
           } else {
-            const gainEnergy = isBoss
-              ? useBossStore.getState().gainEnergy
-              : useEnemyStore.getState().gainEnergy
-            gainEnergy(result.energyDelta)
+            const gainEnergy = isEnemy
+              ? useEnemyStore.getState().gainEnergy
+              : useBossStore.getState().gainEnergy;
+            gainEnergy(result.energyDelta);
           }
         }
 
         if (DEBUG_AI) {
-          const playerAfter = usePlayerStore.getState()
-          const enemyAfter = isBoss ? useBossStore.getState() : useEnemyStore.getState()
+          const playerAfter = usePlayerStore.getState();
+          const enemyAfter = isEnemy ? useEnemyStore.getState() : useBossStore.getState();
           setDebugState({
-            isBoss,
-            enemyId: enemy.id,
+            isBoss: !isEnemy,
+            enemyId: target.id,
             action: result.enemyAction?.label ?? "none",
             reward: Number(result.reward.toFixed(3)),
             dmgToPlayer: result.damageToPlayer,
@@ -174,117 +262,44 @@ export default function Combat(){
             enemyHp: enemyAfter.hp,
             enemyEnergy: enemyAfter.energy,
             tickMs: Math.round(deltaMs),
-            done: result.done
-          })
+            done: result.done,
+          });
         }
 
         if (result.done) {
-          controller.endEncounter()
-          controllerRef.current = null
-          activeKeyRef.current = ""
-          stopLoop()
+          stopLoop();
+          toggleInCombat(false);
         }
-      }, 200)
+      }, 200);
     }
 
-    return () => stopLoop()
-  }, [isThereEnemy, enemyId, bossId])
+    return () => stopLoop();
+  }, [inCombat, isEnemy, enemyId, bossId, toggleInCombat]);
 
-  function stopLoop() {
-    if (controllerRef.current) {
-      controllerRef.current.endEncounter()
-      controllerRef.current = null
-      activeKeyRef.current = ""
-    }
-    if (timerRef.current != null) {
-      window.clearInterval(timerRef.current)
-      timerRef.current = null
-    }
-  }
-      isEnemy: s.isEnemy,
-      toggleIsEnemy: s.toggleIsEnemy
-    }))
-  )
-  const enemyId = useEnemyStore(s => s.id)
-  const bossId = useBossStore(s => s.id)
-
-  const bossHP = useBossStore(s => s.hp)
-  const enemyHP = useEnemyStore(s => s.hp) 
-
-  const spawnEnemy = useEnemyStore(s => s.spawnEnemy)
-  const spawnBoss = useBossStore(s => s.spawnBoss)
-
-  const clearEnemy = useEnemyStore(s => s.clearEnemy)
-  const clearBoss = useBossStore(s => s.clearBoss)
-
-  useEffect(() => {
-    if (!inCombat) return;
-    // if (id) return; // Don't spawn if already spawned
-
-    const epsilon = 0.5
-    if (Math.random() <= epsilon){ // Boss
-      const bosses = getBossesByLocation(scene);
-      if (!bosses) return;
-
-      const keys = Object.keys(bosses);
-      const randomBossKey = keys[Math.floor(Math.random() * keys.length)];
-      spawnBoss(bosses[randomBossKey])
-      toggleIsEnemy(false)
-    } else { // Enemy 
-      console.log('Enemy')
-      // const testScene = 'swamp'
-      const enemies = getEnemiesByLocation(scene);
-      if (!enemies) return;
-      
-      const keys = Object.keys(enemies);
-      const randomEnemyKey = keys[Math.floor(Math.random() * keys.length)];
-      spawnEnemy(enemies[randomEnemyKey])
-      toggleIsEnemy(true)
-    }
-  }, [inCombat, scene])
-
-  useEffect(() => {
-    if (isEnemy){
-      if (enemyHP <= 0){
-        console.log(`Enemy Defeated: ${name}`)
-        toggleInCombat(false)
-        clearEnemy()
-      }
-    } else {
-      if (bossHP <= 0){
-        console.log(`Enemy Defeated: ${name}`)
-        toggleInCombat(false)
-        clearBoss()
-      }
-    }
-  }, [enemyHP, bossHP])
+  if (!inCombat) return null;
 
   return (
-    <>
-      {inCombat &&
-      <div className="relative flex h-full w-full z-1"> 
-        <EnemyEncounter/>
-        {DEBUG_AI && debugState && (
-          <div className="absolute left-3 bottom-3 z-10 text-xs bg-black/70 text-white rounded px-3 py-2 w-64">
-            <div className="font-semibold">AI Debug</div>
-            <div>Type: {debugState.isBoss ? "Boss" : "Mob"}</div>
-            <div>Enemy: {debugState.enemyId || "-"}</div>
-            <div>Action: {debugState.action}</div>
-            <div>Reward: {debugState.reward}</div>
-            <div>Tick: {debugState.tickMs}ms</div>
-            <div>Player HP: {debugState.playerHp}</div>
-            <div>Enemy HP: {debugState.enemyHp}</div>
-            <div>Enemy EN: {debugState.enemyEnergy}</div>
-            <div>DMG to Player: {debugState.dmgToPlayer}</div>
-            <div>DMG to Enemy: {debugState.dmgToEnemy}</div>
-            <div>Heal Enemy: {debugState.healEnemy}</div>
-            <div>Energy Δ: {debugState.energyDelta}</div>
-            <div>Done: {debugState.done ? "yes" : "no"}</div>
-          </div>
-        )}
-        {isEnemy ? <EnemyEncounter/> : <BossEncounter/>}
-      </div>
-      }
-    </>
-  )
+    <div className="relative flex h-full w-full z-1">
+      {isEnemy ? <EnemyEncounter /> : <BossEncounter />}
+
+      {DEBUG_AI && debugState && (
+        <div className="absolute left-3 bottom-3 z-10 text-xs bg-black/70 text-white rounded px-3 py-2 w-64">
+          <div className="font-semibold">AI Debug</div>
+          <div>Type: {debugState.isBoss ? "Boss" : "Mob"}</div>
+          <div>Enemy: {debugState.enemyId || "-"}</div>
+          <div>Action: {debugState.action}</div>
+          <div>Reward: {debugState.reward}</div>
+          <div>Tick: {debugState.tickMs}ms</div>
+          <div>Player HP: {debugState.playerHp}</div>
+          <div>Enemy HP: {debugState.enemyHp}</div>
+          <div>Enemy EN: {debugState.enemyEnergy}</div>
+          <div>DMG to Player: {debugState.dmgToPlayer}</div>
+          <div>DMG to Enemy: {debugState.dmgToEnemy}</div>
+          <div>Heal Enemy: {debugState.healEnemy}</div>
+          <div>Energy Delta: {debugState.energyDelta}</div>
+          <div>Done: {debugState.done ? "yes" : "no"}</div>
+        </div>
+      )}
+    </div>
+  );
 }

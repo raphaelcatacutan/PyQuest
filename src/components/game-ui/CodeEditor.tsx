@@ -8,11 +8,16 @@ import {
   saveIcon
 } from '@/src/assets'
 import { usePlayerStore } from "@/src/game/store";
+import { useTerminalStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
+import { runPython } from "@/src/backend/mechanics/parser";
+import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
+import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
 
 
 export default function CodeEditor() {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const runningRef = useRef(false);
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
     editorRef.current = editor;
     editor.addCommand(_monaco.KeyMod.CtrlCmd | _monaco.KeyCode.Enter, () => {
@@ -31,6 +36,7 @@ export default function CodeEditor() {
       maxEnergy: s.maxEnergy
     }))
   )
+  const appendToLogs = useTerminalStore((s) => s.appendToLog)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -66,34 +72,44 @@ export default function CodeEditor() {
     // }
   }
   
-  function handleOpen() {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".py,.txt";
-    input.onchange = (e) => {
-      const target = e.target as HTMLInputElement;
-      const file = target.files?.[0];
-      if (!file) return;
+  async function handleRun() {
+    const code = editorRef.current?.getValue() ?? "";
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const content = event.target?.result;
-        if (editorRef.current && typeof content === "string") {
-          editorRef.current.setValue(content);
-        }
-      };
-      reader.readAsText(file);
-    };
+    if (!code.trim()) {
+      appendToLogs("[PY]: Nothing to run.");
+      return;
+    }
 
-    input.click();
+    if (runningRef.current) {
+      appendToLogs("[PY]: A script is already running.");
+      return;
+    }
+
+    runningRef.current = true;
+    appendToLogs("[PY]: Running script...");
+    bindPythonRuntimeToZustand((event) => {
+      dispatchPythonRuntimeEvent(event);
+    });
+
+    try {
+      const output = await runPython(code);
+      const lines = output
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
+
+      if (lines.length === 0) {
+        appendToLogs("[PY]: Script finished.");
+      } else {
+        lines.forEach((line) => appendToLogs(`[PY-OUT]: ${line}`));
+      }
+    } catch (error) {
+      appendToLogs(`[PY-ERR]: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      unbindPythonRuntimeFromZustand();
+      runningRef.current = false;
+    }
   }
-
-  function handleRun() {
-    // TODO: Bind Python Run
-    const code = editorRef.current?.getValue() 
-    alert(code)
-    console.log("Run function executed")
-  } 
 
   return (
     <div id="hp-bar" className="relative w-150 flex flex-col h-full bg-[#23100a]">

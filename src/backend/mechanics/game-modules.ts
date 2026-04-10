@@ -2,12 +2,208 @@
  * Built-in game modules that players can import in their Python code
  */
 
-import { CustomModule } from './parser';
+import type { CustomModule } from './parser';
 
-/**
- * Spear combat module
- * Provides weapon-related functions and classes
- */
+export const builtinModule: CustomModule = {
+    name: 'builtin',
+    description: 'Preloaded helpers available without import',
+    visibility: 'internal',
+    prelude: true,
+    code: `
+from abstracts import Player
+
+
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
+
+
+def _state(path, fallback=None):
+    return __pyquest_state(path, fallback)
+
+
+def roll_dice(sides=6, count=1):
+    result = sides * count
+    _emit("builtin.roll_dice", {"sides": sides, "count": count, "result": result})
+    return result
+
+
+def chance(percentage):
+    result = percentage >= 50
+    _emit("builtin.chance", {"percentage": percentage, "result": result})
+    return result
+
+
+def random_choice(items):
+    if not items:
+        _emit("builtin.random_choice", {"result": None})
+        return None
+    result = items[0]
+    _emit("builtin.random_choice", {"result": result})
+    return result
+
+
+def clamp(value, min_value, max_value):
+    if value < min_value:
+        _emit("builtin.clamp", {"value": value, "result": min_value})
+        return min_value
+    if value > max_value:
+        _emit("builtin.clamp", {"value": value, "result": max_value})
+        return max_value
+    _emit("builtin.clamp", {"value": value, "result": value})
+    return value
+
+
+def goTo(locationId: str):
+    return _emit("builtin.goTo", {"locationId": locationId, "from": _state("scene.scene", "")})
+
+
+def gain_hp(amount=10):
+    return _emit("player.gain_hp", {"amount": amount})
+
+
+def take_damage(amount=10):
+    return _emit("player.take_damage", {"amount": amount})
+
+
+def gain_coins(amount=1):
+    return _emit("player.gain_coins", {"amount": amount})
+
+
+def gain_xp(amount=10):
+    return _emit("player.gain_xp", {"amount": amount})
+
+
+def combat(state=True):
+    return _emit("game.combat", {"state": state})
+
+
+def target_enemy(state=True):
+    return _emit("game.is_enemy", {"state": state})
+
+
+def log(message=""):
+    return _emit("terminal.log", {"message": str(message)})
+
+
+def scavenge():
+    return _emit("builtin.scavenge", {"scene": _state("scene.scene", ""), "coins": 1})
+
+
+def explore():
+    return _emit("builtin.explore", {"scene": _state("scene.scene", "")})
+
+
+player = Player()
+`
+};
+
+export const abstractsModule: CustomModule = {
+    name: 'abstracts',
+    description: 'Internal type and class contracts',
+    visibility: 'internal',
+    code: `
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
+
+
+def _state(path, fallback=None):
+    return __pyquest_state(path, fallback)
+
+
+class Armor:
+    @property
+    def type(self) -> str:
+        return _state("player.headSlot", "")
+
+    @property
+    def durability(self) -> float:
+        return _state("player.maxDef", 0)
+
+class Item:
+    def __init__(self, name="", quantity=0, cooldown=0):
+        self.name = name
+        self.quantity = quantity
+        self.cooldown = cooldown
+
+class Entity:
+    @property
+    def health(self) -> float:
+        return _state("enemy.hp", 0)
+
+    @property
+    def name(self) -> str:
+        return _state("enemy.name", "")
+
+    @property
+    def id(self) -> str:
+        return _state("enemy.id", "")
+
+class Player:
+    @property
+    def energy(self) -> int:
+        return _state("player.energy", 0)
+
+    @property
+    def hp(self) -> float:
+        return _state("player.hp", 100)
+
+    @property
+    def armor(self) -> Armor:
+        return Armor()
+
+    def equip(self, item: Item):
+        item_name = getattr(item, "name", "")
+        return _emit("player.equip", {"item": item_name})
+
+    def unequip(self):
+        return _emit("player.unequip", None)
+
+    def gain_hp(self, amount=10):
+        return _emit("player.gain_hp", {"amount": amount})
+
+    def take_damage(self, amount=10):
+        return _emit("player.take_damage", {"amount": amount})
+
+    def gain_coins(self, amount=1):
+        return _emit("player.gain_coins", {"amount": amount})
+
+    def gain_xp(self, amount=10):
+        return _emit("player.gain_xp", {"amount": amount})
+
+    def go_to(self, location_id):
+        return _emit("builtin.goTo", {"locationId": location_id})
+
+class Enemy(Entity):
+    pass
+
+class Slime(Enemy):
+    pass
+
+class Spear(Item):
+    def __init__(self):
+        super().__init__(name="Spear", quantity=1, cooldown=0)
+
+    def attack(self):
+        return _emit("spear.attack", {"damage": _state("player.baseDmg", 0)})
+
+    def thrust(self):
+        return _emit("spear.thrust", {"damage": _state("player.baseDmg", 0)})
+
+    def pierce(self):
+        return _emit("spear.pierce", {"damage": _state("player.baseDmg", 0)})
+`
+};
+
+export const userWeaponsModule: CustomModule = {
+    name: 'user.weapons',
+    description: 'Nested user weapon module',
+    code: `
+from abstracts import *
+
+spear = Spear()
+`
+};
+
 export const spearModule: CustomModule = {
     name: 'spear',
     description: 'Spear combat system with attack and weapon management',
@@ -35,6 +231,7 @@ class Spear:
         
         print(f"Attacked {target_name} with {self.name} for {actual_damage} damage!")
         print(f"Spear durability: {self.durability}/100")
+        __pyquest_callback("spear.attack", {"target": target_name, "damage": actual_damage, "durability": self.durability})
         
         return actual_damage
     
@@ -48,6 +245,7 @@ class Spear:
         
         print(f"Thrust attack on {target_name} for {actual_damage} damage!")
         print(f"Spear durability: {self.durability}/100")
+        __pyquest_callback("spear.thrust", {"target": target_name, "damage": actual_damage, "durability": self.durability})
         
         return actual_damage
     
@@ -55,23 +253,23 @@ class Spear:
         """Repair the spear"""
         self.durability = min(100, self.durability + amount)
         print(f"Repaired {self.name}. Durability: {self.durability}/100")
+        __pyquest_callback("spear.repair", {"amount": amount, "durability": self.durability})
 
 
 def attack(target_name="Enemy", damage=10):
     """Quick attack function"""
     print(f"Attacked {target_name} for {damage} damage!")
+    __pyquest_callback("spear.attack.quick", {"target": target_name, "damage": damage})
     return damage
 
 
 def create_spear(damage=10):
     """Create a new spear with specified damage"""
+    __pyquest_callback("spear.create", {"damage": damage})
     return Spear(damage=damage)
 `
 };
 
-/**
- * Inventory management module
- */
 export const inventoryModule: CustomModule = {
     name: 'inventory',
     description: 'Inventory management system',
@@ -156,9 +354,6 @@ def clear_inventory():
 `
 };
 
-/**
- * Magic/spell module
- */
 export const magicModule: CustomModule = {
     name: 'magic',
     description: 'Magic and spell casting system',
@@ -233,9 +428,6 @@ def mana_cost(spell_name):
 `
 };
 
-/**
- * Utility module for common game operations
- */
 export const utilsModule: CustomModule = {
     name: 'utils',
     description: 'Utility functions for common operations',
@@ -276,16 +468,22 @@ def random_choice(items):
 
 def clamp(value, min_value, max_value):
     """Clamp a value between min and max"""
-    return max(min_value, min(max_value, value))
+    if value < min_value:
+        return min_value
+    if value > max_value:
+        return max_value
+    return value
 `
 };
 
-/**
- * Array of all built-in game modules
- */
-export const gameModules: CustomModule[] = [
+export const customModules: CustomModule[] = [
+    builtinModule,
+    abstractsModule,
+    userWeaponsModule,
     spearModule,
     inventoryModule,
     magicModule,
     utilsModule
 ];
+
+export const gameModules: CustomModule[] = customModules;

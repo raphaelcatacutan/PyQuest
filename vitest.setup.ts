@@ -4,9 +4,9 @@
 const builtins: any = {};
 
 // Create a global Sk object for testing
-(global as any).Sk = {
+(globalThis as any).Sk = {
   configure: (config: any) => {
-    (global as any).Sk._config = config;
+    (globalThis as any).Sk._config = config;
   },
   misceval: {
     asyncToPromise: (fn: () => any) => {
@@ -23,7 +23,32 @@ const builtins: any = {};
     proxy: (obj: any) => obj
   },
   importMainWithBody: (name: string, dumpJS: boolean, code: string) => {
-    const config = (global as any).Sk._config;
+    const config = (globalThis as any).Sk._config;
+    const callbackBridge = typeof builtins.__pyquest_callback === 'function'
+      ? builtins.__pyquest_callback
+      : undefined;
+    const stateBridge = typeof builtins.__pyquest_state === 'function'
+      ? builtins.__pyquest_state
+      : undefined;
+
+    const parseLiteral = (rawValue: string): any => {
+      const normalized = rawValue.trim();
+
+      if ((normalized.startsWith('"') && normalized.endsWith('"')) ||
+          (normalized.startsWith("'") && normalized.endsWith("'"))) {
+        return normalized.slice(1, -1);
+      }
+
+      if (/^-?\d+(\.\d+)?$/.test(normalized)) {
+        return Number(normalized);
+      }
+
+      return normalized;
+    };
+
+    const emitCallback = (eventName: string, payload?: unknown) => {
+      callbackBridge?.(eventName, payload);
+    };
     
     // Execute variable assignments (Player.Health = 100, etc)
     const assignmentRegex = /(\w+)\.(\w+)\s*=\s*([^\n]+)/g;
@@ -48,9 +73,71 @@ const builtins: any = {};
         // Ignore evaluation errors for complex expressions
       }
     }
+
+    const goToRegex = /^\s*goTo\((.*)\)\s*$/gm;
+    while ((match = goToRegex.exec(code)) !== null) {
+      emitCallback('builtin.goTo', { locationId: parseLiteral(match[1]) });
+    }
+
+    const scavengeRegex = /^\s*scavenge\(\)\s*$/gm;
+    while ((match = scavengeRegex.exec(code)) !== null) {
+      emitCallback('builtin.scavenge', {});
+    }
+
+    const exploreRegex = /^\s*explore\(\)\s*$/gm;
+    while ((match = exploreRegex.exec(code)) !== null) {
+      emitCallback('builtin.explore', {});
+    }
+
+    const playerEquipRegex = /^\s*player\.equip\((.*)\)\s*$/gm;
+    while ((match = playerEquipRegex.exec(code)) !== null) {
+      emitCallback('player.equip', { item: parseLiteral(match[1]) });
+    }
+
+    const playerUnequipRegex = /^\s*player\.unequip\(\)\s*$/gm;
+    while ((match = playerUnequipRegex.exec(code)) !== null) {
+      emitCallback('player.unequip', null);
+    }
+
+    const gainHpRegex = /^\s*gain_hp\((.*)\)\s*$/gm;
+    while ((match = gainHpRegex.exec(code)) !== null) {
+      emitCallback('player.gain_hp', { amount: parseLiteral(match[1]) });
+    }
+
+    const takeDamageRegex = /^\s*take_damage\((.*)\)\s*$/gm;
+    while ((match = takeDamageRegex.exec(code)) !== null) {
+      emitCallback('player.take_damage', { amount: parseLiteral(match[1]) });
+    }
+
+    const gainCoinsRegex = /^\s*gain_coins\((.*)\)\s*$/gm;
+    while ((match = gainCoinsRegex.exec(code)) !== null) {
+      emitCallback('player.gain_coins', { amount: parseLiteral(match[1]) });
+    }
+
+    const gainXpRegex = /^\s*gain_xp\((.*)\)\s*$/gm;
+    while ((match = gainXpRegex.exec(code)) !== null) {
+      emitCallback('player.gain_xp', { amount: parseLiteral(match[1]) });
+    }
+
+    const combatRegex = /^\s*combat\((.*)\)\s*$/gm;
+    while ((match = combatRegex.exec(code)) !== null) {
+      const value = String(parseLiteral(match[1])).toLowerCase() === 'true';
+      emitCallback('game.combat', { state: value });
+    }
+
+    const targetEnemyRegex = /^\s*target_enemy\((.*)\)\s*$/gm;
+    while ((match = targetEnemyRegex.exec(code)) !== null) {
+      const value = String(parseLiteral(match[1])).toLowerCase() === 'true';
+      emitCallback('game.is_enemy', { state: value });
+    }
+
+    const logRegex = /^\s*log\((.*)\)\s*$/gm;
+    while ((match = logRegex.exec(code)) !== null) {
+      emitCallback('terminal.log', { message: parseLiteral(match[1]) });
+    }
     
     // Handle simple print statements
-    const printRegex = /print\((.*)\)/g;
+    const printRegex = /^\s*print\((.*)\)\s*$/gm;
     while ((match = printRegex.exec(code)) !== null) {
       try {
         let value = match[1].trim();
@@ -59,12 +146,33 @@ const builtins: any = {};
             (value.startsWith("'") && value.endsWith("'"))) {
           value = value.slice(1, -1);
         } else {
+          const playerPropertyMatch = value.match(/^player\.(\w+)$/);
+
+          if (playerPropertyMatch && stateBridge) {
+            const playerKey = playerPropertyMatch[1];
+            const pathByKey: Record<string, { path: string; fallback: unknown }> = {
+              energy: { path: 'player.energy', fallback: 0 },
+              hp: { path: 'player.hp', fallback: 100 },
+              maxHP: { path: 'player.maxHP', fallback: 100 },
+              def: { path: 'player.def', fallback: 0 },
+              maxDef: { path: 'player.maxDef', fallback: 0 },
+              coins: { path: 'player.coins', fallback: 0 }
+            };
+            const resolved = pathByKey[playerKey];
+
+            if (resolved) {
+              value = String(stateBridge(resolved.path, resolved.fallback));
+            } else {
+              throw new Error(`NameError: name '${value}' is not defined`);
+            }
+          } else {
           // Try to evaluate as expression (numbers, arithmetic, etc)
-          try {
-            value = String(eval(value));
-          } catch {
-            // If eval fails, it's an undefined variable
-            throw new Error(`NameError: name '${value}' is not defined`);
+            try {
+              value = String(eval(value));
+            } catch {
+              // If eval fails, it's an undefined variable
+              throw new Error(`NameError: name '${value}' is not defined`);
+            }
           }
         }
         if (config.output) {

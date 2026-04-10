@@ -91,10 +91,10 @@ export default function Dungeon(){
     {inDungeon && (
         <div className="absolute z-5 w-full h-full opacity-100">
           <div className="flex flex-col items-center justify-center h-full">
-          { mode == 'easy' ? 
+          { mode == '' ? 
             <>
               <div className="mb-2">
-                <span>Set</span>
+                <span>Dungeon</span>
               </div>
               <div className="flex flex-row gap-8">
                 <Card header="Easy" body="..." currProg={currEasy} maxProg={maxEasy} />

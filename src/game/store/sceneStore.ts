@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { SceneTypes } from "../types/scene.types";
-import { Scene } from "../data/scenes";
+import { Scenes } from "../data/scenes";
 import { villageBg } from "@/src/assets";
 
 /**
@@ -17,6 +17,6 @@ interface SceneProps {
 export const useSceneStore = create<SceneProps>((set) => ({
   scene: 'village',
   sceneBg: villageBg,
-  setScene: (scene: SceneTypes) => set({ scene: scene, sceneBg: Scene[scene] }),
+  setScene: (scene: SceneTypes) => set({ scene: scene, sceneBg: Scenes[scene] }),
   // getSceneBg: (scene: SceneTypes) => SceneBg[scene]?.imgBg || villageBg
 }))

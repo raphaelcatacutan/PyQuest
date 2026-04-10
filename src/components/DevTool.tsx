@@ -113,7 +113,7 @@ export default function DevTool(){
         {/* <Button text={dmgHUDText} onClick={() => toggleIsDamaged(null)}/> */}
         <Button text={dialogueBoxText} onClick={toggleDisplayDialogueBox}/>
         <Button text={sceneText} onClick={() => {
-          const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon'];
+          const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon', 'trials'];
           const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
           setScene(randomScene)
         }}/>

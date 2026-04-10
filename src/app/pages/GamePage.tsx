@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useShallow } from "zustand/shallow"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
@@ -20,8 +20,11 @@ import DevTool from "@/src/components/DevTool"
 import Damaged from "@/src/components/events/Damaged"
 import NavBar from "@/src/components/ui/NavBar"
 import Dungeon from "@/src/components/events/Dungeon"
+import Labyrinth from "@/src/components/events/Labyrinth"
 
 export default function GamePage() {
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [displayBg, setDisplayBg] = useState("")
   const inVillage = useGameStore(s => s.inVillage)
   const user_id = usePlayerStore(s => s.user_id)
   const { scene, sceneBg } = useSceneStore(
@@ -79,6 +82,31 @@ export default function GamePage() {
     return () => window.removeEventListener('loot-dropped-to-player', handleLootDrop);
   }, []);
 
+  // Transition effect when sceneBg changes
+  useEffect(() => {
+    setIsTransitioning(true);
+    
+    // Update background image halfway through the dimming
+    const updateBgTimer = setTimeout(() => {
+      setDisplayBg(sceneBg);
+    }, 300); // Halfway through the fade
+    
+    // Complete the transition and brighten
+    const completeTimer = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 600); // Total transition duration
+    
+    return () => {
+      clearTimeout(updateBgTimer);
+      clearTimeout(completeTimer);
+    };
+  }, [sceneBg]); // Trigger whenever sceneBg changes
+
+  // Initialize background on first load
+  useEffect(() => {
+    setDisplayBg(sceneBg);
+  }, []);
+
   // Load all datas
   useEffect(() => {
     const initApp = async () => {
@@ -123,11 +151,22 @@ export default function GamePage() {
 
         <CodeEditor/>
 
-        <div className="relative flex h-full w-full"> {/* scene */}
+        <div className="relative flex h-full w-full bg-black"> {/* scene */}
           
           {/* <Labyrinth/> */}
-          <div className="absolute flex w-full h-full z-1" style={{ backgroundImage: `url(${sceneBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}/>
-          <Dungeon/>
+          <div 
+            className="absolute flex w-full h-full z-1" 
+            style={{ 
+              backgroundImage: `url(${displayBg})`, 
+              backgroundSize: 'cover', 
+              backgroundPosition: 'center', 
+              backgroundRepeat: "repeat",
+              transition: 'opacity 0.3s ease-in, filter 0.3s ease-in-out',
+              opacity: isTransitioning ? 0.4 : 1,
+              filter: isTransitioning ? 'brightness(0)' : 'brightness(1)'
+            }}
+          />
+          {/* <Dungeon/> */}
           
           <div className="absolute h-full z-50">
             <LeftSideBar 

@@ -3,50 +3,53 @@ import { NPC } from "../types/npc.types";
 
 /**
  * 
- *  NPC State
+ *  NPC Store
  */
 
-interface NPCStoreProps extends NPC {
-  currNPC: NPC | null;
+interface NPCStoreProps {
+  npc: NPC | null;
   displayNPC: boolean;
-  speak: (dialogue: string) => void;
-  setCurrNPC: (npc: NPC) => void;
-  clearCurrNPC: () => void;
-  toggleDisplayNPC: () => void;
+  currentDialogueIndex: number;
+
+  setNPC: (npc: NPC) => void;
+  toggleDisplayNPC: (state?: boolean) => void;
+  nextDialogue: () => void;
+  previousDialogue: () => void;
+  setDialogueIndex: (index: number) => void;
+  clearNPC: () => void;
 }
 
-export const useNPCStore = create<NPCStoreProps>((set) => ({
-  id: "",
-  name: "",
-  npcImg: "",
-  type: "villager",
-
-  dialogues: [],
-  currDialogue: "",
-  
-  quests: [],
-  shop: {},
-  
-  currNPC: null,
+export const useNPCStore = create<NPCStoreProps>((set, get) => ({
+  npc: null,
   displayNPC: false,
-  
-  speak: (dialogue) => set(({ currDialogue: dialogue })),
-  
-  setCurrNPC: (npc) => set({ currNPC: npc }),
-  
-  clearCurrNPC: () => set({
-    currNPC: null,
-    id: "",
-    name: "",
-    npcImg: "",
-    type: "villager",
-    dialogues: [],
-    quests: [],
-    shop: {},
-    displayNPC: false
-  }),
-  
-  toggleDisplayNPC: () => set((state) => ({
-    displayNPC: !state.displayNPC
-  })),
-}))
+  currentDialogueIndex: 0,
+
+  setNPC: (npc: NPC) => set({ npc, currentDialogueIndex: 0, displayNPC: true }),
+
+  toggleDisplayNPC: (state) => set((s) => ({ displayNPC: state !== undefined ? state : !s.displayNPC })),
+
+  nextDialogue: () => {
+    const { npc, currentDialogueIndex } = get();
+    if (!npc) return;
+
+    if (currentDialogueIndex < npc.dialogues.length - 1) {
+      set({ currentDialogueIndex: currentDialogueIndex + 1 });
+    }
+  },
+
+  previousDialogue: () => {
+    const { currentDialogueIndex } = get();
+    if (currentDialogueIndex > 0) {
+      set({ currentDialogueIndex: currentDialogueIndex - 1 });
+    }
+  },
+
+  setDialogueIndex: (index: number) => {
+    const { npc } = get();
+    if (npc && index >= 0 && index < npc.dialogues.length) {
+      set({ currentDialogueIndex: index });
+    }
+  },
+
+  clearNPC: () => set({ npc: null, displayNPC: false, currentDialogueIndex: 0 }),
+}));

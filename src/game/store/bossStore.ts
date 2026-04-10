@@ -11,6 +11,7 @@ interface BossStoreProps extends Boss {
   takeDamage: (amount: number) => void;
   gainHp: (amount: number) => void;
   gainEnergy: (amount: number) => void;
+  takeEnergyCost: (amount: number) => void;
   clearBoss: () => void;
 }
 
@@ -56,6 +57,10 @@ export const useBossStore = create<BossStoreProps>((set) => ({
   
   gainEnergy: (amount) => set((state) => ({
     energy: Math.min(state.maxEnergy, state.energy + amount)
+  })),
+
+  takeEnergyCost: (amount) => set((state) => ({
+    energy: Math.max(0, state.energy - amount)
   })),
 
   clearBoss: () => set({

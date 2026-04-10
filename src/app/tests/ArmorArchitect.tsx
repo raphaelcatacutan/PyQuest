@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Armor } from '@/src/game/types/armor.types';
 
+type ArmorStat = 'def' | 'evasion' | 'dmg' | 'energy' | 'atkSpeed' | 'health' | 'dmgReduction';
+type ModifierNature = 'bonus' | 'penalty';
+
 const INITIAL_ARMOR: Armor = {
   id: "",
   filename: "",
@@ -11,44 +14,54 @@ const INITIAL_ARMOR: Armor = {
   rarity: "Common",
   slotType: "",
   
-  def: 0,
-  dmgReduction: 0,
-  evasion: 0,
+  baseDef: 0,
   durability: 100,
-
-  dmgPenalty: 0,
-  energyPenalty: 0,
-  atkSpeedPenalty: 0,
-  healthPenalty: 0,
-
-  energyBonus: 0,
-  atkSpeedBonus: 0,
-  healthBonus: 0,
-  defBonus: 0,
+  modifiers: [],
   
   dropRate: 0.1,
   sellCost: 0,
   buyCost: 0,
 };
 
+const INITIAL_MODIFIER = {
+  stat: 'def' as ArmorStat,
+  nature: 'bonus' as ModifierNature,
+  value: 0,
+};
+
 export default function ArmorArchitect() {
   const [item, setItem] = useState<Armor>(INITIAL_ARMOR);
+  const [modifierInput, setModifierInput] = useState(INITIAL_MODIFIER);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const finalValue = type === 'number' ? Number(value) : value;
 
-    setItem((prev) => {
-      const next = { ...prev, [name]: finalValue };
-      // Sync filename with id automatically for convenience
-      if (name === 'id') next.filename = value;
-      return next;
-    });
+    setItem((prev) => ({
+      ...prev,
+      [name]: finalValue,
+    }));
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitized = e.target.value.replace(/[^a-z_]/g, '');
     setItem(prev => ({ ...prev, id: sanitized, filename: sanitized }));
+  };
+
+  const addModifier = () => {
+    if (!modifierInput.stat) return;
+    setItem(prev => ({
+      ...prev,
+      modifiers: [...prev.modifiers, modifierInput],
+    }));
+    setModifierInput(INITIAL_MODIFIER);
+  };
+
+  const removeModifier = (index: number) => {
+    setItem(prev => ({
+      ...prev,
+      modifiers: prev.modifiers.filter((_, i) => i !== index),
+    }));
   };
 
   const saveToDisk = async (data: Armor) => {
@@ -67,6 +80,19 @@ export default function ArmorArchitect() {
 
   return (
     <div style={styles.container}>
+      <style>{`
+        input::placeholder {
+          color: #666;
+          opacity: 1;
+        }
+        input::-webkit-input-placeholder {
+          color: #666;
+          opacity: 1;
+        }
+        select option:first-child {
+          color: #666;
+        }
+      `}</style>
       <div style={styles.formSection}>
         <h1 style={styles.title}>Armor Architect</h1>
 
@@ -86,7 +112,7 @@ export default function ArmorArchitect() {
           <textarea style={styles.textarea} name="description" placeholder="description" value={item.description} onChange={handleChange} />
           
           <label style={styles.fieldLabel}>Image Path</label>
-          <input style={styles.input} name="armorImg" placeholder="armorImg path (Don't forget to upload the png to its respective folder in /src/assets" value={item.armorImg} onChange={handleChange} />
+          <input style={styles.input} name="armorImg" placeholder="/src/assets/armors/__.png" value={item.armorImg} onChange={handleChange} />
         </section>
 
         {/* 2. CLASSIFICATION */}
@@ -96,7 +122,7 @@ export default function ArmorArchitect() {
             <div>
               <label style={styles.fieldLabel}>Class</label>
               <select style={styles.selectInput} name="class" value={item.class} onChange={handleChange}>
-                <option value="">None</option>
+                <option value="">-- Select Class --</option>
                 <option value="Warrior">Warrior</option>
                 <option value="Wizard">Wizard</option>
                 <option value="Archer">Archer</option>
@@ -115,7 +141,7 @@ export default function ArmorArchitect() {
             <div>
               <label style={styles.fieldLabel}>Slot Type</label>
               <select style={styles.selectInput} name="slotType" value={item.slotType} onChange={handleChange}>
-                <option value="">None</option>
+                <option value="">-- Select Slot --</option>
                 <option value="head">Head</option>
                 <option value="body">Body</option>
               </select>
@@ -123,46 +149,61 @@ export default function ArmorArchitect() {
           </div>
         </section>
 
-        {/* 3. DEFENSE STATS */}
+        {/* 3. BASE STATS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>3. Defense Stats</h3>
+          <h3 style={styles.sectionLabel}>3. Base Stats</h3>
           <div style={styles.grid}>
-            <label style={styles.gridItem}>DEF <input type="number" name="def" style={styles.smallInput} value={item.def} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>DMG Reduction <input type="number" step="0.01" name="dmgReduction" style={styles.smallInput} value={item.dmgReduction} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Evasion <input type="number" step="0.01" name="evasion" style={styles.smallInput} value={item.evasion} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Durability <input type="number" name="durability" style={styles.smallInput} value={item.durability} onChange={handleChange} /></label>
+            <label style={styles.gridItem}>Base DEF <input type="text" inputMode="numeric" pattern="[0-9]*" style={styles.smallInput} value={item.baseDef || ''} onChange={e => setItem({...item, baseDef: Number(e.target.value) || 0})} /></label>
+            <label style={styles.gridItem}>Durability <input type="text" inputMode="numeric" pattern="[0-9]*" style={styles.smallInput} value={item.durability || ''} onChange={e => setItem({...item, durability: Number(e.target.value) || 0})} /></label>
           </div>
         </section>
 
-        {/* 4. PENALTIES */}
+        {/* 4. STAT MODIFIERS */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>4. Stat Penalties (Downsides)</h3>
-          <div style={styles.grid}>
-            <label style={styles.gridItem}>DMG Penalty <input type="number" step="0.01" name="dmgPenalty" style={styles.smallInput} value={item.dmgPenalty} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Energy Penalty <input type="number" step="0.01" name="energyPenalty" style={styles.smallInput} value={item.energyPenalty} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Atk Spd Penalty <input type="number" step="0.01" name="atkSpeedPenalty" style={styles.smallInput} value={item.atkSpeedPenalty} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Health Penalty <input type="number" step="0.01" name="healthPenalty" style={styles.smallInput} value={item.healthPenalty} onChange={handleChange} /></label>
+          <h3 style={styles.sectionLabel}>4. Stat Modifiers (Bonuses & Penalties)</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <select style={{...styles.input, flex: 1}} value={modifierInput.stat} onChange={e => setModifierInput({...modifierInput, stat: e.target.value as ArmorStat})}>
+                <option value="" disabled>-- Select Stat --</option>
+                <option value="def">Defense (def)</option>
+                <option value="evasion">Evasion</option>
+                <option value="dmg">Damage (dmg)</option>
+                <option value="energy">Energy</option>
+                <option value="atkSpeed">Attack Speed (atkSpeed)</option>
+                <option value="health">Health</option>
+                <option value="dmgReduction">Damage Reduction (dmgReduction)</option>
+              </select>
+              <select style={{...styles.input, flex: 0.6}} value={modifierInput.nature} onChange={e => setModifierInput({...modifierInput, nature: e.target.value as ModifierNature})}>
+                <option value="bonus">Bonus</option>
+                <option value="penalty">Penalty</option>
+              </select>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input type="text" inputMode="numeric" pattern="[0-9.]*" placeholder="Value (always positive)" style={{...styles.input, flex: 1}} value={modifierInput.value || ''} onChange={e => setModifierInput({...modifierInput, value: Number(e.target.value) || 0})} />
+              <button style={styles.addButton} onClick={addModifier}>ADD</button>
+            </div>
           </div>
+
+          <ul style={{ color: '#00d4ff', fontSize: '12px' }}>
+            {item.modifiers.map((mod, i) => (
+              <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', padding: '8px', backgroundColor: '#0a0a0a', borderRadius: '4px' }}>
+                <div>
+                  <div><strong>{mod.stat}</strong></div>
+                  <div style={{ fontSize: '11px', color: mod.nature === 'bonus' ? '#00d4ff' : '#ff6b6b' }}>{mod.nature} +{mod.value}</div>
+                </div>
+                <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeModifier(i)}>Remove</button>
+              </li>
+            ))}
+          </ul>
         </section>
 
-        {/* 5. BONUSES */}
+        {/* 5. ECONOMY */}
         <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>5. Stat Bonuses</h3>
+          <h3 style={styles.sectionLabel}>5. Economy & Spawning</h3>
           <div style={styles.grid}>
-            <label style={styles.gridItem}>Energy Bonus <input type="number" step="0.01" name="energyBonus" style={styles.smallInput} value={item.energyBonus} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Atk Spd Bonus <input type="number" step="0.01" name="atkSpeedBonus" style={styles.smallInput} value={item.atkSpeedBonus} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Health Bonus <input type="number" step="0.01" name="healthBonus" style={styles.smallInput} value={item.healthBonus} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>DEF Bonus <input type="number" step="0.01" name="defBonus" style={styles.smallInput} value={item.defBonus} onChange={handleChange} /></label>
-          </div>
-        </section>
-
-        {/* 6. ECONOMY */}
-        <section style={styles.section}>
-          <h3 style={styles.sectionLabel}>6. Economy & Spawning</h3>
-          <div style={styles.grid}>
-            <label style={styles.gridItem}>Drop Rate <input type="number" step="0.01" name="dropRate" style={styles.smallInput} value={item.dropRate} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Buy Cost <input type="number" name="buyCost" style={styles.smallInput} value={item.buyCost} onChange={handleChange} /></label>
-            <label style={styles.gridItem}>Sell Cost <input type="number" name="sellCost" style={styles.smallInput} value={item.sellCost} onChange={handleChange} /></label>
+            <label style={styles.gridItem}>Drop Rate <input type="text" inputMode="numeric" pattern="[0-9.]*" style={styles.smallInput} value={item.dropRate || ''} onChange={e => setItem({...item, dropRate: Number(e.target.value) || 0})} /></label>
+            <label style={styles.gridItem}>Buy Cost <input type="text" inputMode="numeric" pattern="[0-9]*" style={styles.smallInput} value={item.buyCost || ''} onChange={e => setItem({...item, buyCost: Number(e.target.value) || 0})} /></label>
+            <label style={styles.gridItem}>Sell Cost <input type="text" inputMode="numeric" pattern="[0-9]*" style={styles.smallInput} value={item.sellCost || ''} onChange={e => setItem({...item, sellCost: Number(e.target.value) || 0})} /></label>
           </div>
         </section>
 
@@ -193,6 +234,7 @@ const styles: Record<string, React.CSSProperties> = {
   grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' },
   gridItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px' },
   smallInput: { width: '80px', padding: '6px', backgroundColor: '#1a1a1a', border: '1px solid #333', color: '#00d4ff', textAlign: 'right' },
+  addButton: { padding: '0 20px', backgroundColor: '#333', color: 'white', border: 'none', cursor: 'pointer' },
   saveButton: { width: '100%', padding: '20px', backgroundColor: '#00d4ff', color: 'black', fontWeight: 'bold', border: 'none', cursor: 'pointer' },
   codeBlock: { color: '#00d4ff', fontSize: '12px', lineHeight: '1.4' }
 };

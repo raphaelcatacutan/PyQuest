@@ -2,32 +2,36 @@ import { itemClass, itemRarity } from "./item.types";
 
 type SlotType = 'head' | 'body' | ''
 
+// 1. Define the nature of the change
+type ModifierNature = 'bonus' | 'penalty';
+
+// 2. Define the stats that can be changed
+type ArmorStat = 'def' | 'evasion' | 'dmg' | 'energy' | 'atkSpeed' | 'health' | 'dmgReduction';
+
+// 3. The explicit Modifier interface
+interface StatModifier {
+  stat: ArmorStat;
+  nature: ModifierNature; // ⚡️ Explicit classifier
+  value: number;          // Always keep this as a positive number for clarity
+}
+
 export interface Armor {
   id: string;
-  filename: string;         // wooden_armor (+ .py?)
-  name: string;             // Wooden Armor
+  filename: string;
+  name: string;
   description: string;
-  armorImg: string;         // 20x20?
-  class: itemClass;        
+  armorImg: string;
+  class: itemClass;
   rarity: itemRarity;
   slotType: SlotType;
   
-  def: number;              // [0, 100]
-  dmgReduction: number;     // [0, 1]
-  evasion: number;          // [0, 1]
-  durability: number;       // [0, 100]
+  baseDef: number;
+  durability: number;
 
-  dmgPenalty: number;       // [0, 1]
-  energyPenalty: number;    // [0, 1]
-  atkSpeedPenalty: number;  // [0, 1]
-  healthPenalty: number;    // [0, 1]
+  // List of explicit modifiers
+  modifiers: StatModifier[];
 
-  energyBonus: number;      // [0, 1]
-  atkSpeedBonus: number;    // [0, 1]
-  healthBonus: number;      // [0, 1]
-  defBonus: number;         // [0, 1]
-  
-  dropRate: number;         // [0, 100]
+  dropRate: number;
   sellCost: number;
   buyCost: number;
 }

@@ -13,38 +13,56 @@ export const builtinModule: CustomModule = {
 from abstracts import Player
 
 
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
+
+
+def _state(path, fallback=None):
+    return __pyquest_state(path, fallback)
+
+
 def roll_dice(sides=6, count=1):
-    return sides * count
+    result = sides * count
+    _emit("builtin.roll_dice", {"sides": sides, "count": count, "result": result})
+    return result
 
 
 def chance(percentage):
-    return percentage >= 50
+    result = percentage >= 50
+    _emit("builtin.chance", {"percentage": percentage, "result": result})
+    return result
 
 
 def random_choice(items):
     if not items:
+        _emit("builtin.random_choice", {"result": None})
         return None
-    return items[0]
+    result = items[0]
+    _emit("builtin.random_choice", {"result": result})
+    return result
 
 
 def clamp(value, min_value, max_value):
     if value < min_value:
+        _emit("builtin.clamp", {"value": value, "result": min_value})
         return min_value
     if value > max_value:
+        _emit("builtin.clamp", {"value": value, "result": max_value})
         return max_value
+    _emit("builtin.clamp", {"value": value, "result": value})
     return value
 
 
 def goTo(locationId: str):
-    pass
+    return _emit("builtin.goTo", {"locationId": locationId})
 
 
 def scavenge():
-    pass
+    return _emit("builtin.scavenge", {"scene": _state("scene.scene", "")})
 
 
 def explore():
-    pass
+    return _emit("builtin.explore", {"scene": _state("scene.scene", "")})
 
 
 player = Player()
@@ -56,32 +74,61 @@ export const abstractsModule: CustomModule = {
     description: 'Internal type and class contracts',
     visibility: 'internal',
     code: `
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
+
+
+def _state(path, fallback=None):
+    return __pyquest_state(path, fallback)
+
+
 class Armor:
-    type: str
-    durability: float
+    @property
+    def type(self) -> str:
+        return _state("player.headSlot", "")
+
+    @property
+    def durability(self) -> float:
+        return _state("player.maxDef", 0)
 
 class Item:
-    name: str
-    quantity: int
-    cooldown: int
-    
-    def __init__(self):
-        pass
+    def __init__(self, name="", quantity=0, cooldown=0):
+        self.name = name
+        self.quantity = quantity
+        self.cooldown = cooldown
 
 class Entity:
-    health: float
-    name: str
-    id: str
+    @property
+    def health(self) -> float:
+        return _state("enemy.hp", 0)
+
+    @property
+    def name(self) -> str:
+        return _state("enemy.name", "")
+
+    @property
+    def id(self) -> str:
+        return _state("enemy.id", "")
 
 class Player:
-    energy: int
-    armor: Armor
-    
-    def equip(item: Item):
-        pass
+    @property
+    def energy(self) -> int:
+        return _state("player.energy", 0)
 
-    def unequip():
-        pass
+    @property
+    def hp(self) -> float:
+        return _state("player.hp", 100)
+
+    @property
+    def armor(self) -> Armor:
+        return Armor()
+
+    def equip(self, item: Item):
+        item_name = getattr(item, "name", "")
+        return _emit("player.equip", {"item": item_name})
+
+    def unequip(self):
+        return _emit("player.unequip", None)
 
 class Enemy(Entity):
     pass
@@ -91,16 +138,16 @@ class Slime(Enemy):
 
 class Spear(Item):
     def __init__(self):
-        pass
+        super().__init__(name="Spear", quantity=1, cooldown=0)
 
     def attack(self):
-        pass
+        return _emit("spear.attack", {"damage": _state("player.baseDmg", 0)})
 
     def thrust(self):
-        pass
+        return _emit("spear.thrust", {"damage": _state("player.baseDmg", 0)})
 
     def pierce(self):
-        pass
+        return _emit("spear.pierce", {"damage": _state("player.baseDmg", 0)})
 `
 };
 
@@ -141,6 +188,7 @@ class Spear:
         
         print(f"Attacked {target_name} with {self.name} for {actual_damage} damage!")
         print(f"Spear durability: {self.durability}/100")
+        __pyquest_callback("spear.attack", {"target": target_name, "damage": actual_damage, "durability": self.durability})
         
         return actual_damage
     
@@ -154,6 +202,7 @@ class Spear:
         
         print(f"Thrust attack on {target_name} for {actual_damage} damage!")
         print(f"Spear durability: {self.durability}/100")
+        __pyquest_callback("spear.thrust", {"target": target_name, "damage": actual_damage, "durability": self.durability})
         
         return actual_damage
     
@@ -161,16 +210,19 @@ class Spear:
         """Repair the spear"""
         self.durability = min(100, self.durability + amount)
         print(f"Repaired {self.name}. Durability: {self.durability}/100")
+        __pyquest_callback("spear.repair", {"amount": amount, "durability": self.durability})
 
 
 def attack(target_name="Enemy", damage=10):
     """Quick attack function"""
     print(f"Attacked {target_name} for {damage} damage!")
+    __pyquest_callback("spear.attack.quick", {"target": target_name, "damage": damage})
     return damage
 
 
 def create_spear(damage=10):
     """Create a new spear with specified damage"""
+    __pyquest_callback("spear.create", {"damage": damage})
     return Spear(damage=damage)
 `
 };

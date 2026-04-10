@@ -27,6 +27,85 @@ export type CustomModule = {
     sourcePath?: string;
 };
 
+export type PythonModuleCallEvent = {
+    name: string;
+    payload?: unknown;
+};
+
+export type PythonRuntimeHooks = {
+    onFunctionCall?: (event: PythonModuleCallEvent) => void;
+    getStateValue?: (path: string, fallback?: unknown) => unknown;
+};
+
+let runtimeHooks: PythonRuntimeHooks = {};
+
+export function setPythonRuntimeHooks(hooks: PythonRuntimeHooks): void {
+    runtimeHooks = {
+        ...runtimeHooks,
+        ...hooks
+    };
+}
+
+export function clearPythonRuntimeHooks(): void {
+    runtimeHooks = {};
+}
+
+function remapToJs(value: any): unknown {
+    if (Sk?.ffi?.remapToJs) {
+        return Sk.ffi.remapToJs(value);
+    }
+
+    return value;
+}
+
+function remapToPy(value: unknown): any {
+    if (Sk?.ffi?.remapToPy) {
+        return Sk.ffi.remapToPy(value);
+    }
+
+    if (value === undefined || value === null) {
+        return Sk?.builtin?.none?.none$ ?? null;
+    }
+
+    return value;
+}
+
+function createSkBuiltinFunction(fn: (...args: unknown[]) => unknown): any {
+    if (Sk?.builtin?.func) {
+        return new Sk.builtin.func((...pythonArgs: any[]) => {
+            const jsArgs = pythonArgs.map((arg) => remapToJs(arg));
+            const result = fn(...jsArgs);
+            return remapToPy(result);
+        });
+    }
+
+    return (...args: unknown[]) => fn(...args);
+}
+
+function installRuntimeBridgeBuiltins(): void {
+    if (!Sk) {
+        return;
+    }
+
+    const builtins = Sk.builtins ?? (Sk.builtins = {});
+
+    builtins.__pyquest_callback = createSkBuiltinFunction((eventName: unknown, payload?: unknown) => {
+        const normalizedName = typeof eventName === "string" ? eventName : String(eventName ?? "");
+        runtimeHooks.onFunctionCall?.({
+            name: normalizedName,
+            payload
+        });
+        return payload;
+    });
+
+    builtins.__pyquest_state = createSkBuiltinFunction((path: unknown, fallback?: unknown) => {
+        const normalizedPath = typeof path === "string" ? path : String(path ?? "");
+        const value = runtimeHooks.getStateValue?.(normalizedPath, fallback);
+
+        return value === undefined ? fallback : value;
+    });
+}
+
 function ensurePythonModulesInitialized(): void {
     if (getAllPythonModules().length === 0) {
         initializePythonModules();
@@ -173,6 +252,7 @@ function expandCustomModuleImports(code: string): string {
 export function runPython(code: string): Promise<string> {
     return new Promise((resolve) => {
         ensurePythonModulesInitialized();
+        installRuntimeBridgeBuiltins();
 
         let output = "";
         const builtinPrelude = getBuiltinPreludeCode();

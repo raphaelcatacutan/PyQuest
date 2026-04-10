@@ -1,3 +1,6 @@
+import { customModules } from "./game-modules.ts";
+import type { CustomModule } from "./parser";
+
 type ModuleVisibility = "public" | "internal";
 
 export type PythonModuleRecord = {
@@ -9,72 +12,34 @@ export type PythonModuleRecord = {
     description?: string;
 };
 
-const pythonModuleSources = import.meta.glob<string>("./python/**/*.py", {
-    eager: true,
-    query: "?raw",
-    import: "default"
-}) as Record<string, string>;
-
-const filesystemModuleRecords = createFilesystemModuleRecords();
-
 const moduleRegistry: Map<string, PythonModuleRecord> = new Map();
 const manualPublicModuleNames: Set<string> = new Set();
 
-function createFilesystemModuleRecords(): PythonModuleRecord[] {
-    return Object.entries(pythonModuleSources)
-        .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
-        .map(([sourcePath, code]) => {
-            const name = sourcePathToModuleName(sourcePath);
-            const visibility = getModuleVisibility(sourcePath, name);
+function customModuleToRecord(module: CustomModule): PythonModuleRecord {
+    const visibility = module.visibility ?? "public";
+    const prelude = module.prelude ?? false;
 
-            return {
-                name,
-                code,
-                sourcePath,
-                visibility,
-                prelude: name === "builtin",
-                description: getModuleDescription(name, visibility)
-            };
-        });
+    return {
+        name: module.name,
+        code: module.code,
+        sourcePath: module.sourcePath ?? module.name,
+        visibility,
+        prelude,
+        description: module.description ?? getModuleDescription(module.name, visibility, prelude)
+    };
 }
 
-function sourcePathToModuleName(sourcePath: string): string {
-    const normalizedPath = sourcePath.replace(/\\/g, "/").replace(/^\.\//, "");
-    const pathWithoutPrefix = normalizedPath.startsWith("python/")
-        ? normalizedPath.slice("python/".length)
-        : normalizedPath;
-    const pathWithoutExtension = pathWithoutPrefix.endsWith(".py")
-        ? pathWithoutPrefix.slice(0, -3)
-        : pathWithoutPrefix;
-
-    if (pathWithoutExtension.endsWith("/__init__")) {
-        return pathWithoutExtension.slice(0, -"/__init__".length).replace(/\//g, ".");
-    }
-
-    return pathWithoutExtension.replace(/\//g, ".");
-}
-
-function getModuleVisibility(sourcePath: string, moduleName: string): ModuleVisibility {
-    const fileName = sourcePath.replace(/\\/g, "/").split("/").pop() ?? "";
-
-    if (fileName.startsWith("_") || fileName === "__init__.py") {
-        return "internal";
-    }
-
-    if (moduleName === "abstracts" || moduleName === "builtin") {
-        return "internal";
-    }
-
-    return "public";
-}
-
-function getModuleDescription(name: string, visibility: ModuleVisibility): string {
-    if (name === "builtin") {
+function getModuleDescription(name: string, visibility: ModuleVisibility, prelude: boolean): string {
+    if (prelude) {
         return "Preloaded runtime helpers";
     }
 
     if (visibility === "internal") {
         return "Internal support module";
+    }
+
+    if (name.includes(".")) {
+        return "User-importable nested module";
     }
 
     return "User-importable module";
@@ -86,13 +51,11 @@ function ensureInitialized(): void {
     }
 }
 
-export function initializePythonModules(): void {
+export function initializePythonModules(modules: CustomModule[] = customModules): void {
     moduleRegistry.clear();
     manualPublicModuleNames.clear();
 
-    for (const moduleRecord of filesystemModuleRecords) {
-        moduleRegistry.set(moduleRecord.name, moduleRecord);
-    }
+    registerPythonModules(modules.map((module) => customModuleToRecord(module)));
 }
 
 export function clearPythonModules(): void {
@@ -108,6 +71,11 @@ export function registerPythonModules(moduleRecords: PythonModuleRecord[]): void
     for (const moduleRecord of moduleRecords) {
         registerPythonModule(moduleRecord);
     }
+}
+
+export function unregisterPythonModule(moduleName: string): boolean {
+    manualPublicModuleNames.delete(moduleName);
+    return moduleRegistry.delete(moduleName);
 }
 
 export function getPythonModule(name: string): PythonModuleRecord | undefined {
@@ -157,13 +125,9 @@ export function getBuiltinPreludeCode(): string {
 function normalizeModuleRequest(filename: string): string {
     const strippedQuery = filename.split("?")[0];
     const normalizedPath = strippedQuery.replace(/\\/g, "/").replace(/^\.\//, "").replace(/^\/+/, "");
-    const pythonIndex = normalizedPath.lastIndexOf("python/");
-    const relativePath = pythonIndex >= 0
-        ? normalizedPath.slice(pythonIndex + "python/".length)
+    const pathWithoutExtension = normalizedPath.endsWith(".py")
+        ? normalizedPath.slice(0, -3)
         : normalizedPath;
-    const pathWithoutExtension = relativePath.endsWith(".py")
-        ? relativePath.slice(0, -3)
-        : relativePath;
 
     if (pathWithoutExtension.endsWith("/__init__")) {
         return pathWithoutExtension.slice(0, -"/__init__".length).replace(/\//g, ".");

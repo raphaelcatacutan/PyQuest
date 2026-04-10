@@ -2,12 +2,118 @@
  * Built-in game modules that players can import in their Python code
  */
 
-import { CustomModule } from './parser';
+import type { CustomModule } from './parser';
 
-/**
- * Spear combat module
- * Provides weapon-related functions and classes
- */
+export const builtinModule: CustomModule = {
+    name: 'builtin',
+    description: 'Preloaded helpers available without import',
+    visibility: 'internal',
+    prelude: true,
+    code: `
+from abstracts import Player
+
+
+def roll_dice(sides=6, count=1):
+    return sides * count
+
+
+def chance(percentage):
+    return percentage >= 50
+
+
+def random_choice(items):
+    if not items:
+        return None
+    return items[0]
+
+
+def clamp(value, min_value, max_value):
+    if value < min_value:
+        return min_value
+    if value > max_value:
+        return max_value
+    return value
+
+
+def goTo(locationId: str):
+    pass
+
+
+def scavenge():
+    pass
+
+
+def explore():
+    pass
+
+
+player = Player()
+`
+};
+
+export const abstractsModule: CustomModule = {
+    name: 'abstracts',
+    description: 'Internal type and class contracts',
+    visibility: 'internal',
+    code: `
+class Armor:
+    type: str
+    durability: float
+
+class Item:
+    name: str
+    quantity: int
+    cooldown: int
+    
+    def __init__(self):
+        pass
+
+class Entity:
+    health: float
+    name: str
+    id: str
+
+class Player:
+    energy: int
+    armor: Armor
+    
+    def equip(item: Item):
+        pass
+
+    def unequip():
+        pass
+
+class Enemy(Entity):
+    pass
+
+class Slime(Enemy):
+    pass
+
+class Spear(Item):
+    def __init__(self):
+        pass
+
+    def attack(self):
+        pass
+
+    def thrust(self):
+        pass
+
+    def pierce(self):
+        pass
+`
+};
+
+export const userWeaponsModule: CustomModule = {
+    name: 'user.weapons',
+    description: 'Nested user weapon module',
+    code: `
+from abstracts import *
+
+spear = Spear()
+`
+};
+
 export const spearModule: CustomModule = {
     name: 'spear',
     description: 'Spear combat system with attack and weapon management',
@@ -69,9 +175,6 @@ def create_spear(damage=10):
 `
 };
 
-/**
- * Inventory management module
- */
 export const inventoryModule: CustomModule = {
     name: 'inventory',
     description: 'Inventory management system',
@@ -156,9 +259,6 @@ def clear_inventory():
 `
 };
 
-/**
- * Magic/spell module
- */
 export const magicModule: CustomModule = {
     name: 'magic',
     description: 'Magic and spell casting system',
@@ -233,9 +333,6 @@ def mana_cost(spell_name):
 `
 };
 
-/**
- * Utility module for common game operations
- */
 export const utilsModule: CustomModule = {
     name: 'utils',
     description: 'Utility functions for common operations',
@@ -276,16 +373,22 @@ def random_choice(items):
 
 def clamp(value, min_value, max_value):
     """Clamp a value between min and max"""
-    return max(min_value, min(max_value, value))
+    if value < min_value:
+        return min_value
+    if value > max_value:
+        return max_value
+    return value
 `
 };
 
-/**
- * Array of all built-in game modules
- */
-export const gameModules: CustomModule[] = [
+export const customModules: CustomModule[] = [
+    builtinModule,
+    abstractsModule,
+    userWeaponsModule,
     spearModule,
     inventoryModule,
     magicModule,
     utilsModule
 ];
+
+export const gameModules: CustomModule[] = customModules;

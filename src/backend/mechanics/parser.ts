@@ -10,15 +10,19 @@ import {
     isPublicPythonModule,
     registerPythonModule,
     registerPythonModules,
+    unregisterPythonModule,
     resolvePythonModule,
     whitelistPythonModule,
     type PythonModuleRecord
-} from "./python-modules.ts";
+} from "./module-registry.ts";
 
 export type CustomModule = {
     name: string;
     code: string;
     description?: string;
+    visibility?: "public" | "internal";
+    prelude?: boolean;
+    sourcePath?: string;
 };
 
 function ensurePythonModulesInitialized(): void {
@@ -31,9 +35,9 @@ export function registerModule(module: CustomModule): void {
     registerPythonModule({
         name: module.name,
         code: module.code,
-        sourcePath: module.name,
-        visibility: "public",
-        prelude: false,
+        sourcePath: module.sourcePath ?? module.name,
+        visibility: module.visibility ?? "public",
+        prelude: module.prelude ?? false,
         description: module.description
     });
 }
@@ -43,9 +47,9 @@ export function registerModules(modules: CustomModule[]): void {
         modules.map((module) => ({
             name: module.name,
             code: module.code,
-            sourcePath: module.name,
-            visibility: "public",
-            prelude: false,
+            sourcePath: module.sourcePath ?? module.name,
+            visibility: module.visibility ?? "public",
+            prelude: module.prelude ?? false,
             description: module.description
         }))
     );
@@ -61,7 +65,10 @@ export function getModule(name: string): CustomModule | undefined {
     return {
         name: moduleRecord.name,
         code: moduleRecord.code,
-        description: moduleRecord.description
+        description: moduleRecord.description,
+        visibility: moduleRecord.visibility,
+        prelude: moduleRecord.prelude,
+        sourcePath: moduleRecord.sourcePath
     };
 }
 
@@ -69,12 +76,19 @@ export function getAllModules(): CustomModule[] {
     return getAllPythonModules().map((moduleRecord: PythonModuleRecord) => ({
         name: moduleRecord.name,
         code: moduleRecord.code,
-        description: moduleRecord.description
+        description: moduleRecord.description,
+        visibility: moduleRecord.visibility,
+        prelude: moduleRecord.prelude,
+        sourcePath: moduleRecord.sourcePath
     }));
 }
 
 export function clearModules(): void {
     clearPythonModules();
+}
+
+export function unregisterModule(moduleName: string): boolean {
+    return unregisterPythonModule(moduleName);
 }
 
 export function isModuleWhitelisted(moduleName: string): boolean {

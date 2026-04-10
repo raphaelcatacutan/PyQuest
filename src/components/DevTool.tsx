@@ -8,7 +8,8 @@ import {
   useDialogueBoxStore,
   useSceneStore,
   useTerminalStore,
-  useGuideStore
+  useGuideStore,
+  useInventoryStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
@@ -24,6 +25,11 @@ export default function DevTool(){
     }))
   )
   const [input, setInput] = useState("")
+  const { playerId } = useInventoryStore(
+  useShallow((s) => ({
+    playerId: s.player_id
+  }))
+  );
   const { inCombat, toggleInCombat } = useGameStore(
     useShallow((s) => ({
       inCombat: s.inCombat,
@@ -70,14 +76,23 @@ export default function DevTool(){
   const dmgHUDText = `Dmg HUD (${isDamaged})`
   const dialogueBoxText = `Dialogue Box (${displayDialogueBox})`
   const sceneText = `Scene: ${scene}`
+  const playerDataText = `UserId: ${user_id} | PlayerId: ${playerId}`
 
   return (
     <>
       {devTool && 
-      <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900">
+      <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900 flex-wrap">
         <span>DevTool:</span>
+        <span className="text-yellow-300">{playerDataText}</span>
         <input type="text" className="border bg-zinc-800" value={input} onChange={(e) => setInput(e.target.value)}></input>
-        <Button text="Print" onClick={() => {console.log(MachineProblems[0].problem)}}/>
+        <Button text="Print All" onClick={() => {
+          console.log("=== PLAYER DATA ===");
+          console.log("user_id:", user_id);
+          console.log("playerId:", playerId);
+          console.log("localStorage keys:", Object.keys(localStorage));
+          console.log("Full inventoryStore:", useInventoryStore.getState());
+          console.log("Full playerStore:", usePlayerStore.getState());
+        }}/>
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(1)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>

@@ -1,13 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "@/src/game/store";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
-import { useInventoryStore } from "@/src/game/store/inventoryStore";
+import { useInventoryStore, loadInventoryProfile } from "@/src/game/store/inventoryStore";
 import DevTool from "@/src/components/DevTool";
 import { authenticateUser } from "@/src/game/services/authService";
 
 export default function LoginPage() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { user_id, setUserId} = usePlayerStore(
@@ -16,20 +17,15 @@ export default function LoginPage() {
       setUserId: s.setUserId
     }))
   )
-
   const { player_id, setPlayerId } = useInventoryStore(
     useShallow((s) => ({
       player_id: s.player_id,
       setPlayerId: s.setPlayerId
     }))
   )
-
-  const navigate = useNavigate()
-  
   const canLogin = username.trim().length > 0 && password.length > 0;
 
-
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     
     // Authenticate user against localStorage
@@ -40,19 +36,13 @@ export default function LoginPage() {
     
     // Login successful
     setUserId(username);
+    await loadInventoryProfile(username);
     setPlayerId(username);
+    // Load other data
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
   }
 
-  useEffect(() => {
-    console.log("Player ID updated in component:", user_id);
-    console.log("Player Inventory ID:", user_id);
-  }, [user_id]); // This fires every time user_id changes
-
-  function handleCreateAccount(){
-    navigate('/signup')
-  }
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">
@@ -120,7 +110,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 className="underline decoration-white/20 underline-offset-4 cursor-pointer hover:text-gray-200"
-                onClick={handleCreateAccount}
+                onClick={() => navigate("/signup")}
               >
                 Create Account
               </button>

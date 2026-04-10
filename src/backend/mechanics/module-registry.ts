@@ -9,11 +9,37 @@ export type PythonModuleRecord = {
     sourcePath: string;
     visibility: ModuleVisibility;
     prelude: boolean;
+    isPackage: boolean;
     description?: string;
 };
 
 const moduleRegistry: Map<string, PythonModuleRecord> = new Map();
 const manualPublicModuleNames: Set<string> = new Set();
+
+function ensurePackageModules(moduleName: string): void {
+    const parts = moduleName.split(".");
+
+    if (parts.length < 2) {
+        return;
+    }
+
+    for (let index = 1; index < parts.length; index += 1) {
+        const packageName = parts.slice(0, index).join(".");
+
+        if (!moduleRegistry.has(packageName)) {
+            const packageSourcePath = `${packageName.replace(/\./g, "/")}/__init__.py`;
+            moduleRegistry.set(packageName, {
+                name: packageName,
+                code: "",
+                sourcePath: packageSourcePath,
+                visibility: "internal",
+                prelude: false,
+                isPackage: true,
+                description: "Internal package namespace"
+            });
+        }
+    }
+}
 
 function customModuleToRecord(module: CustomModule): PythonModuleRecord {
     const visibility = module.visibility ?? "public";
@@ -25,6 +51,7 @@ function customModuleToRecord(module: CustomModule): PythonModuleRecord {
         sourcePath: module.sourcePath ?? module.name,
         visibility,
         prelude,
+        isPackage: false,
         description: module.description ?? getModuleDescription(module.name, visibility, prelude)
     };
 }
@@ -64,6 +91,7 @@ export function clearPythonModules(): void {
 }
 
 export function registerPythonModule(moduleRecord: PythonModuleRecord): void {
+    ensurePackageModules(moduleRecord.name);
     moduleRegistry.set(moduleRecord.name, moduleRecord);
 }
 
@@ -122,25 +150,49 @@ export function getBuiltinPreludeCode(): string {
         .join("\n\n");
 }
 
-function normalizeModuleRequest(filename: string): string {
+function parseModuleRequest(filename: string): {
+    normalizedRequest: string;
+    shortName: string;
+    requestIsPackageInit: boolean;
+} {
     const strippedQuery = filename.split("?")[0];
     const normalizedPath = strippedQuery.replace(/\\/g, "/").replace(/^\.\//, "").replace(/^\/+/, "");
+    const requestIsPackageInit = normalizedPath.endsWith("/__init__.py");
     const pathWithoutExtension = normalizedPath.endsWith(".py")
         ? normalizedPath.slice(0, -3)
         : normalizedPath;
 
-    if (pathWithoutExtension.endsWith("/__init__")) {
-        return pathWithoutExtension.slice(0, -"/__init__".length).replace(/\//g, ".");
-    }
+    const normalizedRequest = pathWithoutExtension.endsWith("/__init__")
+        ? pathWithoutExtension.slice(0, -"/__init__".length).replace(/\//g, ".")
+        : pathWithoutExtension.replace(/\//g, ".");
 
-    return pathWithoutExtension.replace(/\//g, ".");
+    const shortName = normalizedRequest.split(".").pop() ?? normalizedRequest;
+
+    return {
+        normalizedRequest,
+        shortName,
+        requestIsPackageInit
+    };
+}
+
+export function shouldSkipBuiltinForRequest(filename: string): boolean {
+    ensureInitialized();
+
+    const { normalizedRequest, shortName, requestIsPackageInit } = parseModuleRequest(filename);
+    const moduleRecord = moduleRegistry.get(normalizedRequest) ?? moduleRegistry.get(shortName);
+
+    return Boolean(moduleRecord?.isPackage && !requestIsPackageInit);
 }
 
 export function resolvePythonModule(filename: string): PythonModuleRecord | undefined {
     ensureInitialized();
 
-    const normalizedRequest = normalizeModuleRequest(filename);
-    const shortName = normalizedRequest.split(".").pop() ?? normalizedRequest;
+    const { normalizedRequest, shortName, requestIsPackageInit } = parseModuleRequest(filename);
+    const moduleRecord = moduleRegistry.get(normalizedRequest) ?? moduleRegistry.get(shortName);
 
-    return moduleRegistry.get(normalizedRequest) ?? moduleRegistry.get(shortName);
+    if (moduleRecord?.isPackage && !requestIsPackageInit) {
+        return undefined;
+    }
+
+    return moduleRecord;
 }

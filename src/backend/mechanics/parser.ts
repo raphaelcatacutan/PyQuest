@@ -5,12 +5,14 @@ import {
     clearPythonModules,
     getAllPythonModules,
     getBuiltinPreludeCode,
+    getPythonModule,
     getPublicPythonModuleNames,
     initializePythonModules,
     isPublicPythonModule,
     registerPythonModule,
     registerPythonModules,
     unregisterPythonModule,
+    shouldSkipBuiltinForRequest,
     resolvePythonModule,
     whitelistPythonModule,
     type PythonModuleRecord
@@ -38,6 +40,7 @@ export function registerModule(module: CustomModule): void {
         sourcePath: module.sourcePath ?? module.name,
         visibility: module.visibility ?? "public",
         prelude: module.prelude ?? false,
+        isPackage: false,
         description: module.description
     });
 }
@@ -50,6 +53,7 @@ export function registerModules(modules: CustomModule[]): void {
             sourcePath: module.sourcePath ?? module.name,
             visibility: module.visibility ?? "public",
             prelude: module.prelude ?? false,
+            isPackage: false,
             description: module.description
         }))
     );
@@ -99,30 +103,111 @@ export function whitelistModule(moduleName: string): void {
     whitelistPythonModule(moduleName);
 }
 
+function normalizeImportedModuleName(importedModule: string): string {
+    return importedModule.replace(/\s+as\s+.*$/i, "").trim();
+}
+
+function expandCustomModuleImports(code: string): string {
+    const inlinedModules: Set<string> = new Set();
+    const inlinedModuleCode: string[] = [];
+    const remainingLines: string[] = [];
+    const lines = code.split(/\r?\n/);
+
+    for (const line of lines) {
+        const trimmed = line.trim();
+        const fromMatch = trimmed.match(/^from\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s+import\s+(.+)$/);
+
+        if (fromMatch) {
+            const moduleName = normalizeImportedModuleName(fromMatch[1]);
+            const moduleRecord = getPythonModule(moduleName);
+
+            if (moduleRecord && isPublicPythonModule(moduleName)) {
+                if (!inlinedModules.has(moduleName)) {
+                    inlinedModules.add(moduleName);
+                    inlinedModuleCode.push(moduleRecord.code);
+                }
+                continue;
+            }
+        }
+
+        const importMatch = trimmed.match(/^import\s+(.+)$/);
+        if (importMatch) {
+            const requestedModules = importMatch[1]
+                .split(",")
+                .map((moduleName) => normalizeImportedModuleName(moduleName))
+                .filter((moduleName) => moduleName.length > 0);
+
+            if (requestedModules.length > 0) {
+                let allInlined = true;
+
+                for (const moduleName of requestedModules) {
+                    const moduleRecord = getPythonModule(moduleName);
+
+                    if (!(moduleRecord && isPublicPythonModule(moduleName))) {
+                        allInlined = false;
+                        break;
+                    }
+
+                    if (!inlinedModules.has(moduleName)) {
+                        inlinedModules.add(moduleName);
+                        inlinedModuleCode.push(moduleRecord.code);
+                    }
+                }
+
+                if (allInlined) {
+                    continue;
+                }
+            }
+        }
+
+        remainingLines.push(line);
+    }
+
+    if (inlinedModuleCode.length === 0) {
+        return code;
+    }
+
+    return `${inlinedModuleCode.join("\n\n")}\n\n${remainingLines.join("\n")}`;
+}
+
 export function runPython(code: string): Promise<string> {
     return new Promise((resolve) => {
         ensurePythonModulesInitialized();
 
         let output = "";
         const builtinPrelude = getBuiltinPreludeCode();
-        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${code}` : code;
+        const transformedCode = expandCustomModuleImports(code);
+        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${transformedCode}` : transformedCode;
+
+        // Ensure each run starts from a clean import/compiler state so newly loaded modules are used.
+        if (Sk?.builtin?.dict) {
+            Sk.sysmodules = new Sk.builtin.dict([]);
+        }
+        Sk.realsyspath = undefined;
+        if (typeof Sk.resetCompiler === "function") {
+            Sk.resetCompiler();
+        }
 
         Sk.configure({
             output: (text: string) => {
                 output += text;
             },
             read: (filename: string) => {
+                const module = resolvePythonModule(filename);
+
+                if (module) {
+                    return module.code;
+                }
+
+                if (shouldSkipBuiltinForRequest(filename)) {
+                    throw new Error(`Module '${filename}' is not available. Only registered modules can be imported.`);
+                }
+
                 const builtinFiles = Sk.builtinFiles?.files ?? Sk.builtinFiles?.["files"];
                 const builtinFile = builtinFiles?.[filename];
 
                 if (builtinFile !== undefined) {
                     return builtinFile;
-                }
-
-                const module = resolvePythonModule(filename);
-
-                if (module) {
-                    return module.code;
                 }
 
                 throw new Error(`Module '${filename}' is not available. Only registered modules can be imported.`);

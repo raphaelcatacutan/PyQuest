@@ -1,6 +1,7 @@
 import { Armor } from "./armor.types";
 import { Consumable } from "./consumable.types";
 import { LootDrop } from "./loot.types";
+import { Tutorial } from "./tutorial.types";
 import { Weapon } from "./weapon.types";
 
 type NPCType = 'trader' | 'blacksmith' | 'innkeeper' | 'villager'
@@ -29,6 +30,7 @@ export interface NPC {
 
   dialogues: Dialogue[];
   currDialogue: string;
+  tutorialDialogues: Tutorial[];
 
   quests?: Quest[];
   shop: ShopInventory;

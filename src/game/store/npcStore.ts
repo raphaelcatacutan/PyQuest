@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { NPC } from "../types/npc.types";
+import { NPCs } from "../data/npc";
 
 /**
  * 
@@ -20,7 +21,7 @@ interface NPCStoreProps {
 }
 
 export const useNPCStore = create<NPCStoreProps>((set, get) => ({
-  npc: null,
+  npc: NPCs[0],
   displayNPC: false,
   currentDialogueIndex: 0,
 

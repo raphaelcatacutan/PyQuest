@@ -6,4 +6,4 @@ import npcData from "../json/npc.json"
  *  NPC Database
  */
 
-export const NPCs: NPC = npcData as NPC
+export const NPCs: NPC[] = npcData as NPC[]

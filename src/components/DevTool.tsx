@@ -11,7 +11,8 @@ import {
   useGuideStore,
   useInventoryStore,
   useTrialsStore,
-  useTutorialStore
+  useTutorialStore,
+  useNPCStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
@@ -75,6 +76,7 @@ export default function DevTool(){
   )
   const guide = useGuideStore()
   const trials = useTrialsStore()
+  const npc = useNPCStore()
 
   const gainXP = usePlayerStore(s => s.gainXP)
 
@@ -135,6 +137,8 @@ export default function DevTool(){
           setScene(randomScene)
         }}/>
         <Button text="Guide" onClick={() => guide.toggleGuide(null)}/>
+        <Button text="NPC" onClick={() =>  {npc.toggleDisplayNPC()}}/>
+        <Button text="Tutorial" onClick={() => guide.toggleGuide(null)}/>
       </div>
       }
     </>

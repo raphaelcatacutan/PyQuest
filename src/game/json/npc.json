@@ -1,3 +1,30 @@
-{
-  
-}
+[
+  {
+    "id": "npc_innkeeper_001",
+    "name": "Marta the Innkeeper",
+    "npcImg": "/src/assets/npcs/innkeeper3.png",
+    "type": "innkeeper",
+    "dialogues": [
+      {
+        "dialogue": "Welcome to my inn, traveler! You look weary from your journey. Would you like to rest?",
+        "choices": ["Rest", "Browse Shop", "Ask about Quests", "Leave"]
+      },
+      {
+        "dialogue": "We have the finest potions and remedies in town. What brings you here?",
+        "choices": ["Show me your wares", "Tell me more", "Never mind"]
+      },
+      {
+        "dialogue": "I have some work that needs doing. Interested in earning some coin?",
+        "choices": ["Accept Quest", "Decline", "Ask for details"]
+      }
+    ],
+    "currDialogue": "Welcome to my inn, traveler! You look weary from your journey. Would you like to rest?",
+    "tutorialDialogues": [],
+    "quests": [],
+    "shop": {
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  }
+]

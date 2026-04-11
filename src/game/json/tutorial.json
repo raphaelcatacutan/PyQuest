@@ -2,38 +2,94 @@
   {
     "phase": "phase-1",
     "instructions": [
-      "HELOOOOOOOOOOOOOOO",
-      "HEEEEAWDA"
+      "Look who we got here, another brave soul. Welcome to PyWorld.",
+      "Our world is infested with bugs, and lucky you, you were the chosen one to help us clear out these bugs scattered across the map.",
+      "Enough gossip! Before you head into the Forest, we need to register you. Type: name = 'YourName' to bind your soul to the realm. Afterwards, press the green play-like button, also known as the \"Run\" button to execute the code.",
+      "That’s a **Variable**. You just assigned a **String** (text) to a label. In Python, Strings must be wrapped in quotes so the computer doesn't mistake them for commands!",
+      "Now, what kind of hero are you? Type: role = 'Warrior' to choose your path. Run the code afterwards",
+      "Look at you! A proper object now. This time, open the right panel by clicking the button on the top-right of the scenen, then run print(name) to introduce yourself to the locals!",
+      "We heard ya! Did you see yourself shouting in the terminal?",
+      "The **print() function** is how you tell Python to shout something out. Whatever you put inside those parentheses, the world will see!",
+      "Every adventurer needs a hoard. I’ve initialized a variable for you: golds = 100. Don't spend it all in one script!",
+      "That number is an **Integer**. Unlike Strings, Integers don't need quotes. They are raw values ready for calculation.",
+      "Are you ready for combat? Type: is_ready = True to prime your spirit.",
+      "That right there is a **Boolean**. It can only be `True` or `False`. It's the simplest data type, used for making big decisions in the heat of battle.",
+      "Want to check your fortune? Use golds + 50 to see what your balance looks like after a quick bounty.",
+      "That's an **Arithmetic Expression**. Python can do math faster than any blacksmith! Using the `+` operator lets you calculate new values without losing your original data.",
+      "I’ve sharpened your basic Methods. You can now call goTo('Forest'), use punch() for attack, and scavenge() for loot.",
+      "These are **Functions**. They are pre-written sets of instructions. You'll know more about them later on!",
+      "Listen close: a Bounty has been posted. You'll need to combine variables, math, and functions to survive the trek.",
+      "The Forest doesn't forgive a missing colon or a stray space. Keep your indentation tight, and your logic tighter!",
+      "Python uses **Indentation** (whitespace) to know which code belongs to which block. One wrong space and your 'spells' will fail to cast!",
+      "HEEEEAWDA! Off with you! Go clear those bugs in the forest and make sure none of 'em remains!"
     ]
   },
   {
     "phase": "phase-2",
     "instructions": [
-      "phase2"
-    ]
+        "HEEEEAWDA! Look at you, coming back from the Forest in one piece! That bounty was light work for a soul like yours.",
+        "But listen—the Swamp ahead is thick with fog and repetitive tasks. If you keep typing one line at a time, you'll be stuck there until your syntax rusts.",
+        "First, let's automate your survival. Instead of typing 'scavenge()' over and over, we can use a **While Loop**.",
+        "Try running this code, \n\nwhile energy > 0: \n\tscavenge()",
+        "This tells Python: 'As long as this condition is True, keep doing the indented code below.'",
+        "See that `>` symbol? That is a **Comparison Operator**. It’s how Python weighs two values against each other.",
+        "You’ll need the whole set: `>` (greater than), `<` (less than), `==` (equal to), and `!=` (not equal to). These are the runes that power every decision in your code!",
+        "Notice that colon `:`? It’s like a doorway. Everything indented after it is part of the loop's 'room'.",
+        "Now, the Swamp is unpredictable. You need to make complex choices. We start with the **if** statement—your basic instinct.",
+        "Type: \n\nif energy < 20: \n\tprint(\"Tired\")",
+        "That's a start, but what if you're not tired? You can add an **else** to cover every other possibility. It’s the 'otherwise' of your logic.",
+        "Type: \n\nif energy < 20: \n\tprint(\"Tired\") \nelse: \n\tscavenge()",
+        "But wait! What if you have plenty of energy but your health is low? For that, we use **elif**—short for 'else if'. It let's you check a second specific condition if the first one was False.",
+        "Try this master logic: \n\nif energy < 20: \n\tprint(\"Tired\") \nelif health < 50: \n\tprint(\"Low Health\") \nelse: \n\tscavenge()",
+        "See? Python checks the 'if' first. If that fails, it checks the 'elif'. If both fail, it settles for the 'else'. It’s a perfect chain of command!",
+        "But what if you're hungry *and* tired? You’ll need **Logical Operators**: `and`, `or`, and `not` to chain these runes together.",
+        "Now, let's talk about what the scholars call **Functions**. Sometimes you want to group your logic into a single command you can reuse.",
+        "It’s time to forge your first spell. Type this exactly to define your ritual:\n\ndef super_scavenge():\n\tif energy > 20:\n\t\tscavenge()",
+        "You’ve just used the `def` keyword! This creates a blueprint. But notice nothing happened yet? That's because you've only written the recipe.",
+        "To actually cast the spell, you must 'call' it. Type: \n\nsuper_scavenge() \n\nafter the function and watch your logic come to life!",
+        "Defining a function with `def` is like writing a recipe. It doesn't cook the food yet; it just saves the instructions for when you're hungry for loot.",
+        "Be careful! The Swamp 'bugs' love a missing space. If your indentation is off, your logic will bleed into the wrong blocks.",
+        "Ready to test your new logic? Use your loops and conditions to outlast it.",
+        "Off with ya! Don't let your energy hit zero, or I'll be scavenging *you* from the mud!"
+      ]
   },
   {
     "phase": "phase-3",
     "instructions": [
-      "phase3"
+      "OOP"
     ]
   },
   {
     "phase": "phase-4",
     "instructions": [
-      "phase4"
+      "IMPORT"
     ]
   },
   {
     "phase": "phase-5",
     "instructions": [
-      "phase5"
+      "DATA STRUCTURES"
     ]
   },
   {
     "phase": "phase-6",
     "instructions": [
-      "phase6"
-    ]
+        "HEEEEAWDA! You’ve made it! The air is thin, and the bugs here aren't just pests—they’re System Crashes.",
+        "First, let's talk about survival. Sometimes, a line of code fails and kills your whole script. To prevent this, we use **Exception Handling**.",
+        "Wrap your dangerous spells in a `try` and `except` block. Try this: \n\ntry:\n\tuse_artifact()\nexcept:\n\tprint('Artifact failed, but I am still standing!')",
+        "This 'catches' the error before it breaks your reality. It's the ultimate safety net for a coder-mage.",
+        "Now, let’s look at your words. In Python, a String is just a list of characters. You can grab a single letter using **String Indexing**.",
+        "Type: print(name[0]). That number in the brackets is the 'index'. Remember, Python starts counting at 0, not 1!",
+        "But what if you want to speak with style? We use **Format Specifiers**, or 'f-strings'. It lets you inject variables directly into your speech.",
+        "Try it: print(f'My name is {name} and I am {age} years old.')",
+        "Notice the `f` before the quotes and the `{}` around your variables. It’s the cleanest way to display your stats to the world.",
+        "Be careful with your elements, though. Sometimes you need to merge types. This is **Type Casting**.",
+        "If you have `x = 1 + 1.2`, Python automatically turns that 1 into a 1.2 (a Float). But you can force it! Type: `int(1.2)` to chop off the decimal and turn it back into a whole Integer.",
+        "Finally, your strings have their own built-in powers called **String Methods**. They allow you to transform text instantly.",
+        "Try: print(name.upper()) to shout, or print(name.replace('Warrior', 'Legend')) to change your destiny.",
+        "Methods are like functions that belong specifically to an object. Just add a `.` after the variable name to see its hidden powers.",
+        "You’re no longer just writing code; you’re sculpting data. Use these new tools to navigate the instabilities of the Outer Rim.",
+        "Off with ya! Don't let a ValueError be the end of your tale!"
+      ]
   }
 ]

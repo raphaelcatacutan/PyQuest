@@ -68,13 +68,13 @@ export const useTutorialStore = create<TutorialStoreProps>((set, get) => ({
       });
     }
     // Move to next phase if available
-    else if (currentPhaseIndex < sequence.length - 1) {
-      set({
-        currentPhaseIndex: currentPhaseIndex + 1,
-        currentInstructionIndex: 0,
-        instruction: sequence[currentPhaseIndex + 1]?.instructions[0] || '',
-      });
-    }
+    // else if (currentPhaseIndex < sequence.length - 1) {
+    //   set({
+    //     currentPhaseIndex: currentPhaseIndex + 1,
+    //     currentInstructionIndex: 0,
+    //     instruction: sequence[currentPhaseIndex + 1]?.instructions[0] || '',
+    //   });
+    // }
     // Tutorial complete
     else {
       set({ isTutorial: false });

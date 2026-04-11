@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { Enemy } from "../types/enemy.types";
+import { useSoundStore } from "./soundStore";
 
 /**
  * Enemy Store - Tracks current enemy state during combat
@@ -22,6 +23,7 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   spawnEnemy: (enemy: Enemy) => set({ enemy }),
   
   takeDamage: (amount: number) => set((state) => {
+    useSoundStore.getState().playSfx('hit')
     if (!state.enemy) return {};
     return {
       enemy: {

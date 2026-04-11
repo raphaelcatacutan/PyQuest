@@ -82,6 +82,7 @@ export default function LoginPage() {
                 Username
               </label>
               <input
+                autoFocus={true}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="e.g. AriaStorm"

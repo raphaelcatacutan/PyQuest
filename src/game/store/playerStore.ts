@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { useInventoryStore } from './inventoryStore';
 import { Player } from '../types/player.types';
 import { loadInventoryProfile } from './inventoryStore';
+import { useSoundStore } from './soundStore';
 
 
 interface PlayerStoreProps extends Player {
@@ -84,7 +85,11 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       setUsername: (username) => set({ username }),
       setPassword: (pass) => set({ password: pass }),
 
-      gainHP: (amount) => set((state) => ({ hp: state.hp + amount })),
+      // gainHP: (amount) => set((state) => ({ hp: state.hp + amount })),
+      gainHP: (amount) => {
+        useSoundStore.getState().playSfx('heal'),
+        set((state) => ({ hp: state.hp + amount }))
+      },
       setMaxHP: (amount) => set((state) => ({ maxHP: state.maxHP + amount })),
       resetMaxHP: () => set({ maxHP: 100 }),
 
@@ -98,7 +103,12 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       resetMaxEnergy: () => set({ maxEnergy: 100 }),
 
       setDamage: (amount) => set((state) => ({ baseDmg: state.baseDmg + amount })),
-      takeDamage: (amount) => set((state) => ({ hp: Math.max(0, state.hp - amount) })),
+      // takeDamage: (amount) => set((state) => ({ hp: Math.max(0, state.hp - amount) })),
+      takeDamage: (amount) => set((state) => {
+        const hp = Math.max(0, state.hp - amount)
+        if (hp <= 0) { useSoundStore.getState().playSfx('death') } 
+        return { hp: hp}
+      }),
       resetDamage: () => set({ baseDmg: 2 }),
 
       setCritDmg: (amount) => set((state) => ({ baseCritDmg: state.baseCritDmg + amount })),

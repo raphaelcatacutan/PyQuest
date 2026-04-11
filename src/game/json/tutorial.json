@@ -9,31 +9,31 @@
   {
     "phase": "phase-2",
     "instructions": [
-      "adwada"
+      "phase2"
     ]
   },
   {
     "phase": "phase-3",
     "instructions": [
-      "adwada"
+      "phase3"
     ]
   },
   {
     "phase": "phase-4",
     "instructions": [
-      "adwada"
+      "phase4"
     ]
   },
   {
     "phase": "phase-5",
     "instructions": [
-      "adwada"
+      "phase5"
     ]
   },
   {
     "phase": "phase-6",
     "instructions": [
-      "adwada"
+      "phase6"
     ]
   }
 ]

@@ -128,22 +128,20 @@ export const Guide = () => {
           left: dialogLeft,
         }}
       >
-        <p className="text-white text-sm mb-5 leading-relaxed font-medium">
+        <p className="text-white text-xs mb-5 leading-relaxed font-medium font-[code]">
           {stepData.text}
         </p>
         
         <div className="flex justify-between items-center">
-          <div className="flex gap-1">
-            {steps.map((_, i) => (
-              <div key={i} className={`h-1 w-4 rounded-full ${i === currentStep ? 'bg-cyan-400' : 'bg-slate-700'}`} />
-            ))}
-          </div>
+          <span className="text-white text-xs font-semibold">
+            {currentStep + 1}/{steps.length}
+          </span>
           <button 
             onClick={() => isLastStep ? toggleGuide(null) : nextStep()}
-            className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black rounded-lg uppercase tracking-tighter transition-all active:scale-95 whitespace-nowrap"
+            className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-black rounded-lg uppercase tracking-tighter transition-all active:scale-95 whitespace-nowrap font-[code]"
           >
             {isLastStep ? "Finish" : "Next Step"}
-          </button>
+          </button> 
         </div>
 
         {/* SMART ARROW */}

@@ -1,14 +1,11 @@
 import { create } from "zustand";
+import { Guide } from "../types/guide.types";
+import { Guides } from "../data/guide";
 
 /**
  * 
  *  Tutorial Store
  */
-
-interface Guide {
-  targetId: string;
-  text: string;
-}
 
 interface GuideStoreProps {
   isGuide: boolean;
@@ -21,11 +18,7 @@ interface GuideStoreProps {
 export const useGuideStore = create<GuideStoreProps>((set) => ({
   isGuide: false,
   currentStep: 0,
-  steps: [
-    { targetId: 'hp-bar', 
-      text: "This is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero  is your health. Keep it above zero " 
-    },
-  ],
+  steps: Guides,
   toggleGuide: (state) => { 
     if (state != null){
       return set({ isGuide: state }) 

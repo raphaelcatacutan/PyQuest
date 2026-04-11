@@ -14,21 +14,26 @@ interface TutorialStoreProps {
   instruction: string;
   sequence: Tutorial[];
 
+  enableNextButton: boolean;
+
   toggleIsTutorial: (state?: boolean) => void;
   setInstruction: (instruction: string) => void;
   setSequence: (sequence: Tutorial[]) => void;
   nextStep: () => void;
   previousStep: () => void;
   skipToPhase: (phaseIndex: number) => void;
+  toggleEnableNextButton: (state?: boolean) => void;
   clearTutorial: () => void;
 }
 
 export const useTutorialStore = create<TutorialStoreProps>((set, get) => ({
-  isTutorial: true,
+  isTutorial: false,
   currentPhaseIndex: 0,
   currentInstructionIndex: 0,
   instruction: Tutorials[0]?.instructions[0] || '',
   sequence: Tutorials,
+
+  enableNextButton: true,
 
   toggleIsTutorial: (state?) => {
     set((prev) => ({
@@ -105,6 +110,8 @@ export const useTutorialStore = create<TutorialStoreProps>((set, get) => ({
       });
     }
   },
+
+  toggleEnableNextButton: (state) => set((s) => ({ enableNextButton: state ?? !s.enableNextButton })),
 
   clearTutorial: () => {
     set({

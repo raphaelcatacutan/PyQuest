@@ -22,6 +22,7 @@ import NavBar from "@/src/components/ui/NavBar"
 import Dungeon from "@/src/components/events/Dungeon"
 import Trials from "@/src/components/events/Trials"
 import NPC from "@/src/components/events/NPC"
+import Tutorial from "@/src/components/events/Tutorial"
 
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -145,7 +146,7 @@ export default function GamePage() {
   
 
   return (
-    <div id="hp-bar"  className="relative flex flex-col w-full h-full">
+    <div className="relative flex flex-col w-full h-full">
       <NavBar/>
       
       <div className="relative flex flex-row h-full p-5"> {/* body div */}
@@ -156,6 +157,8 @@ export default function GamePage() {
           <NPC/>
           <Trials/>
           <Dungeon/>
+          <Tutorial/>
+          
           <div 
             className="absolute flex w-full h-full z-1" 
             style={{ 

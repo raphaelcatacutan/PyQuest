@@ -112,7 +112,7 @@ export default function CodeEditor() {
   }
 
   return (
-    <div id="hp-bar" className="relative w-150 flex flex-col h-full bg-[#23100a]">
+    <div className="relative w-150 flex flex-col h-full bg-[#23100a]">
       <div className="flex flex-row m-1">
         <div className="flex w-10/12 pl-1 gap-1">
           <span className="truncate">Current File:</span>

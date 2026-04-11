@@ -2,12 +2,13 @@ import { create } from "zustand"
 import { Enemy } from "../types/enemy.types";
 
 /**
- * 
- *  Enemy State
+ * Enemy Store - Tracks current enemy state during combat
  */
 
-interface EnemyStoreProps extends Enemy{
-  spawnEnemy: (enemy: Enemy) => void; // Accepts ANY enemy
+interface EnemyStoreProps {
+  enemy: Enemy | null;
+  
+  spawnEnemy: (enemy: Enemy) => void;
   takeDamage: (amount: number) => void;
   gainHp: (amount: number) => void;
   takeEnergyCost: (amount: number) => void;
@@ -16,49 +17,49 @@ interface EnemyStoreProps extends Enemy{
 }
 
 export const useEnemyStore = create<EnemyStoreProps>((set) => ({
-  id: "",
-  name: "...",
-  description: "",
-  enemyImg: "",
-  hp: 0,
-  maxHp: 0,
-  energy: 0,
-  maxEnergy: 0,
-  def: 0,
-  maxDef: 0,
-  skills: [],
-  dmg: 0,
-  atkSpeed: 0,
-  critDmg: 0,
-  critChance: 0,
-  evasion: 0,
-  location: {},
-  lootDrop: {
-    coinDropMin: 0,
-    coinDropMax: 0,
-    xpDropMin: 0,
-    xpDropMax: 0,
-    weapons: [],
-    armors: [],
-    consumables: [],
-  },
+  enemy: null,
   
-  spawnEnemy: (enemy) => set({ ...enemy }),
+  spawnEnemy: (enemy: Enemy) => set({ enemy }),
   
-  takeDamage: (amount) => set((state) => ({ 
-    hp: Math.max(0, state.hp - amount) 
-  })),
+  takeDamage: (amount: number) => set((state) => {
+    if (!state.enemy) return {};
+    return {
+      enemy: {
+        ...state.enemy,
+        hp: Math.max(0, state.enemy.hp - amount),
+      },
+    };
+  }),
 
-  gainHp: (amount) => set((state) => ({
-    hp: Math.min(state.maxHp, state.hp + amount)
-  })),
+  gainHp: (amount: number) => set((state) => {
+    if (!state.enemy) return {};
+    return {
+      enemy: {
+        ...state.enemy,
+        hp: Math.min(state.enemy.maxHp, state.enemy.hp + amount),
+      },
+    };
+  }),
   
-  takeEnergyCost: (amount) => set((state) => ({ 
-    energy: Math.max(0, state.energy - amount) 
-  })),
+  takeEnergyCost: (amount: number) => set((state) => {
+    if (!state.enemy) return {};
+    return {
+      enemy: {
+        ...state.enemy,
+        energy: Math.max(0, state.enemy.energy - amount),
+      },
+    };
+  }),
 
-  gainEnergy: (amount) => set((state) => ({
-    energy: Math.min(state.maxEnergy, state.energy + amount)
-  })),
-  clearEnemy: () => set({ id: "" }), // TODO: Improve clearEnemy. When clearing out all attr, no enemy is being registered
-}))
+  gainEnergy: (amount: number) => set((state) => {
+    if (!state.enemy) return {};
+    return {
+      enemy: {
+        ...state.enemy,
+        energy: Math.min(state.enemy.maxEnergy, state.enemy.energy + amount),
+      },
+    };
+  }),
+
+  clearEnemy: () => set({ enemy: null }),
+}));

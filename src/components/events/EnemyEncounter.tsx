@@ -4,12 +4,12 @@ import { useEnemyStore } from "@/src/game/store";
 export default function EnemyEncounter() {
   const { name, hp, maxHp, energy, maxEnergy, enemyImg } = useEnemyStore(
     useShallow((s) => ({
-      name: s.name,
-      hp: s.hp,
-      maxHp: s.maxHp,
-      energy: s.energy,
-      maxEnergy: s.maxEnergy,
-      enemyImg: s.enemyImg,
+      name: s.enemy?.name ?? "...",
+      hp: s.enemy?.hp ?? 0,
+      maxHp: s.enemy?.maxHp ?? 1,
+      energy: s.enemy?.energy ?? 0,
+      maxEnergy: s.enemy?.maxEnergy ?? 1,
+      enemyImg: s.enemy?.enemyImg ?? "",
     })),
   );
 

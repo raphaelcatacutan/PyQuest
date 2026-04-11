@@ -29,9 +29,9 @@ export default function Combat() {
     })),
   );
 
-  const enemyId = useEnemyStore((s) => s.id);
+  const enemyId = useEnemyStore((s) => s.enemy?.id ?? "");
   const bossId = useBossStore((s) => s.id);
-  const enemyHp = useEnemyStore((s) => s.hp);
+  const enemyHp = useEnemyStore((s) => s.enemy?.hp ?? 0);
   const bossHp = useBossStore((s) => s.hp);
 
   const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
@@ -159,8 +159,9 @@ export default function Combat() {
     const key = `${isEnemy ? "enemy" : "boss"}:${activeId}`;
     if (activeKeyRef.current !== key) {
       const target = isEnemy
-        ? useEnemyStore.getState()
+        ? useEnemyStore.getState().enemy
         : useBossStore.getState();
+      if (!target) return;
       controllerRef.current = createEncounterController({
         kind: isEnemy ? "mob" : "boss",
         enemy: {
@@ -173,7 +174,7 @@ export default function Combat() {
           critChance: target.critChance,
           critDmg: target.critDmg,
           atkSpeed: target.atkSpeed,
-          skills: target.skills,
+          skills: target.skills as any,
         },
       });
       activeKeyRef.current = key;
@@ -190,10 +191,10 @@ export default function Combat() {
         lastTickRef.current = now;
 
         const player = usePlayerStore.getState();
-        const target = isEnemy
-          ? useEnemyStore.getState()
-          : useBossStore.getState();
-        if (!target.id) return;
+        const enemyState = isEnemy ? useEnemyStore.getState() : null;
+        const bossState = !isEnemy ? useBossStore.getState() : null;
+        const target = isEnemy ? enemyState?.enemy : bossState;
+        if (!target?.id) return;
 
         const result = controller.tick({
           player: {
@@ -216,7 +217,7 @@ export default function Combat() {
             critChance: target.critChance,
             critDmg: target.critDmg,
             atkSpeed: target.atkSpeed,
-            skills: target.skills,
+            skills: target.skills as any,
           },
           deltaMs,
         });
@@ -256,23 +257,25 @@ export default function Combat() {
         if (DEBUG_AI) {
           const playerAfter = usePlayerStore.getState();
           const enemyAfter = isEnemy
-            ? useEnemyStore.getState()
+            ? useEnemyStore.getState().enemy
             : useBossStore.getState();
-          setDebugState({
-            isBoss: !isEnemy,
-            enemyId: target.id,
-            action: result.enemyAction?.label ?? "none",
-            reward: Number(result.reward.toFixed(3)),
-            dmgToPlayer: result.damageToPlayer,
-            dmgToEnemy: result.damageToEnemy,
-            healEnemy: result.healEnemy,
-            energyDelta: result.energyDelta,
-            playerHp: playerAfter.hp,
-            enemyHp: enemyAfter.hp,
-            enemyEnergy: enemyAfter.energy,
-            tickMs: Math.round(deltaMs),
-            done: result.done,
-          });
+          if (enemyAfter) {
+            setDebugState({
+              isBoss: !isEnemy,
+              enemyId: enemyAfter.id,
+              action: result.enemyAction?.label ?? "none",
+              reward: Number(result.reward.toFixed(3)),
+              dmgToPlayer: result.damageToPlayer,
+              dmgToEnemy: result.damageToEnemy,
+              healEnemy: result.healEnemy,
+              energyDelta: result.energyDelta,
+              playerHp: playerAfter.hp,
+              enemyHp: enemyAfter.hp,
+              enemyEnergy: enemyAfter.energy,
+              tickMs: Math.round(deltaMs),
+              done: result.done,
+            });
+          }
         }
 
         if (result.done) {

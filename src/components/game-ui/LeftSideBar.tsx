@@ -22,7 +22,7 @@ export default function LeftSideBar({ playerInventory, deleteInventoryItem, rena
   const coins = usePlayerStore(s => s.coins);
 
   return (
-    <div className="relative h-full flex flex-row">
+    <div id="inventory" className="relative h-full flex flex-row">
       <div className={`overflow-hidden transition-all duration-300 ease-in-out ${inv ? 'max-w-96' : 'max-w-0'}`} style={{ backgroundImage: `url(${playerInventoryBg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: "repeat" }}>
         <div className="relative p-5 h-full flex flex-col">
           <div className="flex-1">

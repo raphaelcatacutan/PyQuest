@@ -27,7 +27,7 @@ export default function NavBar(){
   return (
     <div className="flex flex-row h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)] gap-4 items-center justify-center">{/* nav div */}
       <Button variant="exit-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
-      <div className="flex items-center gap-2 flex-1 max-w-xs">
+      <div id="lvl-bar" className="flex items-center gap-2 flex-1 max-w-xs">
         <span className="text-xs text-gray-200 font-semibold whitespace-nowrap">Level: {level}</span>
         <div className="relative flex-1 bg-gray-700 border border-gray-500 rounded h-5 overflow-hidden">
           <div 

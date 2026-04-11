@@ -149,11 +149,11 @@ export default function GamePage() {
     <div className="relative flex flex-col w-full h-full">
       <NavBar/>
       
-      <div className="relative flex flex-row h-full p-5"> {/* body div */}
+      <div id="origin" className="relative flex flex-row h-full p-5"> {/* body div */}
 
         <CodeEditor/>
 
-        <div className="relative flex h-full w-full bg-black"> {/* scene */}
+        <div id="scene" className="relative flex h-full w-full bg-black"> {/* scene */}
           <NPC/>
           <Trials/>
           <Dungeon/>
@@ -183,7 +183,7 @@ export default function GamePage() {
           </div>
 
           {!rightPanel ? 
-          <div className="absolute right-1 top-1 z-50">
+          <div id="right-btn" className="absolute right-1 top-1 z-50">
             <Button variant="icon-only-btn" icon={rightPanelIcon} iconSize={25} onClick={toggleRightPanel}/> 
           </div>
           : 

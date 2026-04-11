@@ -112,7 +112,7 @@ export default function CodeEditor() {
   }
 
   return (
-    <div className="relative w-150 flex flex-col h-full bg-[#23100a]">
+    <div id="code-editor" className="relative w-150 flex flex-col h-full bg-[#23100a]">
       <div className="flex flex-row m-1">
         <div className="flex w-10/12 pl-1 gap-1">
           <span className="truncate">Current File:</span>
@@ -158,7 +158,7 @@ export default function CodeEditor() {
           </div>
         )} */}
       </div>
-      <div className="absolute bottom-0 w-full p-2 flex gap-4 pointer-events-none z-50">
+      <div id="status-bar" className="absolute bottom-0 w-full p-2 flex gap-4 pointer-events-none z-50">
         <div className="flex flex-col flex-1">
           {/* <span className="text-xs text-gray-700 font-semibold">Health</span> */}
           <div className="relative w-full bg-gray-200 border-2 border-gray-400 rounded h-6 overflow-hidden">

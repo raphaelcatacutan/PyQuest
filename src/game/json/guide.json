@@ -1,3 +1,10 @@
 [
-    { "targetId": "hp-bar", "text": "This is your health. Keep it above zero! This is your health. Keep it above zero!This is your health. Keep it above zero!This is your health. Keep it above zero!This is your health. Keep it above zero!This is your health. Keep it above zero!This is your health. Keep it above zero!This is your health. Keep it above zero!This is your health. Keep it above zero!" }
+    { "targetId": "origin", "text": "Welcome to PyQuest. Let’s calibrate your interface before the journey begins." },
+    { "targetId": "scene", "text": "This is the World View. You are currently resting in the safety of the village." },
+    { "targetId": "inventory", "text": "Your Inventory: the storehouse for your gear, consumables, and hard-coded functions." },
+    { "targetId": "right-btn", "text": "Access the Side Panel here to browse the Item Shop or monitor the System Terminal." },
+    { "targetId": "code-editor", "text": "This is your Code Editor—where logic becomes power. Type your commands here." },
+    { "targetId": "status-bar", "text": "Your Health and Energy. Keep an eye on these; syntax errors can be draining." },
+    { "targetId": "lvl-bar", "text": "Your Level. Grow your knowledge to unlock more complex syntax." },
+    { "targetId": "origin", "text": "The environment is initialized. Good luck surviving the logic ahead!" }
 ]

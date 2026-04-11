@@ -6,6 +6,7 @@ import { useShallow } from "zustand/shallow";
 import { useInventoryStore, loadInventoryProfile } from "@/src/game/store/inventoryStore";
 import DevTool from "@/src/components/DevTool";
 import { authenticateUser } from "@/src/game/services/authService";
+import { useSoundStore } from "@/src/game/store/soundStore";
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -23,6 +24,7 @@ export default function LoginPage() {
       setPlayerId: s.setPlayerId
     }))
   )
+  const initSounds = useSoundStore(s => s.initSounds)
   const canLogin = username.trim().length > 0 && password.length > 0;
 
   async function onSubmit(e: React.FormEvent) {
@@ -39,6 +41,7 @@ export default function LoginPage() {
     await loadInventoryProfile(username);
     setPlayerId(username);
     // Load other data
+    initSounds()
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
   }

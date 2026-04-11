@@ -22,6 +22,7 @@ import { useShallow } from "zustand/shallow"
 import showToast from "./ui/Toast"
 import { getDPByDifficulty } from "../game/data/trials"
 import { Tutorials } from "../game/data/tutorial"
+import { useSoundStore } from "../game/store/soundStore"
 
 export default function DevTool(){
   const { devTool, toggleDevTool } = useDevToolStore(
@@ -94,6 +95,7 @@ export default function DevTool(){
   const playerDataText = `UserId: ${user_id} | PlayerId: ${playerId}`
 
   const tuts = useTutorialStore()
+  const sfx = useSoundStore()
 
   return (
     <>
@@ -140,6 +142,10 @@ export default function DevTool(){
         <Button text="Guide" onClick={() => guide.toggleGuide(null)}/>
         <Button text="NPC" onClick={() =>  {npc.toggleDisplayNPC()}}/>
         <Button text="Tutorial" onClick={() => tutorial.toggleIsTutorial()}/>
+        <Button text="SFX" onClick={() => {
+          useSoundStore.getState().playSfx('click')
+          console.log("Played Hit SFX")
+          }}/>
       </div>
       }
     </>

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { Boss } from "../types/boss.types";
+import { getRandomMP } from "../data/dungeon";
+import { MachineProblem } from "../types/dungeon.types";
 
 /**
  * 
@@ -7,6 +9,7 @@ import { Boss } from "../types/boss.types";
  */
 
 interface BossStoreProps extends Boss {
+  activeProblem: MachineProblem; 
   spawnBoss: (boss: Boss) => void;
   takeDamage: (amount: number) => void;
   gainHp: (amount: number) => void;
@@ -44,6 +47,8 @@ export const useBossStore = create<BossStoreProps>((set) => ({
     armors: [],
     consumables: [],
   },
+
+  activeProblem: getRandomMP(),
 
   spawnBoss: (boss) => set({ ...boss }),  
   
@@ -92,5 +97,6 @@ export const useBossStore = create<BossStoreProps>((set) => ({
       armors: [],
       consumables: [],
     },
+    activeProblem: getRandomMP(),
   })
 })) 

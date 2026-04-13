@@ -23,10 +23,12 @@ import renameIcon from "./rename.svg?url"
 import rightPanelIcon from "./right_panel.svg?url"
 import saveIcon from "./save.svg?url"
 import transferIcon from "./transfer.svg?url"
+import noteIcon from "./bounty_quest.svg?url"
+import guideIcon from "./guide.svg"
 
 export { 
   addFileIcon, addFolderIcon, addFolder1Icon, bagIcon, buyIcon, clearIcon, closeIcon, closedFolderIcon, 
   closedFolder1Icon, coinsIcon, collapseIcon, consumableIcon, deleteIcon, exitIcon, fileIcon, open1Icon, 
   openFolderIcon, openFolder1Icon, playIcon, poiIcon, refreshIcon, renameIcon, rightPanelIcon, saveIcon, 
-  transferIcon 
+  transferIcon, noteIcon, guideIcon
 }

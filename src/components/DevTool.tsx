@@ -5,7 +5,7 @@ import {
   useBossStore,
   useGameStore,
   usePlayerStore,
-  useDialogueBoxStore,
+  useBountyQuestStore,
   useSceneStore,
   useTerminalStore,
   useGuideStore,
@@ -31,6 +31,8 @@ export default function DevTool(){
       toggleDevTool: s.toggleDevTool
     }))
   )
+  if (!devTool) return null
+
   const [input, setInput] = useState("")
   const { playerId } = useInventoryStore(
   useShallow((s) => ({
@@ -58,10 +60,11 @@ export default function DevTool(){
       toggleIsDamaged: s.toggleIsDamaged
     }))
   )
-  const { displayDialogueBox, toggleDisplayDialogueBox } = useDialogueBoxStore(
+  const { displayBountyQuest, toggleDisplayBountyQuest, toggleQuest } = useBountyQuestStore(
     useShallow((s) => ({
-      displayDialogueBox: s.displayDialogueBox,
-      toggleDisplayDialogueBox: s.toggleDisplayDialogueBox
+      displayBountyQuest: s.displayBountyQuest,
+      toggleDisplayBountyQuest: s.toggleDisplayBountyQuest,
+      toggleQuest: s.toggleQuest
     }))
   )
   const { scene, setScene } = useSceneStore()
@@ -90,16 +93,16 @@ export default function DevTool(){
   const combatText = `Combat (${inCombat})`
   const dmgHUDText = `Dmg HUD (${isDamaged})`
   // const toastText = `Toast (${})`
-  const dialogueBoxText = `Dialogue Box (${displayDialogueBox})`
+  const BountyQuestText = `Dialogue Box (${displayBountyQuest})`
   const sceneText = `Scene: ${scene}`
   const playerDataText = `UserId: ${user_id} | PlayerId: ${playerId}`
 
   const tuts = useTutorialStore()
   const sfx = useSoundStore()
+  const bounty = useBountyQuestStore()
 
   return (
     <>
-      {devTool && 
       <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900 flex-wrap">
         <span>DevTool:</span>
         {/* <span className="text-yellow-300">{playerDataText}</span> */}
@@ -120,7 +123,6 @@ export default function DevTool(){
         <span>{hp}</span>
         <Button text="Hp+" onClick={() => gainHP(10)}/>
         <Button text="XP+" onClick={() => gainXP(10)}/>
-        <Button text="Display ID" onClick={() => {console.log(`Player: ${user_id}`)}}/>
         <Button text="Toast" onClick={() => {showToast({variant: "info", message: "Test"})}}/>
         <Button text={combatText} onClick={() => { toggleInCombat(null) }}/>
         <Button text="Enemy/Boss" onClick={() => { 
@@ -132,8 +134,12 @@ export default function DevTool(){
           if (isEnemy){ enemyTakeDamage(20) }
           else { bossTakeDamage(20) }
         }}/>
-        {/* <Button text={dmgHUDText} onClick={() => toggleIsDamaged(null)}/> */}
-        <Button text={dialogueBoxText} onClick={toggleDisplayDialogueBox}/>
+        <Button text={BountyQuestText} onClick={() => toggleDisplayBountyQuest()}/>
+        <Button text="Check" onClick={() => {
+          console.log("Check toggled")
+          bounty.toggleQuest("1")
+          // toggleQuest("1")
+          }}/>
         <Button text={sceneText} onClick={() => {
           const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon', 'trials'];
           const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
@@ -147,7 +153,7 @@ export default function DevTool(){
           console.log("Played Hit SFX")
           }}/>
       </div>
-      }
+      
     </>
   )
 }

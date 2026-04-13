@@ -1,0 +1,857 @@
+{
+  "village": [],
+  "forest": [
+    {
+      "problem": "Print the message 'Exploring the Forest' to the console.",
+      "correct_code": "print('Exploring the Forest')",
+      "expected_output": "Exploring the Forest",
+      "reward": {
+        "xpDropMin": 10, "xpDropMax": 20, "coinDropMin": 5, "coinDropMax": 10,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a variable named 'trees' and assign it the value 100. Print the variable.",
+      "correct_code": "trees = 100\nprint(trees)",
+      "expected_output": "100",
+      "reward": {
+        "xpDropMin": 15, "xpDropMax": 25, "coinDropMin": 10, "coinDropMax": 15,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Assign the string 'Oak' to a variable called 'tree_type' and print it.",
+      "correct_code": "tree_type = 'Oak'\nprint(tree_type)",
+      "expected_output": "Oak",
+      "reward": {
+        "xpDropMin": 15, "xpDropMax": 25, "coinDropMin": 10, "coinDropMax": 15,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Add 50 and 25 and print the result.",
+      "correct_code": "print(50 + 25)",
+      "expected_output": "75",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 20, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Subtract 10 from 100 and print the result.",
+      "correct_code": "print(100 - 10)",
+      "expected_output": "90",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 20, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Multiply 12 by 12 and print the result.",
+      "correct_code": "print(12 * 12)",
+      "expected_output": "144",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 25, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Divide 10 by 4 and print the result (should be a float).",
+      "correct_code": "print(10 / 4)",
+      "expected_output": "2.5",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 25, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use the modulo operator (%) to find the remainder of 10 divided by 3.",
+      "correct_code": "print(10 % 3)",
+      "expected_output": "1",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 30, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Calculate 2 to the power of 3 (2 cubed) and print the result.",
+      "correct_code": "print(2 ** 3)",
+      "expected_output": "8",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 30, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a variable 'gold' with 50. Increase it by 10 using += and print it.",
+      "correct_code": "gold = 50\ngold += 10\nprint(gold)",
+      "expected_output": "60",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 35, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Print the boolean value of (5 > 10).",
+      "correct_code": "print(5 > 10)",
+      "expected_output": "False",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 35, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Calculate the average of 10, 20, and 30 and print the result.",
+      "correct_code": "print((10 + 20 + 30) / 3)",
+      "expected_output": "20.0",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 45, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    }
+  ],
+  "swamp": [
+    {
+      "problem": "Check if variable 'water_level' (set to 10) is greater than 5. If so, print 'Danger'.",
+      "correct_code": "water_level = 10\nif water_level > 5:\n    print('Danger')",
+      "expected_output": "Danger",
+      "reward": {
+        "xpDropMin": 20, "xpDropMax": 30, "coinDropMin": 10, "coinDropMax": 20,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Set 'temp' to 15. If it is less than 20, print 'Cold'; otherwise, print 'Warm'.",
+      "correct_code": "temp = 15\nif temp < 20:\n    print('Cold')\nelse:\n    print('Warm')",
+      "expected_output": "Cold",
+      "reward": {
+        "xpDropMin": 20, "xpDropMax": 30, "coinDropMin": 10, "coinDropMax": 20,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use elif: if 'score' is 90 print 'A', if 80 print 'B', else print 'C'. Set score to 85.",
+      "correct_code": "score = 85\nif score >= 90:\n    print('A')\nelif score >= 80:\n    print('B')\nelse:\n    print('C')",
+      "expected_output": "B",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 15, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a Match-Case statement to check 'status' set to 404. If 200 print 'OK', if 404 print 'Not Found'.",
+      "correct_code": "status = 404\nmatch status:\n    case 200:\n        print('OK')\n    case 404:\n        print('Not Found')",
+      "expected_output": "Not Found",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Write a conditional expression (ternary) that assigns 'Yes' to 'result' if 10 > 5, else 'No'. Print 'result'.",
+      "correct_code": "result = 'Yes' if 10 > 5 else 'No'\nprint(result)",
+      "expected_output": "Yes",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use the 'and' operator: Print 'Access' if 'has_key' is True and 'knows_pass' is True.",
+      "correct_code": "has_key = True\nknows_pass = True\nif has_key and knows_pass:\n    print('Access')",
+      "expected_output": "Access",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 15, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use the 'or' operator: Print 'Safe' if 'is_sunny' is True or 'has_umbrella' is True. Set both to True.",
+      "correct_code": "is_sunny = True\nhas_umbrella = True\nif is_sunny or has_umbrella:\n    print('Safe')",
+      "expected_output": "Safe",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 15, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use 'not': Set 'is_trapped' to False. If not is_trapped, print 'Free'.",
+      "correct_code": "is_trapped = False\nif not is_trapped:\n    print('Free')",
+      "expected_output": "Free",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 15, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a while loop that prints 'i' from 1 to 3. Start i at 1.",
+      "correct_code": "i = 1\nwhile i <= 3:\n    print(i)\n    i += 1",
+      "expected_output": "1\n2\n3",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use 'break' in a while loop to stop printing when 'x' equals 3. Start x at 1, loop while x < 10.",
+      "correct_code": "x = 1\nwhile x < 10:\n    if x == 3:\n        break\n    print(x)\n    x += 1",
+      "expected_output": "1\n2",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use 'continue' in a while loop to skip printing the number 2. Loop from 1 to 4.",
+      "correct_code": "i = 0\nwhile i < 4:\n    i += 1\n    if i == 2:\n        continue\n    print(i)",
+      "expected_output": "1\n3\n4",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Check if 'swamp_gas' is not equal (!=) to 'oxygen'. Set gas to 'methane' and print 'True' if they differ.",
+      "correct_code": "swamp_gas = 'methane'\nif swamp_gas != 'oxygen':\n    print('True')",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 20, "xpDropMax": 30, "coinDropMin": 10, "coinDropMax": 20,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Loop while 'stamina' > 0. Decrement stamina by 20 each time. Start at 40. Print stamina each loop.",
+      "correct_code": "stamina = 40\nwhile stamina > 0:\n    print(stamina)\n    stamina -= 20",
+      "expected_output": "40\n20",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a Match-Case with a wildcard (_) to print 'Unknown' for any direction other than 'North'. Set direction to 'West'.",
+      "correct_code": "direction = 'West'\nmatch direction:\n    case 'North':\n        print('Go North')\n    case _:\n        print('Unknown')",
+      "expected_output": "Unknown",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use logical operators: Print 'Win' if 'has_orb' is True and ('level' > 5 or 'is_admin' is True). Set has_orb=True, level=2, is_admin=True.",
+      "correct_code": "has_orb = True\nlevel = 2\nis_admin = True\nif has_orb and (level > 5 or is_admin):\n    print('Win')",
+      "expected_output": "Win",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Check if 5 is less than or equal to 5 AND 10 is greater than or equal to 8. Print 'Valid'.",
+      "correct_code": "if 5 <= 5 and 10 >= 8:\n    print('Valid')",
+      "expected_output": "Valid",
+      "reward": {
+        "xpDropMin": 25, "xpDropMax": 35, "coinDropMin": 15, "coinDropMax": 25,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Set 'count' to 5. While count is greater than 0, print 'Live', then break immediately.",
+      "correct_code": "count = 5\nwhile count > 0:\n    print('Live')\n    break",
+      "expected_output": "Live",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Combine conditional expression and print: Print 'Small' if 'val' < 10 else 'Big'. Set val to 12.",
+      "correct_code": "val = 12\nprint('Small' if val < 10 else 'Big')",
+      "expected_output": "Big",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Loop from 1 to 5. If the number is even, skip it using 'continue'. Print the odd numbers.",
+      "correct_code": "i = 0\nwhile i < 5:\n    i += 1\n    if i % 2 == 0:\n        continue\n    print(i)",
+      "expected_output": "1\n3\n5",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use Match-Case: if 'color' is 'Green' or 'Red' print 'Found'. Use '|' for multiple cases. Set color to 'Red'.",
+      "correct_code": "color = 'Red'\nmatch color:\n    case 'Green' | 'Red':\n        print('Found')",
+      "expected_output": "Found",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    }
+  ],
+"jungle": [
+    {
+      "problem": "Define a function named 'greet' that prints 'Hello Jungle' and call it.",
+      "correct_code": "def greet():\n    print('Hello Jungle')\ngreet()",
+      "expected_output": "Hello Jungle",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'shout' that takes a parameter 'word' and prints it in uppercase. Call it with 'run'.",
+      "correct_code": "def shout(word):\n    print(word.upper())\nshout('run')",
+      "expected_output": "RUN",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'get_gold' that returns the integer 100. Call it and print the result.",
+      "correct_code": "def get_gold():\n    return 100\nprint(get_gold())",
+      "expected_output": "100",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'add_points' with a default argument 'pts=10'. Call it without arguments and print the result.",
+      "correct_code": "def add_points(pts=10):\n    return pts\nprint(add_points())",
+      "expected_output": "10",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define 'multiply' that takes a and b, and returns their product. Print multiply(5, 4).",
+      "correct_code": "def multiply(a, b):\n    return a * b\nprint(multiply(5, 4))",
+      "expected_output": "20",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'describe_animal' that takes 'name' and 'action' with a default 'action' of 'sleeping'. Call it with 'Tiger'.",
+      "correct_code": "def describe_animal(name, action='sleeping'):\n    print(f'{name} is {action}')\ndescribe_animal('Tiger')",
+      "expected_output": "Tiger is sleeping",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Write a function 'is_even' that returns True if a number is even, False otherwise. Print is_even(8).",
+      "correct_code": "def is_even(n):\n    return n % 2 == 0\nprint(is_even(8))",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'make_path' that returns the string 'Left' if an input is 0, else 'Right'. Print make_path(1).",
+      "correct_code": "def make_path(dir):\n    if dir == 0: return 'Left'\n    return 'Right'\nprint(make_path(1))",
+      "expected_output": "Right",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'square' that returns the square of a number. Call it with 6 and print it.",
+      "correct_code": "def square(n):\n    return n * n\nprint(square(6))",
+      "expected_output": "36",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define 'check_health' which returns 'Healthy' if hp > 50, else 'Low'. Call with 30 and print.",
+      "correct_code": "def check_health(hp):\n    return 'Healthy' if hp > 50 else 'Low'\nprint(check_health(30))",
+      "expected_output": "Low",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Write a function 'repeat_msg' that takes 'msg' and 'times' (default 2) and prints the msg 'times' times.",
+      "correct_code": "def repeat_msg(msg, times=2):\n    print(msg * times)\nrepeat_msg('?', 3)",
+      "expected_output": "???",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 55,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'find_max' that returns the larger of two numbers. Print find_max(10, 25).",
+      "correct_code": "def find_max(a, b):\n    return a if a > b else b\nprint(find_max(10, 25))",
+      "expected_output": "25",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'do_nothing' that uses the 'pass' keyword and returns None. Print its call.",
+      "correct_code": "def do_nothing():\n    pass\nprint(do_nothing())",
+      "expected_output": "None",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'calc_area' (width, height) that returns width * height. Call with 5, 10 and print.",
+      "correct_code": "def calc_area(w, h):\n    return w * h\nprint(calc_area(5, 10))",
+      "expected_output": "50",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create 'set_level' that takes 'lvl' and returns 'Level: ' plus the string version of lvl. Print set_level(5).",
+      "correct_code": "def set_level(lvl):\n    return 'Level: ' + str(lvl)\nprint(set_level(5))",
+      "expected_output": "Level: 5",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'apply_poison' that returns current_hp minus 5. Call with 20 and print.",
+      "correct_code": "def apply_poison(hp):\n    return hp - 5\nprint(apply_poison(20))",
+      "expected_output": "15",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Write a function 'power' that takes 'base' and 'exp' (default 2). Print power(3).",
+      "correct_code": "def power(base, exp=2):\n    return base ** exp\nprint(power(3))",
+      "expected_output": "9",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'shout_name' that takes 'name'. If name is empty, return 'Stranger'. Call with '' and print.",
+      "correct_code": "def shout_name(name):\n    if not name: return 'Stranger'\n    return name\nprint(shout_name(''))",
+      "expected_output": "Stranger",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'total_loot' that takes three arguments and returns their sum. Print total_loot(1, 2, 3).",
+      "correct_code": "def total_loot(a, b, c):\n    return a + b + c\nprint(total_loot(1, 2, 3))",
+      "expected_output": "6",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'end_game' that returns 'Game Over'. Print the result of the call.",
+      "correct_code": "def end_game():\n    return 'Game Over'\nprint(end_game())",
+      "expected_output": "Game Over",
+      "reward": {
+        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    }
+  ],
+  "temple": [
+    {
+      "problem": "",
+      "correct_code": "",
+      "expected_output": "",
+      "reward": {
+        "xpDropMin": 0,
+        "xpDropMax": 0,
+        "coinDropMin": 0,
+        "coinDropMax": 0,
+        "armors": [],
+        "weapons": [],
+        "consumables": []
+      }
+    }
+  ],
+  "desert": [
+    {
+      "problem": "Create a list named 'items' with 'map' and 'water'. Print the second element.",
+      "correct_code": "items = ['map', 'water']\nprint(items[1])",
+      "expected_output": "water",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a 'for' loop to print every number in the list [1, 2, 3] on a new line.",
+      "correct_code": "for n in [1, 2, 3]:\n    print(n)",
+      "expected_output": "1\n2\n3",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a dictionary 'oasis' with key 'loc' and value 'West'. Print the value using the key.",
+      "correct_code": "oasis = {'loc': 'West'}\nprint(oasis['loc'])",
+      "expected_output": "West",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a tuple named 'coords' with values (10, 20). Print the whole tuple.",
+      "correct_code": "coords = (10, 20)\nprint(coords)",
+      "expected_output": "(10, 20)",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a set named 'stones' with 'ruby', 'ruby', 'jade'. Print the set to see unique values.",
+      "correct_code": "stones = {'ruby', 'ruby', 'jade'}\nprint(sorted(list(stones)))",
+      "expected_output": "['jade', 'ruby']",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use the 'in' operator to check if 'cacti' is in the list ['sand', 'cacti']. Print the result.",
+      "correct_code": "print('cacti' in ['sand', 'cacti'])",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'sum_all' using *args that returns the sum of all arguments. Print sum_all(10, 20, 30).",
+      "correct_code": "def sum_all(*args):\n    return sum(args)\nprint(sum_all(10, 20, 30))",
+      "expected_output": "60",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'show_stats' using **kwargs. Print the value of the 'hp' argument. Call it with hp=50.",
+      "correct_code": "def show_stats(**kwargs):\n    print(kwargs['hp'])\nshow_stats(hp=50)",
+      "expected_output": "50",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a 'for' loop with range(3) to print 'Sand' three times.",
+      "correct_code": "for i in range(3):\n    print('Sand')",
+      "expected_output": "Sand\nSand\nSand",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Check if 'gold' is NOT in the list ['sand', 'dust'] using 'not in'. Print the result.",
+      "correct_code": "print('gold' not in ['sand', 'dust'])",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Update the 'oasis' dictionary: change 'water' key from 0 to 100. Print the dictionary.",
+      "correct_code": "oasis = {'water': 0}\noasis['water'] = 100\nprint(oasis['water'])",
+      "expected_output": "100",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Access the last element of the list [5, 10, 15, 20] using index -1.",
+      "correct_code": "l = [5, 10, 15, 20]\nprint(l[-1])",
+      "expected_output": "20",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Add 'dunes' to the set {'sun', 'heat'} using .add() and print the set length.",
+      "correct_code": "s = {'sun', 'heat'}\ns.add('dunes')\nprint(len(s))",
+      "expected_output": "3",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define a function 'list_gear' that takes *args and prints the first item in args. Call with 'Boot', 'Canteen'.",
+      "correct_code": "def list_gear(*args):\n    print(args[0])\nlist_gear('Boot', 'Canteen')",
+      "expected_output": "Boot",
+      "reward": {
+        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 60,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a 'for' loop to iterate through the dictionary {'a': 1, 'b': 2} and print only the keys.",
+      "correct_code": "d = {'a': 1, 'b': 2}\nfor key in d:\n    print(key)",
+      "expected_output": "a\nb",
+      "reward": {
+        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 60,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Create a function 'identify' using **kwargs. Return the value of key 'name'. Call with name='Nomad'.",
+      "correct_code": "def identify(**kwargs):\n    return kwargs['name']\nprint(identify(name='Nomad'))",
+      "expected_output": "Nomad",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Check if key 'heat' exists in {'heat': 'high', 'shade': 'low'} using 'in'. Print the result.",
+      "correct_code": "d = {'heat': 'high', 'shade': 'low'}\nprint('heat' in d)",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Count how many times 5 appears in the tuple (5, 10, 5, 20) using .count().",
+      "correct_code": "t = (5, 10, 5, 20)\nprint(t.count(5))",
+      "expected_output": "2",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Loop through the string 'SUN' and print each character in lowercase.",
+      "correct_code": "for char in 'SUN':\n    print(char.lower())",
+      "expected_output": "s\nu\nn",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      } 
+    },
+    {
+      "problem": "Combine *args and sum: create a function 'average' that returns sum(args) divided by length. Call average(10, 20).",
+      "correct_code": "def average(*args):\n    return sum(args) / len(args)\nprint(average(10, 20))",
+      "expected_output": "15.0",
+      "reward": {
+        "xpDropMin": 70, "xpDropMax": 100, "coinDropMin": 60, "coinDropMax": 90,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    }
+  ],
+  "cemetery": [
+    {
+      "problem": "Use a try-except block to handle a ZeroDivisionError (10 / 0). Print 'Error' if it occurs.",
+      "correct_code": "try:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    print('Error')",
+      "expected_output": "Error",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 70, "coinDropMin": 40, "coinDropMax": 60,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use an f-string to format the float 3.14159 to 2 decimal places. Print the result.",
+      "correct_code": "pi = 3.14159\nprint(f'{pi:.2f}')",
+      "expected_output": "3.14",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 65, "coinDropMin": 35, "coinDropMax": 55,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Cast the string '13' to an integer, add 7 to it, and print the result.",
+      "correct_code": "val = '13'\nprint(int(val) + 7)",
+      "expected_output": "20",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Access the first character of the string 'Ghost' using indexing and print it.",
+      "correct_code": "s = 'Ghost'\nprint(s[0])",
+      "expected_output": "G",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a string method to convert 'RIP' to lowercase and print it.",
+      "correct_code": "s = 'RIP'\nprint(s.lower())",
+      "expected_output": "rip",
+      "reward": {
+        "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use indexing to print the last character of 'Skeleton'.",
+      "correct_code": "s = 'Skeleton'\nprint(s[-1])",
+      "expected_output": "n",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use the .strip() method to remove spaces from '  spirit  ' and print it.",
+      "correct_code": "s = '  spirit  '\nprint(s.strip())",
+      "expected_output": "spirit",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Cast 5.7 to an integer (truncation) and print the result.",
+      "correct_code": "print(int(5.7))",
+      "expected_output": "5",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use the .replace() method to change 'Zombie' to 'Undead' in the string 'Zombie King'.",
+      "correct_code": "s = 'Zombie King'\nprint(s.replace('Zombie', 'Undead'))",
+      "expected_output": "Undead King",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 55,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a try-except-finally block. In try, print 'Start'. In finally, print 'End'.",
+      "correct_code": "try:\n    print('Start')\nfinally:\n    print('End')",
+      "expected_output": "Start\nEnd",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Format the integer 1000000 with commas as thousands separators using an f-string.",
+      "correct_code": "num = 1000000\nprint(f'{num:,}')",
+      "expected_output": "1,000,000",
+      "reward": {
+        "xpDropMin": 55, "xpDropMax": 75, "coinDropMin": 45, "coinDropMax": 65,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use indexing to print the middle 3 characters of 'Graveyard' (indices 3 to 6).",
+      "correct_code": "s = 'Graveyard'\nprint(s[3:6])",
+      "expected_output": "vey",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 55,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Cast a boolean True to a string and print its type.",
+      "correct_code": "val = str(True)\nprint(type(val))",
+      "expected_output": "<class 'str'>",
+      "reward": {
+        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Check if 'Bones' starts with 'Bo' using the .startswith() method. Print the boolean result.",
+      "correct_code": "s = 'Bones'\nprint(s.startswith('Bo'))",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use a try-except block to handle a ValueError when casting 'Ghost' to int. Print 'Fail'.",
+      "correct_code": "try:\n    int('Ghost')\nexcept ValueError:\n    print('Fail')",
+      "expected_output": "Fail",
+      "reward": {
+        "xpDropMin": 55, "xpDropMax": 75, "coinDropMin": 45, "coinDropMax": 65,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Format a decimal 0.5 as a percentage '50.0%' using f-strings.",
+      "correct_code": "val = 0.5\nprint(f'{val:.1%}')",
+      "expected_output": "50.0%",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 70, "coinDropMin": 40, "coinDropMax": 60,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use indexing to reverse the string 'Tomb' and print it.",
+      "correct_code": "s = 'Tomb'\nprint(s[::-1])",
+      "expected_output": "bmoT",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 70, "coinDropMin": 40, "coinDropMax": 60,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Find the index of the first 'e' in 'Cemetery' using the .find() method.",
+      "correct_code": "s = 'Cemetery'\nprint(s.find('e'))",
+      "expected_output": "1",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 35, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Cast the float 10.0 to a string and concatenate it with ' HP'. Print the result.",
+      "correct_code": "hp = 10.0\nprint(str(hp) + ' HP')",
+      "expected_output": "10.0 HP",
+      "reward": {
+        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use an f-string to print 'Val: 255' in hexadecimal lowercase (use :x).",
+      "correct_code": "val = 255\nprint(f'Val: {val:x}')",
+      "expected_output": "Val: ff",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 85, "coinDropMin": 50, "coinDropMax": 75,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    }
+  ]
+}

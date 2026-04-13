@@ -5,7 +5,7 @@ import { InventoryNode } from "@/src/game/types/inventory.types";
 export const loadInventoryProfile = async (playerId: string) => {
   if (!playerId) return;
 
-  const storageKey = `player-inventory-${playerId}`;
+  const storageKey = `${playerId}-inventory`;
   
   // ✅ Check if this player has EXISTING saved inventory data
   const existingData = localStorage.getItem(storageKey);

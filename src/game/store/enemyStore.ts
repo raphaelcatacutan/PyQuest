@@ -1,8 +1,9 @@
 import { create } from "zustand"
 import { Enemy } from "../types/enemy.types";
 import { useSoundStore } from "./soundStore";
-import { MachineProblem } from "../types/dungeon.types";
-import { getRandomMP } from "../data/dungeon";
+import { getRandomMPByScene } from "../data/mps";
+import { MachineProblem } from "../types/mp.types";
+import { useSceneStore } from "./sceneStore";
 
 /**
  * Enemy Store - Tracks current enemy state during combat
@@ -22,7 +23,7 @@ interface EnemyStoreProps {
 
 export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   enemy: null,
-  activeProblem: getRandomMP(),
+  activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
   
   spawnEnemy: (enemy: Enemy) => set({ enemy }),
   
@@ -67,5 +68,5 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
     };
   }),
 
-  clearEnemy: () => set({ enemy: null, activeProblem: getRandomMP() }),
+  clearEnemy: () => set({ enemy: null, activeProblem: getRandomMPByScene(useSceneStore.getState().scene) }),
 }));

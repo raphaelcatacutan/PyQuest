@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { Boss } from "../types/boss.types";
-import { getRandomMP } from "../data/dungeon";
-import { MachineProblem } from "../types/dungeon.types";
+import { MachineProblem } from "../types/mp.types";
+import { getRandomMPByScene } from "../data/mps";
+import { useSceneStore } from "./sceneStore";
 
 /**
  * 
@@ -48,7 +49,7 @@ export const useBossStore = create<BossStoreProps>((set) => ({
     consumables: [],
   },
 
-  activeProblem: getRandomMP(),
+  activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
 
   spawnBoss: (boss) => set({ ...boss }),  
   
@@ -97,6 +98,6 @@ export const useBossStore = create<BossStoreProps>((set) => ({
       armors: [],
       consumables: [],
     },
-    activeProblem: getRandomMP(),
+    activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
   })
 })) 

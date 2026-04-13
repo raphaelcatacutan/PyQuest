@@ -1,6 +1,6 @@
 import { exitIcon, noteIcon, guideIcon } from "@/src/assets"
 import Button from "./Button"
-import { usePlayerStore, useBountyQuestStore, useGuideStore } from "@/src/game/store"
+import { usePlayerStore, useBountyQuestStore, useGuideStore, useSoundStore } from "@/src/game/store"
 import { useShallow } from "zustand/shallow"
 import { useNavigate } from "react-router-dom"
 
@@ -17,10 +17,12 @@ export default function NavBar(){
   )
   const logOut = usePlayerStore((s) => s.logOut)
   const toggleGuide = useGuideStore(s => s.toggleGuide)
+  const stopMusic = useSoundStore(s => s.stopMusic)
 
   function handleExitGame(){
     // TODO: Add Confirmation Toast
     logOut()
+    stopMusic()
     navigate('/login')
   }
 

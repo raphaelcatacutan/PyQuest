@@ -26,6 +26,7 @@ export default function LoginPage() {
     }))
   )
   const initSounds = useSoundStore(s => s.initSounds)
+  const playMusic = useSoundStore(s => s.playMusic)
 
   const proceedToGame = async (usernameToProcess: string) => {
     setUserId(usernameToProcess);
@@ -33,6 +34,7 @@ export default function LoginPage() {
     setPlayerId(usernameToProcess);
     // Load other data
     initSounds()
+    playMusic('village')
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
   }

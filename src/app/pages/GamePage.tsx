@@ -202,7 +202,7 @@ export default function GamePage() {
           </div>
           }
 
-          <Combat/>
+          {/* <Combat/> */}
 
         </div>
       </div>

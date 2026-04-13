@@ -6,18 +6,10 @@ import { MerchantInventoryNode } from "./MerchantInventoryNode";
 // TODO: Item must be accompanied with Buy and Sell value
 const data: InventoryNode[] = [
   {
-    id: "Enemy",
-    name: "Enemy",
+    id: "Store",
+    name: "Store",
     kind: "folder",
-    children: [
-      { id: "bow", name: "bow", kind: "weapon", itemId: "bow" },
-      {
-        id: "common_sword",
-        name: "common_sword",
-        kind: "weapon",
-        itemId: "common_sword",
-      },
-    ],
+    children: [{ id: "kick", name: "kick()", kind: "misc", itemId: "kick" }],
   },
 ];
 

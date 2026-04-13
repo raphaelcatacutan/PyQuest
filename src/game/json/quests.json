@@ -1,0 +1,26 @@
+{
+  "1": [
+    {
+      "questId": "1",
+      "description": "Kill 10 slimes",
+      "isCompleted": false
+    },
+    {
+      "questId": "2",
+      "description": "Kill 5 worms",
+      "isCompleted": false
+    }
+  ],
+  "2": [
+    {
+      "questId": "",
+      "description": "Kill 10 slimes",
+      "isCompleted": false
+    },
+    {
+      "questId": "",
+      "description": "Kill 5 worms",
+      "isCompleted": false
+    }
+  ]
+}

@@ -5,17 +5,15 @@
 
 interface UserCredentials {
   username: string;
-  password: string;
 }
 
 /**
- * Register a new user by storing credentials in localStorage
+ * Register a new user by storing username in localStorage
  * @param username - Username for the new account
- * @param password - Password for the new account
  * @returns true if registration successful, false if user already exists
  */
-export const registerUser = (username: string, password: string): boolean => {
-  if (!username || !password) {
+export const registerUser = (username: string): boolean => {
+  if (!username) {
     return false;
   }
 
@@ -28,7 +26,6 @@ export const registerUser = (username: string, password: string): boolean => {
   // Store user credentials
   const userCredentials: UserCredentials = {
     username,
-    password,
   };
 
   localStorage.setItem(`user-${username}`, JSON.stringify(userCredentials));
@@ -36,32 +33,17 @@ export const registerUser = (username: string, password: string): boolean => {
 };
 
 /**
- * Authenticate a user by checking credentials against localStorage
+ * Authenticate a user by checking if username exists in localStorage
  * @param username - Username to authenticate
- * @param password - Password to check
- * @returns true if credentials are valid, false otherwise
+ * @returns true if user exists, false otherwise
  */
-export const authenticateUser = (username: string, password: string): boolean => {
-  if (!username || !password) {
+export const authenticateUser = (username: string): boolean => {
+  if (!username) {
     return false;
   }
 
-  // Get user credentials from localStorage
-  const storedUser = localStorage.getItem(`user-${username}`);
-  
-  if (!storedUser) {
-    return false; // User does not exist
-  }
-
-  try {
-    const userCredentials: UserCredentials = JSON.parse(storedUser);
-    
-    // Check password (simple comparison - in production, use bcrypt or similar)
-    return userCredentials.password === password;
-  } catch (error) {
-    console.error("Error authenticating user:", error);
-    return false;
-  }
+  // Check if user exists in localStorage
+  return localStorage.getItem(`user-${username}`) !== null;
 };
 
 /**

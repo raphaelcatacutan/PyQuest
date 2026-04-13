@@ -2,7 +2,7 @@ import { useShallow } from "zustand/shallow";
 import { useEnemyStore } from "@/src/game/store";
 
 export default function EnemyEncounter() {
-  const { name, hp, maxHp, energy, maxEnergy, enemyImg } = useEnemyStore(
+  const { name, hp, maxHp, energy, maxEnergy, enemyImg, activeProblem } = useEnemyStore(
     useShallow((s) => ({
       name: s.enemy?.name ?? "...",
       hp: s.enemy?.hp ?? 0,
@@ -10,6 +10,7 @@ export default function EnemyEncounter() {
       energy: s.enemy?.energy ?? 0,
       maxEnergy: s.enemy?.maxEnergy ?? 1,
       enemyImg: s.enemy?.enemyImg ?? "",
+      activeProblem: s.activeProblem
     })),
   );
 
@@ -19,31 +20,41 @@ export default function EnemyEncounter() {
   const energyPercentage = (energy / safeMaxEnergy) * 100;
 
   return (
-    <div className="relative flex h-full w-full z-1">
-      <div className="absolute flex flex-col w-full h-full items-center">
-        <span className="text-4xl mt-2">{name}</span>
-        <div className="relative w-48 bg-gray-800 border-2 border-gray-600 rounded h-8 overflow-hidden">
-          <div
-            className="bg-red-600 h-full transition-all duration-300"
-            style={{ width: `${healthPercentage}%` }}
-          />
-          <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
-            {hp}/{maxHp}
-          </span>
-        </div>
-        <div className="relative w-48 bg-gray-800 border-2 border-gray-600 rounded h-4 overflow-hidden mt-2">
-          <div
-            className="bg-yellow-500 h-full transition-all duration-300"
-            style={{ width: `${energyPercentage}%` }}
-          />
-          <span className="absolute inset-0 flex items-center justify-center text-white text-sm font-bold">
-            {energy}/{maxEnergy}
-          </span>
-        </div>
-      </div>
+    <div className="absolute z-5 w-full h-full opacity-100">
+      <div className="flex flex-col items-center justify-center h-full">
+        <>
+          <div className="flex w-full h-full items-center justify-center">
+            <div className="flex w-8/10 h-8/10">
+              <div className="flex flex-col w-full gap-2 items-center justify-center">
+                <span className="text-3xl text-red-700">{name}</span>
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
-        <img src={enemyImg} className="w-80 h-80" draggable={false} />
+                <div className="relative w-80 h-5 overflow-hidden rounded-2xl bg-zinc-900">
+                  <div className="bg-red-600 h-full transition-all duration-300" style={{ width: `${healthPercentage}%` }} />
+                  <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
+                    {hp}/{maxHp}
+                  </span>
+                </div>
+                
+                <div className="relative w-80 h-5 overflow-hidden rounded-2xl bg-zinc-900">
+                  <div className="bg-yellow-500 h-full transition-all duration-300" style={{ width: `${energyPercentage}%` }} />
+                  <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
+                    {energy}/{maxEnergy}
+                  </span>
+                </div>
+                
+                <div className=" flex justify-center items-center">
+                  <img src={enemyImg} className="w-80 h-80" draggable={false}></img>
+                </div>
+              </div>
+              <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">
+                <span className="h-full overflow-y-auto">
+                  {activeProblem.problem}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </>
       </div>
     </div>
   );

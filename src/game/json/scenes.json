@@ -1,6 +1,13 @@
 {
-  "village": "/src/assets/maps/village1.png",
+  "forest": "/src/assets/maps/forest.png",
+  "swamp": "/src/assets/maps/swamp.png",
+  "jungle": "/src/assets/maps/jungle.png",
+  "temple": "/src/assets/maps/temple.png",
+  "desert": "/src/assets/maps/desert.png",
+  "cemetery": "/src/assets/maps/cemetery.png",
+  
   "dungeon": "/src/assets/maps/dungeon.png",
-  "labyrinth": "/src/assets/maps/labyrinth.png",
-  "trials": "/src/assets/maps/trials.png"
+  "village": "/src/assets/maps/village1.png",
+  "trials": "/src/assets/maps/trials.png",
+  "labyrinth": "/src/assets/maps/labyrinth.png"
 }

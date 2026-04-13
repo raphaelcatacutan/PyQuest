@@ -93,7 +93,7 @@ export default function DevTool(){
   const combatText = `Combat (${inCombat})`
   const dmgHUDText = `Dmg HUD (${isDamaged})`
   // const toastText = `Toast (${})`
-  const BountyQuestText = `Dialogue Box (${displayBountyQuest})`
+  const BountyQuestText = `Bounty Quest (${displayBountyQuest})`
   const sceneText = `Scene: ${scene}`
   const playerDataText = `UserId: ${user_id} | PlayerId: ${playerId}`
 
@@ -141,7 +141,7 @@ export default function DevTool(){
           // toggleQuest("1")
           }}/>
         <Button text={sceneText} onClick={() => {
-          const scenes: SceneTypes[] = ['village', 'labyrinth', 'dungeon', 'trials'];
+          const scenes: SceneTypes[] = ['village', 'forest', 'temple', 'cemetery', 'swamp', 'jungle', 'desert'];
           const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
           setScene(randomScene)
         }}/>

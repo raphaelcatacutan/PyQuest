@@ -12,7 +12,8 @@ import {
   useGameStore,
   usePlayerStore,
   useInventoryStore,
-  loadInventoryProfile
+  loadInventoryProfile,
+  loadDungeonProfile
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/game/types/inventory.types"
 import BountyQuest from "@/src/components/ui/BountyQuest"
@@ -53,7 +54,7 @@ export default function GamePage() {
     }))
   )
   
-  
+
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
     removeItems: (nodeIds: string[]) => void
@@ -126,6 +127,7 @@ export default function GamePage() {
         // Only load if we have a valid ID
         await loadInventoryProfile(currentId);
         await loadBountyProfile(currentId);
+        await loadDungeonProfile(currentId)
         // load other data
       } else {
         console.log("NOT FOUND")

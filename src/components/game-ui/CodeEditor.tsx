@@ -1,5 +1,5 @@
 import Editor, { OnMount } from "@monaco-editor/react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, act } from "react";
 import * as monaco from 'monaco-editor';
 import Button from "../ui/Button";  
 import {
@@ -7,8 +7,7 @@ import {
   clearIcon,
   saveIcon
 } from '@/src/assets'
-import { usePlayerStore } from "@/src/game/store";
-import { useTerminalStore } from "@/src/game/store";
+import { usePlayerStore, useTerminalStore, useEditorStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
 import { runPython } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
@@ -37,6 +36,12 @@ export default function CodeEditor() {
     }))
   )
   const appendToLogs = useTerminalStore((s) => s.appendToLog)
+  const { activeFile, setActiveFile } = useEditorStore(
+    useShallow((s) => ({
+      activeFile: s.activeFile,
+      setActiveFile: s.setActiveFile
+    }))
+  )
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -116,7 +121,7 @@ export default function CodeEditor() {
       <div className="flex flex-row m-1">
         <div className="flex w-10/12 pl-1 gap-1">
           <span className="truncate">Current File:</span>
-          <span className="truncate border rounded-lg px-2">Hello_World.py{}</span>
+          <span className="truncate border rounded-lg px-2">{activeFile}</span>
         </div>
         <div className="flex flex-row-reverse gap-2">
           <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>

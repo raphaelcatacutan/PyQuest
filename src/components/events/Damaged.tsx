@@ -60,7 +60,7 @@ export default function Damaged(){
   return (
     <>
       <div 
-        className={`absolute inset-0 z-100 pointer-events-none transition-opacity duration-500 ease-out ${
+        className={`absolute inset-0 z-100 flex items-center justify-center pointer-events-none transition-opacity duration-500 ease-out ${
           isDamaged ? 'opacity-100' : 'opacity-0'
         }`}
         style={{ 
@@ -68,7 +68,11 @@ export default function Damaged(){
           backgroundSize: 'cover',
           opacity: isDamaged ? hpOpacity : 0,
         }}
-      />
+      >
+        <div className="w-full flex justify-center bg-black/50" >
+          <span className="text-6xl my-5" >You're Dead</span>
+        </div>
+      </div>
 
       {/* <div 
         className={`absolute inset-0 z-[90] pointer-events-none transition-opacity duration-700 ease-in-out ${

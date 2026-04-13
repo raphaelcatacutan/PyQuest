@@ -174,7 +174,7 @@ export default function Combat() {
           critChance: target.critChance,
           critDmg: target.critDmg,
           atkSpeed: target.atkSpeed,
-          skills: target.skills as any,
+          skills: target.skills,
         },
       });
       activeKeyRef.current = key;
@@ -217,7 +217,7 @@ export default function Combat() {
             critChance: target.critChance,
             critDmg: target.critDmg,
             atkSpeed: target.atkSpeed,
-            skills: target.skills as any,
+            skills: target.skills,
           },
           deltaMs,
         });

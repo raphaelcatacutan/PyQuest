@@ -1,1 +1,2571 @@
-{}
+{
+  "wooden_wand": {
+    "id": "wooden_wand",
+    "filename": "wooden_wand",
+    "name": "Wooden Wand",
+    "description": "Common Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/wooden_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.15,
+    "baseCritChance": 0.05,
+    "durability": 90,
+    "energyCostPerSwing": 8,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "wilted_wand": {
+    "id": "wilted_wand",
+    "filename": "wilted_wand",
+    "name": "Wilted Wand",
+    "description": "Common Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/wilted_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.15,
+    "baseCritChance": 0.05,
+    "durability": 90,
+    "energyCostPerSwing": 8,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "academy_wand": {
+    "id": "academy_wand",
+    "filename": "academy_wand",
+    "name": "Academy Wand",
+    "description": "Common Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/academy_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.15,
+    "baseCritChance": 0.05,
+    "durability": 90,
+    "energyCostPerSwing": 8,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "amethyst_staff": {
+    "id": "amethyst_staff",
+    "filename": "amethyst_staff",
+    "name": "Amethyst Staff",
+    "description": "Common Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/amethyst_staff.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.15,
+    "baseCritChance": 0.05,
+    "durability": 90,
+    "energyCostPerSwing": 8,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.08
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "old_staff": {
+    "id": "old_staff",
+    "filename": "old_staff",
+    "name": "Old Staff",
+    "description": "Common Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/old_staff.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.15,
+    "baseCritChance": 0.05,
+    "durability": 90,
+    "energyCostPerSwing": 8,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 80
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "great_forests_wand": {
+    "id": "great_forests_wand",
+    "filename": "great_forests_wand",
+    "name": "Great Forest's Wand",
+    "description": "Rare Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/great_forests_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "baseDmg": 6,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Heal Skill",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "heal",
+          "value": 5
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "cursed_wand": {
+    "id": "cursed_wand",
+    "filename": "cursed_wand",
+    "name": "Cursed Wand",
+    "description": "Rare Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/cursed_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "baseDmg": 6,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.12
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 6
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "bleed",
+          "value": 2,
+          "duration": 3000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "diamond_staff": {
+    "id": "diamond_staff",
+    "filename": "diamond_staff",
+    "name": "Diamond Staff",
+    "description": "Rare Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/diamond_staff.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "baseDmg": 6,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "fire_drake_wand": {
+    "id": "fire_drake_wand",
+    "filename": "fire_drake_wand",
+    "name": "Fire Drake Wand",
+    "description": "Rare Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/fire_drake_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "baseDmg": 6,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 6
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "burn",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "lightning_staff": {
+    "id": "lightning_staff",
+    "filename": "lightning_staff",
+    "name": "Lightning Staff",
+    "description": "Rare Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/lightning_staff.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "baseDmg": 6,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 120
+      },
+      {
+        "stat": "critDmg",
+        "nature": "penalty",
+        "value": 0.06
+      }
+    ],
+    "skills": [
+      {
+        "name": "Stun Skill",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 700
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "stun",
+        "chance": 0.12,
+        "duration": 500
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "floyds_sage_wand": {
+    "id": "floyds_sage_wand",
+    "filename": "floyds_sage_wand",
+    "name": "Floyd's Sage Wand",
+    "description": "Epic Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/floyds_sage_wand.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "baseDmg": 9,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "skills": [
+      {
+        "name": "Heal Skill",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "heal",
+          "value": 9
+        }
+      },
+      {
+        "name": "Damage Skill 2",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "staff_of_ages": {
+    "id": "staff_of_ages",
+    "filename": "staff_of_ages",
+    "name": "Staff of Ages",
+    "description": "Epic Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/staff_of_ages.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "baseDmg": 9,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.18
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 140
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      },
+      {
+        "name": "Heal Skill 2",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "heal",
+          "value": 9
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "seasons_blessing": {
+    "id": "seasons_blessing",
+    "filename": "seasons_blessing",
+    "name": "Season's Blessing",
+    "description": "Epic Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/seasons_blessing.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "baseDmg": 9,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 170
+      },
+      {
+        "stat": "critDmg",
+        "nature": "penalty",
+        "value": 0.1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Heal Skill",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "heal",
+          "value": 9
+        }
+      },
+      {
+        "name": "Damage Skill 2",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "galaxies_tear": {
+    "id": "galaxies_tear",
+    "filename": "galaxies_tear",
+    "name": "Galaxies Tear",
+    "description": "Legendary Wizard wand weapon.",
+    "weaponImg": "src/assets/weapons/galaxies_tear.png",
+    "wieldType": "one",
+    "weaponType": "wand",
+    "class": "Wizard",
+    "rarity": "Legendary",
+    "baseDmg": 13,
+    "baseCritDmg": 0.4,
+    "baseCritChance": 0.16,
+    "durability": 160,
+    "energyCostPerSwing": 14,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 240
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.25
+      },
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 26
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "damage",
+          "value": 18
+        }
+      },
+      {
+        "name": "Heal Skill 2",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "heal",
+          "value": 14
+        }
+      },
+      {
+        "name": "Stun Skill 3",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1300
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "stun",
+        "chance": 0.24,
+        "duration": 1200
+      }
+    ],
+    "dropRate": 0.015,
+    "sellCost": 525,
+    "buyCost": 1500
+  },
+  "training_sword": {
+    "id": "training_sword",
+    "filename": "training_sword",
+    "name": "Training Sword",
+    "description": "Common Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/training_sword.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Common",
+    "baseDmg": 6,
+    "baseCritDmg": 0.18,
+    "baseCritChance": 0.04,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 80
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "common_sword": {
+    "id": "common_sword",
+    "filename": "common_sword",
+    "name": "Common Sword",
+    "description": "Common Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/common_sword.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Common",
+    "baseDmg": 6,
+    "baseCritDmg": 0.18,
+    "baseCritChance": 0.04,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "rapier": {
+    "id": "rapier",
+    "filename": "rapier",
+    "name": "Rapier",
+    "description": "Common Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/rapier.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Common",
+    "baseDmg": 6,
+    "baseCritDmg": 0.18,
+    "baseCritChance": 0.04,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "rusty_axe": {
+    "id": "rusty_axe",
+    "filename": "rusty_axe",
+    "name": "Rusty Axe",
+    "description": "Common Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/rusty_axe.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Common",
+    "baseDmg": 6,
+    "baseCritDmg": 0.18,
+    "baseCritChance": 0.04,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.08
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "spear": {
+    "id": "spear",
+    "filename": "spear",
+    "name": "Spear",
+    "description": "Common Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/spear.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Common",
+    "baseDmg": 6,
+    "baseCritDmg": 0.18,
+    "baseCritChance": 0.04,
+    "durability": 110,
+    "energyCostPerSwing": 10,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "steel_sword": {
+    "id": "steel_sword",
+    "filename": "steel_sword",
+    "name": "Steel Sword",
+    "description": "Rare Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/steel_sword.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "baseDmg": 9,
+    "baseCritDmg": 0.25,
+    "baseCritChance": 0.06,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 100
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "ashen_sword": {
+    "id": "ashen_sword",
+    "filename": "ashen_sword",
+    "name": "Ashen Sword",
+    "description": "Rare Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/ashen_sword.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "baseDmg": 9,
+    "baseCritDmg": 0.25,
+    "baseCritChance": 0.06,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.12
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 100
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "bleed",
+          "value": 2,
+          "duration": 3000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "burn",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "lightning_spear": {
+    "id": "lightning_spear",
+    "filename": "lightning_spear",
+    "name": "Lightning Spear",
+    "description": "Rare Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/lightning_spear.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "baseDmg": 9,
+    "baseCritDmg": 0.25,
+    "baseCritChance": 0.06,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 120
+      },
+      {
+        "stat": "critDmg",
+        "nature": "penalty",
+        "value": 0.06
+      }
+    ],
+    "skills": [
+      {
+        "name": "Stun Skill",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 700
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "stun",
+        "chance": 0.12,
+        "duration": 500
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "coated_blade": {
+    "id": "coated_blade",
+    "filename": "coated_blade",
+    "name": "Coated Blade",
+    "description": "Rare Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/coated_blade.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "baseDmg": 9,
+    "baseCritDmg": 0.25,
+    "baseCritChance": 0.06,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "bleed",
+          "value": 2,
+          "duration": 3000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "poison",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "steel_axe": {
+    "id": "steel_axe",
+    "filename": "steel_axe",
+    "name": "Steel Axe",
+    "description": "Rare Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/steel_axe.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "baseDmg": 9,
+    "baseCritDmg": 0.25,
+    "baseCritChance": 0.06,
+    "durability": 130,
+    "energyCostPerSwing": 12,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 6
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "elbrauns_blade": {
+    "id": "elbrauns_blade",
+    "filename": "elbrauns_blade",
+    "name": "Elbraun's Blade",
+    "description": "Epic Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/elbrauns_blade.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "baseDmg": 13,
+    "baseCritDmg": 0.35,
+    "baseCritChance": 0.09,
+    "durability": 150,
+    "energyCostPerSwing": 14,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 140
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      },
+      {
+        "name": "Stun Skill 2",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1000
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "heavenly_sword": {
+    "id": "heavenly_sword",
+    "filename": "heavenly_sword",
+    "name": "Heavenly Sword",
+    "description": "Epic Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/heavenly_sword.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "baseDmg": 13,
+    "baseCritDmg": 0.35,
+    "baseCritChance": 0.09,
+    "durability": 150,
+    "energyCostPerSwing": 14,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.18
+      },
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 140
+      }
+    ],
+    "skills": [
+      {
+        "name": "Heal Skill",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "heal",
+          "value": 9
+        }
+      },
+      {
+        "name": "Damage Skill 2",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "shadow_glaive": {
+    "id": "shadow_glaive",
+    "filename": "shadow_glaive",
+    "name": "Shadow Glaive",
+    "description": "Epic Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/shadow_glaive.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "baseDmg": 13,
+    "baseCritDmg": 0.35,
+    "baseCritChance": 0.09,
+    "durability": 150,
+    "energyCostPerSwing": 14,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 170
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.18
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "bleed",
+          "value": 3,
+          "duration": 4000
+        }
+      },
+      {
+        "name": "Damage Skill 2",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.18,
+        "duration": 4
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "ancient_of_rites": {
+    "id": "ancient_of_rites",
+    "filename": "ancient_of_rites",
+    "name": "Ancient of Rites",
+    "description": "Legendary Warrior sword weapon.",
+    "weaponImg": "src/assets/weapons/ancient_of_rites.png",
+    "wieldType": "one",
+    "weaponType": "sword",
+    "class": "Warrior",
+    "rarity": "Legendary",
+    "baseDmg": 18,
+    "baseCritDmg": 0.45,
+    "baseCritChance": 0.13,
+    "durability": 180,
+    "energyCostPerSwing": 16,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 240
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.25
+      },
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 26
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "damage",
+          "value": 18
+        }
+      },
+      {
+        "name": "Stun Skill 2",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1300
+        }
+      },
+      {
+        "name": "Heal Skill 3",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "heal",
+          "value": 14
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.24,
+        "duration": 5
+      }
+    ],
+    "dropRate": 0.015,
+    "sellCost": 525,
+    "buyCost": 1500
+  },
+  "wooden_bow": {
+    "id": "wooden_bow",
+    "filename": "wooden_bow",
+    "name": "Wooden Bow",
+    "description": "Common Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/wooden_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Common",
+    "baseDmg": 5,
+    "baseCritDmg": 0.2,
+    "baseCritChance": 0.06,
+    "durability": 95,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 80
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "crossbow": {
+    "id": "crossbow",
+    "filename": "crossbow",
+    "name": "Crossbow",
+    "description": "Common Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/crossbow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Common",
+    "baseDmg": 5,
+    "baseCritDmg": 0.2,
+    "baseCritChance": 0.06,
+    "durability": 95,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "slingshot": {
+    "id": "slingshot",
+    "filename": "slingshot",
+    "name": "Slingshot",
+    "description": "Common Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/slingshot.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Common",
+    "baseDmg": 5,
+    "baseCritDmg": 0.2,
+    "baseCritChance": 0.06,
+    "durability": 95,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "old_compound_bow": {
+    "id": "old_compound_bow",
+    "filename": "old_compound_bow",
+    "name": "Old Compound Bow",
+    "description": "Common Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/old_compound_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Common",
+    "baseDmg": 5,
+    "baseCritDmg": 0.2,
+    "baseCritChance": 0.06,
+    "durability": 95,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.08
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "wilted_bow": {
+    "id": "wilted_bow",
+    "filename": "wilted_bow",
+    "name": "Wilted Bow",
+    "description": "Common Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/wilted_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Common",
+    "baseDmg": 5,
+    "baseCritDmg": 0.2,
+    "baseCritChance": 0.06,
+    "durability": 95,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "steel_crossbow": {
+    "id": "steel_crossbow",
+    "filename": "steel_crossbow",
+    "name": "Steel Crossbow",
+    "description": "Rare Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/steel_crossbow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Rare",
+    "baseDmg": 8,
+    "baseCritDmg": 0.28,
+    "baseCritChance": 0.09,
+    "durability": 115,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 100
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "multishot_bow": {
+    "id": "multishot_bow",
+    "filename": "multishot_bow",
+    "name": "Multishot Bow",
+    "description": "Rare Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/multishot_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Rare",
+    "baseDmg": 8,
+    "baseCritDmg": 0.28,
+    "baseCritChance": 0.09,
+    "durability": 115,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 120
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "elven_bow": {
+    "id": "elven_bow",
+    "filename": "elven_bow",
+    "name": "Elven Bow",
+    "description": "Rare Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/elven_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Rare",
+    "baseDmg": 8,
+    "baseCritDmg": 0.28,
+    "baseCritChance": 0.09,
+    "durability": 115,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Heal Skill",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "heal",
+          "value": 5
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "volcanic_bow": {
+    "id": "volcanic_bow",
+    "filename": "volcanic_bow",
+    "name": "Volcanic Bow",
+    "description": "Rare Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/volcanic_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Rare",
+    "baseDmg": 8,
+    "baseCritDmg": 0.28,
+    "baseCritChance": 0.09,
+    "durability": 115,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.12
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 6
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "burn",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "lightning_bow": {
+    "id": "lightning_bow",
+    "filename": "lightning_bow",
+    "name": "Lightning Bow",
+    "description": "Rare Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/lightning_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Rare",
+    "baseDmg": 8,
+    "baseCritDmg": 0.28,
+    "baseCritChance": 0.09,
+    "durability": 115,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 120
+      },
+      {
+        "stat": "critDmg",
+        "nature": "penalty",
+        "value": 0.06
+      }
+    ],
+    "skills": [
+      {
+        "name": "Stun Skill",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 700
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "stun",
+        "chance": 0.12,
+        "duration": 500
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "sorbets_great_bow": {
+    "id": "sorbets_great_bow",
+    "filename": "sorbets_great_bow",
+    "name": "Sorbet's Great Bow",
+    "description": "Epic Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/sorbets_great_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Epic",
+    "baseDmg": 11,
+    "baseCritDmg": 0.38,
+    "baseCritChance": 0.13,
+    "durability": 135,
+    "energyCostPerSwing": 13,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 140
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      },
+      {
+        "name": "Stun Skill 2",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1000
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "hells_bane": {
+    "id": "hells_bane",
+    "filename": "hells_bane",
+    "name": "Hell's Bane",
+    "description": "Epic Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/hells_bane.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Epic",
+    "baseDmg": 11,
+    "baseCritDmg": 0.38,
+    "baseCritChance": 0.13,
+    "durability": 135,
+    "energyCostPerSwing": 13,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.18
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      },
+      {
+        "name": "Bleed Skill 2",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "bleed",
+          "value": 3,
+          "duration": 4000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "burn",
+        "chance": 0.18,
+        "duration": 4
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "blighted_bow": {
+    "id": "blighted_bow",
+    "filename": "blighted_bow",
+    "name": "Blighted Bow",
+    "description": "Epic Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/blighted_bow.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Epic",
+    "baseDmg": 11,
+    "baseCritDmg": 0.38,
+    "baseCritChance": 0.13,
+    "durability": 135,
+    "energyCostPerSwing": 13,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 170
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "bleed",
+          "value": 3,
+          "duration": 4000
+        }
+      },
+      {
+        "name": "Damage Skill 2",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "poison",
+        "chance": 0.18,
+        "duration": 4
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "lunar_promise": {
+    "id": "lunar_promise",
+    "filename": "lunar_promise",
+    "name": "Lunar Promise",
+    "description": "Legendary Archer bow weapon.",
+    "weaponImg": "src/assets/weapons/lunar_promise.png",
+    "wieldType": "dual",
+    "weaponType": "bow",
+    "class": "Archer",
+    "rarity": "Legendary",
+    "baseDmg": 16,
+    "baseCritDmg": 0.5,
+    "baseCritChance": 0.17,
+    "durability": 165,
+    "energyCostPerSwing": 15,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 240
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.25
+      },
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 26
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "damage",
+          "value": 18
+        }
+      },
+      {
+        "name": "Stun Skill 2",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1300
+        }
+      },
+      {
+        "name": "Heal Skill 3",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "heal",
+          "value": 14
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "stun",
+        "chance": 0.24,
+        "duration": 1200
+      }
+    ],
+    "dropRate": 0.015,
+    "sellCost": 525,
+    "buyCost": 1500
+  },
+  "dagger": {
+    "id": "dagger",
+    "filename": "dagger",
+    "name": "Dagger",
+    "description": "Common Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/dagger.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 85,
+    "energyCostPerSwing": 7,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 80
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "stiletto": {
+    "id": "stiletto",
+    "filename": "stiletto",
+    "name": "Stiletto",
+    "description": "Common Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/stiletto.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 85,
+    "energyCostPerSwing": 7,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "rusted_kukri": {
+    "id": "rusted_kukri",
+    "filename": "rusted_kukri",
+    "name": "Rusted Kukri",
+    "description": "Common Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/rusted_kukri.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 85,
+    "energyCostPerSwing": 7,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "quickblade": {
+    "id": "quickblade",
+    "filename": "quickblade",
+    "name": "Quickblade",
+    "description": "Common Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/quickblade.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 85,
+    "energyCostPerSwing": 7,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.08
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "butterfly_knife": {
+    "id": "butterfly_knife",
+    "filename": "butterfly_knife",
+    "name": "Butterfly Knife",
+    "description": "Common Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/butterfly_knife.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Common",
+    "baseDmg": 4,
+    "baseCritDmg": 0.22,
+    "baseCritChance": 0.08,
+    "durability": 85,
+    "energyCostPerSwing": 7,
+    "modifiers": [
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "skills": [],
+    "inflictions": [],
+    "dropRate": 0.22,
+    "sellCost": 42,
+    "buyCost": 120
+  },
+  "poisoned_throwing_knives": {
+    "id": "poisoned_throwing_knives",
+    "filename": "poisoned_throwing_knives",
+    "name": "Poisoned Throwing Knives",
+    "description": "Rare Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/poisoned_throwing_knives.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "baseDmg": 7,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 100,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 120
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "bleed",
+          "value": 2,
+          "duration": 3000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "poison",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "steel_kukri": {
+    "id": "steel_kukri",
+    "filename": "steel_kukri",
+    "name": "Steel Kukri",
+    "description": "Rare Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/steel_kukri.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "baseDmg": 7,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 100,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 6
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "fire_fang": {
+    "id": "fire_fang",
+    "filename": "fire_fang",
+    "name": "Fire Fang",
+    "description": "Rare Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/fire_fang.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "baseDmg": 7,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 100,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.12
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 6
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "damage",
+          "value": 7
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "burn",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "serrated_dirk": {
+    "id": "serrated_dirk",
+    "filename": "serrated_dirk",
+    "name": "Serrated Dirk",
+    "description": "Rare Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/serrated_dirk.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "baseDmg": 7,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 100,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "skills": [
+      {
+        "name": "Bleed Skill",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "bleed",
+          "value": 2,
+          "duration": 3000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.12,
+        "duration": 3
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "lightning_dagger": {
+    "id": "lightning_dagger",
+    "filename": "lightning_dagger",
+    "name": "Lightning Dagger",
+    "description": "Rare Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/lightning_dagger.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "baseDmg": 7,
+    "baseCritDmg": 0.3,
+    "baseCritChance": 0.12,
+    "durability": 100,
+    "energyCostPerSwing": 9,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 120
+      },
+      {
+        "stat": "critDmg",
+        "nature": "penalty",
+        "value": 0.06
+      }
+    ],
+    "skills": [
+      {
+        "name": "Stun Skill",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 10,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 700
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "stun",
+        "chance": 0.12,
+        "duration": 500
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 105,
+    "buyCost": 300
+  },
+  "lantiers_hidden_blade": {
+    "id": "lantiers_hidden_blade",
+    "filename": "lantiers_hidden_blade",
+    "name": "Lantier's Hidden Blade",
+    "description": "Epic Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/lantiers_hidden_blade.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "baseDmg": 10,
+    "baseCritDmg": 0.42,
+    "baseCritChance": 0.16,
+    "durability": 120,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 170
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "skills": [
+      {
+        "name": "Stun Skill",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1000
+        }
+      },
+      {
+        "name": "Bleed Skill 2",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "bleed",
+          "value": 3,
+          "duration": 4000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "poison",
+        "chance": 0.18,
+        "duration": 4
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "duskblade": {
+    "id": "duskblade",
+    "filename": "duskblade",
+    "name": "Duskblade",
+    "description": "Epic Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/duskblade.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "baseDmg": 10,
+    "baseCritDmg": 0.42,
+    "baseCritChance": 0.16,
+    "durability": 120,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.18
+      },
+      {
+        "stat": "energyMax",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "damage",
+          "value": 12
+        }
+      },
+      {
+        "name": "Bleed Skill 2",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "bleed",
+          "value": 3,
+          "duration": 4000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "bleed",
+        "chance": 0.18,
+        "duration": 4
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "vampire_fans": {
+    "id": "vampire_fans",
+    "filename": "vampire_fans",
+    "name": "Vampire Fans",
+    "description": "Epic Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/vampire_fans.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "baseDmg": 10,
+    "baseCritDmg": 0.42,
+    "baseCritChance": 0.16,
+    "durability": 120,
+    "energyCostPerSwing": 11,
+    "modifiers": [
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "dmg",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "skills": [
+      {
+        "name": "Heal Skill",
+        "description": "Placeholder heal skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "heal",
+          "value": 9
+        }
+      },
+      {
+        "name": "Bleed Skill 2",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 14,
+        "effect": {
+          "type": "bleed",
+          "value": 3,
+          "duration": 4000
+        }
+      }
+    ],
+    "inflictions": [],
+    "dropRate": 0.05,
+    "sellCost": 245,
+    "buyCost": 700
+  },
+  "last_whisper": {
+    "id": "last_whisper",
+    "filename": "last_whisper",
+    "name": "Last Whisper",
+    "description": "Legendary Rogue dagger weapon.",
+    "weaponImg": "src/assets/weapons/last_whisper.png",
+    "wieldType": "dual",
+    "weaponType": "dagger",
+    "class": "Rogue",
+    "rarity": "Legendary",
+    "baseDmg": 14,
+    "baseCritDmg": 0.55,
+    "baseCritChance": 0.2,
+    "durability": 145,
+    "energyCostPerSwing": 13,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 240
+      },
+      {
+        "stat": "critChance",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "critDmg",
+        "nature": "bonus",
+        "value": 0.25
+      },
+      {
+        "stat": "energyMax",
+        "nature": "bonus",
+        "value": 26
+      }
+    ],
+    "skills": [
+      {
+        "name": "Damage Skill",
+        "description": "Placeholder damage skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "damage",
+          "value": 18
+        }
+      },
+      {
+        "name": "Stun Skill 2",
+        "description": "Placeholder stun skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "stun",
+          "value": 0,
+          "duration": 1300
+        }
+      },
+      {
+        "name": "Bleed Skill 3",
+        "description": "Placeholder bleed skill values for balance pass.",
+        "energyCost": 18,
+        "effect": {
+          "type": "bleed",
+          "value": 4,
+          "duration": 5000
+        }
+      }
+    ],
+    "inflictions": [
+      {
+        "type": "poison",
+        "chance": 0.24,
+        "duration": 5
+      }
+    ],
+    "dropRate": 0.015,
+    "sellCost": 525,
+    "buyCost": 1500
+  }
+}

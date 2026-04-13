@@ -4,73 +4,74 @@ import { useState } from "react";
 import Button from "../../../ui/Button";
 import {
   buyIcon,
-  fileIcon,
-  consumableIcon,
-  openFolderIcon,
   closedFolderIcon,
+  consumableIcon,
+  fileIcon,
+  openFolderIcon,
+} from "@/src/assets";
+import { resolveInventoryItemImage } from "../itemImageResolver";
 
-} from '@/src/assets'
-
-interface MerchantInventoryNodeProps extends NodeRendererProps<InventoryNode>{
+interface MerchantInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onSelect: (nodeId: string) => void;
   onBuy: (nodeId: string) => void;
   isSelected: boolean;
 }
 
-export function MerchantInventoryNode({ node, style, onSelect, onBuy, isSelected }: MerchantInventoryNodeProps){
+export function MerchantInventoryNode({
+  node,
+  style,
+  onSelect,
+  onBuy,
+  isSelected,
+}: MerchantInventoryNodeProps) {
   const [isHovered, setIsHovered] = useState(false);
   const name = node.data.name;
-  
-  // function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
-  //   // Store the item data in the drag event
-  //   const dragData = {
-  //     nodeIds: selectedNodeIds.size > 1 && selectedNodeIds.has(node.id) 
-  //       ? Array.from(selectedNodeIds) 
-  //       : [node.id],
-  //     source: 'loot'
-  //   };
-  //   const jsonString = JSON.stringify(dragData);
-  //   e.dataTransfer.effectAllowed = 'move';
-  //   e.dataTransfer.setData('text/plain', jsonString);
-  //   console.log("Dragging items:", dragData.nodeIds, "JSON:", jsonString);
-  // }
-  
+
   function getNodeIcon(type: InventoryNode["kind"]) {
+    const itemImage = resolveInventoryItemImage(node.data);
+    if (itemImage) {
+      return (
+        <img
+          src={itemImage.src}
+          alt={itemImage.alt}
+          title={itemImage.usedPlaceholder ? "placeholder-image" : itemImage.alt}
+          style={{ width: 24, height: 24, display: "inline", marginRight: 6 }}
+        />
+      );
+    }
+
     switch (type) {
-      case "weapon": return "⚔️ ";
-      case "armor": return "🛡️ ";
-      case "consumable": 
+      case "consumable":
         return (
-          <img 
+          <img
             src={consumableIcon}
             alt="Consumable"
             style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
           />
-        )
-      case "folder": 
+        );
+      case "folder":
         return (
-          <img 
-          src={node.isOpen ? openFolderIcon : closedFolderIcon} 
-          alt="folder" 
-          style={{ width: 16, height: 16, display: "inline"}}
+          <img
+            src={node.isOpen ? openFolderIcon : closedFolderIcon}
+            alt="Folder"
+            style={{ width: 16, height: 16, display: "inline" }}
           />
         );
-      default: return (
-        <img 
-          src={fileIcon}
-          alt="Item"
-          style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
-        />
-      );
+      default:
+        return (
+          <img
+            src={fileIcon}
+            alt="Item"
+            style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
+          />
+        );
     }
   }
-  
+
   return (
-    <div 
+    <div
       style={style}
-      // ref={dragHandle}
       draggable
-      // onDragStart={handleDragStart}
       onClick={() => {
         onSelect(node.id);
         if (node.data.kind === "folder") node.toggle();
@@ -92,21 +93,20 @@ export function MerchantInventoryNode({ node, style, onSelect, onBuy, isSelected
         {getNodeIcon(node.data.kind)}
         <span className="truncate">
           {name}
-          {node.data.kind !== "folder" && (
-            <span className="text-amber-300">{"  $123"}</span>
-          )}
+          {node.data.kind !== "folder" && <span className="text-amber-300">{"  $123"}</span>}
         </span>
       </div>
       {isHovered && node.data.kind !== "folder" && (
         <div className="flex-2 flex flex-row-reverse w-fit gap-1" onClick={(e) => e.stopPropagation()}>
-          <Button 
-            variant="icon-only-btn" 
-            icon={buyIcon} 
-            iconSize={20} 
-            onClick={() => onBuy(node.id)} 
-            title="Buy Item"/>
+          <Button
+            variant="icon-only-btn"
+            icon={buyIcon}
+            iconSize={20}
+            onClick={() => onBuy(node.id)}
+            title="Buy Item"
+          />
         </div>
       )}
     </div>
-  )
+  );
 }

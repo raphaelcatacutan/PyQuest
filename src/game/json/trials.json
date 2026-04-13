@@ -1,23 +1,28 @@
 [
   {
     "difficulty": "easy",
-    "incorrectCode": "function addNumbers(a, b) {\n  return a - b;\n}",
-    "correctCode": "function addNumbers(a, b) {\n  return a + b;\n}",
+    "incorrectCode": "function addNumbers(a, b) {\n  return a - b;\n}\n// Called with: addNumbers(4, 6)",
+    "correctCode": "function addNumbers(a, b) {\n  return a + b;\n}\n// Called with: addNumbers(4, 6)",
     "expectedOutput": "10",
     "reward": {
       "xpDropMin": 50,
       "xpDropMax": 100,
       "coinDropMin": 25,
       "coinDropMax": 50,
-      "weapons": [],
+      "weapons": [
+        {
+          "itemId": "wooden_wand",
+          "dropRate": 0.08
+        }
+      ],
       "armors": [],
       "consumables": []
     }
   },
   {
     "difficulty": "easy",
-    "incorrectCode": "function isEven(num) {\n  return num % 2 === 1;\n}",
-    "correctCode": "function isEven(num) {\n  return num % 2 === 0;\n}",
+    "incorrectCode": "function isEven(num) {\n  return num % 2 === 1;\n}\n// Called with: isEven(8)",
+    "correctCode": "function isEven(num) {\n  return num % 2 === 0;\n}\n// Called with: isEven(8)",
     "expectedOutput": "true",
     "reward": {
       "xpDropMin": 50,
@@ -25,21 +30,86 @@
       "coinDropMin": 25,
       "coinDropMax": 50,
       "weapons": [],
+      "armors": [
+        {
+          "itemId": "academy_hat",
+          "dropRate": 0.08
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "incorrectCode": "def multiply(a, b):\n    return a + b\n\nprint(multiply(3, 4))",
+    "correctCode": "def multiply(a, b):\n    return a * b\n\nprint(multiply(3, 4))",
+    "expectedOutput": "12",
+    "reward": {
+      "xpDropMin": 55,
+      "xpDropMax": 105,
+      "coinDropMin": 28,
+      "coinDropMax": 54,
+      "weapons": [],
       "armors": [],
       "consumables": []
     }
   },
   {
+    "difficulty": "easy",
+    "incorrectCode": "def first_char(text):\n    return text[1]\n\nprint(first_char('pyquest'))",
+    "correctCode": "def first_char(text):\n    return text[0]\n\nprint(first_char('pyquest'))",
+    "expectedOutput": "p",
+    "reward": {
+      "xpDropMin": 55,
+      "xpDropMax": 105,
+      "coinDropMin": 28,
+      "coinDropMax": 54,
+      "weapons": [
+        {
+          "itemId": "training_sword",
+          "dropRate": 0.06
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "incorrectCode": "def list_total(nums):\n    total = 0\n    for n in nums:\n        total -= n\n    return total\n\nprint(list_total([1, 2, 3, 4]))",
+    "correctCode": "def list_total(nums):\n    total = 0\n    for n in nums:\n        total += n\n    return total\n\nprint(list_total([1, 2, 3, 4]))",
+    "expectedOutput": "10",
+    "reward": {
+      "xpDropMin": 60,
+      "xpDropMax": 110,
+      "coinDropMin": 30,
+      "coinDropMax": 58,
+      "weapons": [],
+      "armors": [
+        {
+          "itemId": "apprentice_robe",
+          "dropRate": 0.06
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
     "difficulty": "medium",
-    "incorrectCode": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] > max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}\n// Called with: findMax([5, 2, 8, 1])",
-    "correctCode": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] > max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}\n// Called with: findMax([5, 2, 8, 1])\n// Returns 8",
+    "incorrectCode": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 1; i < arr.length; i++) {\n    if (arr[i] < max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}\n// Called with: findMax([5, 2, 8, 1])",
+    "correctCode": "function findMax(arr) {\n  let max = arr[0];\n  for (let i = 1; i < arr.length; i++) {\n    if (arr[i] > max) {\n      max = arr[i];\n    }\n  }\n  return max;\n}\n// Called with: findMax([5, 2, 8, 1])",
     "expectedOutput": "8",
     "reward": {
-      "xpDropMin": 150,
-      "xpDropMax": 250,
-      "coinDropMin": 75,
-      "coinDropMax": 150,
-      "weapons": [{"itemId": "iron_sword", "dropRate": 0.3}],
+      "xpDropMin": 140,
+      "xpDropMax": 220,
+      "coinDropMin": 70,
+      "coinDropMax": 140,
+      "weapons": [
+        {
+          "itemId": "steel_sword",
+          "dropRate": 0.1
+        }
+      ],
       "armors": [],
       "consumables": []
     }
@@ -50,12 +120,77 @@
     "correctCode": "function reverseString(str) {\n  let reversed = '';\n  for (let i = str.length - 1; i >= 0; i--) {\n    reversed += str[i];\n  }\n  return reversed;\n}\n// Called with: reverseString('hello')",
     "expectedOutput": "olleh",
     "reward": {
-      "xpDropMin": 150,
-      "xpDropMax": 250,
+      "xpDropMin": 140,
+      "xpDropMax": 220,
+      "coinDropMin": 70,
+      "coinDropMax": 140,
+      "weapons": [],
+      "armors": [
+        {
+          "itemId": "silverweave_cloak",
+          "dropRate": 0.09
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "incorrectCode": "def count_vowels(text):\n    count = 0\n    for ch in text.lower():\n        if ch == 'a' and ch == 'e' and ch == 'i' and ch == 'o' and ch == 'u':\n            count += 1\n    return count\n\nprint(count_vowels('Debugging'))",
+    "correctCode": "def count_vowels(text):\n    count = 0\n    for ch in text.lower():\n        if ch in 'aeiou':\n            count += 1\n    return count\n\nprint(count_vowels('Debugging'))",
+    "expectedOutput": "3",
+    "reward": {
+      "xpDropMin": 145,
+      "xpDropMax": 230,
       "coinDropMin": 75,
+      "coinDropMax": 145,
+      "weapons": [
+        {
+          "itemId": "steel_crossbow",
+          "dropRate": 0.09
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "incorrectCode": "def factorial(n):\n    result = 1\n    for i in range(1, n):\n        result *= i\n    return result\n\nprint(factorial(5))",
+    "correctCode": "def factorial(n):\n    result = 1\n    for i in range(1, n + 1):\n        result *= i\n    return result\n\nprint(factorial(5))",
+    "expectedOutput": "120",
+    "reward": {
+      "xpDropMin": 150,
+      "xpDropMax": 235,
+      "coinDropMin": 78,
       "coinDropMax": 150,
       "weapons": [],
-      "armors": [{"itemId": "leather_armor", "dropRate": 0.25}],
+      "armors": [
+        {
+          "itemId": "steel_helm",
+          "dropRate": 0.08
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "incorrectCode": "def unique_values(nums):\n    unique = []\n    for n in nums:\n        if n in unique:\n            unique.append(n)\n    return unique\n\nprint(unique_values([1, 2, 2, 3, 1, 4]))",
+    "correctCode": "def unique_values(nums):\n    unique = []\n    for n in nums:\n        if n not in unique:\n            unique.append(n)\n    return unique\n\nprint(unique_values([1, 2, 2, 3, 1, 4]))",
+    "expectedOutput": "[1, 2, 3, 4]",
+    "reward": {
+      "xpDropMin": 150,
+      "xpDropMax": 240,
+      "coinDropMin": 80,
+      "coinDropMax": 155,
+      "weapons": [
+        {
+          "itemId": "steel_kukri",
+          "dropRate": 0.08
+        }
+      ],
+      "armors": [],
       "consumables": []
     }
   },
@@ -69,9 +204,19 @@
       "xpDropMax": 500,
       "coinDropMin": 150,
       "coinDropMax": 300,
-      "weapons": [{"itemId": "steel_sword", "dropRate": 0.25}],
-      "armors": [{"itemId": "iron_armor", "dropRate": 0.2}],
-      "consumables": [{"itemId": "health_potion", "dropRate": 0.5, "quantity": 2}]
+      "weapons": [
+        {
+          "itemId": "heavenly_sword",
+          "dropRate": 0.1
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "elbrauns_helm",
+          "dropRate": 0.08
+        }
+      ],
+      "consumables": []
     }
   },
   {
@@ -84,9 +229,94 @@
       "xpDropMax": 500,
       "coinDropMin": 150,
       "coinDropMax": 300,
-      "weapons": [],
-      "armors": [],
-      "consumables": [{"itemId": "mana_potion", "dropRate": 0.6, "quantity": 3}]
+      "weapons": [
+        {
+          "itemId": "blighted_bow",
+          "dropRate": 0.1
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "final_memorial",
+          "dropRate": 0.07
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "incorrectCode": "def binary_search(nums, target):\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        elif target < nums[mid]:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1\n\nprint(binary_search([1, 3, 5, 7, 9], 7))",
+    "correctCode": "def binary_search(nums, target):\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        elif target < nums[mid]:\n            high = mid - 1\n        else:\n            low = mid + 1\n    return -1\n\nprint(binary_search([1, 3, 5, 7, 9], 7))",
+    "expectedOutput": "3",
+    "reward": {
+      "xpDropMin": 310,
+      "xpDropMax": 520,
+      "coinDropMin": 160,
+      "coinDropMax": 315,
+      "weapons": [
+        {
+          "itemId": "lantiers_hidden_blade",
+          "dropRate": 0.09
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "mountains_heart",
+          "dropRate": 0.07
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "incorrectCode": "def merge_sorted(a, b):\n    i = j = 0\n    merged = []\n    while i < len(a) and j < len(b):\n        if a[i] > b[j]:\n            merged.append(a[i])\n            i += 1\n        else:\n            merged.append(b[j])\n            j += 1\n    return merged + a[i:] + b[j:]\n\nprint(merge_sorted([1, 4, 6], [2, 3, 5]))",
+    "correctCode": "def merge_sorted(a, b):\n    i = j = 0\n    merged = []\n    while i < len(a) and j < len(b):\n        if a[i] <= b[j]:\n            merged.append(a[i])\n            i += 1\n        else:\n            merged.append(b[j])\n            j += 1\n    return merged + a[i:] + b[j:]\n\nprint(merge_sorted([1, 4, 6], [2, 3, 5]))",
+    "expectedOutput": "[1, 2, 3, 4, 5, 6]",
+    "reward": {
+      "xpDropMin": 320,
+      "xpDropMax": 540,
+      "coinDropMin": 165,
+      "coinDropMax": 325,
+      "weapons": [
+        {
+          "itemId": "hells_bane",
+          "dropRate": 0.08
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "horus_mantle",
+          "dropRate": 0.06
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "incorrectCode": "def longest_unique_substring(s):\n    seen = {}\n    left = 0\n    best = 0\n    for right, ch in enumerate(s):\n        if ch in seen:\n            left = seen[ch] + 1\n        seen[ch] = right\n        best = max(best, right - left + 1)\n    return best\n\nprint(longest_unique_substring('abcabcbb'))",
+    "correctCode": "def longest_unique_substring(s):\n    seen = {}\n    left = 0\n    best = 0\n    for right, ch in enumerate(s):\n        if ch in seen:\n            left = max(left, seen[ch] + 1)\n        seen[ch] = right\n        best = max(best, right - left + 1)\n    return best\n\nprint(longest_unique_substring('abcabcbb'))",
+    "expectedOutput": "3",
+    "reward": {
+      "xpDropMin": 330,
+      "xpDropMax": 560,
+      "coinDropMin": 170,
+      "coinDropMax": 340,
+      "weapons": [
+        {
+          "itemId": "last_whisper",
+          "dropRate": 0.07
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "lost_from_light",
+          "dropRate": 0.05
+        }
+      ],
+      "consumables": []
     }
   }
 ]

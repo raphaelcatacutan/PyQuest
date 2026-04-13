@@ -1,23 +1,322 @@
 [
   {
     "difficulty": "easy",
-    "problem": "Write a basic input and output program",
-    "correct_code": "print(\"Hello World\")",
+    "problem": "Write a program that prints Hello World.",
+    "correct_code": "print('Hello World')",
     "expected_output": "Hello World",
-    "reward": {}
+    "reward": {
+      "xpDropMin": 60,
+      "xpDropMax": 110,
+      "coinDropMin": 30,
+      "coinDropMax": 60,
+      "weapons": [
+        {
+          "itemId": "wooden_bow",
+          "dropRate": 0.08
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "problem": "Create a function square(n) and print the result for n = 6.",
+    "correct_code": "def square(n):\n    return n * n\n\nprint(square(6))",
+    "expected_output": "36",
+    "reward": {
+      "xpDropMin": 62,
+      "xpDropMax": 112,
+      "coinDropMin": 32,
+      "coinDropMax": 62,
+      "weapons": [],
+      "armors": [
+        {
+          "itemId": "hunter_cap",
+          "dropRate": 0.07
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "problem": "Print whether the number 11 is odd or even using an if statement.",
+    "correct_code": "n = 11\nif n % 2 == 0:\n    print('even')\nelse:\n    print('odd')",
+    "expected_output": "odd",
+    "reward": {
+      "xpDropMin": 64,
+      "xpDropMax": 115,
+      "coinDropMin": 33,
+      "coinDropMax": 64,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "problem": "Compute and print the sum of the list [2, 4, 6, 8].",
+    "correct_code": "nums = [2, 4, 6, 8]\nprint(sum(nums))",
+    "expected_output": "20",
+    "reward": {
+      "xpDropMin": 66,
+      "xpDropMax": 118,
+      "coinDropMin": 34,
+      "coinDropMax": 66,
+      "weapons": [
+        {
+          "itemId": "dagger",
+          "dropRate": 0.06
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "easy",
+    "problem": "Reverse the word 'debug' and print it.",
+    "correct_code": "word = 'debug'\nprint(word[::-1])",
+    "expected_output": "gubed",
+    "reward": {
+      "xpDropMin": 68,
+      "xpDropMax": 120,
+      "coinDropMin": 35,
+      "coinDropMax": 68,
+      "weapons": [],
+      "armors": [
+        {
+          "itemId": "light_jerkin",
+          "dropRate": 0.06
+        }
+      ],
+      "consumables": []
+    }
   },
   {
     "difficulty": "medium",
-    "problem": "Create a function that adds two numbers",
-    "correct_code": "def add(a, b):\n    return a + b",
+    "problem": "Create a function that adds two numbers and print add(2, 3).",
+    "correct_code": "def add(a, b):\n    return a + b\n\nprint(add(2, 3))",
     "expected_output": "5",
-    "reward": {}
+    "reward": {
+      "xpDropMin": 170,
+      "xpDropMax": 250,
+      "coinDropMin": 85,
+      "coinDropMax": 170,
+      "weapons": [
+        {
+          "itemId": "steel_crossbow",
+          "dropRate": 0.09
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "problem": "Find and print the maximum value in [5, 12, 3, 19, 7].",
+    "correct_code": "nums = [5, 12, 3, 19, 7]\nprint(max(nums))",
+    "expected_output": "19",
+    "reward": {
+      "xpDropMin": 175,
+      "xpDropMax": 260,
+      "coinDropMin": 88,
+      "coinDropMax": 176,
+      "weapons": [],
+      "armors": [
+        {
+          "itemId": "windrunner_coat",
+          "dropRate": 0.08
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "problem": "Count and print the number of vowels in the string 'algorithm'.",
+    "correct_code": "text = 'algorithm'\nvowels = sum(1 for ch in text if ch in 'aeiou')\nprint(vowels)",
+    "expected_output": "3",
+    "reward": {
+      "xpDropMin": 180,
+      "xpDropMax": 265,
+      "coinDropMin": 90,
+      "coinDropMax": 180,
+      "weapons": [
+        {
+          "itemId": "great_forests_wand",
+          "dropRate": 0.08
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "problem": "Remove duplicates from [1, 2, 2, 3, 4, 4, 5] while preserving order, then print the result.",
+    "correct_code": "nums = [1, 2, 2, 3, 4, 4, 5]\nseen = set()\nresult = []\nfor n in nums:\n    if n not in seen:\n        seen.add(n)\n        result.append(n)\nprint(result)",
+    "expected_output": "[1, 2, 3, 4, 5]",
+    "reward": {
+      "xpDropMin": 185,
+      "xpDropMax": 270,
+      "coinDropMin": 92,
+      "coinDropMax": 185,
+      "weapons": [],
+      "armors": [
+        {
+          "itemId": "bastion_mail",
+          "dropRate": 0.07
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "medium",
+    "problem": "Print the 8th Fibonacci number (0-indexed sequence starts at 0, 1).",
+    "correct_code": "n = 8\na, b = 0, 1\nfor _ in range(n):\n    a, b = b, a + b\nprint(a)",
+    "expected_output": "21",
+    "reward": {
+      "xpDropMin": 190,
+      "xpDropMax": 280,
+      "coinDropMin": 95,
+      "coinDropMax": 190,
+      "weapons": [
+        {
+          "itemId": "shadow_glaive",
+          "dropRate": 0.07
+        }
+      ],
+      "armors": [],
+      "consumables": []
+    }
   },
   {
     "difficulty": "hard",
-    "problem": "Implement a loop that counts from 1 to 10",
-    "correct_code": "for i in range(1, 11):\n    print(i, end=\" \")",
+    "problem": "Implement a loop that counts from 1 to 10 and prints values on one line separated by spaces.",
+    "correct_code": "for i in range(1, 11):\n    print(i, end=' ')",
     "expected_output": "1 2 3 4 5 6 7 8 9 10",
-    "reward": {}
+    "reward": {
+      "xpDropMin": 320,
+      "xpDropMax": 520,
+      "coinDropMin": 160,
+      "coinDropMax": 320,
+      "weapons": [
+        {
+          "itemId": "heavenly_sword",
+          "dropRate": 0.1
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "elbrauns_iron_will",
+          "dropRate": 0.08
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "problem": "Implement binary search and print the index of 34 in [3, 8, 12, 20, 34, 55, 89].",
+    "correct_code": "nums = [3, 8, 12, 20, 34, 55, 89]\ntarget = 34\nlow, high = 0, len(nums) - 1\nans = -1\nwhile low <= high:\n    mid = (low + high) // 2\n    if nums[mid] == target:\n        ans = mid\n        break\n    elif nums[mid] < target:\n        low = mid + 1\n    else:\n        high = mid - 1\nprint(ans)",
+    "expected_output": "4",
+    "reward": {
+      "xpDropMin": 330,
+      "xpDropMax": 530,
+      "coinDropMin": 165,
+      "coinDropMax": 330,
+      "weapons": [
+        {
+          "itemId": "lunar_promise",
+          "dropRate": 0.08
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "last_bastion",
+          "dropRate": 0.06
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "problem": "Validate parentheses for the string \"([{}])\" and print True or False.",
+    "correct_code": "s = '([{}])'\nstack = []\npairs = {')': '(', ']': '[', '}': '{'}\nvalid = True\nfor ch in s:\n    if ch in '([{':\n        stack.append(ch)\n    else:\n        if not stack or stack[-1] != pairs[ch]:\n            valid = False\n            break\n        stack.pop()\nif stack:\n    valid = False\nprint(valid)",
+    "expected_output": "True",
+    "reward": {
+      "xpDropMin": 340,
+      "xpDropMax": 540,
+      "coinDropMin": 170,
+      "coinDropMax": 340,
+      "weapons": [
+        {
+          "itemId": "ancient_of_rites",
+          "dropRate": 0.07
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "aegis_helmet",
+          "dropRate": 0.06
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "problem": "Merge sorted lists [1, 4, 7] and [2, 3, 8] into one sorted list and print it.",
+    "correct_code": "a = [1, 4, 7]\nb = [2, 3, 8]\ni = j = 0\nmerged = []\nwhile i < len(a) and j < len(b):\n    if a[i] <= b[j]:\n        merged.append(a[i])\n        i += 1\n    else:\n        merged.append(b[j])\n        j += 1\nmerged.extend(a[i:])\nmerged.extend(b[j:])\nprint(merged)",
+    "expected_output": "[1, 2, 3, 4, 7, 8]",
+    "reward": {
+      "xpDropMin": 350,
+      "xpDropMax": 550,
+      "coinDropMin": 175,
+      "coinDropMax": 350,
+      "weapons": [
+        {
+          "itemId": "last_whisper",
+          "dropRate": 0.07
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "chosen_eclipse",
+          "dropRate": 0.05
+        }
+      ],
+      "consumables": []
+    }
+  },
+  {
+    "difficulty": "hard",
+    "problem": "Find the longest common prefix in ['flight', 'flint', 'flip'] and print it.",
+    "correct_code": "words = ['flight', 'flint', 'flip']\nprefix = words[0]\nfor word in words[1:]:\n    while not word.startswith(prefix):\n        prefix = prefix[:-1]\nprint(prefix)",
+    "expected_output": "fl",
+    "reward": {
+      "xpDropMin": 360,
+      "xpDropMax": 560,
+      "coinDropMin": 180,
+      "coinDropMax": 360,
+      "weapons": [
+        {
+          "itemId": "galaxies_tear",
+          "dropRate": 0.06
+        }
+      ],
+      "armors": [
+        {
+          "itemId": "lost_from_light",
+          "dropRate": 0.05
+        }
+      ],
+      "consumables": []
+    }
   }
 ]

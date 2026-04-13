@@ -48,7 +48,7 @@ export const useTrialsStore = create<TrialsStoreProps>()(
       currMedium: 0,
       maxMedium: 5,
       currHard: 0,
-      maxHard: 3,
+      maxHard: 5,
       currAttempt: 0,
       maxAttempts: 3,
 

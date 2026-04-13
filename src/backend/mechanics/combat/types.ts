@@ -30,7 +30,7 @@ export type PlayerSnapshot = {
   level: number;
 };
 
-export type ActionType = 'basic_attack' | 'skill' | 'defend' | 'heal' | 'regen';
+export type ActionType = 'skill' | 'fallback_basic_attack' | 'fallback_energy_regen';
 
 export type Action = {
   id: string;
@@ -38,9 +38,10 @@ export type Action = {
   label: string;
   skillIndex?: number;
   energyCost: number;
+  source: 'json_skill' | 'fallback';
 };
 
-export type ActionTag = 'none' | 'basic' | 'skill' | 'defend' | 'heal' | 'regen';
+export type ActionTag = 'none' | 'skill' | 'fallback_basic' | 'fallback_regen' | 'skip';
 
 export type QTable = Map<string, number[]>;
 

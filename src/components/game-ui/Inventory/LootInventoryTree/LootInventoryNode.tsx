@@ -3,71 +3,96 @@ import { NodeRendererProps } from "react-arborist";
 import { useState } from "react";
 import Button from "../../../ui/Button";
 import {
+  closedFolderIcon,
+  consumableIcon,
   deleteIcon,
   fileIcon,
-  transferIcon,
-  consumableIcon,
   openFolderIcon,
-  closedFolderIcon,
-} from '@/src/assets'
+  transferIcon,
+} from "@/src/assets";
+import { resolveInventoryItemImage } from "../itemImageResolver";
 
-interface LootInventoryNodeProps extends NodeRendererProps<InventoryNode>{
+interface LootInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onTrash: (nodeIds: string[]) => void;
-  onSelect: (nodeId: string, isShiftClick: boolean, isCtrlClick: boolean) => void;
+  onSelect: (
+    nodeId: string,
+    isShiftClick: boolean,
+    isCtrlClick: boolean,
+  ) => void;
   onGetItem: (nodeIds: string[]) => void;
   selectedNodeIds: Set<string>;
 }
 
-export function LootInventoryNode({ node, style, dragHandle, onTrash, onSelect, onGetItem, selectedNodeIds }: LootInventoryNodeProps){
+export function LootInventoryNode({
+  node,
+  style,
+  dragHandle,
+  onTrash,
+  onSelect,
+  onGetItem,
+  selectedNodeIds,
+}: LootInventoryNodeProps) {
   const [isHovered, setIsHovered] = useState(false);
   const name = node.data.name;
-  
+
   function handleDragStart(e: React.DragEvent<HTMLDivElement>) {
-    // Store the item data in the drag event
     const dragData = {
-      nodeIds: selectedNodeIds.size > 1 && selectedNodeIds.has(node.id) 
-        ? Array.from(selectedNodeIds) 
-        : [node.id],
-      source: 'loot'
+      nodeIds:
+        selectedNodeIds.size > 1 && selectedNodeIds.has(node.id)
+          ? Array.from(selectedNodeIds)
+          : [node.id],
+      source: "loot",
     };
     const jsonString = JSON.stringify(dragData);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', jsonString);
-    console.log("Dragging items:", dragData.nodeIds, "JSON:", jsonString);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", jsonString);
   }
-  
+
   function getNodeIcon(type: InventoryNode["kind"]) {
+    const itemImage = resolveInventoryItemImage(node.data);
+    if (itemImage) {
+      return (
+        <img
+          src={itemImage.src}
+          alt={itemImage.alt}
+          title={
+            itemImage.usedPlaceholder ? "placeholder-image" : itemImage.alt
+          }
+          style={{ width: 24, height: 24, display: "inline", marginRight: 6 }}
+        />
+      );
+    }
+
     switch (type) {
-      case "weapon": return "⚔️ ";
-      case "armor": return "🛡️ ";
-      case "consumable": 
+      case "consumable":
         return (
-          <img 
+          <img
             src={consumableIcon}
             alt="Consumable"
             style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
           />
-        )
-      case "folder": 
+        );
+      case "folder":
         return (
-          <img 
-          src={node.isOpen ? openFolderIcon : closedFolderIcon} 
-          alt="folder" 
-          style={{ width: 16, height: 16, display: "inline"}}
+          <img
+            src={node.isOpen ? openFolderIcon : closedFolderIcon}
+            alt="Folder"
+            style={{ width: 16, height: 16, display: "inline" }}
           />
         );
-      default: return (
-        <img 
-          src={fileIcon}
-          alt="Item"
-          style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
-        />
-      );
+      default:
+        return (
+          <img
+            src={fileIcon}
+            alt="Item"
+            style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
+          />
+        );
     }
   }
-  
+
   return (
-    <div 
+    <div
       style={style}
       ref={dragHandle}
       draggable
@@ -94,25 +119,31 @@ export function LootInventoryNode({ node, style, dragHandle, onTrash, onSelect, 
         <span className="truncate">{name}</span>
       </div>
       {isHovered && (
-        <div className="flex-2 flex flex-row-reverse w-fit gap-1" onClick={(e) => e.stopPropagation()}>
-          <Button variant="icon-only-btn" icon={deleteIcon} iconSize={20} onClick={() => onTrash([node.id])}/>
-          <Button 
-            variant="icon-only-btn" 
-            icon={transferIcon} 
-            iconSize={20} 
+        <div
+          className="flex-2 flex flex-row-reverse w-fit gap-1"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Button
+            variant="icon-only-btn"
+            icon={deleteIcon}
+            iconSize={20}
+            onClick={() => onTrash([node.id])}
+          />
+          <Button
+            variant="icon-only-btn"
+            icon={transferIcon}
+            iconSize={20}
             onClick={() => {
-              // If multiple items are selected, transfer all of them
-              // Otherwise, transfer just the hovered item
-              const itemsToTransfer = selectedNodeIds.size > 1 ? Array.from(selectedNodeIds) : [node.id];
-              console.log("Transfer button clicked on:", node.data.name);
-              console.log("  Selected IDs:", Array.from(selectedNodeIds));
-              console.log("  Transferring:", itemsToTransfer);
-              console.log("  Selected count:", selectedNodeIds.size);
+              const itemsToTransfer =
+                selectedNodeIds.size > 1
+                  ? Array.from(selectedNodeIds)
+                  : [node.id];
               onGetItem(itemsToTransfer);
-            }} 
-            title="Take Item"/>
+            }}
+            title="Take Item"
+          />
         </div>
       )}
     </div>
-  )
+  );
 }

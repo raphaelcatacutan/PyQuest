@@ -1,1 +1,3146 @@
-{}
+{
+  "academy_hat": {
+    "id": "academy_hat",
+    "filename": "academy_hat",
+    "name": "Academy Hat",
+    "description": "Common Wizard head armor.",
+    "armorImg": "src/assets/armors/academy_hat.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "scholars_glasses": {
+    "id": "scholars_glasses",
+    "filename": "scholars_glasses",
+    "name": "Scholars Glasses",
+    "description": "Common Wizard head armor.",
+    "armorImg": "src/assets/armors/scholars_glasses.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "apprentice_hat": {
+    "id": "apprentice_hat",
+    "filename": "apprentice_hat",
+    "name": "Apprentice Hat",
+    "description": "Common Wizard head armor.",
+    "armorImg": "src/assets/armors/apprentice_hat.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "woven_hat": {
+    "id": "woven_hat",
+    "filename": "woven_hat",
+    "name": "Woven Hat",
+    "description": "Common Wizard head armor.",
+    "armorImg": "src/assets/armors/woven_hat.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "monocle": {
+    "id": "monocle",
+    "filename": "monocle",
+    "name": "Monocle",
+    "description": "Common Wizard head armor.",
+    "armorImg": "src/assets/armors/monocle.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 70
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "moonthread_hat": {
+    "id": "moonthread_hat",
+    "filename": "moonthread_hat",
+    "name": "Moonthread Hat",
+    "description": "Rare Wizard head armor.",
+    "armorImg": "src/assets/armors/moonthread_hat.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "high_wizard_hat": {
+    "id": "high_wizard_hat",
+    "filename": "high_wizard_hat",
+    "name": "High Wizard Hat",
+    "description": "Rare Wizard head armor.",
+    "armorImg": "src/assets/armors/high_wizard_hat.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "silverweave_hat": {
+    "id": "silverweave_hat",
+    "filename": "silverweave_hat",
+    "name": "Silverweave Hat",
+    "description": "Rare Wizard head armor.",
+    "armorImg": "src/assets/armors/silverweave_hat.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 90
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "runic_monocle": {
+    "id": "runic_monocle",
+    "filename": "runic_monocle",
+    "name": "Runic Monocle",
+    "description": "Rare Wizard head armor.",
+    "armorImg": "src/assets/armors/runic_monocle.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 110
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "starreader_hat": {
+    "id": "starreader_hat",
+    "filename": "starreader_hat",
+    "name": "Starreader Hat",
+    "description": "Rare Wizard head armor.",
+    "armorImg": "src/assets/armors/starreader_hat.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "floyds_big_hat": {
+    "id": "floyds_big_hat",
+    "filename": "floyds_big_hat",
+    "name": "Floyd's Big Hat",
+    "description": "Epic Wizard head armor.",
+    "armorImg": "src/assets/armors/floyds_big_hat.png",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "voidpetal_hat": {
+    "id": "voidpetal_hat",
+    "filename": "voidpetal_hat",
+    "name": "Voidpetal Hat",
+    "description": "Epic Wizard head armor.",
+    "armorImg": "src/assets/armors/voidpetal_hat.png",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "daybreak_hat": {
+    "id": "daybreak_hat",
+    "filename": "daybreak_hat",
+    "name": "Daybreak Hat",
+    "description": "Epic Wizard head armor.",
+    "armorImg": "src/assets/armors/daybreak_hat.png",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 130
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "crown_of_the_seventh_circle": {
+    "id": "crown_of_the_seventh_circle",
+    "filename": "crown_of_the_seventh_circle",
+    "name": "Crown of the Seventh Circle",
+    "description": "Legendary Wizard head armor.",
+    "armorImg": "src/assets/armors/crown_of_the_seventh_circle.png",
+    "class": "Wizard",
+    "rarity": "Legendary",
+    "slotType": "head",
+    "baseDef": 12,
+    "durability": 190,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 455,
+    "buyCost": 1300
+  },
+  "apprentice_robe": {
+    "id": "apprentice_robe",
+    "filename": "apprentice_robe",
+    "name": "Apprentice Robe",
+    "description": "Common Wizard body armor.",
+    "armorImg": "src/assets/armors/apprentice_robe.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "student_robe": {
+    "id": "student_robe",
+    "filename": "student_robe",
+    "name": "Student Robe",
+    "description": "Common Wizard body armor.",
+    "armorImg": "src/assets/armors/student_robe.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "woven_robe": {
+    "id": "woven_robe",
+    "filename": "woven_robe",
+    "name": "Woven Robe",
+    "description": "Common Wizard body armor.",
+    "armorImg": "src/assets/armors/woven_robe.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "simple_cloak": {
+    "id": "simple_cloak",
+    "filename": "simple_cloak",
+    "name": "Simple Cloak",
+    "description": "Common Wizard body armor.",
+    "armorImg": "src/assets/armors/simple_cloak.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 70
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "old_mantle": {
+    "id": "old_mantle",
+    "filename": "old_mantle",
+    "name": "Old Mantle",
+    "description": "Common Wizard body armor.",
+    "armorImg": "src/assets/armors/old_mantle.png",
+    "class": "Wizard",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "moonthread_robe": {
+    "id": "moonthread_robe",
+    "filename": "moonthread_robe",
+    "name": "Moonthread Robe",
+    "description": "Rare Wizard body armor.",
+    "armorImg": "src/assets/armors/moonthread_robe.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "high_wizard_robe": {
+    "id": "high_wizard_robe",
+    "filename": "high_wizard_robe",
+    "name": "High Wizard Robe",
+    "description": "Rare Wizard body armor.",
+    "armorImg": "src/assets/armors/high_wizard_robe.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "silverweave_cloak": {
+    "id": "silverweave_cloak",
+    "filename": "silverweave_cloak",
+    "name": "Silverweave Cloak",
+    "description": "Rare Wizard body armor.",
+    "armorImg": "src/assets/armors/silverweave_cloak.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 90
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "runic_robe": {
+    "id": "runic_robe",
+    "filename": "runic_robe",
+    "name": "Runic Robe",
+    "description": "Rare Wizard body armor.",
+    "armorImg": "src/assets/armors/runic_robe.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 110
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "starwoven_mantle": {
+    "id": "starwoven_mantle",
+    "filename": "starwoven_mantle",
+    "name": "Starwoven Mantle",
+    "description": "Rare Wizard body armor.",
+    "armorImg": "src/assets/armors/starwoven_mantle.png",
+    "class": "Wizard",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "floyds_star_cloak": {
+    "id": "floyds_star_cloak",
+    "filename": "floyds_star_cloak",
+    "name": "Floyd's Star Cloak",
+    "description": "Epic Wizard body armor.",
+    "armorImg": "src/assets/armors/floyds_star_cloak.png",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "tempestveil_cloak": {
+    "id": "tempestveil_cloak",
+    "filename": "tempestveil_cloak",
+    "name": "Tempestveil Cloak",
+    "description": "Epic Wizard body armor.",
+    "armorImg": "src/assets/armors/tempestveil_cloak.png",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "star_shatterer_cloak": {
+    "id": "star_shatterer_cloak",
+    "filename": "star_shatterer_cloak",
+    "name": "Star Shatterer Cloak",
+    "description": "Epic Wizard body armor.",
+    "armorImg": "src/assets/armors/star_shatterer_cloak.png",
+    "class": "Wizard",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 130
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "galaxies_heart": {
+    "id": "galaxies_heart",
+    "filename": "galaxies_heart",
+    "name": "Galaxies Heart",
+    "description": "Legendary Wizard body armor.",
+    "armorImg": "src/assets/armors/galaxies_heart.png",
+    "class": "Wizard",
+    "rarity": "Legendary",
+    "slotType": "body",
+    "baseDef": 16,
+    "durability": 220,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 578,
+    "buyCost": 1650
+  },
+  "iron_helm": {
+    "id": "iron_helm",
+    "filename": "iron_helm",
+    "name": "Iron Helm",
+    "description": "Common Warrior head armor.",
+    "armorImg": "src/assets/armors/iron_helm.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "soldier_helm": {
+    "id": "soldier_helm",
+    "filename": "soldier_helm",
+    "name": "Soldier Helm",
+    "description": "Common Warrior head armor.",
+    "armorImg": "src/assets/armors/soldier_helm.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "guard_helm": {
+    "id": "guard_helm",
+    "filename": "guard_helm",
+    "name": "Guard Helm",
+    "description": "Common Warrior head armor.",
+    "armorImg": "src/assets/armors/guard_helm.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.01
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "heavy_helm": {
+    "id": "heavy_helm",
+    "filename": "heavy_helm",
+    "name": "Heavy Helm",
+    "description": "Common Warrior head armor.",
+    "armorImg": "src/assets/armors/heavy_helm.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "worn_greathelm": {
+    "id": "worn_greathelm",
+    "filename": "worn_greathelm",
+    "name": "Worn Greathelm",
+    "description": "Common Warrior head armor.",
+    "armorImg": "src/assets/armors/worn_greathelm.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "steel_helm": {
+    "id": "steel_helm",
+    "filename": "steel_helm",
+    "name": "Steel Helm",
+    "description": "Rare Warrior head armor.",
+    "armorImg": "src/assets/armors/steel_helm.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 90
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "knight_helm": {
+    "id": "knight_helm",
+    "filename": "knight_helm",
+    "name": "Knight Helm",
+    "description": "Rare Warrior head armor.",
+    "armorImg": "src/assets/armors/knight_helm.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "ashen_helm": {
+    "id": "ashen_helm",
+    "filename": "ashen_helm",
+    "name": "Ashen Helm",
+    "description": "Rare Warrior head armor.",
+    "armorImg": "src/assets/armors/ashen_helm.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "vanguard_helm": {
+    "id": "vanguard_helm",
+    "filename": "vanguard_helm",
+    "name": "Vanguard Helm",
+    "description": "Rare Warrior head armor.",
+    "armorImg": "src/assets/armors/vanguard_helm.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.02
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 90
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "runed_greathelm": {
+    "id": "runed_greathelm",
+    "filename": "runed_greathelm",
+    "name": "Runed Greathelm",
+    "description": "Rare Warrior head armor.",
+    "armorImg": "src/assets/armors/runed_greathelm.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "elbrauns_helm": {
+    "id": "elbrauns_helm",
+    "filename": "elbrauns_helm",
+    "name": "Elbraun's Helm",
+    "description": "Epic Warrior head armor.",
+    "armorImg": "src/assets/armors/elbrauns_helm.png",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 130
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "dawnbreak_visor": {
+    "id": "dawnbreak_visor",
+    "filename": "dawnbreak_visor",
+    "name": "Dawnbreak Visor",
+    "description": "Epic Warrior head armor.",
+    "armorImg": "src/assets/armors/dawnbreak_visor.png",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "bulwark_great_helmet": {
+    "id": "bulwark_great_helmet",
+    "filename": "bulwark_great_helmet",
+    "name": "Bulwark Great Helmet",
+    "description": "Epic Warrior head armor.",
+    "armorImg": "src/assets/armors/bulwark_great_helmet.png",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.04
+      },
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "energy",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "aegis_helmet": {
+    "id": "aegis_helmet",
+    "filename": "aegis_helmet",
+    "name": "Aegis Helmet",
+    "description": "Legendary Warrior head armor.",
+    "armorImg": "src/assets/armors/aegis_helmet.png",
+    "class": "Warrior",
+    "rarity": "Legendary",
+    "slotType": "head",
+    "baseDef": 12,
+    "durability": 190,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 455,
+    "buyCost": 1300
+  },
+  "chainmail_armor": {
+    "id": "chainmail_armor",
+    "filename": "chainmail_armor",
+    "name": "Chainmail Armor",
+    "description": "Common Warrior body armor.",
+    "armorImg": "src/assets/armors/chainmail_armor.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "iron_cuirass": {
+    "id": "iron_cuirass",
+    "filename": "iron_cuirass",
+    "name": "Iron Cuirass",
+    "description": "Common Warrior body armor.",
+    "armorImg": "src/assets/armors/iron_cuirass.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "soldier_armor": {
+    "id": "soldier_armor",
+    "filename": "soldier_armor",
+    "name": "Soldier Armor",
+    "description": "Common Warrior body armor.",
+    "armorImg": "src/assets/armors/soldier_armor.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.01
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "worn_plate": {
+    "id": "worn_plate",
+    "filename": "worn_plate",
+    "name": "Worn Plate",
+    "description": "Common Warrior body armor.",
+    "armorImg": "src/assets/armors/worn_plate.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "guard_mail": {
+    "id": "guard_mail",
+    "filename": "guard_mail",
+    "name": "Guard Mail",
+    "description": "Common Warrior body armor.",
+    "armorImg": "src/assets/armors/guard_mail.png",
+    "class": "Warrior",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "steel_cuirass": {
+    "id": "steel_cuirass",
+    "filename": "steel_cuirass",
+    "name": "Steel Cuirass",
+    "description": "Rare Warrior body armor.",
+    "armorImg": "src/assets/armors/steel_cuirass.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 90
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "knight_armor": {
+    "id": "knight_armor",
+    "filename": "knight_armor",
+    "name": "Knight Armor",
+    "description": "Rare Warrior body armor.",
+    "armorImg": "src/assets/armors/knight_armor.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "ashen_plate": {
+    "id": "ashen_plate",
+    "filename": "ashen_plate",
+    "name": "Ashen Plate",
+    "description": "Rare Warrior body armor.",
+    "armorImg": "src/assets/armors/ashen_plate.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "vanguard_armor": {
+    "id": "vanguard_armor",
+    "filename": "vanguard_armor",
+    "name": "Vanguard Armor",
+    "description": "Rare Warrior body armor.",
+    "armorImg": "src/assets/armors/vanguard_armor.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.02
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 90
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "bastion_mail": {
+    "id": "bastion_mail",
+    "filename": "bastion_mail",
+    "name": "Bastion Mail",
+    "description": "Rare Warrior body armor.",
+    "armorImg": "src/assets/armors/bastion_mail.png",
+    "class": "Warrior",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "elbrauns_iron_will": {
+    "id": "elbrauns_iron_will",
+    "filename": "elbrauns_iron_will",
+    "name": "Elbraun's Iron Will",
+    "description": "Epic Warrior body armor.",
+    "armorImg": "src/assets/armors/elbrauns_iron_will.png",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 130
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "final_memorial": {
+    "id": "final_memorial",
+    "filename": "final_memorial",
+    "name": "Final Memorial",
+    "description": "Epic Warrior body armor.",
+    "armorImg": "src/assets/armors/final_memorial.png",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.04
+      },
+      {
+        "stat": "energy",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "mountains_heart": {
+    "id": "mountains_heart",
+    "filename": "mountains_heart",
+    "name": "Mountain's Heart",
+    "description": "Epic Warrior body armor.",
+    "armorImg": "src/assets/armors/mountains_heart.png",
+    "class": "Warrior",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.04
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 130
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "last_bastion": {
+    "id": "last_bastion",
+    "filename": "last_bastion",
+    "name": "Last Bastion",
+    "description": "Legendary Warrior body armor.",
+    "armorImg": "src/assets/armors/last_bastion.png",
+    "class": "Warrior",
+    "rarity": "Legendary",
+    "slotType": "body",
+    "baseDef": 16,
+    "durability": 220,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 578,
+    "buyCost": 1650
+  },
+  "hunter_cap": {
+    "id": "hunter_cap",
+    "filename": "hunter_cap",
+    "name": "Hunter Cap",
+    "description": "Common Archer head armor.",
+    "armorImg": "src/assets/armors/hunter_cap.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 70
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "archer_hood": {
+    "id": "archer_hood",
+    "filename": "archer_hood",
+    "name": "Archer Hood",
+    "description": "Common Archer head armor.",
+    "armorImg": "src/assets/armors/archer_hood.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "feather_charm": {
+    "id": "feather_charm",
+    "filename": "feather_charm",
+    "name": "Feather Charm",
+    "description": "Common Archer head armor.",
+    "armorImg": "src/assets/armors/feather_charm.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "trail_amulet": {
+    "id": "trail_amulet",
+    "filename": "trail_amulet",
+    "name": "Trail Amulet",
+    "description": "Common Archer head armor.",
+    "armorImg": "src/assets/armors/trail_amulet.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "scout_band": {
+    "id": "scout_band",
+    "filename": "scout_band",
+    "name": "Scout Band",
+    "description": "Common Archer head armor.",
+    "armorImg": "src/assets/armors/scout_band.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "elven_hood": {
+    "id": "elven_hood",
+    "filename": "elven_hood",
+    "name": "Elven Hood",
+    "description": "Rare Archer head armor.",
+    "armorImg": "src/assets/armors/elven_hood.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "windcall_charm": {
+    "id": "windcall_charm",
+    "filename": "windcall_charm",
+    "name": "Windcall Charm",
+    "description": "Rare Archer head armor.",
+    "armorImg": "src/assets/armors/windcall_charm.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "hawkeye_band": {
+    "id": "hawkeye_band",
+    "filename": "hawkeye_band",
+    "name": "Hawkeye Band",
+    "description": "Rare Archer head armor.",
+    "armorImg": "src/assets/armors/hawkeye_band.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "penalty",
+        "value": 0.01
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "ranger_amulet": {
+    "id": "ranger_amulet",
+    "filename": "ranger_amulet",
+    "name": "Ranger Amulet",
+    "description": "Rare Archer head armor.",
+    "armorImg": "src/assets/armors/ranger_amulet.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 110
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "stormwatch_circlet": {
+    "id": "stormwatch_circlet",
+    "filename": "stormwatch_circlet",
+    "name": "Stormwatch Circlet",
+    "description": "Rare Archer head armor.",
+    "armorImg": "src/assets/armors/stormwatch_circlet.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "sorbets_wind_amulet": {
+    "id": "sorbets_wind_amulet",
+    "filename": "sorbets_wind_amulet",
+    "name": "Sorbet's Wind Amulet",
+    "description": "Epic Archer head armor.",
+    "armorImg": "src/assets/armors/sorbets_wind_amulet.png",
+    "class": "Archer",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "skies_blessing": {
+    "id": "skies_blessing",
+    "filename": "skies_blessing",
+    "name": "Skies Blessing",
+    "description": "Epic Archer head armor.",
+    "armorImg": "src/assets/armors/skies_blessing.png",
+    "class": "Archer",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "galeforce_amulet": {
+    "id": "galeforce_amulet",
+    "filename": "galeforce_amulet",
+    "name": "Galeforce Amulet",
+    "description": "Epic Archer head armor.",
+    "armorImg": "src/assets/armors/galeforce_amulet.png",
+    "class": "Archer",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "dusk_and_dawn": {
+    "id": "dusk_and_dawn",
+    "filename": "dusk_and_dawn",
+    "name": "Dusk and Dawn",
+    "description": "Legendary Archer head armor.",
+    "armorImg": "src/assets/armors/dusk_and_dawn.png",
+    "class": "Archer",
+    "rarity": "Legendary",
+    "slotType": "head",
+    "baseDef": 12,
+    "durability": 190,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 455,
+    "buyCost": 1300
+  },
+  "hunter_tunic": {
+    "id": "hunter_tunic",
+    "filename": "hunter_tunic",
+    "name": "Hunter Tunic",
+    "description": "Common Archer body armor.",
+    "armorImg": "src/assets/armors/hunter_tunic.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "leather_jerkin": {
+    "id": "leather_jerkin",
+    "filename": "leather_jerkin",
+    "name": "Leather Jerkin",
+    "description": "Common Archer body armor.",
+    "armorImg": "src/assets/armors/leather_jerkin.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "scout_vest": {
+    "id": "scout_vest",
+    "filename": "scout_vest",
+    "name": "Scout Vest",
+    "description": "Common Archer body armor.",
+    "armorImg": "src/assets/armors/scout_vest.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 70
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "travelers_coat": {
+    "id": "travelers_coat",
+    "filename": "travelers_coat",
+    "name": "Traveler's Coat",
+    "description": "Common Archer body armor.",
+    "armorImg": "src/assets/armors/travelers_coat.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "archers_garb": {
+    "id": "archers_garb",
+    "filename": "archers_garb",
+    "name": "Archer's Garb",
+    "description": "Common Archer body armor.",
+    "armorImg": "src/assets/armors/archers_garb.png",
+    "class": "Archer",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "ranger_jerkin": {
+    "id": "ranger_jerkin",
+    "filename": "ranger_jerkin",
+    "name": "Ranger Jerkin",
+    "description": "Rare Archer body armor.",
+    "armorImg": "src/assets/armors/ranger_jerkin.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "elven_leather": {
+    "id": "elven_leather",
+    "filename": "elven_leather",
+    "name": "Elven Leather",
+    "description": "Rare Archer body armor.",
+    "armorImg": "src/assets/armors/elven_leather.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 110
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "windrunner_coat": {
+    "id": "windrunner_coat",
+    "filename": "windrunner_coat",
+    "name": "Windrunner Coat",
+    "description": "Rare Archer body armor.",
+    "armorImg": "src/assets/armors/windrunner_coat.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "falconhide_vest": {
+    "id": "falconhide_vest",
+    "filename": "falconhide_vest",
+    "name": "Falconhide Vest",
+    "description": "Rare Archer body armor.",
+    "armorImg": "src/assets/armors/falconhide_vest.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "penalty",
+        "value": 0.01
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "stormweave_tunic": {
+    "id": "stormweave_tunic",
+    "filename": "stormweave_tunic",
+    "name": "Stormweave Tunic",
+    "description": "Rare Archer body armor.",
+    "armorImg": "src/assets/armors/stormweave_tunic.png",
+    "class": "Archer",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "sorbets_windbreaker": {
+    "id": "sorbets_windbreaker",
+    "filename": "sorbets_windbreaker",
+    "name": "Sorbet's Windbreaker",
+    "description": "Epic Archer body armor.",
+    "armorImg": "src/assets/armors/sorbets_windbreaker.png",
+    "class": "Archer",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "yggdrasil_shroud": {
+    "id": "yggdrasil_shroud",
+    "filename": "yggdrasil_shroud",
+    "name": "Yggdrasil Shroud",
+    "description": "Epic Archer body armor.",
+    "armorImg": "src/assets/armors/yggdrasil_shroud.png",
+    "class": "Archer",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 32
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "penalty",
+        "value": 130
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "north_wind_armor": {
+    "id": "north_wind_armor",
+    "filename": "north_wind_armor",
+    "name": "North Wind Armor",
+    "description": "Epic Archer body armor.",
+    "armorImg": "src/assets/armors/north_wind_armor.png",
+    "class": "Archer",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "horus_mantle": {
+    "id": "horus_mantle",
+    "filename": "horus_mantle",
+    "name": "Horus Mantle",
+    "description": "Legendary Archer body armor.",
+    "armorImg": "src/assets/armors/horus_mantle.png",
+    "class": "Archer",
+    "rarity": "Legendary",
+    "slotType": "body",
+    "baseDef": 16,
+    "durability": 220,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 578,
+    "buyCost": 1650
+  },
+  "cloth_mask": {
+    "id": "cloth_mask",
+    "filename": "cloth_mask",
+    "name": "Cloth Mask",
+    "description": "Common Rogue head armor.",
+    "armorImg": "src/assets/armors/cloth_mask.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "street_hood": {
+    "id": "street_hood",
+    "filename": "street_hood",
+    "name": "Street Hood",
+    "description": "Common Rogue head armor.",
+    "armorImg": "src/assets/armors/street_hood.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 70
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "leather_mask": {
+    "id": "leather_mask",
+    "filename": "leather_mask",
+    "name": "Leather Mask",
+    "description": "Common Rogue head armor.",
+    "armorImg": "src/assets/armors/leather_mask.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "shade_scarf": {
+    "id": "shade_scarf",
+    "filename": "shade_scarf",
+    "name": "Shade Scarf",
+    "description": "Common Rogue head armor.",
+    "armorImg": "src/assets/armors/shade_scarf.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "worn_veil": {
+    "id": "worn_veil",
+    "filename": "worn_veil",
+    "name": "Worn Veil",
+    "description": "Common Rogue head armor.",
+    "armorImg": "src/assets/armors/worn_veil.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "head",
+    "baseDef": 2,
+    "durability": 100,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 35,
+    "buyCost": 100
+  },
+  "nightstalker_mask": {
+    "id": "nightstalker_mask",
+    "filename": "nightstalker_mask",
+    "name": "Nightstalker Mask",
+    "description": "Rare Rogue head armor.",
+    "armorImg": "src/assets/armors/nightstalker_mask.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "silent_hood": {
+    "id": "silent_hood",
+    "filename": "silent_hood",
+    "name": "Silent Hood",
+    "description": "Rare Rogue head armor.",
+    "armorImg": "src/assets/armors/silent_hood.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 110
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "duskwrap_mask": {
+    "id": "duskwrap_mask",
+    "filename": "duskwrap_mask",
+    "name": "Duskwrap Mask",
+    "description": "Rare Rogue head armor.",
+    "armorImg": "src/assets/armors/duskwrap_mask.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "penalty",
+        "value": 0.01
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "shadowveil_hood": {
+    "id": "shadowveil_hood",
+    "filename": "shadowveil_hood",
+    "name": "Shadowveil Hood",
+    "description": "Rare Rogue head armor.",
+    "armorImg": "src/assets/armors/shadowveil_hood.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "blackthorn_mask": {
+    "id": "blackthorn_mask",
+    "filename": "blackthorn_mask",
+    "name": "Blackthorn Mask",
+    "description": "Rare Rogue head armor.",
+    "armorImg": "src/assets/armors/blackthorn_mask.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "head",
+    "baseDef": 4,
+    "durability": 125,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 88,
+    "buyCost": 250
+  },
+  "lantiers_persona": {
+    "id": "lantiers_persona",
+    "filename": "lantiers_persona",
+    "name": "Lantier's Persona",
+    "description": "Epic Rogue head armor.",
+    "armorImg": "src/assets/armors/lantiers_persona.png",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "shadow_realm_mask": {
+    "id": "shadow_realm_mask",
+    "filename": "shadow_realm_mask",
+    "name": "Shadow Realm Mask",
+    "description": "Epic Rogue head armor.",
+    "armorImg": "src/assets/armors/shadow_realm_mask.png",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "puppeteers_mask": {
+    "id": "puppeteers_mask",
+    "filename": "puppeteers_mask",
+    "name": "Puppeteer's Mask",
+    "description": "Epic Rogue head armor.",
+    "armorImg": "src/assets/armors/puppeteers_mask.png",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "slotType": "head",
+    "baseDef": 7,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 210,
+    "buyCost": 600
+  },
+  "chosen_eclipse": {
+    "id": "chosen_eclipse",
+    "filename": "chosen_eclipse",
+    "name": "Chosen Eclipse",
+    "description": "Legendary Rogue head armor.",
+    "armorImg": "src/assets/armors/chosen_eclipse.png",
+    "class": "Rogue",
+    "rarity": "Legendary",
+    "slotType": "head",
+    "baseDef": 12,
+    "durability": 190,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 455,
+    "buyCost": 1300
+  },
+  "light_jerkin": {
+    "id": "light_jerkin",
+    "filename": "light_jerkin",
+    "name": "Light Jerkin",
+    "description": "Common Rogue body armor.",
+    "armorImg": "src/assets/armors/light_jerkin.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.02
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "thiefs_garb": {
+    "id": "thiefs_garb",
+    "filename": "thiefs_garb",
+    "name": "Thief's Garb",
+    "description": "Common Rogue body armor.",
+    "armorImg": "src/assets/armors/thiefs_garb.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 70
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "leather_vest": {
+    "id": "leather_vest",
+    "filename": "leather_vest",
+    "name": "Leather Vest",
+    "description": "Common Rogue body armor.",
+    "armorImg": "src/assets/armors/leather_vest.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 12
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "shadow_tunic": {
+    "id": "shadow_tunic",
+    "filename": "shadow_tunic",
+    "name": "Shadow Tunic",
+    "description": "Common Rogue body armor.",
+    "armorImg": "src/assets/armors/shadow_tunic.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "worn_cloak": {
+    "id": "worn_cloak",
+    "filename": "worn_cloak",
+    "name": "Worn Cloak",
+    "description": "Common Rogue body armor.",
+    "armorImg": "src/assets/armors/worn_cloak.png",
+    "class": "Rogue",
+    "rarity": "Common",
+    "slotType": "body",
+    "baseDef": 3,
+    "durability": 120,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 8
+      }
+    ],
+    "dropRate": 0.24,
+    "sellCost": 46,
+    "buyCost": 130
+  },
+  "nightrunner_garb": {
+    "id": "nightrunner_garb",
+    "filename": "nightrunner_garb",
+    "name": "Nightrunner Garb",
+    "description": "Rare Rogue body armor.",
+    "armorImg": "src/assets/armors/nightrunner_garb.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.03
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "silentstep_vest": {
+    "id": "silentstep_vest",
+    "filename": "silentstep_vest",
+    "name": "Silentstep Vest",
+    "description": "Rare Rogue body armor.",
+    "armorImg": "src/assets/armors/silentstep_vest.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 110
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "duskleather_armor": {
+    "id": "duskleather_armor",
+    "filename": "duskleather_armor",
+    "name": "Duskleather Armor",
+    "description": "Rare Rogue body armor.",
+    "armorImg": "src/assets/armors/duskleather_armor.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 2
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "penalty",
+        "value": 0.01
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "shadowthread_cloak": {
+    "id": "shadowthread_cloak",
+    "filename": "shadowthread_cloak",
+    "name": "Shadowthread Cloak",
+    "description": "Rare Rogue body armor.",
+    "armorImg": "src/assets/armors/shadowthread_cloak.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 12
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 1
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "blackweave_tunic": {
+    "id": "blackweave_tunic",
+    "filename": "blackweave_tunic",
+    "name": "Blackweave Tunic",
+    "description": "Rare Rogue body armor.",
+    "armorImg": "src/assets/armors/blackweave_tunic.png",
+    "class": "Rogue",
+    "rarity": "Rare",
+    "slotType": "body",
+    "baseDef": 6,
+    "durability": 150,
+    "modifiers": [
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 20
+      },
+      {
+        "stat": "evasion",
+        "nature": "penalty",
+        "value": 0.015
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 112,
+    "buyCost": 320
+  },
+  "lantiers_blessing": {
+    "id": "lantiers_blessing",
+    "filename": "lantiers_blessing",
+    "name": "Lantier's Blessing",
+    "description": "Epic Rogue body armor.",
+    "armorImg": "src/assets/armors/lantiers_blessing.png",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 150
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "def",
+        "nature": "penalty",
+        "value": 2
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "sulgatas_shadow": {
+    "id": "sulgatas_shadow",
+    "filename": "sulgatas_shadow",
+    "name": "Sulgata's Shadow",
+    "description": "Epic Rogue body armor.",
+    "armorImg": "src/assets/armors/sulgatas_shadow.png",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 18
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "shadoweave_cloak": {
+    "id": "shadoweave_cloak",
+    "filename": "shadoweave_cloak",
+    "name": "Shadoweave Cloak",
+    "description": "Epic Rogue body armor.",
+    "armorImg": "src/assets/armors/shadoweave_cloak.png",
+    "class": "Rogue",
+    "rarity": "Epic",
+    "slotType": "body",
+    "baseDef": 10,
+    "durability": 180,
+    "modifiers": [
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.05
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 3
+      },
+      {
+        "stat": "health",
+        "nature": "penalty",
+        "value": 16
+      }
+    ],
+    "dropRate": 0.055,
+    "sellCost": 266,
+    "buyCost": 760
+  },
+  "lost_from_light": {
+    "id": "lost_from_light",
+    "filename": "lost_from_light",
+    "name": "Lost From Light",
+    "description": "Legendary Rogue body armor.",
+    "armorImg": "src/assets/armors/lost_from_light.png",
+    "class": "Rogue",
+    "rarity": "Legendary",
+    "slotType": "body",
+    "baseDef": 16,
+    "durability": 220,
+    "modifiers": [
+      {
+        "stat": "def",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "evasion",
+        "nature": "bonus",
+        "value": 0.07
+      },
+      {
+        "stat": "energy",
+        "nature": "bonus",
+        "value": 26
+      },
+      {
+        "stat": "dmg",
+        "nature": "bonus",
+        "value": 5
+      },
+      {
+        "stat": "atkSpeed",
+        "nature": "bonus",
+        "value": 220
+      },
+      {
+        "stat": "health",
+        "nature": "bonus",
+        "value": 48
+      },
+      {
+        "stat": "dmgReduction",
+        "nature": "bonus",
+        "value": 0.06
+      }
+    ],
+    "dropRate": 0.018,
+    "sellCost": 578,
+    "buyCost": 1650
+  }
+}

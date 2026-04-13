@@ -7,15 +7,23 @@ export const loadInventoryProfile = async (playerId: string) => {
 
   const storageKey = `player-inventory-${playerId}`;
   
+  // ✅ Check if this player has EXISTING saved inventory data
+  const existingData = localStorage.getItem(storageKey);
+  const isNewPlayer = !existingData;
+
   useInventoryStore.persist.setOptions({
     name: storageKey,
   });
 
-  // 1. Pull the data from the disk
+  // Only reset to initial state if this is a BRAND NEW player
+  if (isNewPlayer) {
+    useInventoryStore.setState({ playerInventory: InitialPlayerInventory });
+  }
+
+  // Load from localStorage for this player (or keep initial if new)
   await useInventoryStore.persist.rehydrate();
   
-  // 2. FORCE the player_id to match the account we just loaded
-  // This fixes cases where the saved JSON file has an empty player_id
+  // Force the player_id to match the account
   useInventoryStore.setState({ player_id: playerId });
 
   console.log(`Successfully loaded inventory for: ${playerId}`);

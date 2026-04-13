@@ -5,13 +5,14 @@ import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
 import { useInventoryStore, loadInventoryProfile } from "@/src/game/store/inventoryStore";
 import DevTool from "@/src/components/DevTool";
-import { authenticateUser } from "@/src/game/services/authService";
+import { registerUser, userExists } from "@/src/game/services/authService";
 import { useSoundStore } from "@/src/game/store/soundStore";
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingUsername, setPendingUsername] = useState("");
   const { user_id, setUserId} = usePlayerStore(
     useShallow((s) => ({
       user_id: s.user_id,
@@ -25,25 +26,50 @@ export default function LoginPage() {
     }))
   )
   const initSounds = useSoundStore(s => s.initSounds)
-  const canLogin = username.trim().length > 0 && password.length > 0;
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    
-    // Authenticate user against localStorage
-    if (!authenticateUser(username, password)) {
-      showToast({ variant: "error", message: "Invalid Username or Password" });
-      return;
-    }
-    
-    // Login successful
-    setUserId(username);
-    await loadInventoryProfile(username);
-    setPlayerId(username);
+  const proceedToGame = async (usernameToProcess: string) => {
+    setUserId(usernameToProcess);
+    await loadInventoryProfile(usernameToProcess);
+    setPlayerId(usernameToProcess);
     // Load other data
     initSounds()
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
+  }
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    
+    if (!username.trim()) {
+      showToast({ variant: "error", message: "Please enter a username" });
+      return;
+    }
+
+    // Check if user exists
+    if (userExists(username)) {
+      // User exists, proceed to game
+      await proceedToGame(username);
+    } else {
+      // User does not exist, show confirmation dialog
+      setPendingUsername(username);
+      setShowConfirmDialog(true);
+    }
+  }
+
+  const handleCreateAccount = async () => {
+    if (registerUser(pendingUsername)) {
+      setShowConfirmDialog(false);
+      setUsername("");
+      await proceedToGame(pendingUsername);
+    } else {
+      showToast({ variant: "error", message: "Failed to create account" });
+      setShowConfirmDialog(false);
+    }
+  }
+
+  const handleCancel = () => {
+    setShowConfirmDialog(false);
+    setPendingUsername("");
   }
 
 
@@ -89,19 +115,6 @@ export default function LoginPage() {
                 className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-yellow-200/60 focus:ring-2 focus:ring-yellow-200/20"
               />
             </div>
-
-            <div>
-              <label className="mb-2 block text-xs uppercase tracking-widest text-gray-300">
-                Password
-              </label>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="••••••••"
-                className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-input-focus/60 focus:ring-2 focus:ring-yellow-200/20"
-              />
-            </div>
             
             <button
               type="submit"
@@ -109,16 +122,6 @@ export default function LoginPage() {
             >
               Begin Adventure
             </button>
-
-            <div className="flex items-center justify-center text-xs text-gray-400">
-              <button
-                type="button"
-                className="underline decoration-white/20 underline-offset-4 cursor-pointer hover:text-gray-200"
-                onClick={() => navigate("/signup")}
-              >
-                Create Account
-              </button>
-            </div>
           </form>
 
           {/* Footer flavor text */}
@@ -127,6 +130,35 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-sm rounded-2xl border-3 border-gray-500 bg-gray-900 p-8 shadow-2xl">
+            <h2 className="mb-4 text-center text-xl font-semibold text-gray-100">
+              Create New Account?
+            </h2>
+            <p className="mb-6 text-center text-[20px] text-gray-300">
+              The username <span className="font-semibold text-yellow-300">{pendingUsername}</span> does not exist. Would you like to create a new account with this username?
+            </p>
+            
+            <div className="flex gap-4">
+              <button
+                onClick={handleCancel}
+                className="flex-1 rounded-xl border-2 border-gray-500 px-4 py-2 font-semibold text-gray-300 cursor-pointer hover:bg-gray-800 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateAccount}
+                className="flex-1 rounded-xl bg-yellow-600 px-4 py-2 font-semibold text-gray-100 cursor-pointer hover:bg-yellow-500 transition"
+              >
+                Create Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

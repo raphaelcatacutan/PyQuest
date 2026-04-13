@@ -15,7 +15,7 @@ import {
   loadInventoryProfile
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/game/types/inventory.types"
-import DialogueBox from "@/src/components/ui/DialogueBox"
+import BountyQuest from "@/src/components/ui/BountyQuest"
 import DevTool from "@/src/components/DevTool"
 import Damaged from "@/src/components/events/Damaged"
 import NavBar from "@/src/components/ui/NavBar"
@@ -23,6 +23,7 @@ import Dungeon from "@/src/components/events/Dungeon"
 import Trials from "@/src/components/events/Trials"
 import NPC from "@/src/components/events/NPC"
 import Tutorial from "@/src/components/events/Tutorial"
+import { loadBountyProfile } from "@/src/game/store"
 
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -51,6 +52,7 @@ export default function GamePage() {
       moveInventoryItem: s.moveInventoryItem,
     }))
   )
+  
   
   const lootInventoryRef = useRef<{ 
     getItems: (nodeIds: string[]) => InventoryNode[],
@@ -123,6 +125,7 @@ export default function GamePage() {
         console.log("FOUND")
         // Only load if we have a valid ID
         await loadInventoryProfile(currentId);
+        await loadBountyProfile(currentId);
         // load other data
       } else {
         console.log("NOT FOUND")
@@ -203,7 +206,7 @@ export default function GamePage() {
       </div>
 
       {/* Misc */}
-      <DialogueBox/>
+      <BountyQuest/>
       <Damaged/>
       <DevTool/>
     </div>

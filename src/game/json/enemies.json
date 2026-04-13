@@ -17,7 +17,9 @@
     "critChance": 0.1,
     "evasion": 0.1,
     "location": {
-      "village": 0.1
+      "village": 0.1,
+      "forest": 0.25,
+      "swamp": 0.2
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -47,7 +49,12 @@
     "critChance": 0.1,
     "evasion": 0.1,
     "location": {
-      "village": 0.1
+      "village": 0.1,
+      "forest": 0.22,
+      "cave": 0.2,
+      "cemetery": 0.3,
+      "tundra": 0.2,
+      "temple": 0.18
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -78,7 +85,9 @@
     "evasion": 0.15,
     "location": {
       "village": 0.55,
-      "dungeon": 0.2
+      "dungeon": 0.2,
+      "forest": 0.6,
+      "jungle": 0.42
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -109,7 +118,9 @@
     "evasion": 0.12,
     "location": {
       "dungeon": 0.6,
-      "village": 0.15
+      "village": 0.15,
+      "desert": 0.5,
+      "cave": 0.35
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -140,7 +151,12 @@
     "evasion": 0.1,
     "location": {
       "dungeon": 0.4,
-      "labyrinth": 0.55
+      "labyrinth": 0.55,
+      "desert": 0.38,
+      "swamp": 0.62,
+      "cemetery": 0.58,
+      "tundra": 0.21,
+      "temple": 0.36
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -171,7 +187,12 @@
     "evasion": 0.13,
     "location": {
       "labyrinth": 0.45,
-      "trials": 0.35
+      "trials": 0.35,
+      "desert": 0.32,
+      "cave": 0.4,
+      "cemetery": 0.42,
+      "tundra": 0.61,
+      "temple": 0.29
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -203,7 +224,12 @@
     "location": {
       "labyrinth": 0.75,
       "trials": 0.45,
-      "dungeon": 0.2
+      "dungeon": 0.2,
+      "jungle": 0.36,
+      "cave": 0.34,
+      "cemetery": 0.24,
+      "tundra": 0.33,
+      "temple": 0.64
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -234,7 +260,9 @@
     "evasion": 0.16,
     "location": {
       "village": 0.7,
-      "dungeon": 0.15
+      "dungeon": 0.15,
+      "forest": 0.35,
+      "jungle": 0.44
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -265,7 +293,9 @@
     "evasion": 0.11,
     "location": {
       "dungeon": 0.72,
-      "labyrinth": 0.2
+      "labyrinth": 0.2,
+      "swamp": 0.28,
+      "jungle": 0.41
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -296,7 +326,9 @@
     "evasion": 0.14,
     "location": {
       "labyrinth": 0.68,
-      "trials": 0.22
+      "trials": 0.22,
+      "forest": 0.3,
+      "swamp": 0.27
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -327,7 +359,9 @@
     "evasion": 0.09,
     "location": {
       "trials": 0.74,
-      "labyrinth": 0.25
+      "labyrinth": 0.25,
+      "desert": 0.29,
+      "jungle": 0.31
     },
     "lootDrop": {
       "coinDropMin": 0,
@@ -359,7 +393,13 @@
     "location": {
       "trials": 0.58,
       "dungeon": 0.18,
-      "labyrinth": 0.3
+      "labyrinth": 0.3,
+      "desert": 0.27,
+      "swamp": 0.26,
+      "cave": 0.33,
+      "cemetery": 0.2,
+      "tundra": 0.37,
+      "temple": 0.41
     },
     "lootDrop": {
       "coinDropMin": 0,

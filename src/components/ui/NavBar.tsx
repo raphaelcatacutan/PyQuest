@@ -1,11 +1,12 @@
-import { exitIcon } from "@/src/assets"
+import { exitIcon, noteIcon } from "@/src/assets"
 import Button from "./Button"
-import { usePlayerStore } from "@/src/game/store"
+import { usePlayerStore, useBountyQuestStore } from "@/src/game/store"
 import { useShallow } from "zustand/shallow"
 import { useNavigate } from "react-router-dom"
 
 
 export default function NavBar(){
+  const toggleDisplayBountyQuest = useBountyQuestStore(s => s.toggleDisplayBountyQuest)
   const navigate = useNavigate()
   const { XP, xpRequirement, level } = usePlayerStore(
     useShallow((s) => ({
@@ -27,8 +28,8 @@ export default function NavBar(){
   return (
     <div className="flex flex-row h-10 p-1 bg-header shadow-[0_0_2px_rgba(255,255,255,1)] gap-4 items-center justify-center">{/* nav div */}
       <Button variant="exit-btn" icon={exitIcon} iconSize={30} title="Exit" onClick={handleExitGame}></Button>
-      <div id="lvl-bar" className="flex items-center gap-2 flex-1 max-w-xs">
-        <span className="text-xs text-gray-200 font-semibold whitespace-nowrap">Level: {level}</span>
+        <span id='lvl-bar' className="text-1xl text-gray-200 font-semibold whitespace-nowrap">Level: {level}</span>
+      {/* <div id="lvl-bar" className="flex items-center gap-2 flex-1 max-w-xs">
         <div className="relative flex-1 bg-gray-700 border border-gray-500 rounded h-5 overflow-hidden">
           <div 
             className="bg-yellow-500 h-full transition-all duration-300" 
@@ -38,6 +39,9 @@ export default function NavBar(){
             {XP}/{xpRequirement}
           </span>
         </div>
+      </div> */}
+      <div id='bounty-quest'>      
+        <Button variant="icon-only-btn" icon={noteIcon} iconSize={30} title="Bounty Quest" onClick={toggleDisplayBountyQuest}></Button>
       </div>
     </div> 
 )

@@ -5,6 +5,7 @@
     { "targetId": "right-btn", "text": "Access the Side Panel here to browse the Item Shop or monitor the System Terminal." },
     { "targetId": "code-editor", "text": "This is your Code Editor—where logic becomes power. Type your commands here." },
     { "targetId": "status-bar", "text": "Your Health and Energy. Keep an eye on these; syntax errors can be draining." },
-    { "targetId": "lvl-bar", "text": "Your Level. Grow your knowledge to unlock more complex syntax." },
+    { "targetId": "lvl-bar", "text": "This is your Level. Grow your knowledge to unlock more complex syntax." },
+    { "targetId": "bounty-quest", "text": "Your bounty quest. Accomplish the tasks to proceed to the next level." },
     { "targetId": "origin", "text": "The environment is initialized. Good luck surviving the logic ahead!" }
 ]

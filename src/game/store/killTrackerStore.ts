@@ -62,3 +62,9 @@ export const loadKillProfile = async (playerId: string) => {
   
   console.log(`Successfully loaded Tracker for: ${playerId}`)
 };
+
+export const resetKillTrackerPersist = () => {
+  useKillTrackerStore.persist.setOptions({
+    name: "player-kills-default",
+  });
+};

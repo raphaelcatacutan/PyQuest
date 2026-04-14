@@ -118,14 +118,14 @@ export default function DevTool(){
           console.log("Full inventoryStore:", useInventoryStore.getState());
           console.log("Full playerStore:", usePlayerStore.getState());
         }}/>
-        <Button text="Print" onClick={() => console.log(tuts.instruction)}/>
+        <Button text="Print" onClick={() => console.log(user_id)}/>
         {/* <Button text="Next" onClick={() => tuts.nextStep()}/> */}
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
         <Button text="Coin+" onClick={() => gainCoin(100)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>
         <span>{hp}</span>
         <Button text="Hp+" onClick={() => gainHP(10)}/>
-        <Button text="XP+" onClick={() => gainXP(10)}/>
+        <Button text="XP+" onClick={() => gainXP(100)}/>
         <Button text="Toast" onClick={() => {showToast({variant: "info", message: "Test"})}}/>
         <Button text={combatText} onClick={() => { toggleInCombat(null) }}/>
         <Button text="Enemy/Boss" onClick={() => { 

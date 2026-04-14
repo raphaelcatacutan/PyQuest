@@ -30,13 +30,13 @@ export default function LoginPage() {
 
   const proceedToGame = async (usernameToProcess: string) => {
     setUserId(usernameToProcess);
-    await loadInventoryProfile(usernameToProcess);
     setPlayerId(usernameToProcess);
     // Load other data
     initSounds()
     playMusic('village')
     navigate('/game');
     showToast({ variant: "success", message: "Welcome, adventurer!" });
+    console.log("Logged in")
   }
 
   async function onSubmit(e: React.FormEvent) {

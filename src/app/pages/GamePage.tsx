@@ -13,7 +13,8 @@ import {
   usePlayerStore,
   useInventoryStore,
   loadInventoryProfile,
-  loadDungeonProfile
+  loadDungeonProfile,
+  loadUserProfile
 } from "@/src/game/store"
 import { InventoryNode } from "@/src/game/types/inventory.types"
 import BountyQuest from "@/src/components/ui/BountyQuest"
@@ -126,6 +127,7 @@ export default function GamePage() {
       if (currentId) {
         console.log(`Data Found for ${currentId}`)
         // Only load if we have a valid ID
+        await loadUserProfile(currentId);
         await loadInventoryProfile(currentId);
         await loadBountyProfile(currentId);
         await loadDungeonProfile(currentId);
@@ -136,7 +138,7 @@ export default function GamePage() {
       }
     };
     initApp();
-  }, [user_id]); // Adding user_id here covers both refresh AND login
+  }, []); // Adding user_id here covers both refresh AND login
   
   function handleItemTransferred(item: InventoryNode) {
     console.log("GamePage.handleItemTransferred called with item:", item);

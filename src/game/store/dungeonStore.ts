@@ -16,6 +16,12 @@ export const loadDungeonProfile = async (playerId: string) => {
   useDungeonStore.setState({ playerId });
 };
 
+export const resetDungeonPersist = () => {
+  useDungeonStore.persist.setOptions({
+    name: "player-dungeon-default",
+  });
+};
+
 interface DungeonStoreProps extends Dungeon {
   setPlayerId: (id: string) => void;
 

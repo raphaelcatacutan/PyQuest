@@ -142,6 +142,7 @@ export const useMerchantStore = create<MerchantStoreProps>((set) => ({
           name: item.name,
           kind: "weapon" as const,
           itemId: item.id,
+          children: [],
         })
       );
 

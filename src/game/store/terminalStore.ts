@@ -14,7 +14,7 @@ interface TerminalStoreProps {
 }
 
 export const useTerminalStore = create<TerminalStoreProps>((set) => ({
-  logs: ["[BATTLE_LOG]: You defeated a goblin! 76 exp rewarded."],
+  logs: ["[SYSTEM]: Hello Player!"],
   maxLogs: 100,
   setLogs: (logs) => set({ logs: logs }),
   appendToLog: (msg) => set((state) => {

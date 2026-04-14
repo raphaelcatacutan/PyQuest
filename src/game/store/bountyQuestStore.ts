@@ -138,3 +138,9 @@ export const loadBountyProfile = async (playerId: string) => {
 
   console.log(`Successfully loaded bounty quests for: ${playerId}`)
 };
+
+export const resetBountyPersist = () => {
+  useBountyQuestStore.persist.setOptions({
+    name: "player-bounty-default",
+  });
+};

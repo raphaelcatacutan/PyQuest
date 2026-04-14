@@ -1,10 +1,53 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { useInventoryStore } from './inventoryStore';
 import { Player } from '../types/player.types';
-import { loadInventoryProfile } from './inventoryStore';
 import { useSoundStore } from './soundStore';
+import { resetInventoryPersist } from './inventoryStore';
+import { resetBountyPersist } from './bountyQuestStore';
+import { resetDungeonPersist } from './dungeonStore';
+import { resetKillTrackerPersist } from './killTrackerStore';
 
+export const loadUserProfile = async (playerId: string) => {
+  if (!playerId) return;
+
+  const playerStorageKey = `${playerId}-stats`;
+  
+  const existingData = localStorage.getItem(playerStorageKey);
+  const isNewPlayer = !existingData;
+
+  // Switch to this player's storage
+  usePlayerStore.persist.setOptions({
+    name: playerStorageKey,
+  });
+
+  // Only reset to initial state if this is a BRAND NEW player
+  if (isNewPlayer) {
+    usePlayerStore.setState({ 
+      user_id: playerId,
+      hp: 100,
+      maxHP: 100,
+      def: 0,
+      maxDef: 0,
+      energy: 100,
+      maxEnergy: 100,
+      coins: 0,
+      XP: 0,
+      level: 1,
+      xpRequirement: 100,
+    });
+  }
+
+  // Load from localStorage for this player (or keep initial if new)
+  await usePlayerStore.persist.rehydrate();
+  
+  // Ensure the user_id matches the account
+  usePlayerStore.setState({ user_id: playerId });
+
+  // Load the inventory profile for this player
+  // await loadInventoryProfile(playerId);
+
+  console.log(`Successfully loaded profile for: ${playerId}`);
+};
 
 interface PlayerStoreProps extends Player {
   setUserId: (user_id: string) => void;
@@ -79,7 +122,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       setUserId: (user_id) => {
         set({ user_id });
         // When we set the user, we immediately tell the inventory store to rehydrate its data
-        loadInventoryProfile(user_id);
+        // loadInventoryProfile(user_id);
       },
       
       setUsername: (username) => set({ username }),
@@ -150,7 +193,15 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       toggleIsHealing: (bool) => set((s) => ({ isHealing: bool ?? !s.isHealing })),
 
       logOut: () => {
-        useInventoryStore.setState({ player_id: "" });
+        // Reset all persist keys before clearing state to prevent ghost logins
+        usePlayerStore.persist.setOptions({
+          name: 'pyquest-active-session',
+        });
+        resetInventoryPersist();
+        resetBountyPersist();
+        resetDungeonPersist();
+        resetKillTrackerPersist();
+        
         set({
           user_id: "",
           username: "",
@@ -163,7 +214,6 @@ export const usePlayerStore = create<PlayerStoreProps>()(
           rightHand: "",
           isDamaged: false
         });
-        // Remove the session key so the next refresh doesn't auto-log in the last user
         localStorage.removeItem('pyquest-active-session');
       }
     }),

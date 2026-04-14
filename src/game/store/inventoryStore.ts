@@ -156,3 +156,10 @@ export const useInventoryStore = create<InventoryStoreProps>()(
     }
   )
 );
+
+// Helper function reset inventory persist key after logout
+export const resetInventoryPersist = () => {
+  useInventoryStore.persist.setOptions({
+    name: "player-inventory-default",
+  });
+};

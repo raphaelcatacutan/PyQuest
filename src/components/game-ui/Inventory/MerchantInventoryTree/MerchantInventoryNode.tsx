@@ -7,6 +7,9 @@ import { useSoundStore, usePlayerStore } from "@/src/game/store";
 import { getNodeIcon } from "../node.util";
 import { useShallow } from "zustand/shallow";
 import showToast from "@/src/components/ui/Toast";
+import ArmorsCatalog from "@/src/game/json/armors.json";
+import WeaponsCatalog from "@/src/game/json/weapons.json";
+import ConsumablesCatalog from "@/src/game/json/consumables.json";
 
 
 interface MerchantInventoryNodeProps extends NodeRendererProps<InventoryNode> {
@@ -31,10 +34,27 @@ export function MerchantInventoryNode({
   )
   const name = node.data.name;
 
+  // Get the item's buy cost from the appropriate catalog
+  const getItemCost = () => {
+    const itemId = (node.data as any).itemId as string;
+    const kind = node.data.kind;
+
+    if (kind === "armor") {
+      return (ArmorsCatalog as any)[itemId]?.buyCost || 0;
+    } else if (kind === "weapon") {
+      return (WeaponsCatalog as any)[itemId]?.buyCost || 0;
+    } else if (kind === "consumable") {
+      return (ConsumablesCatalog as any)[itemId]?.buyCost || 0;
+    }
+    return 0;
+  };
+
+  const itemCost = getItemCost();
+
   const handlePurchase = () => {
-    if (coins >= 123) {
+    if (coins >= itemCost) {
       useSoundStore.getState().playSfx('trade')
-      deductCoins(123); // TODO: Replace with item price
+      deductCoins(itemCost);
       onBuy(node.id);
     } else {
       showToast({ variant: "warning", message: "Not Enough Coins" });
@@ -70,7 +90,11 @@ export function MerchantInventoryNode({
         />
         <span className="truncate">
           {name}
-          {node.data.kind !== "folder" && <span className="text-amber-300 ml-2">{"$123"}</span>}
+          {node.data.kind !== "folder" && 
+            <span className="text-amber-300 ml-2">
+              ${itemCost}
+            </span>
+          }
         </span>
       </div>
       {isHovered && node.data.kind !== "folder" && ( node.data.kind !== "util" && 

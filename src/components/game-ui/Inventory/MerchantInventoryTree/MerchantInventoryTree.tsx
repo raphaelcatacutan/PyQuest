@@ -1,17 +1,8 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Tree } from "react-arborist";
 import { InventoryNode } from "@/src/game/types/inventory.types";
 import { MerchantInventoryNode } from "./MerchantInventoryNode";
-
-// TODO: Item must be accompanied with Buy and Sell value
-const data: InventoryNode[] = [
-  {
-    id: "Store",
-    name: "Store",
-    kind: "folder",
-    children: [{ id: "kick", name: "kick()", kind: "consumable", itemId: "kick" }],
-  },
-];
+import { useMerchantStore, useSceneStore } from "@/src/game/store";
 
 interface MerchantInventoryTreeProps {
   onItemBought?: (item: InventoryNode) => void;
@@ -20,8 +11,17 @@ interface MerchantInventoryTreeProps {
 export function MerchantInventoryTree({
   onItemBought,
 }: MerchantInventoryTreeProps) {
-  const [merchantInventory, setMerchantInventory] = useState(data);
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const merchantInventory = useMerchantStore((s) => s.merchantInventory);
+  const selectedNodeId = useMerchantStore((s) => s.selectedNodeId);
+  const removeInventoryItem = useMerchantStore((s) => s.removeInventoryItem);
+  const toggleSelectedNodeId = useMerchantStore((s) => s.toggleSelectedNodeId);
+  const refreshStore = useMerchantStore((s) => s.refreshStore);
+  const scene = useSceneStore(s => s.scene)
+
+  // Only refresh when scene changes
+  useEffect(() => {
+    refreshStore()
+  }, [scene, refreshStore])
 
   function handleBuy(nodeId: string) {
     console.log("=== handleBuy START ===");
@@ -57,23 +57,13 @@ export function MerchantInventoryTree({
 
     // Remove from merchant inventory
     console.log("Removing item from merchant inventory...");
-    const deleteFromArray = (items: InventoryNode[]): InventoryNode[] => {
-      return items
-        .filter((item) => item.id !== nodeId)
-        .map((item) =>
-          item.kind === "folder"
-            ? { ...item, children: deleteFromArray(item.children) }
-            : item,
-        );
-    };
-    setMerchantInventory(deleteFromArray(merchantInventory));
-    setSelectedNodeId(null);
+    removeInventoryItem(nodeId);
     console.log("=== handleBuy END ===");
   }
 
   function handleNodeSelect(nodeId: string) {
     // Simple single-item selection
-    setSelectedNodeId(selectedNodeId === nodeId ? null : nodeId);
+    toggleSelectedNodeId(nodeId);
   }
 
   return (

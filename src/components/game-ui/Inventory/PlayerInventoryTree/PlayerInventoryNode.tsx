@@ -13,6 +13,9 @@ import { usePlayerStore, useSceneStore, useSoundStore } from "@/src/game/store";
 import { getNodeIcon } from "../node.util";
 import { createPortal } from "react-dom";
 import { useShallow } from "zustand/shallow";
+import ArmorsCatalog from "@/src/game/json/armors.json";
+import WeaponsCatalog from "@/src/game/json/weapons.json";
+import ConsumablesCatalog from "@/src/game/json/consumables.json";
 
 interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onDelete: (nodeId: string) => void;
@@ -48,9 +51,8 @@ export function PlayerInventoryNode({
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(node.data.name);
   const scene = useSceneStore(s => s.scene)
-  const { coins, gainCoins } = usePlayerStore(
+  const { gainCoins } = usePlayerStore(
     useShallow((s) => ({
-      coins: s.coins,
       gainCoins: s.gainCoins
     }))
   )
@@ -114,9 +116,26 @@ export function PlayerInventoryNode({
 
   const handleSell = () => {
     useSoundStore.getState().playSfx('trade')
-    gainCoins(123) // TODO: Replace with item value
+    gainCoins(itemSellPrice);
     onDelete(node.id)
   }
+
+  // Get the item's sell price from the appropriate catalog
+  const getItemSellPrice = () => {
+    const itemId = (node.data as any).itemId as string;
+    const kind = node.data.kind;
+
+    if (kind === "armor") {
+      return (ArmorsCatalog as any)[itemId]?.sellCost || 0;
+    } else if (kind === "weapon") {
+      return (WeaponsCatalog as any)[itemId]?.sellCost || 0;
+    } else if (kind === "consumable") {
+      return (ConsumablesCatalog as any)[itemId]?.sellCost || 0;
+    }
+    return 0;
+  };
+
+  const itemSellPrice = getItemSellPrice();
 
   return (
     <div
@@ -160,7 +179,7 @@ export function PlayerInventoryNode({
           {isHovered && 
             scene == 'village' && 
             isSellableItem(node.data.kind) && (
-            <span className="text-amber-300 ml-2">$123</span> // TODO: Replace with cost value
+            <span className="text-amber-300 ml-2">${itemSellPrice}</span>
           )}
           </>
         )}

@@ -6,6 +6,7 @@ import { resetInventoryPersist } from './inventoryStore';
 import { resetBountyPersist } from './bountyQuestStore';
 import { resetDungeonPersist } from './dungeonStore';
 import { resetKillTrackerPersist } from './killTrackerStore';
+import showToast from '@/src/components/ui/Toast';
 
 export const loadUserProfile = async (playerId: string) => {
   if (!playerId) return;
@@ -181,13 +182,18 @@ export const usePlayerStore = create<PlayerStoreProps>()(
         while (newXP >= newXpRequirement) {
           newXP -= newXpRequirement;
           newLevel += 1;
-          newXpRequirement = Math.floor(newXpRequirement * 1.2);
+          newXpRequirement = Math.floor(newXpRequirement * 1.2);        
+          showToast({variant: 'info', message: "You Leveled up!"})
         }
         return { XP: newXP, level: newLevel, xpRequirement: newXpRequirement };
       }),
 
       setXpRequirement: (amount) => set({ xpRequirement: amount }),
-      levelUp: () => set((state) => ({ level: state.level + 1 })),
+      // levelUp: () => set((state) => ({ level: state.level + 1 })),
+      levelUp: () => {
+        showToast({variant: 'success', message: "You Leveled up!"})
+        set((state) => ({ level: state.level + 1 }))
+      },
 
       toggleIsDamaged: (bool) => set((s) => ({ isDamaged: bool ?? !s.isDamaged })),
       toggleIsHealing: (bool) => set((s) => ({ isHealing: bool ?? !s.isHealing })),

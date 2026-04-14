@@ -3,7 +3,6 @@ import { painHud } from "@/src/assets"
 import { useEffect, useRef } from "react"
 import { useShallow } from "zustand/shallow"
 
-// TODO: "You're Dead" Overlay once hp hits 0, like in elden ring
 
 export default function Damaged(){
   const { hp, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(

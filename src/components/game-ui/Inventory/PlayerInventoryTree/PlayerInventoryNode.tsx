@@ -11,8 +11,10 @@ import {
   fileIcon,
   openFolderIcon,
   renameIcon,
+  sellIcon
 } from "@/src/assets";
 import { resolveInventoryItemImage } from "../itemImageResolver";
+import { useSceneStore, useSoundStore } from "@/src/game/store";
 
 interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onDelete: (nodeId: string) => void;
@@ -41,6 +43,7 @@ export function PlayerInventoryNode({
   const [isHovered, setIsHovered] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(node.data.name);
+  const scene = useSceneStore(s => s.scene)
   const name = node.data.name;
 
   function getNodeType(type: InventoryNode["kind"]) {
@@ -175,6 +178,18 @@ export function PlayerInventoryNode({
               setNewName(name);
             }}
           />
+          {scene == 'village' && node.data.kind == "misc" &&
+            <Button
+              variant="icon-only-btn"
+              icon={sellIcon}
+              iconSize={20}
+              onClick={() => {
+                useSoundStore.getState().playSfx('trade')
+                onDelete(node.id)
+                // TODO: Sell
+              }}
+            />
+          }
           {node.data.kind === "folder" && (
             <>
               <Button

@@ -10,6 +10,7 @@ import {
   openFolderIcon,
 } from "@/src/assets";
 import { resolveInventoryItemImage } from "../itemImageResolver";
+import { useSoundStore } from "@/src/game/store";
 
 interface MerchantInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onSelect: (nodeId: string) => void;
@@ -102,7 +103,10 @@ export function MerchantInventoryNode({
             variant="icon-only-btn"
             icon={buyIcon}
             iconSize={20}
-            onClick={() => onBuy(node.id)}
+            onClick={() => {
+              onBuy(node.id)
+              useSoundStore.getState().playSfx('trade')
+            }}
             title="Buy Item"
           />
         </div>

@@ -19,3 +19,4 @@ export type InventoryNode =
       // Node Config
       nameOverride?: string; // rename support
     };
+    // TODO: Revamp

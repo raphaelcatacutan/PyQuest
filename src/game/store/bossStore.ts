@@ -3,6 +3,7 @@ import { Boss } from "../types/boss.types";
 import { MachineProblem } from "../types/mp.types";
 import { getRandomMPByScene } from "../data/mps";
 import { useSceneStore } from "./sceneStore";
+import { useSoundStore } from "./soundStore";
 
 /**
  * 
@@ -53,9 +54,10 @@ export const useBossStore = create<BossStoreProps>((set) => ({
 
   spawnBoss: (boss) => set({ ...boss }),  
   
-  takeDamage: (amount) => set((state) => ({
-    hp: Math.max(0, state.hp - amount)
-  })),
+  takeDamage: (amount) => {
+    useSoundStore.getState().playSfx('hit')
+    set((state) => ({ hp: Math.max(0, state.hp - amount) }))
+  },
 
   gainHp: (amount) => set((state) => ({
     hp: Math.min(state.maxHp, state.hp + amount)

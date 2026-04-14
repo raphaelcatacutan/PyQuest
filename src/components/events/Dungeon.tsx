@@ -62,7 +62,6 @@ export default function Dungeon(){
       const timer = setTimeout(() => { toggleInDungeon(true) }, 1500)
       return () => clearTimeout(timer);
     } else { resetDungeon() }
-    console.log(scene)
   }, [scene])
 
   useEffect(() => {

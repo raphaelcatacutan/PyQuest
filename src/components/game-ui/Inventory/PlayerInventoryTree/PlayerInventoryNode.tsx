@@ -147,6 +147,137 @@ export function PlayerInventoryNode({
 
   const itemSellPrice = getItemSellPrice();
 
+  // Get detailed item data from catalogs
+  const getItemData = () => {
+    const itemId = (node.data as any).itemId as string;
+    const kind = node.data.kind;
+
+    if (kind === "armor") {
+      return (ArmorsCatalog as any)[itemId];
+    } else if (kind === "weapon") {
+      return (WeaponsCatalog as any)[itemId];
+    } else if (kind === "consumable") {
+      return (ConsumablesCatalog as any)[itemId];
+    }
+    return null;
+  };
+
+  const itemData = getItemData();
+
+  // Render tooltip content based on item type
+  const renderTooltipContent = () => {
+    if (!itemData) {
+      return (
+        <>
+          <p className="text-xs font-bold">{node.data.name}</p>
+          <p className="text-xs text-gray-300">Item not found in catalog</p>
+        </>
+      );
+    }
+
+    if (node.data.kind === "armor") {
+      const armor = itemData;
+      return (
+        <>
+          <p className="text-xs font-bold text-yellow-300">{armor.name}</p>
+          {armor.rarity && <p className="text-xs text-gray-400">{armor.rarity}</p>}
+          {armor.description && <p className="text-xs text-gray-300 mt-1">{armor.description}</p>}
+          
+          {armor.baseDef > 0 && <p className="text-xs text-blue-300 mt-2">Defense: +{armor.baseDef}</p>}
+          {armor.durability && <p className="text-xs text-gray-400">Durability: {armor.durability}</p>}
+          
+          {armor.modifiers && armor.modifiers.length > 0 && (
+            <div className="text-xs mt-2 space-y-1">
+              <p className="text-gray-400 font-semibold">Modifiers:</p>
+              {armor.modifiers.map((mod: any, idx: number) => (
+                <p key={idx} className={mod.nature === 'bonus' ? 'text-green-400' : 'text-red-400'}>
+                  {mod.stat}: {mod.nature === 'bonus' ? '+' : '-'}{mod.value}
+                </p>
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    if (node.data.kind === "weapon") {
+      const weapon = itemData;
+      return (
+        <>
+          <p className="text-xs font-bold text-yellow-300">{weapon.name}</p>
+          {weapon.rarity && <p className="text-xs text-gray-400">{weapon.rarity}</p>}
+          {weapon.description && <p className="text-xs text-gray-300 mt-1">{weapon.description}</p>}
+          
+          <div className="text-xs mt-2 space-y-1">
+            <p className="text-blue-300">Base Dmg: {weapon.baseDmg}</p>
+            {weapon.baseCritChance > 0 && <p className="text-blue-300">Crit Chance: {(weapon.baseCritChance * 100).toFixed(0)}%</p>}
+            {weapon.baseCritDmg > 0 && <p className="text-blue-300">Crit Dmg: {(weapon.baseCritDmg * 100).toFixed(0)}%</p>}
+            {weapon.energyCostPerSwing && <p className="text-gray-400">Energy/Swing: {weapon.energyCostPerSwing}</p>}
+          </div>
+
+          {weapon.modifiers && weapon.modifiers.length > 0 && (
+            <div className="text-xs mt-2 space-y-1">
+              <p className="text-gray-400 font-semibold">Modifiers:</p>
+              {weapon.modifiers.map((mod: any, idx: number) => (
+                <p key={idx} className={mod.nature === 'bonus' ? 'text-green-400' : 'text-red-400'}>
+                  {mod.stat}: {mod.nature === 'bonus' ? '+' : '-'}{mod.value}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {weapon.skills && weapon.skills.length > 0 && (
+            <div className="text-xs mt-2 space-y-1">
+              <p className="text-gray-400 font-semibold">Skills:</p>
+              {weapon.skills.map((skill: any, idx: number) => (
+                <p key={idx} className="text-purple-300">{skill.name} ({skill.energyCost} energy)</p>
+              ))}
+            </div>
+          )}
+
+          {weapon.inflictions && weapon.inflictions.length > 0 && (
+            <div className="text-xs mt-2 space-y-1">
+              <p className="text-gray-400 font-semibold">Status Chance:</p>
+              {weapon.inflictions.map((inf: any, idx: number) => (
+                <p key={idx} className="text-orange-300">{inf.type}: {(inf.chance * 100).toFixed(0)}%</p>
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    if (node.data.kind === "consumable") {
+      const consumable = itemData;
+      return (
+        <>
+          <p className="text-xs font-bold text-yellow-300">{consumable.name}</p>
+          {consumable.description && <p className="text-xs text-gray-300 mt-1">{consumable.description}</p>}
+          
+          {consumable.cooldown && <p className="text-xs text-gray-400 mt-2">Cooldown: {consumable.cooldown}ms</p>}
+
+          {consumable.effects && consumable.effects.length > 0 && (
+            <div className="text-xs mt-2 space-y-1">
+              <p className="text-gray-400 font-semibold">Effects:</p>
+              {consumable.effects.map((effect: any, idx: number) => {
+                if (effect.type === 'restore') {
+                  return <p key={idx} className="text-green-400">{effect.stat}: +{effect.amount}</p>;
+                } else if (effect.type === 'buff') {
+                  return <p key={idx} className="text-blue-400">{effect.stat} Buff x{effect.multiplier} ({effect.duration}ms)</p>;
+                } else if (effect.type === 'debuff') {
+                  return <p key={idx} className="text-red-400">{effect.stat}: -{effect.amount} ({effect.duration}ms)</p>;
+                }
+                return null;
+              })}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div
       style={style}
@@ -260,11 +391,10 @@ export function PlayerInventoryNode({
           pointerEvents: 'none', 
           zIndex: 51,      // High z-index to stay on top of everything
         }}
-        className="bg-black/90 max-w-80 max-h-100 text-wrap overflow-y-clip text-white p-2 rounded shadow-2xl border border-yellow-500"
+        className="bg-black/90 max-w-xs text-wrap overflow-y-auto max-h-96 text-white p-3 rounded shadow-2xl border border-yellow-500"
       >
-         <p className="text-xs font-bold">{node.data.name}</p>
-         <p className="text-xs font-bold">Lorem ipsum dolor sit amet consectetur, </p>
-         {node.data.cursed && <p className="text-red-400 text-[10px]">Cursed Item!</p>}
+         {renderTooltipContent()}
+         {node.data.cursed && <p className="text-red-400 text-[10px] mt-2">⚠️ Cursed Item!</p>}
       </div>,
       document.body // Teleport destination
     )}

@@ -25,6 +25,7 @@ import Trials from "@/src/components/events/Trials"
 import NPC from "@/src/components/events/NPC"
 import Tutorial from "@/src/components/events/Tutorial"
 import { loadBountyProfile } from "@/src/game/store"
+import { loadKillProfile } from "@/src/game/store/killTrackerStore"
 
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -127,7 +128,8 @@ export default function GamePage() {
         // Only load if we have a valid ID
         await loadInventoryProfile(currentId);
         await loadBountyProfile(currentId);
-        await loadDungeonProfile(currentId)
+        await loadDungeonProfile(currentId);
+        await loadKillProfile(currentId);
         // load other data
       } else {
         console.log("NOT FOUND")

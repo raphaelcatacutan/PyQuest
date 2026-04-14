@@ -1,17 +1,18 @@
+import { useKillTrackerStore } from "@/src/game/store";
 import Button from "./Button";
 import { closeIcon } from "@/src/assets";
-import { Quests } from "@/src/game/data/quests";
 import { useBountyQuestStore } from "@/src/game/store/bountyQuestStore";
+import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 
 export default function BountyQuest() {
-  // 1. Grab everything we need from the store in one shallow-protected hook
   const { 
     displayBountyQuest, 
     toggleDisplayBountyQuest, 
     questLevel, 
     allQuests, 
-    toggleQuest, 
+    toggleQuest,
+    checkQuestProgress, 
     header 
   } = useBountyQuestStore(
     useShallow((s) => ({
@@ -20,14 +21,20 @@ export default function BountyQuest() {
       questLevel: s.questLevel,
       allQuests: s.allQuests,
       toggleQuest: s.toggleQuest,
+      checkQuestProgress: s.checkQuestProgress,
       header: s.header,
     }))
   );
-
-  // 2. Derive the current level's quests. 
-  // We use .toString() because the keys in allQuests are strings ("1", "2").
+  const killCounts = useKillTrackerStore(s => s.killCounts)
+  
+  useEffect(() => {
+    if (displayBountyQuest) {
+      checkQuestProgress();
+    }
+  }, [displayBountyQuest, checkQuestProgress]);
+  
   const currentQuests = allQuests[questLevel.toString()] || [];
-
+  
   if (!displayBountyQuest) return null;
 
   return (
@@ -68,7 +75,15 @@ export default function BountyQuest() {
                   opacity: quest.isCompleted ? 0.6 : 1, // Visual cue for completion
                 }}
               >
-                {quest.description}
+                {/* {quest.description} */}
+                {/* {quest.description} ({killCounts[quest.targetId] || 0} / {quest.requiredAmount}) */}
+                {quest.description} 
+                {/* ⚡️ Only show the counter if targetId exists */}
+                {quest.targetId && quest.requiredAmount && (
+                  <span className="ml-2 text-2xl text-[#a34c24]">
+                    ({killCounts[quest.targetId] || 0} / {quest.requiredAmount})
+                  </span>
+                )}
               </span>
             </li>
           ))}

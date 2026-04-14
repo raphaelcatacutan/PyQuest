@@ -12,7 +12,8 @@ import {
   useInventoryStore,
   useTrialsStore,
   useTutorialStore,
-  useNPCStore
+  useNPCStore,
+  useKillTrackerStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
@@ -100,6 +101,8 @@ export default function DevTool(){
   const tuts = useTutorialStore()
   const sfx = useSoundStore()
   const bounty = useBountyQuestStore()
+  const kill = useKillTrackerStore()
+
 
   return (
     <>
@@ -135,11 +138,14 @@ export default function DevTool(){
           else { bossTakeDamage(20) }
         }}/>
         <Button text={BountyQuestText} onClick={() => toggleDisplayBountyQuest()}/>
-        <Button text="Check" onClick={() => {
-          console.log("Check toggled")
-          bounty.toggleQuest("1")
-          // toggleQuest("1")
-          }}/>
+        <Button text='Refresh Quests' onClick={() => {
+          bounty.refreshQuest()
+          console.log("Toggled Refresh Quests")
+        }}/>
+        <Button text='+Quest Lvl' onClick={() => bounty.incrementQuestLevel()}/>
+        <Button text='Record Slime Kill' onClick={() => kill.recordKill('slime')}/>
+        {/* <Button text='+Slime Kill' onClick={() => bounty.incrementQuestLevel()}/> */}
+        <Button text="Check" onClick={() => { bounty.toggleQuest("1") }}/>
         <Button text={sceneText} onClick={() => {
           const scenes: SceneTypes[] = ['village', 'forest', 'temple', 'cemetery', 'swamp', 'jungle', 'desert'];
           const randomScene = scenes[Math.floor(Math.random() * scenes.length)];

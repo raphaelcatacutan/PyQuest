@@ -252,7 +252,6 @@ export default function EnemyArchitect() {
               <option value="desert">desert</option>
               <option value="swamp">swamp</option>
               <option value="cemetery">cemetery</option>
-              <option value="tundra">tundra</option>
               <option value="jungle">jungle</option>
               <option value="temple">temple</option>
             </select>

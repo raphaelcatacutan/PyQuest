@@ -1,26 +1,140 @@
 {
   "1": [
     {
-      "questId": "1",
+      "questId": "q1",
       "description": "Kill 10 slimes",
-      "isCompleted": false
+      "isCompleted": false,
+      "targetId": "slime",
+      "requiredAmount": 10
     },
     {
-      "questId": "2",
-      "description": "Kill 5 worms",
-      "isCompleted": false
+      "questId": "q2",
+      "description": "Kill 5 skeletons",
+      "isCompleted": false,
+      "targetId": "skeleton",
+      "requiredAmount": 5
+    },
+    {
+      "questId": "q3",
+      "description": "Kill 8 Forest Fangs",
+      "isCompleted": false,
+      "targetId": "forest_fang",
+      "requiredAmount": 8
     }
   ],
   "2": [
     {
-      "questId": "",
-      "description": "Kill 10 slimes",
-      "isCompleted": false
+      "questId": "q1",
+      "description": "Kill 12 slimes",
+      "isCompleted": false,
+      "targetId": "slime",
+      "requiredAmount": 10
     },
     {
-      "questId": "",
-      "description": "Kill 5 worms",
-      "isCompleted": false
+      "questId": "q1",
+      "description": "Kill 12 Mire Hag",
+      "isCompleted": false,
+      "targetId": "mire_hag",
+      "requiredAmount": 12
+    },
+    {
+      "questId": "q3",
+      "description": "Kill 10 stalker",
+      "isCompleted": false,
+      "targetId": "stalker",
+      "requiredAmount": 10
+    }
+  ],
+  "3": [
+    {
+      "questId": "q1",
+      "description": "Kill 15 knight",
+      "isCompleted": false,
+      "targetId": "knight",
+      "requiredAmount": 15
+    },
+    {
+      "questId": "q2",
+      "description": "Kill 13 scout",
+      "isCompleted": false,
+      "targetId": "scout",
+      "requiredAmount": 13
+    },
+    {
+      "questId": "q3",
+      "description": "Kill 18 Shaman",
+      "isCompleted": false,
+      "targetId": "shaman",
+      "requiredAmount": 18
+    }
+  ],
+  "4": [
+    {
+      "questId": "q1",
+      "description": "Kill 15 Frost Wraith",
+      "isCompleted": false,
+      "targetId": "frost_wraith",
+      "requiredAmount": 15
+    },
+    {
+      "questId": "q2",
+      "description": "Kill 20 Giant",
+      "isCompleted": false,
+      "targetId": "giant",
+      "requiredAmount": 20
+    },
+    {
+      "questId": "q3",
+      "description": "Kill 18 Shaman",
+      "isCompleted": false,
+      "targetId": "shaman",
+      "requiredAmount": 18
+    }
+  ],
+  "5": [
+    {
+      "questId": "q1",
+      "description": "Kill 22 Dune Raider",
+      "isCompleted": false,
+      "targetId": "knight",
+      "requiredAmount": 22
+    },
+    {
+      "questId": "q2",
+      "description": "Kill 20 Giant",
+      "isCompleted": false,
+      "targetId": "giant",
+      "requiredAmount": 20
+    },
+    {
+      "questId": "q3",
+      "description": "Kill 20 Mire Hag",
+      "isCompleted": false,
+      "targetId": "mire_hag",
+      "requiredAmount": 20
+    }
+  ],
+  "6": [
+    {
+      "questId": "q1",
+      "description": "Kill 25 Skeleton",
+      "isCompleted": false,
+      "targetId": "skeleton",
+      "requiredAmount": 25
+    },
+    {
+      "questId": "q2",
+      "description": "Kill 25 Shaman",
+      "isCompleted": false,
+      "targetId": "shaman",
+      "requiredAmount": 25
+    },
+    {
+      "questId": "q3",
+      "description": "Kill 25 Frost Wraith",
+      "isCompleted": false,
+      "targetId": "frost_wraith",
+      "requiredAmount": 25
     }
   ]
 }

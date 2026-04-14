@@ -36,6 +36,10 @@ function isSellableItem(kind: string): kind is "weapon" | "armor" | "consumable"
   return SELLABLE_ITEM_KINDS.includes(kind as any);
 }
 
+function isUtilItem(kind: string): boolean {
+  return kind === "util";
+}
+
 export function PlayerInventoryNode({
   node,
   style,
@@ -59,7 +63,7 @@ export function PlayerInventoryNode({
   const name = node.data.name;
 
   function handleConfirmRename() {
-    if (newName.trim() && newName !== name) {
+    if (!isUtilItem(node.data.kind) && newName.trim() && newName !== name) {
       onRename(node.id, newName.trim());
     }
     setIsRenaming(false);
@@ -93,6 +97,12 @@ export function PlayerInventoryNode({
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     onSelect(node.id, e.shiftKey, e.ctrlKey || e.metaKey);
     if (node.data.kind === "folder") node.toggle();
+  }
+
+  function handleDeleteClick() {
+    if (!isUtilItem(node.data.kind)) {
+      onDelete(node.id);
+    }
   }
 
   function handleDoubleClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -189,21 +199,25 @@ export function PlayerInventoryNode({
           className="flex-2 flex flex-row-reverse w-fit"
           onClick={(e) => e.stopPropagation()}
         >
-          <Button
-            variant="icon-only-btn"
-            icon={deleteIcon}
-            iconSize={20}
-            onClick={() => onDelete(node.id)}
-          />
-          <Button
-            variant="icon-only-btn"
-            icon={renameIcon}
-            iconSize={20}
-            onClick={() => {
-              setIsRenaming(true);
-              setNewName(name);
-            }}
-          />
+          {!isUtilItem(node.data.kind) && (
+            <>
+              <Button
+                variant="icon-only-btn"
+                icon={deleteIcon}
+                iconSize={20}
+                onClick={handleDeleteClick}
+              />
+              <Button
+                variant="icon-only-btn"
+                icon={renameIcon}
+                iconSize={20}
+                onClick={() => {
+                  setIsRenaming(true);
+                  setNewName(name);
+                }}
+              />
+            </>
+          )}
           {scene == 'village' && 
             isSellableItem(node.data.kind) && (
             <Button

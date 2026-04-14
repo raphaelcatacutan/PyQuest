@@ -121,7 +121,7 @@ export default function DevTool(){
         <Button text="Print" onClick={() => console.log(tuts.instruction)}/>
         {/* <Button text="Next" onClick={() => tuts.nextStep()}/> */}
         <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
-        <Button text="Coin+" onClick={() => gainCoin(1)}/>
+        <Button text="Coin+" onClick={() => gainCoin(100)}/>
         <Button text="Hp-" onClick={() => selfHarm(20)}/>
         <span>{hp}</span>
         <Button text="Hp+" onClick={() => gainHP(10)}/>

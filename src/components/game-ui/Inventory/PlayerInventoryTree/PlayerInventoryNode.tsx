@@ -5,16 +5,14 @@ import Button from "../../../ui/Button";
 import {
   addFileIcon,
   addFolderIcon,
-  closedFolderIcon,
-  consumableIcon,
   deleteIcon,
-  fileIcon,
-  openFolderIcon,
   renameIcon,
   sellIcon
 } from "@/src/assets";
-import { resolveInventoryItemImage } from "../itemImageResolver";
-import { useSceneStore, useSoundStore } from "@/src/game/store";
+import { usePlayerStore, useSceneStore, useSoundStore } from "@/src/game/store";
+import { getNodeIcon } from "../node.util";
+import { createPortal } from "react-dom";
+import { useShallow } from "zustand/shallow";
 
 interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onDelete: (nodeId: string) => void;
@@ -27,6 +25,12 @@ interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
     isCtrlClick: boolean,
   ) => void;
   selectedNodeIds: Set<string>;
+}
+
+const SELLABLE_ITEM_KINDS = ["weapon", "armor", "consumable"] as const;
+
+function isSellableItem(kind: string): kind is "weapon" | "armor" | "consumable" {
+  return SELLABLE_ITEM_KINDS.includes(kind as any);
 }
 
 export function PlayerInventoryNode({
@@ -44,50 +48,13 @@ export function PlayerInventoryNode({
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(node.data.name);
   const scene = useSceneStore(s => s.scene)
+  const { coins, gainCoins } = usePlayerStore(
+    useShallow((s) => ({
+      coins: s.coins,
+      gainCoins: s.gainCoins
+    }))
+  )
   const name = node.data.name;
-
-  function getNodeType(type: InventoryNode["kind"]) {
-    const itemImage = resolveInventoryItemImage(node.data);
-    if (itemImage) {
-      return (
-        <img
-          src={itemImage.src}
-          alt={itemImage.alt}
-          title={
-            itemImage.usedPlaceholder ? "placeholder-image" : itemImage.alt
-          }
-          style={{ width: 24, height: 24, display: "inline", marginRight: 6 }}
-        />
-      );
-    }
-
-    switch (type) {
-      case "consumable":
-        return (
-          <img
-            src={consumableIcon}
-            alt="Consumable"
-            style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
-          />
-        );
-      case "folder":
-        return (
-          <img
-            src={node.isOpen ? openFolderIcon : closedFolderIcon}
-            alt="Folder"
-            style={{ width: 16, height: 16, display: "inline" }}
-          />
-        );
-      default:
-        return (
-          <img
-            src={fileIcon}
-            alt="File"
-            style={{ width: 16, height: 16, display: "inline", marginRight: 4 }}
-          />
-        );
-    }
-  }
 
   function handleConfirmRename() {
     if (newName.trim() && newName !== name) {
@@ -121,16 +88,45 @@ export function PlayerInventoryNode({
     }
   }
 
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    onSelect(node.id, e.shiftKey, e.ctrlKey || e.metaKey);
+    if (node.data.kind === "folder") node.toggle();
+  }
+
+  function handleDoubleClick(e: React.MouseEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("PlayerInventoryNode double clicked:", {
+      id: node.id,
+      name: node.data.name,
+      kind: node.data.kind,
+    });
+  }
+
+  // Track mouse coordinates
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    // We use clientX/Y or pageX/Y depending on your CSS setup
+    // Using a small offset (e.g., +15) keeps the overlay from flickering under the cursor
+    setMousePos({ x: e.clientX + 15, y: e.clientY + 15 });
+  };
+
+  const handleSell = () => {
+    useSoundStore.getState().playSfx('trade')
+    gainCoins(123) // TODO: Replace with item value
+    onDelete(node.id)
+  }
+
   return (
     <div
       style={style}
       ref={dragHandle}
-      onClick={(e) => {
-        onSelect(node.id, e.shiftKey, e.ctrlKey || e.metaKey);
-        if (node.data.kind === "folder") node.toggle();
-      }}
+      onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+      onDoubleClick={handleDoubleClick}
       className={`
         border-l-2
         border-transparent
@@ -143,7 +139,11 @@ export function PlayerInventoryNode({
       `}
     >
       <div className="flex flex-1 w-fit gap-1 pl-1 min-w-0">
-        {getNodeType(node.data.kind)}
+        <img
+          src={getNodeIcon(node)}
+          alt="Folder"
+          style={{ width: 16, height: 16, display: "inline" }}
+        />
         {isRenaming ? (
           <input
             type="text"
@@ -155,7 +155,14 @@ export function PlayerInventoryNode({
             className="bg-gray-700 text-white rounded border border-blue-500 truncate"
           />
         ) : (
+          <>
           <span className="truncate">{name}</span>
+          {isHovered && 
+            scene == 'village' && 
+            isSellableItem(node.data.kind) && (
+            <span className="text-amber-300 ml-2">$123</span> // TODO: Replace with cost value
+          )}
+          </>
         )}
       </div>
       {isHovered && (
@@ -178,17 +185,14 @@ export function PlayerInventoryNode({
               setNewName(name);
             }}
           />
-          {scene == 'village' && node.data.kind == "misc" &&
+          {scene == 'village' && 
+            isSellableItem(node.data.kind) && (
             <Button
               variant="icon-only-btn"
               icon={sellIcon}
               iconSize={20}
-              onClick={() => {
-                useSoundStore.getState().playSfx('trade')
-                onDelete(node.id)
-                // TODO: Sell
-              }}
-            />
+              onClick={handleSell}
+            />)
           }
           {node.data.kind === "folder" && (
             <>
@@ -208,6 +212,29 @@ export function PlayerInventoryNode({
           )}
         </div>
       )}
+
+      {/* 3. THE PORTAL OVERLAY */}
+    {/* We render this OUTSIDE the flex flow entirely */}
+    {isHovered && 
+        scene == 'village' && 
+        isSellableItem(node.data.kind) &&
+      createPortal(
+      <div 
+        style={{
+          position: 'fixed', // Use fixed so coordinates are viewport-relative
+          left: mousePos.x,
+          top: mousePos.y,
+          pointerEvents: 'none', 
+          zIndex: 51,      // High z-index to stay on top of everything
+        }}
+        className="bg-black/90 max-w-80 max-h-100 text-wrap overflow-y-clip text-white p-2 rounded shadow-2xl border border-yellow-500"
+      >
+         <p className="text-xs font-bold">{node.data.name}</p>
+         <p className="text-xs font-bold">Lorem ipsum dolor sit amet consectetur, </p>
+         {node.data.cursed && <p className="text-red-400 text-[10px]">Cursed Item!</p>}
+      </div>,
+      document.body // Teleport destination
+    )}
     </div>
   );
 }

@@ -9,7 +9,7 @@ const data: InventoryNode[] = [
     id: "Store",
     name: "Store",
     kind: "folder",
-    children: [{ id: "kick", name: "kick()", kind: "misc", itemId: "kick" }],
+    children: [{ id: "kick", name: "kick()", kind: "consumable", itemId: "kick" }],
   },
 ];
 

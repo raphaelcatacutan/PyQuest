@@ -124,7 +124,7 @@ export default function GamePage() {
       const currentId = usePlayerStore.getState().user_id;
       
       if (currentId) {
-        console.log("FOUND")
+        console.log(`Data Found for ${currentId}`)
         // Only load if we have a valid ID
         await loadInventoryProfile(currentId);
         await loadBountyProfile(currentId);
@@ -132,7 +132,7 @@ export default function GamePage() {
         await loadKillProfile(currentId);
         // load other data
       } else {
-        console.log("NOT FOUND")
+        console.log(`Data NOT Found for ${currentId}`)
       }
     };
     initApp();

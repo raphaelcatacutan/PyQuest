@@ -9,7 +9,6 @@ import {
   addFileIcon,
   refreshIcon,
 } from '@/src/assets'
-import showToast from "@/src/components/ui/Toast"
 
 // RESTRICTIONS: Duplicate Files is not allowed
 //               Duplicate Folder names & File names is not allowed

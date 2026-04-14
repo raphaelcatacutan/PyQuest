@@ -8,15 +8,10 @@ export type InventoryNode =
     }
   | { // Item Node
       id: string;
-      kind: "weapon" | "armor" | "consumable" | "misc" | "" ;
+      kind: "weapon" | "armor" | "consumable" | "misc" | "util" | "function" | "" ;
       itemId: string;        // points to registry
       name: string;
       
       // Weapons and Armors
-      durability?: number;   
       cursed?: boolean;      
-
-      // Node Config
-      nameOverride?: string; // rename support
     };
-    // TODO: Revamp

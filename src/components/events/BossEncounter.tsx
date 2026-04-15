@@ -20,8 +20,11 @@ export default function BossEncounter(){
     }))
   )
 
-  const healthPercentage = (hp / maxHp) * 100;
-  const energyPercentage = (energy / maxEnergy) * 100;
+  const safeMaxHp = Math.max(1, maxHp);
+  const safeMaxEnergy = Math.max(1, maxEnergy);
+  const healthPercentage = (hp / safeMaxHp) * 100;
+  const energyPercentage = (energy / safeMaxEnergy) * 100;
+  const activeProblemText = activeProblem?.problem ?? "No machine problem available for this scene.";
 
   return (
     <div className="absolute z-5 w-full h-full opacity-100">
@@ -52,7 +55,7 @@ export default function BossEncounter(){
               </div>
               <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">
                 <span className="h-full overflow-y-auto">
-                  {activeProblem.problem}
+                  {activeProblemText}
                 </span>
               </div>
             </div>

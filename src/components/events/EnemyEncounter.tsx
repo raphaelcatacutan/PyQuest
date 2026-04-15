@@ -18,6 +18,7 @@ export default function EnemyEncounter() {
   const safeMaxEnergy = Math.max(1, maxEnergy);
   const healthPercentage = (hp / safeMaxHp) * 100;
   const energyPercentage = (energy / safeMaxEnergy) * 100;
+  const activeProblemText = activeProblem?.problem ?? "No machine problem available for this scene.";
 
   return (
     <div className="absolute z-5 w-full h-full opacity-100">
@@ -48,7 +49,7 @@ export default function EnemyEncounter() {
               </div>
               <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">
                 <span className="h-full overflow-y-auto">
-                  {activeProblem.problem}
+                  {activeProblemText}
                 </span>
               </div>
             </div>

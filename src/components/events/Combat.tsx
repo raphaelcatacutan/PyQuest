@@ -88,7 +88,10 @@ export default function Combat() {
 
     const canSpawnEnemy = enemyKeys.length > 0;
     const canSpawnBoss = bossKeys.length > 0;
-    if (!canSpawnEnemy && !canSpawnBoss) return;
+    if (!canSpawnEnemy && !canSpawnBoss) {
+      toggleInCombat(false);
+      return;
+    }
 
     const shouldSpawnBoss =
       canSpawnBoss && (!canSpawnEnemy || Math.random() <= 0.5);
@@ -289,6 +292,8 @@ export default function Combat() {
   }, [inCombat, isEnemy, enemyId, bossId, toggleInCombat]);
 
   if (!inCombat) return null;
+  if (isEnemy && !enemyId) return null;
+  if (!isEnemy && !bossId) return null;
 
   return (
     <div className="relative flex h-full w-full z-1">

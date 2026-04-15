@@ -29,7 +29,7 @@ import sellIcon from "./sell.svg?url"
 import configIcon from "./config_file.svg"
 import functionIcon from "./function.svg"
 import armorIcon from "./armor.svg"
-import weaponIcon from "./function.svg"
+import weaponIcon from "./weapon.svg"
 
 export { 
   addFileIcon, addFolderIcon, addFolder1Icon, bagIcon, buyIcon, clearIcon, closeIcon, closedFolderIcon, 

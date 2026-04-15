@@ -56,19 +56,73 @@
   {
     "phase": "phase-3",
     "instructions": [
-      "OOP"
+      "HEEEEAWDA! You survived the Swamp. Now we shape code like blacksmiths shape steel: with **OOP**.",
+      "Object-Oriented Programming turns your ideas into reusable blueprints called **classes**.",
+      "Start simple. Type:\n\nclass Adventurer:\n\tpass",
+      "That class is your blueprint. It defines what an Adventurer can be.",
+      "Now give it memory with a constructor. Type:\n\nclass Adventurer:\n\tdef __init__(self, name, hp):\n\t\tself.name = name\n\t\tself.hp = hp",
+      "Create your first object. Type:\n\nhero = Adventurer('Aria', 100)",
+      "Inspect it. Type:\n\nprint(hero.name)",
+      "Nice. Objects hold **state** in attributes like name and hp.",
+      "Now teach your class an action. Add this method:\n\ndef attack(self):\n\treturn 'Slash!'",
+      "Cast it with:\n\nprint(hero.attack())",
+      "Want stronger design? Use **inheritance**.",
+      "Create a subclass:\n\nclass Ranger(Adventurer):\n\tpass",
+      "Spawn one:\n\nranger = Ranger('Lyn', 90)",
+      "Check lineage:\n\nprint(isinstance(ranger, Adventurer))",
+      "Now override behavior in Ranger with:\n\ndef attack(self):\n\treturn 'Piercing Arrow!'",
+      "Then run:\n\nprint(ranger.attack())",
+      "Great. That is **polymorphism**: same method name, different behavior.",
+      "Add this method to Adventurer:\n\ndef take_damage(self, amount):\n\tself.hp -= amount",
+      "Test state change:\n\nhero.take_damage(25)\nprint(hero.hp)",
+      "Off with ya! Classes, objects, inheritance, and methods are now in your arsenal."
     ]
   },
   {
     "phase": "phase-4",
     "instructions": [
-      "IMPORT"
+      "HEEEEAWDA! Blueprints alone are not enough. Real masters borrow tools with **imports**.",
+      "Imports let you use code from other modules instead of rewriting everything.",
+      "Start with this:\n\nfrom user.weapons import spear",
+      "That line pulls spear from the user.weapons module into your current script.",
+      "Now test it:\n\nspear.attack()",
+      "You can also import the module itself using an alias.",
+      "Type:\n\nimport user.weapons as gear",
+      "Then call:\n\ngear.spear.thrust()",
+      "Selective aliasing works too:\n\nfrom user.weapons import spear as training_spear",
+      "Cast with:\n\ntraining_spear.pierce()",
+      "Imports keep files focused. One module can hold weapons, another can hold utilities.",
+      "If an import fails, check spelling, path, and whether the module is available.",
+      "Remember: module access uses dot notation, like gear.spear.attack().",
+      "Mix imports with logic for automation.",
+      "Try this sequence:\n\nfrom user.weapons import spear\nfor _ in range(2):\n\tspear.attack()",
+      "Perfect. You now know how to connect files and reuse systems.",
+      "One more step remains: organizing large data with structures.",
+      "Off with ya! Bring order to chaos with data structures next."
     ]
   },
   {
     "phase": "phase-5",
     "instructions": [
-      "DATA STRUCTURES"
+      "HEEEEAWDA! Final forge before mastery: **Data Structures**.",
+      "First: **Lists** for ordered collections.",
+      "Type:\n\ninventory = ['potion', 'map']\ninventory.append('key')\nprint(inventory)",
+      "Lists are mutable. You can add, remove, sort, and loop through them.",
+      "Now: **Dictionaries** for key-value data. Type:\n\nstats = {'hp': 100, 'energy': 50}\nprint(stats['hp'])",
+      "Dictionaries are perfect for stats, configs, and lookup tables.",
+      "Next: **Tuples** for fixed ordered data. Type:\n\ncoords = (10, 20)\nprint(coords[0])",
+      "Tuples are immutable, useful for values that should not change.",
+      "Now: **Sets** for unique values. Type:\n\ntags = {'bug', 'bug', 'quest'}\nprint(tags)",
+      "Sets remove duplicates automatically and are great for membership checks.",
+      "Loop through structures:\n\nfor item in inventory:\n\tprint(item)",
+      "Use comprehensions for compact transformations:\n\nsquares = [n * n for n in [1, 2, 3]]\nprint(squares)",
+      "Nested structures are common too:\n\nparty = [{'name': 'Aria', 'hp': 100}]\nprint(party[0]['name'])",
+      "Update data in place:\n\nstats['hp'] -= 20\nprint(stats['hp'])",
+      "Remove items when needed:\n\ninventory.remove('map')\nprint(inventory)",
+      "Sort when order matters:\n\nnums = [5, 1, 9]\nnums.sort()\nprint(nums)",
+      "Choose structures wisely: list for order, dict for keys, tuple for fixed data, set for uniqueness.",
+      "You are now ready to handle real game-state data at scale.",
+      "Off with ya! The next lessons will test everything you've learned so far."
     ]
   },
   {

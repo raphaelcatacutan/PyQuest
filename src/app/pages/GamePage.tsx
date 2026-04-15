@@ -3,8 +3,6 @@ import { useShallow } from "zustand/shallow"
 import CodeEditor from "@/src/components/game-ui/CodeEditor"
 import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
 import Button from "@/src/components/ui/Button"
-import showToast from "@/src/components/ui/Toast"
-import Combat from "@/src/components/events/Combat"
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar"
 import { rightPanelIcon } from '@/src/assets'
 import { 
@@ -12,6 +10,9 @@ import {
   useGameStore,
   usePlayerStore,
   useInventoryStore,
+  useTutorialStore,
+  useBountyQuestStore,
+  loadTutorialProfile,
   loadInventoryProfile,
   loadDungeonProfile,
   loadUserProfile
@@ -32,22 +33,15 @@ export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [displayBg, setDisplayBg] = useState("")
   const inVillage = useGameStore(s => s.inVillage)
-  const user_id = usePlayerStore(s => s.user_id)
-  const { scene, sceneBg } = useSceneStore(
-    useShallow((s) => ({
-      scene: s.scene,
-      sceneBg: s.sceneBg
-    }))
-  )
+  const sceneBg = useSceneStore(s => s.sceneBg)
   const { rightPanel, toggleRightPanel } = useGameStore(
-    useShallow((state) => ({
-      rightPanel: state.rightPanel,
-      toggleRightPanel: state.toggleRightPanel
+    useShallow((s) => ({
+      rightPanel: s.rightPanel,
+      toggleRightPanel: s.toggleRightPanel
     }))
   )
-  const { player_id, playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
+  const { playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
     useShallow((s) => ({
-      player_id: s.player_id,
       playerInventory: s.playerInventory,
       addInventoryItem: s.addInventoryItem,
       deleteInventoryItem: s.deleteInventoryItem,
@@ -130,8 +124,12 @@ export default function GamePage() {
         await loadUserProfile(currentId);
         await loadInventoryProfile(currentId);
         await loadBountyProfile(currentId);
+        await loadTutorialProfile(currentId);
         await loadDungeonProfile(currentId);
         await loadKillProfile(currentId);
+
+        const progressIncrement = useBountyQuestStore.getState().questLevel;
+        useTutorialStore.getState().startGameLoop(progressIncrement);
         // load other data
       } else {
         console.log(`Data NOT Found for ${currentId}`)

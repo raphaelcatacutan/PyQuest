@@ -32,3 +32,162 @@ export const getRandomMPByScene = (scene: string): MachineProblem => {
   const randomIndex = Math.floor(Math.random() * problemsForLevel.length);
   return problemsForLevel[randomIndex] ?? FALLBACK_PROBLEM;
 }
+
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function extractQuotedTokens(problemText: string): string[] {
+  const tokens: string[] = [];
+  const regex = /['"]([^'"]+)['"]/g;
+  let match: RegExpExecArray | null = regex.exec(problemText);
+
+  while (match) {
+    const token = match[1]?.trim();
+    if (token) {
+      tokens.push(token);
+    }
+    match = regex.exec(problemText);
+  }
+
+  return tokens;
+}
+
+function extractVariableNames(problemText: string): string[] {
+  const names = new Set<string>();
+  const patterns = [
+    /variable(?:\s+named|\s+called)?\s+['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?/gi,
+    /assign\s+it\s+to\s+a\s+variable\s+called\s+['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?/gi,
+    /set\s+['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?\s+to\s+/gi,
+  ];
+
+  patterns.forEach((pattern) => {
+    let match = pattern.exec(problemText);
+    while (match) {
+      if (match[1]) {
+        names.add(match[1]);
+      }
+      match = pattern.exec(problemText);
+    }
+  });
+
+  return [...names];
+}
+
+function extractFunctionNames(problemText: string): string[] {
+  const names = new Set<string>();
+  const patterns = [
+    /function\s+named\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
+    /define\s+a\s+function\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
+    /create\s+a\s+function\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
+    /def\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
+  ];
+
+  patterns.forEach((pattern) => {
+    let match = pattern.exec(problemText);
+    while (match) {
+      if (match[1]) {
+        names.add(match[1]);
+      }
+      match = pattern.exec(problemText);
+    }
+  });
+
+  return [...names];
+}
+
+function extractNumericTokens(problemText: string): string[] {
+  const tokens = new Set<string>();
+  const regex = /\b\d+(?:\.\d+)?\b/g;
+  let match = regex.exec(problemText);
+
+  while (match) {
+    if (match[0]) {
+      tokens.add(match[0]);
+    }
+    match = regex.exec(problemText);
+  }
+
+  return [...tokens];
+}
+
+function containsRegex(code: string, regex: RegExp): boolean {
+  return regex.test(code);
+}
+
+function buildProblemChecks(problemText: string): RegExp[] {
+  const checks: RegExp[] = [];
+  const lowerProblem = problemText.toLowerCase();
+
+  if (lowerProblem.includes("print")) checks.push(/\bprint\s*\(/m);
+  if (/\bwhile\b/.test(lowerProblem)) checks.push(/^\s*while\b/m);
+  if (/\bfor\b/.test(lowerProblem)) checks.push(/^\s*for\b/m);
+  if (/\bif\b/.test(lowerProblem)) checks.push(/^\s*if\b/m);
+  if (/\belif\b/.test(lowerProblem)) checks.push(/^\s*elif\b/m);
+  if (/\belse\b/.test(lowerProblem)) checks.push(/^\s*else\b/m);
+  if (/\bmatch\b/.test(lowerProblem)) checks.push(/^\s*match\b/m);
+  if (/\bcase\b/.test(lowerProblem)) checks.push(/^\s*case\b/m);
+  if (/\bbreak\b/.test(lowerProblem)) checks.push(/\bbreak\b/m);
+  if (/\bcontinue\b/.test(lowerProblem)) checks.push(/\bcontinue\b/m);
+  if (/\breturn\b/.test(lowerProblem)) checks.push(/\breturn\b/m);
+  if (/\bpass\b/.test(lowerProblem)) checks.push(/\bpass\b/m);
+  if (/\bfunction\b|\bdefine\b|\bdef\b/.test(lowerProblem)) checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/m);
+  if (lowerProblem.includes("uppercase")) checks.push(/\.upper\s*\(/m);
+  if (lowerProblem.includes("lowercase")) checks.push(/\.lower\s*\(/m);
+
+  if (lowerProblem.includes("<=")) checks.push(/<=/m);
+  if (lowerProblem.includes(">=")) checks.push(/>=/m);
+  if (lowerProblem.includes("!=")) checks.push(/!=/m);
+  if (lowerProblem.includes("==")) checks.push(/==/m);
+  if (lowerProblem.includes("%")) checks.push(/%/m);
+  if (lowerProblem.includes("**") || lowerProblem.includes("power")) checks.push(/\*\*/m);
+  if (lowerProblem.includes("+=")) checks.push(/\+=/m);
+  if (lowerProblem.includes("-=")) checks.push(/-=/m);
+  if (lowerProblem.includes(" and ")) checks.push(/\band\b/m);
+  if (lowerProblem.includes(" or ")) checks.push(/\bor\b/m);
+  if (lowerProblem.includes(" not ")) checks.push(/\bnot\b/m);
+
+  const variableNames = extractVariableNames(problemText);
+  variableNames.forEach((name) => {
+    checks.push(new RegExp(`\\b${escapeRegex(name)}\\s*=`, "m"));
+  });
+
+  const functionNames = extractFunctionNames(problemText);
+  functionNames.forEach((name) => {
+    checks.push(new RegExp(`^\\s*def\\s+${escapeRegex(name)}\\s*\\(`, "m"));
+
+    if (/\bcall\b/.test(lowerProblem)) {
+      checks.push(new RegExp(`\\b${escapeRegex(name)}\\s*\\(`, "m"));
+    }
+  });
+
+  const quotedTokens = extractQuotedTokens(problemText);
+  quotedTokens.forEach((token) => {
+    const isNamedIdentifier = variableNames.includes(token) || functionNames.includes(token);
+    const isIdentifierToken = /^[A-Za-z_][A-Za-z0-9_]*$/.test(token);
+    if (!isNamedIdentifier && (!isIdentifierToken || /\bmessage\b|\bprint\b/.test(lowerProblem))) {
+      checks.push(new RegExp(`[\"']${escapeRegex(token)}[\"']`, "m"));
+    }
+  });
+
+  const numericTokens = extractNumericTokens(problemText);
+  numericTokens.forEach((token) => {
+    checks.push(new RegExp(`\\b${escapeRegex(token)}\\b`, "m"));
+  });
+
+  return checks;
+}
+
+export const validateMachineProblemSolution = (problem: MachineProblem, code: string): boolean => {
+  const normalizedCode = code.replace(/\r/g, "");
+  if (!normalizedCode.trim()) {
+    return false;
+  }
+
+  const checks = buildProblemChecks(problem.problem || "");
+  if (checks.length === 0) {
+    return normalizedCode.trim().length > 0;
+  }
+
+  return checks.every((regex) => containsRegex(normalizedCode, regex));
+}

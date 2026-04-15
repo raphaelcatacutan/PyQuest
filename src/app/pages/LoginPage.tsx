@@ -3,7 +3,7 @@ import { usePlayerStore } from "@/src/game/store";
 import { useState } from "react";
 import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
-import { useInventoryStore, loadInventoryProfile } from "@/src/game/store/inventoryStore";
+import { useInventoryStore } from "@/src/game/store/inventoryStore";
 import DevTool from "@/src/components/DevTool";
 import { registerUser, userExists } from "@/src/game/services/authService";
 import { useSoundStore } from "@/src/game/store/soundStore";
@@ -13,15 +13,13 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingUsername, setPendingUsername] = useState("");
-  const { user_id, setUserId} = usePlayerStore(
+  const { setUserId} = usePlayerStore(
     useShallow((s) => ({
-      user_id: s.user_id,
       setUserId: s.setUserId
     }))
   )
-  const { player_id, setPlayerId } = useInventoryStore(
+  const { setPlayerId } = useInventoryStore(
     useShallow((s) => ({
-      player_id: s.player_id,
       setPlayerId: s.setPlayerId
     }))
   )

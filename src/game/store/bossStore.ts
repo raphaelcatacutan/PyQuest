@@ -53,7 +53,10 @@ export const useBossStore = create<BossStoreProps>((set) => ({
 
   activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
 
-  spawnBoss: (boss) => set({ ...boss }),  
+  spawnBoss: (boss) => set({
+    ...boss,
+    activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
+  }),  
   
   takeDamage: (amount) => {
     useSoundStore.getState().playSfx('hit')

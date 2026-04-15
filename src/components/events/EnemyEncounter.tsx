@@ -19,6 +19,8 @@ export default function EnemyEncounter() {
   const healthPercentage = (hp / safeMaxHp) * 100;
   const energyPercentage = (energy / safeMaxEnergy) * 100;
   const activeProblemText = activeProblem?.problem ?? "No machine problem available for this scene.";
+  const displayedEnergy = Math.floor(energy);
+  const displayedMaxEnergy = Math.floor(maxEnergy);
 
   return (
     <div className="absolute z-5 w-full h-full opacity-100">
@@ -39,7 +41,7 @@ export default function EnemyEncounter() {
                 <div className="relative w-80 h-5 overflow-hidden rounded-2xl bg-zinc-900">
                   <div className="bg-yellow-500 h-full transition-all duration-300" style={{ width: `${energyPercentage}%` }} />
                   <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
-                    {energy}/{maxEnergy}
+                    {displayedEnergy}/{displayedMaxEnergy}
                   </span>
                 </div>
                 

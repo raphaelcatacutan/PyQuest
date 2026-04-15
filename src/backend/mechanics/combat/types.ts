@@ -1,19 +1,32 @@
 export type CombatantKind = 'mob' | 'boss';
 
 export type EnemySkillEffect =
-  | { type: 'heal'; healAmount: number }
-  | { type: 'stun'; duration: number }
-  | { type: 'poison'; dmgPerSecond: number }
-  | { type: 'bleed'; dmgPerSecond: number }
-  | { type: 'empower'; dmgMultiplier: number }
-  | { type: 'speedup'; speedUp: number }
-  | { type: 'confusion'; dmg: number };
+  | { type: 'heal'; healAmount: number; target?: 'self' | 'player' }
+  | { type: 'stun'; durationMs: number; target?: 'self' | 'player' }
+  | {
+      type: 'poison';
+      dmgPerSecond: number;
+      durationMs: number;
+      tickIntervalMs: number;
+      target?: 'self' | 'player';
+    }
+  | {
+      type: 'bleed';
+      dmgPerSecond: number;
+      durationMs: number;
+      tickIntervalMs: number;
+      target?: 'self' | 'player';
+    }
+  | { type: 'empower'; dmgMultiplier: number; durationMs: number; target?: 'self' | 'player' }
+  | { type: 'speedup'; speedUp: number; durationMs: number; target?: 'self' | 'player' }
+  | { type: 'confusion'; durationMs: number; target?: 'self' | 'player' };
 
 export type EnemySkill = {
+  id: string;
   name: string;
   energyCost: number;
-  dmg?: number;
-  effect?: EnemySkillEffect;
+  cooldownMs: number;
+  effect: EnemySkillEffect;
 };
 
 export type EnemySnapshot = {
@@ -21,6 +34,7 @@ export type EnemySnapshot = {
   maxHp: number;
   energy: number;
   maxEnergy: number;
+  energyRegenPerSecond: number;
   def: number;
   dmg: number;
   critChance: number;
@@ -40,7 +54,12 @@ export type PlayerSnapshot = {
   level: number;
 };
 
-export type ActionType = 'skill' | 'fallback_basic_attack' | 'fallback_energy_regen';
+export type PlayerAttackInput = {
+  baseDamage: number;
+  source: string;
+};
+
+export type ActionType = 'skill' | 'base_attack';
 
 export type Action = {
   id: string;
@@ -48,17 +67,29 @@ export type Action = {
   label: string;
   skillIndex?: number;
   energyCost: number;
-  source: 'json_skill' | 'fallback';
+  source: 'json_skill' | 'base_runtime';
 };
 
-export type ActionTag = 'none' | 'skill' | 'fallback_basic' | 'fallback_regen' | 'skip';
+export type ActionTag = 'none' | 'skill' | 'base_attack' | 'skip';
 
 export type QTable = Map<string, number[]>;
 
 export type TickInput = {
   player: PlayerSnapshot;
   enemy: EnemySnapshot;
+  playerAttacks?: PlayerAttackInput[];
   deltaMs: number;
+};
+
+export type EncounterAnalytics = {
+  elapsedMs: number;
+  totalDamageToPlayer: number;
+  totalDamageToEnemy: number;
+  totalDotDamageToPlayer: number;
+  totalDotDamageToEnemy: number;
+  totalPlayerAttacks: number;
+  totalEnemyActions: number;
+  totalEnemySkillCasts: number;
 };
 
 export type TickResult = {
@@ -69,6 +100,9 @@ export type TickResult = {
   healEnemy: number;
   energyDelta: number;
   reward: number;
+  damageCauses: string[];
+  playerAttacksConsumed: number;
+  analytics: EncounterAnalytics;
   done: boolean;
 };
 

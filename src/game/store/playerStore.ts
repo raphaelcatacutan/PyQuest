@@ -8,6 +8,25 @@ import { resetDungeonPersist } from './dungeonStore';
 import { resetKillTrackerPersist } from './killTrackerStore';
 import showToast from '@/src/components/ui/Toast';
 
+const DEFAULT_PLAYER_ATTACKS_PER_SECOND = 0.4;
+
+function normalizePlayerAttackSpeed(atkSpeed: number): number {
+  if (!Number.isFinite(atkSpeed) || atkSpeed <= 0) {
+    return DEFAULT_PLAYER_ATTACKS_PER_SECOND;
+  }
+
+  // Legacy saves used milliseconds between attacks (e.g. 3000).
+  if (atkSpeed > 10) {
+    const converted = 1000 / atkSpeed;
+    if (!Number.isFinite(converted) || converted <= 0) {
+      return DEFAULT_PLAYER_ATTACKS_PER_SECOND;
+    }
+    return Number(converted.toFixed(4));
+  }
+
+  return atkSpeed;
+}
+
 export const loadUserProfile = async (playerId: string) => {
   if (!playerId) return;
 
@@ -35,14 +54,18 @@ export const loadUserProfile = async (playerId: string) => {
       XP: 0,
       level: 1,
       xpRequirement: 100,
+      atkSpeed: DEFAULT_PLAYER_ATTACKS_PER_SECOND,
     });
   }
 
   // Load from localStorage for this player (or keep initial if new)
   await usePlayerStore.persist.rehydrate();
   
-  // Ensure the user_id matches the account
-  usePlayerStore.setState({ user_id: playerId });
+  // Ensure the user_id matches the account and normalize legacy attack speed values.
+  usePlayerStore.setState((state) => ({
+    user_id: playerId,
+    atkSpeed: normalizePlayerAttackSpeed(state.atkSpeed),
+  }));
 
   // Load the inventory profile for this player
   // await loadInventoryProfile(playerId);
@@ -107,7 +130,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       baseDmg: 2,
       baseCritDmg: 0,
       baseCritChance: 3,
-      atkSpeed: 3000,
+      atkSpeed: DEFAULT_PLAYER_ATTACKS_PER_SECOND,
       leftHand: "",
       rightHand: "",
       headSlot: "",
@@ -161,7 +184,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       resetCritChange: () => set({ baseCritChance: 0 }),
 
       setAtkSpeed: (amount) => set((state) => ({ atkSpeed: state.atkSpeed + amount })),
-      resetAtkSpeed: () => set({ atkSpeed: 3000 }),
+      resetAtkSpeed: () => set({ atkSpeed: DEFAULT_PLAYER_ATTACKS_PER_SECOND }),
 
       equipLeftHandWith: (weapon, weaponDmg) => set((state) => ({ leftHand: weapon, baseDmg: state.baseDmg + weaponDmg })),
       equipRightHandWith: (weapon, weaponDmg) => set((state) => ({ rightHand: weapon, baseDmg: state.baseDmg + weaponDmg })),
@@ -216,6 +239,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
           energy: 100,
           XP: 0,
           level: 1,
+          atkSpeed: DEFAULT_PLAYER_ATTACKS_PER_SECOND,
           leftHand: "",
           rightHand: "",
           isDamaged: false

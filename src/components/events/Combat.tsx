@@ -4,19 +4,59 @@ import EnemyEncounter from "./EnemyEncounter";
 import BossEncounter from "./BossEncounter";
 import {
   useBossStore,
+  useCombatDebugStore,
   useEnemyStore,
   useGameStore,
   usePlayerStore,
   useSceneStore,
 } from "@/src/game/store";
 import {
+  clearPlayerAttacks,
   createEncounterController,
+  drainPlayerAttacks,
   EncounterController,
+  EnemySkill,
 } from "@/src/backend/mechanics/combat";
 import { getEnemiesByLocation } from "@/src/game/data/enemies";
-import { getBossesByLocation } from "@/src/game/data/bosses";
 
 const DEBUG_AI = true;
+
+function toCombatSkills(skills: unknown[]): EnemySkill[] {
+  if (!Array.isArray(skills)) return [];
+
+  const validSkills: EnemySkill[] = [];
+  skills.forEach((rawSkill) => {
+    if (!rawSkill || typeof rawSkill !== "object") return;
+
+    const skill = rawSkill as Partial<EnemySkill> & {
+      name?: unknown;
+      id?: unknown;
+      energyCost?: unknown;
+      cooldownMs?: unknown;
+      effect?: unknown;
+    };
+
+    if (
+      typeof skill.id !== "string" ||
+      typeof skill.name !== "string" ||
+      typeof skill.energyCost !== "number" ||
+      typeof skill.cooldownMs !== "number" ||
+      !skill.effect
+    ) {
+      return;
+    }
+
+    validSkills.push({
+      id: skill.id,
+      name: skill.name,
+      energyCost: skill.energyCost,
+      cooldownMs: skill.cooldownMs,
+      effect: skill.effect as EnemySkill["effect"],
+    });
+  });
+
+  return validSkills;
+}
 
 export default function Combat() {
   const scene = useSceneStore((s) => s.scene);
@@ -36,7 +76,6 @@ export default function Combat() {
 
   const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
   const clearEnemy = useEnemyStore((s) => s.clearEnemy);
-  const spawnBoss = useBossStore((s) => s.spawnBoss);
   const clearBoss = useBossStore((s) => s.clearBoss);
 
   const controllerRef = useRef<EncounterController | null>(null);
@@ -57,6 +96,16 @@ export default function Combat() {
     enemyHp: number;
     enemyEnergy: number;
     tickMs: number;
+    playerAttacksConsumed: number;
+    damageCauses: string[];
+    analyticsElapsedMs: number;
+    analyticsToPlayer: number;
+    analyticsToEnemy: number;
+    analyticsDotToPlayer: number;
+    analyticsDotToEnemy: number;
+    analyticsPlayerAttacks: number;
+    analyticsEnemyActions: number;
+    analyticsEnemySkillCasts: number;
     done: boolean;
   } | null>(null);
 
@@ -71,6 +120,8 @@ export default function Combat() {
       window.clearInterval(timerRef.current);
       timerRef.current = null;
     }
+
+    clearPlayerAttacks();
   };
 
   useEffect(() => {
@@ -82,26 +133,11 @@ export default function Combat() {
     if (enemyId || bossId) return;
 
     const enemies = getEnemiesByLocation(scene);
-    const bosses = getBossesByLocation(scene);
     const enemyKeys = Object.keys(enemies);
-    const bossKeys = Object.keys(bosses);
 
     const canSpawnEnemy = enemyKeys.length > 0;
-    const canSpawnBoss = bossKeys.length > 0;
-    if (!canSpawnEnemy && !canSpawnBoss) {
+    if (!canSpawnEnemy) {
       toggleInCombat(false);
-      return;
-    }
-
-    const shouldSpawnBoss =
-      canSpawnBoss && (!canSpawnEnemy || Math.random() <= 0.5);
-
-    if (shouldSpawnBoss) {
-      const randomBossKey =
-        bossKeys[Math.floor(Math.random() * bossKeys.length)];
-      spawnBoss(bosses[randomBossKey]);
-      clearEnemy();
-      toggleIsEnemy(false);
       return;
     }
 
@@ -117,7 +153,6 @@ export default function Combat() {
     scene,
     spawnEnemy,
     clearEnemy,
-    spawnBoss,
     clearBoss,
     toggleIsEnemy,
   ]);
@@ -172,15 +207,20 @@ export default function Combat() {
           maxHp: target.maxHp,
           energy: target.energy,
           maxEnergy: target.maxEnergy,
+          energyRegenPerSecond: target.energyRegenPerSecond,
           def: target.def,
           dmg: target.dmg,
           critChance: target.critChance,
           critDmg: target.critDmg,
           atkSpeed: target.atkSpeed,
-          skills: target.skills,
+          skills: toCombatSkills(target.skills),
         },
       });
       activeKeyRef.current = key;
+      useCombatDebugStore.getState().clearLogs();
+      useCombatDebugStore.getState().appendLog(
+        `Encounter started: ${isEnemy ? "mob" : "boss"} ${target.id}`,
+      );
     }
 
     if (timerRef.current == null) {
@@ -198,6 +238,7 @@ export default function Combat() {
         const bossState = !isEnemy ? useBossStore.getState() : null;
         const target = isEnemy ? enemyState?.enemy : bossState;
         if (!target?.id) return;
+        const playerAttacks = drainPlayerAttacks();
 
         const result = controller.tick({
           player: {
@@ -215,13 +256,15 @@ export default function Combat() {
             maxHp: target.maxHp,
             energy: target.energy,
             maxEnergy: target.maxEnergy,
+            energyRegenPerSecond: target.energyRegenPerSecond,
             def: target.def,
             dmg: target.dmg,
             critChance: target.critChance,
             critDmg: target.critDmg,
             atkSpeed: target.atkSpeed,
-            skills: target.skills,
+            skills: toCombatSkills(target.skills),
           },
+          playerAttacks,
           deltaMs,
         });
 
@@ -263,7 +306,7 @@ export default function Combat() {
             ? useEnemyStore.getState().enemy
             : useBossStore.getState();
           if (enemyAfter) {
-            setDebugState({
+            const snapshot = {
               isBoss: !isEnemy,
               enemyId: enemyAfter.id,
               action: result.enemyAction?.label ?? "none",
@@ -276,8 +319,49 @@ export default function Combat() {
               enemyHp: enemyAfter.hp,
               enemyEnergy: enemyAfter.energy,
               tickMs: Math.round(deltaMs),
+              playerAttacksConsumed: result.playerAttacksConsumed,
+              damageCauses: result.damageCauses,
+              analyticsElapsedMs: Math.round(result.analytics.elapsedMs),
+              analyticsToPlayer: result.analytics.totalDamageToPlayer,
+              analyticsToEnemy: result.analytics.totalDamageToEnemy,
+              analyticsDotToPlayer: result.analytics.totalDotDamageToPlayer,
+              analyticsDotToEnemy: result.analytics.totalDotDamageToEnemy,
+              analyticsPlayerAttacks: result.analytics.totalPlayerAttacks,
+              analyticsEnemyActions: result.analytics.totalEnemyActions,
+              analyticsEnemySkillCasts: result.analytics.totalEnemySkillCasts,
               done: result.done,
+            };
+            setDebugState(snapshot);
+            useCombatDebugStore.getState().setLatest({
+              isBoss: snapshot.isBoss,
+              enemyId: snapshot.enemyId,
+              action: snapshot.action,
+              reward: snapshot.reward,
+              dmgToPlayer: snapshot.dmgToPlayer,
+              dmgToEnemy: snapshot.dmgToEnemy,
+              healEnemy: snapshot.healEnemy,
+              energyDelta: snapshot.energyDelta,
+              playerHp: snapshot.playerHp,
+              enemyHp: snapshot.enemyHp,
+              enemyEnergy: snapshot.enemyEnergy,
+              tickMs: snapshot.tickMs,
+              done: snapshot.done,
+              playerAttacksConsumed: snapshot.playerAttacksConsumed,
+              damageCauses: snapshot.damageCauses,
+              analytics: result.analytics,
             });
+
+            if (
+              result.damageCauses.length > 0 ||
+              result.damageToEnemy > 0 ||
+              result.damageToPlayer > 0 ||
+              result.didEnemyAct
+            ) {
+              const causes = result.damageCauses.join(", ") || "none";
+              useCombatDebugStore.getState().appendLog(
+                `Tick ${Math.round(deltaMs)}ms | action=${snapshot.action} | p=-${result.damageToPlayer} e=-${result.damageToEnemy} | causes=${causes}`,
+              );
+            }
           }
         }
 
@@ -314,6 +398,17 @@ export default function Combat() {
           <div>DMG to Enemy: {debugState.dmgToEnemy}</div>
           <div>Heal Enemy: {debugState.healEnemy}</div>
           <div>Energy Delta: {debugState.energyDelta}</div>
+          <div>Player Attacks: {debugState.playerAttacksConsumed}</div>
+          <div>Causes: {debugState.damageCauses.join(", ") || "none"}</div>
+          <div className="mt-1 font-semibold">Analytics</div>
+          <div>Elapsed: {debugState.analyticsElapsedMs}ms</div>
+          <div>Total DMG to Player: {debugState.analyticsToPlayer}</div>
+          <div>Total DMG to Enemy: {debugState.analyticsToEnemy}</div>
+          <div>DOT to Player: {debugState.analyticsDotToPlayer}</div>
+          <div>DOT to Enemy: {debugState.analyticsDotToEnemy}</div>
+          <div>Total Player Attacks: {debugState.analyticsPlayerAttacks}</div>
+          <div>Total Enemy Actions: {debugState.analyticsEnemyActions}</div>
+          <div>Enemy Skill Casts: {debugState.analyticsEnemySkillCasts}</div>
           <div>Done: {debugState.done ? "yes" : "no"}</div>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { useBossStore, useDungeonStore, useEnemyStore, useGameStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore } from "../../game/store";
+import { enqueuePlayerAttack } from "./combat/player-attacks";
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { PythonModuleCallEvent } from "./parser";
 
@@ -96,15 +97,8 @@ function applyPlayerAttackDamage(damage: number): void {
         appendRuntimeLog(`Attack skipped (${damage}) because combat is not active.`);
         return;
     }
-
-    if (gameState.isEnemy) {
-        useEnemyStore.getState().takeDamage(damage);
-        appendRuntimeLog(`Enemy took ${damage} damage.`);
-        return;
-    }
-
-    useBossStore.getState().takeDamage(damage);
-    appendRuntimeLog(`Boss took ${damage} damage.`);
+    enqueuePlayerAttack(damage, "python.attack");
+    appendRuntimeLog(`Queued player attack (${damage}).`);
 }
 
 export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {

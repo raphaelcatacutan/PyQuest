@@ -17,12 +17,16 @@
         "energyCost": 8,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.18
-        }
+          "speedUp": 0.18,
+          "durationMs": 3500,
+          "target": "self"
+        },
+        "id": "gel_sprint_1",
+        "cooldownMs": 2000
       }
     ],
     "dmg": 15,
-    "atkSpeed": 1.2,
+    "atkSpeed": 0.4,
     "critDmg": 0.5,
     "critChance": 0.1,
     "evasion": 0.1,
@@ -39,7 +43,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "skeleton": {
     "id": "skeleton",
@@ -56,15 +61,20 @@
       {
         "name": "Bone Pierce",
         "description": "A jagged arrow that leaves a shallow wound.",
-        "energyCost": 9,
+        "energyCost": 40,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 4
-        }
+          "dmgPerSecond": 4,
+          "durationMs": 5000,
+          "tickIntervalMs": 1000,
+          "target": "player"
+        },
+        "id": "bone_pierce_1",
+        "cooldownMs": 2250
       }
     ],
     "dmg": 15,
-    "atkSpeed": 1.2,
+    "atkSpeed": 0.4,
     "critDmg": 0.5,
     "critChance": 0.1,
     "evasion": 0.1,
@@ -84,7 +94,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "forest_fang": {
     "id": "forest_fang",
@@ -104,8 +115,12 @@
         "energyCost": 11,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.25
-        }
+          "speedUp": 0.25,
+          "durationMs": 3500,
+          "target": "self"
+        },
+        "id": "predator_rush_1",
+        "cooldownMs": 2750
       },
       {
         "name": "Rending Bite",
@@ -113,12 +128,17 @@
         "energyCost": 13,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 5
-        }
+          "dmgPerSecond": 5,
+          "durationMs": 5000,
+          "tickIntervalMs": 1000,
+          "target": "player"
+        },
+        "id": "rending_bite_2",
+        "cooldownMs": 3250
       }
     ],
     "dmg": 18,
-    "atkSpeed": 1.5,
+    "atkSpeed": 0.5,
     "critDmg": 0.6,
     "critChance": 0.14,
     "evasion": 0.15,
@@ -133,7 +153,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "dune_raider": {
     "id": "dune_raider",
@@ -153,8 +174,11 @@
         "energyCost": 12,
         "effect": {
           "type": "stun",
-          "duration": 1
-        }
+          "durationMs": 1000,
+          "target": "player"
+        },
+        "id": "dust_ambush_1",
+        "cooldownMs": 3000
       },
       {
         "name": "Raid Captain",
@@ -162,12 +186,16 @@
         "energyCost": 14,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.2
-        }
+          "dmgMultiplier": 1.2,
+          "durationMs": 4000,
+          "target": "self"
+        },
+        "id": "raid_captain_2",
+        "cooldownMs": 3500
       }
     ],
     "dmg": 22,
-    "atkSpeed": 1.3,
+    "atkSpeed": 0.43,
     "critDmg": 0.7,
     "critChance": 0.16,
     "evasion": 0.12,
@@ -182,7 +210,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "mire_hag": {
     "id": "mire_hag",
@@ -202,8 +231,13 @@
         "energyCost": 15,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "durationMs": 5000,
+          "tickIntervalMs": 1000,
+          "target": "player"
+        },
+        "id": "marsh_hex_1",
+        "cooldownMs": 3750
       },
       {
         "name": "Wicked Whisper",
@@ -211,12 +245,15 @@
         "energyCost": 13,
         "effect": {
           "type": "confusion",
-          "dmg": 10
-        }
+          "durationMs": 3000,
+          "target": "player"
+        },
+        "id": "wicked_whisper_2",
+        "cooldownMs": 3250
       }
     ],
     "dmg": 20,
-    "atkSpeed": 1,
+    "atkSpeed": 0.34,
     "critDmg": 0.9,
     "critChance": 0.18,
     "evasion": 0.1,
@@ -237,7 +274,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "frost_wraith": {
     "id": "frost_wraith",
@@ -257,8 +295,11 @@
         "energyCost": 16,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "durationMs": 2000,
+          "target": "player"
+        },
+        "id": "cold_snare_1",
+        "cooldownMs": 4000
       },
       {
         "name": "Frost Rot",
@@ -266,12 +307,17 @@
         "energyCost": 17,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "durationMs": 5000,
+          "tickIntervalMs": 1000,
+          "target": "player"
+        },
+        "id": "frost_rot_2",
+        "cooldownMs": 4250
       }
     ],
     "dmg": 24,
-    "atkSpeed": 1.2,
+    "atkSpeed": 0.4,
     "critDmg": 1,
     "critChance": 0.2,
     "evasion": 0.13,
@@ -292,7 +338,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "labyrinth_guardian": {
     "id": "labyrinth_guardian",
@@ -312,8 +359,12 @@
         "energyCost": 18,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.35
-        }
+          "dmgMultiplier": 1.35,
+          "durationMs": 4000,
+          "target": "self"
+        },
+        "id": "stone_bulwark_1",
+        "cooldownMs": 4500
       },
       {
         "name": "Crushing Step",
@@ -321,12 +372,15 @@
         "energyCost": 20,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "durationMs": 2000,
+          "target": "player"
+        },
+        "id": "crushing_step_2",
+        "cooldownMs": 5000
       }
     ],
     "dmg": 30,
-    "atkSpeed": 1.05,
+    "atkSpeed": 0.35,
     "critDmg": 1.2,
     "critChance": 0.22,
     "evasion": 0.08,
@@ -341,7 +395,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "village_thief": {
     "id": "village_thief",
@@ -361,8 +416,11 @@
         "energyCost": 11,
         "effect": {
           "type": "confusion",
-          "dmg": 12
-        }
+          "durationMs": 3000,
+          "target": "player"
+        },
+        "id": "pocket_sand_1",
+        "cooldownMs": 2750
       },
       {
         "name": "Quickstep",
@@ -370,12 +428,16 @@
         "energyCost": 10,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.3
-        }
+          "speedUp": 0.5,
+          "durationMs": 3500,
+          "target": "self"
+        },
+        "id": "quickstep_2",
+        "cooldownMs": 2500
       }
     ],
     "dmg": 19,
-    "atkSpeed": 1.55,
+    "atkSpeed": 0.5,
     "critDmg": 0.75,
     "critChance": 0.17,
     "evasion": 0.16,
@@ -390,7 +452,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "dungeon_puppet": {
     "id": "dungeon_puppet",
@@ -410,12 +473,15 @@
         "energyCost": 15,
         "effect": {
           "type": "stun",
-          "duration": 1
-        }
+          "durationMs": 1000,
+          "target": "player"
+        },
+        "id": "puppet_strings_1",
+        "cooldownMs": 3750
       }
     ],
     "dmg": 26,
-    "atkSpeed": 1.15,
+    "atkSpeed": 0.38,
     "critDmg": 1,
     "critChance": 0.19,
     "evasion": 0.11,
@@ -430,7 +496,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "stalker": {
     "id": "stalker",
@@ -450,8 +517,13 @@
         "energyCost": 16,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 8
-        }
+          "dmgPerSecond": 8,
+          "durationMs": 5000,
+          "tickIntervalMs": 1000,
+          "target": "player"
+        },
+        "id": "shadow_lure_1",
+        "cooldownMs": 4000
       },
       {
         "name": "Silent Hunt",
@@ -459,12 +531,16 @@
         "energyCost": 14,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.32
-        }
+          "speedUp": 0.32,
+          "durationMs": 3500,
+          "target": "self"
+        },
+        "id": "silent_hunt_2",
+        "cooldownMs": 3500
       }
     ],
     "dmg": 28,
-    "atkSpeed": 1.2,
+    "atkSpeed": 0.4,
     "critDmg": 1.1,
     "critChance": 0.21,
     "evasion": 0.14,
@@ -482,7 +558,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "knight": {
     "id": "knight",
@@ -502,8 +579,12 @@
         "energyCost": 19,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.4
-        }
+          "dmgMultiplier": 1.4,
+          "durationMs": 4000,
+          "target": "self"
+        },
+        "id": "shield_break_1",
+        "cooldownMs": 4750
       },
       {
         "name": "Command Halt",
@@ -511,12 +592,15 @@
         "energyCost": 17,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "durationMs": 2000,
+          "target": "player"
+        },
+        "id": "command_halt_2",
+        "cooldownMs": 4250
       }
     ],
     "dmg": 31,
-    "atkSpeed": 1.1,
+    "atkSpeed": 0.37,
     "critDmg": 1.25,
     "critChance": 0.23,
     "evasion": 0.09,
@@ -534,7 +618,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 7
   },
   "giant": {
     "id": "giant",
@@ -554,8 +639,12 @@
         "energyCost": 20,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.5
-        }
+          "dmgMultiplier": 1.5,
+          "durationMs": 4000,
+          "target": "self"
+        },
+        "id": "titan_roar_1",
+        "cooldownMs": 5000
       },
       {
         "name": "Second Wind",
@@ -563,12 +652,15 @@
         "energyCost": 22,
         "effect": {
           "type": "heal",
-          "healAmount": 36
-        }
+          "healAmount": 36,
+          "target": "self"
+        },
+        "id": "second_wind_2",
+        "cooldownMs": 5500
       }
     ],
     "dmg": 35,
-    "atkSpeed": 0.95,
+    "atkSpeed": 0.34,
     "critDmg": 1.35,
     "critChance": 0.24,
     "evasion": 0.06,
@@ -591,7 +683,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 7
   },
   "scout": {
     "id": "scout",
@@ -611,12 +704,16 @@
         "energyCost": 12,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.28
-        }
+          "speedUp": 0.28,
+          "durationMs": 3500,
+          "target": "self"
+        },
+        "id": "flank_step_1",
+        "cooldownMs": 3000
       }
     ],
     "dmg": 21,
-    "atkSpeed": 1.35,
+    "atkSpeed": 0.45,
     "critDmg": 0.8,
     "critChance": 0.16,
     "evasion": 0.15,
@@ -633,7 +730,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "shaman": {
     "id": "shaman",
@@ -653,8 +751,13 @@
         "energyCost": 15,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "durationMs": 5000,
+          "tickIntervalMs": 1000,
+          "target": "player"
+        },
+        "id": "hex_mark_1",
+        "cooldownMs": 3750
       },
       {
         "name": "Spirit Mend",
@@ -662,12 +765,15 @@
         "energyCost": 18,
         "effect": {
           "type": "heal",
-          "healAmount": 24
-        }
+          "healAmount": 24,
+          "target": "self"
+        },
+        "id": "spirit_mend_2",
+        "cooldownMs": 4500
       }
     ],
     "dmg": 25,
-    "atkSpeed": 1.05,
+    "atkSpeed": 0.35,
     "critDmg": 1,
     "critChance": 0.19,
     "evasion": 0.11,
@@ -686,7 +792,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "raider": {
     "id": "raider",
@@ -706,8 +813,12 @@
         "energyCost": 17,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.3
-        }
+          "dmgMultiplier": 1.3,
+          "durationMs": 4000,
+          "target": "self"
+        },
+        "id": "war_cry_1",
+        "cooldownMs": 4250
       },
       {
         "name": "Shield Bash",
@@ -715,12 +826,15 @@
         "energyCost": 16,
         "effect": {
           "type": "stun",
-          "duration": 1
-        }
+          "durationMs": 1000,
+          "target": "player"
+        },
+        "id": "shield_bash_2",
+        "cooldownMs": 4000
       }
     ],
     "dmg": 29,
-    "atkSpeed": 1.12,
+    "atkSpeed": 0.37,
     "critDmg": 1.15,
     "critChance": 0.2,
     "evasion": 0.1,
@@ -738,7 +852,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "warden": {
     "id": "warden",
@@ -758,12 +873,15 @@
         "energyCost": 18,
         "effect": {
           "type": "confusion",
-          "dmg": 16
-        }
+          "durationMs": 3000,
+          "target": "player"
+        },
+        "id": "lockdown_1",
+        "cooldownMs": 4500
       }
     ],
     "dmg": 30,
-    "atkSpeed": 1,
+    "atkSpeed": 0.34,
     "critDmg": 1.2,
     "critChance": 0.19,
     "evasion": 0.09,
@@ -779,6 +897,7 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   }
 }

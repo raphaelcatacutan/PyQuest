@@ -1,5 +1,6 @@
 import Button from "./ui/Button"
 import { 
+  useCombatDebugStore,
   useDevToolStore,
   useEnemyStore, 
   useBossStore,
@@ -102,6 +103,13 @@ export default function DevTool(){
   const sfx = useSoundStore()
   const bounty = useBountyQuestStore()
   const kill = useKillTrackerStore()
+  const { latestCombatDebug, combatLogs, clearCombatLogs } = useCombatDebugStore(
+    useShallow((s) => ({
+      latestCombatDebug: s.latest,
+      combatLogs: s.logs,
+      clearCombatLogs: s.clearLogs,
+    })),
+  );
 
 
   return (
@@ -158,6 +166,40 @@ export default function DevTool(){
           useSoundStore.getState().playSfx('click')
           console.log("Played Hit SFX")
           }}/>
+      </div>
+
+      <div className="absolute z-101 bottom-20 right-0 w-[420px] max-h-72 overflow-auto border bg-zinc-900 p-2 text-xs">
+        <div className="flex items-center justify-between mb-1">
+          <span className="font-semibold">Combat Debug</span>
+          <Button text="Clear Logs" onClick={clearCombatLogs} />
+        </div>
+        {latestCombatDebug ? (
+          <>
+            <div>Type: {latestCombatDebug.isBoss ? "Boss" : "Mob"}</div>
+            <div>Enemy: {latestCombatDebug.enemyId}</div>
+            <div>Action: {latestCombatDebug.action}</div>
+            <div>Reward: {latestCombatDebug.reward}</div>
+            <div>Damage Causes: {latestCombatDebug.damageCauses.join(", ") || "none"}</div>
+            <div>Analytics Time: {Math.round(latestCombatDebug.analytics.elapsedMs)}ms</div>
+            <div>Analytics To Player: {latestCombatDebug.analytics.totalDamageToPlayer}</div>
+            <div>Analytics To Enemy: {latestCombatDebug.analytics.totalDamageToEnemy}</div>
+            <div>Analytics DOT Player: {latestCombatDebug.analytics.totalDotDamageToPlayer}</div>
+            <div>Analytics DOT Enemy: {latestCombatDebug.analytics.totalDotDamageToEnemy}</div>
+            <div>Analytics Player Attacks: {latestCombatDebug.analytics.totalPlayerAttacks}</div>
+            <div>Analytics Enemy Actions: {latestCombatDebug.analytics.totalEnemyActions}</div>
+            <div>Analytics Enemy Skills: {latestCombatDebug.analytics.totalEnemySkillCasts}</div>
+          </>
+        ) : (
+          <div>No combat snapshot yet.</div>
+        )}
+        <div className="font-semibold mt-2">Combat Log</div>
+        {combatLogs.length === 0 ? (
+          <div>No log entries.</div>
+        ) : (
+          combatLogs.slice(-15).map((line, index) => (
+            <div key={`${index}-${line}`}>{line}</div>
+          ))
+        )}
       </div>
       
     </>

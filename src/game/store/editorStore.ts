@@ -7,11 +7,15 @@ import { create } from "zustand";
 
 interface EditorStoreProps {
   activeFile: string;
+  activeCode: string;
   setActiveFile: (file: string) => void;
+  setActiveCode: (code: string) => void;
 }
 
 export const useEditorStore = create<EditorStoreProps>((set) => ({
   activeFile: "hello_world.py",
+  activeCode: "",
 
-  setActiveFile: (file) => set({ activeFile: file })
+  setActiveFile: (file) => set({ activeFile: file }),
+  setActiveCode: (code) => set({ activeCode: code })
 }))

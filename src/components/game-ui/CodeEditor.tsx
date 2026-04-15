@@ -1,5 +1,5 @@
 import Editor, { OnMount } from "@monaco-editor/react";
-import { useRef, useEffect, act } from "react";
+import { useRef, useEffect } from "react";
 import * as monaco from 'monaco-editor';
 import Button from "../ui/Button";  
 import {
@@ -36,10 +36,10 @@ export default function CodeEditor() {
     }))
   )
   const appendToLogs = useTerminalStore((s) => s.appendToLog)
-  const { activeFile, setActiveFile } = useEditorStore(
+  const { activeFile, setActiveCode } = useEditorStore(
     useShallow((s) => ({
       activeFile: s.activeFile,
-      setActiveFile: s.setActiveFile
+      setActiveCode: s.setActiveCode,
     }))
   )
 
@@ -58,6 +58,7 @@ export default function CodeEditor() {
   function handleClear() {
     if (editorRef.current) {
       editorRef.current.setValue("");
+      setActiveCode("");
     }
   }
 
@@ -79,6 +80,7 @@ export default function CodeEditor() {
   
   async function handleRun() {
     const code = editorRef.current?.getValue() ?? "";
+    setActiveCode(code);
 
     if (!code.trim()) {
       appendToLogs("[PY]: Nothing to run.");
@@ -137,7 +139,11 @@ export default function CodeEditor() {
           defaultValue="# Welcome to PyQuest! 
 # Start writing your coding journey in Python here!"
           theme="vs-dark"
-          onMount={handleEditorDidMount}
+          onMount={(editor, monacoInstance) => {
+            handleEditorDidMount(editor, monacoInstance);
+            setActiveCode(editor.getValue());
+          }}
+          onChange={(value) => setActiveCode(value ?? "")}
           options={{
             minimap: { enabled: false},
             glyphMargin: false,

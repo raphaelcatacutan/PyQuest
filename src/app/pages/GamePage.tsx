@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { useShallow } from "zustand/shallow";
-import CodeEditor from "@/src/components/game-ui/CodeEditor";
-import LeftSideBar from "@/src/components/game-ui/LeftSideBar";
-import Button from "@/src/components/ui/Button";
-import showToast from "@/src/components/ui/Toast";
+import { useEffect, useRef, useState } from "react"
+import { useShallow } from "zustand/shallow"
+import CodeEditor from "@/src/components/game-ui/CodeEditor"
+import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
+import Button from "@/src/components/ui/Button"
 import Combat from "@/src/components/events/Combat";
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar";
 import { rightPanelIcon } from "@/src/assets";
@@ -12,6 +11,9 @@ import {
   useGameStore,
   usePlayerStore,
   useInventoryStore,
+  useTutorialStore,
+  useBountyQuestStore,
+  loadTutorialProfile,
   loadInventoryProfile,
   loadDungeonProfile,
   loadUserProfile,
@@ -29,32 +31,18 @@ import { loadBountyProfile } from "@/src/game/store";
 import { loadKillProfile } from "@/src/game/store/killTrackerStore";
 
 export default function GamePage() {
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayBg, setDisplayBg] = useState("");
-  const inVillage = useGameStore((s) => s.inVillage);
-  const user_id = usePlayerStore((s) => s.user_id);
-  const { scene, sceneBg } = useSceneStore(
-    useShallow((s) => ({
-      scene: s.scene,
-      sceneBg: s.sceneBg,
-    })),
-  );
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [displayBg, setDisplayBg] = useState("")
+  const inVillage = useGameStore(s => s.inVillage)
+  const sceneBg = useSceneStore(s => s.sceneBg)
   const { rightPanel, toggleRightPanel } = useGameStore(
-    useShallow((state) => ({
-      rightPanel: state.rightPanel,
-      toggleRightPanel: state.toggleRightPanel,
-    })),
-  );
-  const {
-    player_id,
-    playerInventory,
-    addInventoryItem,
-    deleteInventoryItem,
-    renameInventoryItem,
-    moveInventoryItem,
-  } = useInventoryStore(
     useShallow((s) => ({
-      player_id: s.player_id,
+      rightPanel: s.rightPanel,
+      toggleRightPanel: s.toggleRightPanel
+    }))
+  )
+  const { playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
+    useShallow((s) => ({
       playerInventory: s.playerInventory,
       addInventoryItem: s.addInventoryItem,
       deleteInventoryItem: s.deleteInventoryItem,
@@ -140,8 +128,12 @@ export default function GamePage() {
         await loadUserProfile(currentId);
         await loadInventoryProfile(currentId);
         await loadBountyProfile(currentId);
+        await loadTutorialProfile(currentId);
         await loadDungeonProfile(currentId);
         await loadKillProfile(currentId);
+
+        const progressIncrement = useBountyQuestStore.getState().questLevel;
+        useTutorialStore.getState().startGameLoop(progressIncrement);
         // load other data
       } else {
         console.log(`Data NOT Found for ${currentId}`);

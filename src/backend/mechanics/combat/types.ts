@@ -1,9 +1,19 @@
 export type CombatantKind = 'mob' | 'boss';
 
+export type EnemySkillEffect =
+  | { type: 'heal'; healAmount: number }
+  | { type: 'stun'; duration: number }
+  | { type: 'poison'; dmgPerSecond: number }
+  | { type: 'bleed'; dmgPerSecond: number }
+  | { type: 'empower'; dmgMultiplier: number }
+  | { type: 'speedup'; speedUp: number }
+  | { type: 'confusion'; dmg: number };
+
 export type EnemySkill = {
   name: string;
-  dmg: number;
   energyCost: number;
+  dmg?: number;
+  effect?: EnemySkillEffect;
 };
 
 export type EnemySnapshot = {

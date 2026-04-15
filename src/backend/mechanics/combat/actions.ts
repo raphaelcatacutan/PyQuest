@@ -87,14 +87,15 @@ export function resolveEnemyAction(
     };
   }
 
-  const rawDamage = action.type === 'skill'
-    ? getSkillDamage(enemy, action.skillIndex)
-    : enemy.dmg;
+  const rawDamage =
+    action.type === 'skill' ? getSkillDamage(enemy, action.skillIndex) : enemy.dmg;
+  const healEnemy =
+    action.type === 'skill' ? getSkillHeal(enemy, action.skillIndex) : 0;
   const damage = computeDamage(rawDamage, enemy.critChance, enemy.critDmg, player.def);
 
   return {
     damageToPlayer: damage,
-    healEnemy: 0,
+    healEnemy,
     energyDelta: -action.energyCost,
     actionTag: action.type === 'skill' ? 'skill' : 'fallback_basic',
   };
@@ -104,7 +105,48 @@ function getSkillDamage(enemy: EnemySnapshot, index?: number): number {
   if (index == null || index < 0 || index >= enemy.skills.length) {
     return 0;
   }
-  return enemy.skills[index]?.dmg ?? 0;
+  const skill = enemy.skills[index];
+  if (!skill) return 0;
+
+  if (typeof skill.dmg === 'number') {
+    return Math.max(0, skill.dmg);
+  }
+
+  const effect = skill.effect;
+  if (!effect) {
+    return Math.max(0, enemy.dmg);
+  }
+
+  switch (effect.type) {
+    case 'confusion':
+      return Math.max(0, effect.dmg);
+    case 'poison':
+    case 'bleed':
+      return Math.max(0, effect.dmgPerSecond);
+    case 'empower':
+      return Math.max(0, Math.round(enemy.dmg * Math.max(1, effect.dmgMultiplier)));
+    case 'speedup':
+      return Math.max(0, Math.round(enemy.dmg * (1 + Math.max(0, effect.speedUp))));
+    case 'stun':
+      return Math.max(0, enemy.dmg);
+    case 'heal':
+      return 0;
+    default:
+      return Math.max(0, enemy.dmg);
+  }
+}
+
+function getSkillHeal(enemy: EnemySnapshot, index?: number): number {
+  if (index == null || index < 0 || index >= enemy.skills.length) {
+    return 0;
+  }
+
+  const effect = enemy.skills[index]?.effect;
+  if (!effect || effect.type !== 'heal') {
+    return 0;
+  }
+
+  return Math.max(0, effect.healAmount);
 }
 
 function normalizeChance(chance: number): number {
@@ -114,6 +156,8 @@ function normalizeChance(chance: number): number {
 }
 
 function computeDamage(base: number, critChance: number, critDmg: number, targetDef: number): number {
+  if (base <= 0) return 0;
+
   let dmg = base;
   const chance = normalizeChance(critChance);
   if (Math.random() < chance) {

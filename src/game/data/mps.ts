@@ -8,13 +8,27 @@ import { MPData, MachineProblem } from '../types/mp.types'
 
 export const MachineProblems: MPData = mpData as MPData
 
+const FALLBACK_PROBLEM: MachineProblem = {
+  problem: "No machine problem is available for this scene yet.",
+  correct_code: "print('No machine problem is available for this scene yet.')",
+  expected_output: "No machine problem is available for this scene yet.",
+  reward: {
+    xpDropMin: 0,
+    xpDropMax: 0,
+    coinDropMin: 0,
+    coinDropMax: 0,
+    weapons: [],
+    armors: [],
+    consumables: [],
+  },
+};
+
 export const getRandomMPByScene = (scene: string): MachineProblem => {
-  // 1. Access the array for the specific level
   const problemsForLevel = MachineProblems[scene];
+  if (!Array.isArray(problemsForLevel) || problemsForLevel.length === 0) {
+    return FALLBACK_PROBLEM;
+  }
 
-  // 3. Generate a random index based on the length of THAT specific level's array
   const randomIndex = Math.floor(Math.random() * problemsForLevel.length);
-
-  // 4. Return the random problem
-  return problemsForLevel[randomIndex];
+  return problemsForLevel[randomIndex] ?? FALLBACK_PROBLEM;
 }

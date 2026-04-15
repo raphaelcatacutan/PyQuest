@@ -30,7 +30,7 @@ export default function SignupPage() {
     }
     
     // Register the new user
-    if (registerUser(username, password)) {
+    if (registerUser(username)) {
       showToast({ variant: "success", message: "Account created successfully! Please login." });
       navigate('/login');
     } else {

@@ -1,6 +1,7 @@
-import { useBossStore, useDungeonStore, useEnemyStore, useGameStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore } from "../../game/store";
+import { useBossStore, useDungeonStore, useEnemyStore, useGameStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore, useTutorialStore } from "../../game/store";
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { PythonModuleCallEvent } from "./parser";
+import statementDamageTable from "./damage.json";
 
 const SCENE_VALUES: SceneTypes[] = [
     "",
@@ -18,6 +19,7 @@ const SCENE_VALUES: SceneTypes[] = [
 ];
 
 const SCENE_SET = new Set<string>(SCENE_VALUES);
+const STATEMENT_DAMAGE = statementDamageTable as Record<string, number>;
 
 function readPayload(payload: unknown): Record<string, unknown> {
     if (payload && typeof payload === "object") {
@@ -72,6 +74,11 @@ function appendRuntimeLog(message: string): void {
     useTerminalStore.getState().appendToLog(`[PY]: ${message}`);
 }
 
+function isWorldSyntaxUnlocked(): boolean {
+    const isTutorial = useTutorialStore.getState().isTutorial;
+    return !isTutorial;
+}
+
 function setSceneAndFlags(scene: SceneTypes): void {
     useSceneStore.getState().setScene(scene);
     useGameStore.setState({
@@ -107,11 +114,26 @@ function applyPlayerAttackDamage(damage: number): void {
     appendRuntimeLog(`Boss took ${damage} damage.`);
 }
 
+function resolveStatementDamage(statementType: string): number {
+    const rawValue = STATEMENT_DAMAGE[statementType] ?? STATEMENT_DAMAGE.Statement ?? 0;
+
+    if (typeof rawValue !== "number" || !Number.isFinite(rawValue)) {
+        return 0;
+    }
+
+    return Math.max(0, Math.floor(rawValue));
+}
+
 export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
     const payload = event.payload;
 
     switch (event.name) {
         case "builtin.goTo": {
+            if (!isWorldSyntaxUnlocked()) {
+                appendRuntimeLog("goTo() is locked during tutorial.");
+                return;
+            }
+
             const locationId = readString(payload, "locationId", "").trim().toLowerCase();
 
             if (!isSceneType(locationId)) {
@@ -125,6 +147,11 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
         }
 
         case "builtin.scavenge": {
+            if (!isWorldSyntaxUnlocked()) {
+                appendRuntimeLog("scavenge() is locked during tutorial.");
+                return;
+            }
+
             const amount = Math.max(0, readNumber(payload, "coins", 1));
             usePlayerStore.getState().gainCoins(amount);
             appendRuntimeLog(`Scavenge rewarded ${amount} coin(s).`);
@@ -132,8 +159,14 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
         }
 
         case "builtin.explore": {
-            useGameStore.getState().toggleInCombat(true);
-            appendRuntimeLog("Explore started combat.");
+            if (!isWorldSyntaxUnlocked()) {
+                appendRuntimeLog("explore() is locked during tutorial.");
+                return;
+            }
+
+            const state = readBoolean(payload, "state", true);
+            useGameStore.getState().toggleInCombat(state);
+            appendRuntimeLog(`Explore set combat to ${state}.`);
             return;
         }
 
@@ -195,6 +228,9 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             const delayValue = Math.max(0, readNumber(payload, "delayMs", 0));
             const delaySuffix = delayValue > 0 ? ` | delay ${delayValue}ms` : "";
             appendRuntimeLog(`[TRACE] ${statementType} @ line ${lineNumber}${delaySuffix}`);
+
+            const statementDamage = resolveStatementDamage(statementType);
+            applyPlayerAttackDamage(statementDamage);
             return;
         }
 

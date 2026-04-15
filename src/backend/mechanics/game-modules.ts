@@ -97,8 +97,8 @@ def scavenge():
     return _emit("builtin.scavenge", {"scene": _state("scene.scene", ""), "coins": 1})
 
 
-def explore():
-    return _emit("builtin.explore", {"scene": _state("scene.scene", "")})
+def explore(state=True):
+    return _emit("builtin.explore", {"scene": _state("scene.scene", ""), "state": bool(state)})
 
 
 player = Player()

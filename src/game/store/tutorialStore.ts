@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { Tutorial, TutorialTest } from "../types/tutorial.types";
 import { Tutorials } from "../data/tutorial";
 import { useEditorStore } from "./editorStore";
+import { useBountyQuestStore } from "./bountyQuestStore";
 
 /**
  * 
@@ -138,6 +139,8 @@ export const useTutorialStore = create<TutorialStoreProps>()(
             hasStoredProgress: true,
           });
         } else {
+          useBountyQuestStore.getState().setHeader("New bounty quests are available.");
+          useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
           set({
             isTutorial: false,
             blockedReason: "",

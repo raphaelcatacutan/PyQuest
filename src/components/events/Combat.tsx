@@ -37,8 +37,6 @@ export default function Combat() {
   const enemyHp = useEnemyStore((s) => s.enemy?.hp ?? 0);
   const bossHp = useBossStore((s) => s.hp);
   const playerHp = usePlayerStore((s) => s.hp);
-  const playerMaxHp = usePlayerStore((s) => s.maxHP);
-  const playerMaxEnergy = usePlayerStore((s) => s.maxEnergy);
 
   const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
   const clearEnemy = useEnemyStore((s) => s.clearEnemy);
@@ -83,24 +81,9 @@ export default function Combat() {
     useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
   };
 
-  const resetToCurrentLessonOnDeath = () => {
-    const questLevel = useBountyQuestStore.getState().questLevel;
-    const targetPhaseIndex = Math.max(0, questLevel - 1);
-
-    useTutorialStore.getState().skipToPhase(targetPhaseIndex);
-    useTutorialStore.getState().toggleIsTutorial(true);
-
-    usePlayerStore.setState({
-      hp: playerMaxHp,
-      energy: playerMaxEnergy,
-    });
-
-    useSceneStore.getState().setScene("village");
-    useGameStore.setState({
-      inVillage: true,
-      inCombat: false,
-    });
-
+  const handlePlayerDeath = () => {
+    stopLoop();
+    toggleInCombat(false);
     clearEnemy();
     clearBoss();
   };
@@ -192,8 +175,7 @@ export default function Combat() {
     if (!inCombat) return;
 
     if (playerHp <= 0) {
-      stopLoop();
-      resetToCurrentLessonOnDeath();
+      handlePlayerDeath();
       return;
     }
 
@@ -359,8 +341,7 @@ export default function Combat() {
         if (result.done) {
           const playerAfter = usePlayerStore.getState();
           if (playerAfter.hp <= 0) {
-            stopLoop();
-            resetToCurrentLessonOnDeath();
+            handlePlayerDeath();
             return;
           }
 

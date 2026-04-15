@@ -596,8 +596,8 @@
   "scout": {
     "id": "scout",
     "name": "Scout",
-    "description": "NEW ENEMY: Asset pending. A fast scout that probes weak defenses.",
-    "enemyImg": "/src/assets/enemies/pending_scout.png",
+    "description": "A fast scout that probes weak defenses.",
+    "enemyImg": "/src/assets/enemies/scout.png",
     "hp": 118,
     "maxHp": 118,
     "energy": 122,
@@ -638,8 +638,8 @@
   "shaman": {
     "id": "shaman",
     "name": "Shaman",
-    "description": "NEW ENEMY: Asset pending. A ritual caster drawing power from old shrines.",
-    "enemyImg": "/src/assets/enemies/pending_shaman.png",
+    "description": "A ritual caster drawing power from old shrines.",
+    "enemyImg": "/src/assets/enemies/shaman.png",
     "hp": 142,
     "maxHp": 142,
     "energy": 152,
@@ -691,8 +691,8 @@
   "raider": {
     "id": "raider",
     "name": "Raider",
-    "description": "NEW ENEMY: Asset pending. A disciplined attacker trained for siege pushes.",
-    "enemyImg": "/src/assets/enemies/pending_raider.png",
+    "description": "A disciplined attacker trained for siege pushes.",
+    "enemyImg": "/src/assets/enemies/raider.png",
     "hp": 166,
     "maxHp": 166,
     "energy": 150,
@@ -743,8 +743,8 @@
   "warden": {
     "id": "warden",
     "name": "Warden",
-    "description": "NEW ENEMY: Asset pending. A stoic enforcer guarding key entrances.",
-    "enemyImg": "/src/assets/enemies/pending_warden.png",
+    "description": "A stoic enforcer guarding key entrances.",
+    "enemyImg": "/src/assets/enemies/warden.png",
     "hp": 178,
     "maxHp": 178,
     "energy": 144,

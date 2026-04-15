@@ -33,6 +33,7 @@ import { loadKillProfile } from "@/src/game/store/killTrackerStore";
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [displayBg, setDisplayBg] = useState("")
+  const previousInVillageRef = useRef<boolean>(true)
   const inVillage = useGameStore(s => s.inVillage)
   const sceneBg = useSceneStore(s => s.sceneBg)
   const { rightPanel, toggleRightPanel } = useGameStore(
@@ -111,6 +112,18 @@ export default function GamePage() {
   useEffect(() => {
     setDisplayBg(sceneBg);
   }, []);
+
+  useEffect(() => {
+    const wasInVillage = previousInVillageRef.current;
+    const enteredVillage = !wasInVillage && inVillage;
+
+    if (enteredVillage) {
+      const progressIncrement = useBountyQuestStore.getState().questLevel;
+      useTutorialStore.getState().startGameLoop(progressIncrement);
+    }
+
+    previousInVillageRef.current = inVillage;
+  }, [inVillage]);
 
   // Load all datas
   useEffect(() => {

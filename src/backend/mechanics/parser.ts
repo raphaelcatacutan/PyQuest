@@ -249,6 +249,18 @@ function inferStatementType(trimmedLine: string): string {
         return "PrintStatement";
     }
 
+    if (/^async\s+def\b/.test(trimmedLine)) {
+        return "AsyncFunctionDefinition";
+    }
+
+    if (/^async\s+for\b/.test(trimmedLine)) {
+        return "AsyncForLoop";
+    }
+
+    if (/^async\s+with\b/.test(trimmedLine)) {
+        return "AsyncWithStatement";
+    }
+
     if (/^while\b/.test(trimmedLine)) {
         return "WhileLoop";
     }
@@ -261,6 +273,10 @@ function inferStatementType(trimmedLine: string): string {
         return "IfStatement";
     }
 
+    if (/^match\b/.test(trimmedLine)) {
+        return "MatchStatement";
+    }
+
     if (/^def\b/.test(trimmedLine)) {
         return "FunctionDefinition";
     }
@@ -271,6 +287,54 @@ function inferStatementType(trimmedLine: string): string {
 
     if (/^return\b/.test(trimmedLine)) {
         return "ReturnStatement";
+    }
+
+    if (/^raise\b/.test(trimmedLine)) {
+        return "RaiseStatement";
+    }
+
+    if (/^assert\b/.test(trimmedLine)) {
+        return "AssertStatement";
+    }
+
+    if (/^break\b/.test(trimmedLine)) {
+        return "BreakStatement";
+    }
+
+    if (/^continue\b/.test(trimmedLine)) {
+        return "ContinueStatement";
+    }
+
+    if (/^pass\b/.test(trimmedLine)) {
+        return "PassStatement";
+    }
+
+    if (/^del\b/.test(trimmedLine)) {
+        return "DeleteStatement";
+    }
+
+    if (/^global\b/.test(trimmedLine)) {
+        return "GlobalStatement";
+    }
+
+    if (/^nonlocal\b/.test(trimmedLine)) {
+        return "NonlocalStatement";
+    }
+
+    if (/^await\b/.test(trimmedLine)) {
+        return "AwaitExpression";
+    }
+
+    if (/^[a-zA-Z_][a-zA-Z0-9_\.\[\]]*\s*(\+=|-=|\*=|\/=|%=|\*\*=|\/\/=|&=|\|=|\^=|>>=|<<=)/.test(trimmedLine)) {
+        return "AugmentedAssignmentStatement";
+    }
+
+    if (/^[a-zA-Z_][a-zA-Z0-9_]*(\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)*\s*=/.test(trimmedLine)) {
+        return "AssignmentStatement";
+    }
+
+    if (/^[a-zA-Z_][a-zA-Z0-9_\.]*\s*\(/.test(trimmedLine)) {
+        return "FunctionCallStatement";
     }
 
     if (/^(import\b|from\b)/.test(trimmedLine)) {

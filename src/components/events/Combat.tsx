@@ -3,11 +3,14 @@ import { useShallow } from "zustand/shallow";
 import EnemyEncounter from "./EnemyEncounter";
 import BossEncounter from "./BossEncounter";
 import {
+  useBountyQuestStore,
   useBossStore,
   useEnemyStore,
   useGameStore,
+  useKillTrackerStore,
   usePlayerStore,
   useSceneStore,
+  useTutorialStore,
 } from "@/src/game/store";
 import {
   createEncounterController,
@@ -33,11 +36,57 @@ export default function Combat() {
   const bossId = useBossStore((s) => s.id);
   const enemyHp = useEnemyStore((s) => s.enemy?.hp ?? 0);
   const bossHp = useBossStore((s) => s.hp);
+  const playerHp = usePlayerStore((s) => s.hp);
 
   const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
   const clearEnemy = useEnemyStore((s) => s.clearEnemy);
   const spawnBoss = useBossStore((s) => s.spawnBoss);
   const clearBoss = useBossStore((s) => s.clearBoss);
+
+  const handleQuestProgressAfterKill = (targetId: string) => {
+    if (!targetId) return;
+
+    const killTracker = useKillTrackerStore.getState();
+    const bounty = useBountyQuestStore.getState();
+
+    killTracker.recordKill(targetId);
+    bounty.checkQuestProgress();
+
+    const latestBounty = useBountyQuestStore.getState();
+    const currentLevelKey = latestBounty.questLevel.toString();
+    const currentLevelQuests = latestBounty.allQuests[currentLevelKey] || [];
+    const hasQuestList = currentLevelQuests.length > 0;
+    const isLevelComplete = hasQuestList && currentLevelQuests.every((quest) => quest.isCompleted);
+
+    if (!isLevelComplete) {
+      return;
+    }
+
+    const availableLevels = Object.keys(latestBounty.allQuests)
+      .map((level) => Number(level))
+      .filter((level) => Number.isFinite(level));
+    const maxQuestLevel = availableLevels.length > 0 ? Math.max(...availableLevels) : latestBounty.questLevel;
+
+    if (latestBounty.questLevel >= maxQuestLevel) {
+      latestBounty.setHeader("All bounty quests are complete.");
+      latestBounty.toggleDisplayBountyQuest(true);
+      return;
+    }
+
+    latestBounty.incrementQuestLevel();
+    const nextLevel = useBountyQuestStore.getState().questLevel;
+    usePlayerStore.getState().levelUp();
+    useTutorialStore.getState().toggleIsTutorial(false);
+    useBountyQuestStore.getState().setHeader(`New bounty quests unlocked for level ${nextLevel}.`);
+    useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
+  };
+
+  const handlePlayerDeath = () => {
+    stopLoop();
+    toggleInCombat(false);
+    clearEnemy();
+    clearBoss();
+  };
 
   const controllerRef = useRef<EncounterController | null>(null);
   const activeKeyRef = useRef<string>("");
@@ -125,13 +174,20 @@ export default function Combat() {
   useEffect(() => {
     if (!inCombat) return;
 
+    if (playerHp <= 0) {
+      handlePlayerDeath();
+      return;
+    }
+
     if (isEnemy && enemyId && enemyHp <= 0) {
+      handleQuestProgressAfterKill(enemyId);
       toggleInCombat(false);
       clearEnemy();
       return;
     }
 
     if (!isEnemy && bossId && bossHp <= 0) {
+      handleQuestProgressAfterKill(bossId);
       toggleInCombat(false);
       clearBoss();
     }
@@ -142,6 +198,7 @@ export default function Combat() {
     bossId,
     enemyHp,
     bossHp,
+    playerHp,
     clearEnemy,
     clearBoss,
     toggleInCombat,
@@ -282,6 +339,20 @@ export default function Combat() {
         }
 
         if (result.done) {
+          const playerAfter = usePlayerStore.getState();
+          if (playerAfter.hp <= 0) {
+            handlePlayerDeath();
+            return;
+          }
+
+          const activeTarget = isEnemy
+            ? useEnemyStore.getState().enemy
+            : useBossStore.getState();
+
+          if (activeTarget?.id && activeTarget.hp <= 0) {
+            handleQuestProgressAfterKill(activeTarget.id);
+          }
+
           stopLoop();
           toggleInCombat(false);
         }

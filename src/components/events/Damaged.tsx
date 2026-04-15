@@ -2,12 +2,15 @@ import { usePlayerStore } from "@/src/game/store"
 import { painHud } from "@/src/assets"
 import { useEffect, useRef } from "react"
 import { useShallow } from "zustand/shallow"
+import { useBountyQuestStore, useBossStore, useEnemyStore, useGameStore, useSceneStore, useTutorialStore } from "@/src/game/store"
 
 
 export default function Damaged(){
-  const { hp, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(
+  const { hp, maxHP, maxEnergy, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(
     useShallow((s) => ({
       hp: s.hp,
+      maxHP: s.maxHP,
+      maxEnergy: s.maxEnergy,
       isDamaged: s.isDamaged,
       toggleIsDamaged: s.toggleIsDamaged,
       takeDamage: s.takeDamage,
@@ -16,6 +19,9 @@ export default function Damaged(){
       toggleIsHealing: s.toggleIsHealing
     }))
   )
+  const questLevel = useBountyQuestStore((s) => s.questLevel)
+  const clearEnemy = useEnemyStore((s) => s.clearEnemy)
+  const clearBoss = useBossStore((s) => s.clearBoss)
 
   const prevHp = useRef(hp)
   let hpOpacity = 1;  
@@ -56,21 +62,52 @@ export default function Damaged(){
     prevHp.current = hp;
   }, [hp, takeDamage])
 
+  function handleRestartLevel() {
+    const targetPhaseIndex = Math.max(0, questLevel - 1)
+
+    useTutorialStore.getState().skipToPhase(targetPhaseIndex)
+    useTutorialStore.getState().toggleIsTutorial(true)
+
+    useSceneStore.getState().setScene("village")
+    useGameStore.setState({
+      inVillage: true,
+      inCombat: false,
+    })
+
+    clearEnemy()
+    clearBoss()
+
+    usePlayerStore.setState({
+      hp: maxHP,
+      energy: maxEnergy,
+      isDamaged: false,
+    })
+  }
+
   return (
     <>
       <div 
-        className={`absolute inset-0 z-100 flex items-center justify-center pointer-events-none transition-opacity duration-500 ease-out ${
+        className={`absolute inset-0 z-100 flex items-center justify-center transition-opacity duration-500 ease-out ${
           isDamaged ? 'opacity-100' : 'opacity-0'
         }`}
         style={{ 
+          pointerEvents: hp <= 0 ? 'auto' : 'none',
           backgroundImage: `url(${painHud})`, 
           backgroundSize: 'cover',
           opacity: isDamaged ? hpOpacity : 0,
         }}
       >
-        <div className="w-full flex justify-center bg-black/50" >
-          <span className="text-6xl my-5" >You're Dead</span>
-        </div>
+        {hp <= 0 && (
+          <div className="w-full flex flex-col items-center justify-center gap-4 bg-black/50 py-4" >
+            <span className="text-6xl my-2" >You're Dead</span>
+            <button
+              className="rounded-lg border border-slate-500 px-4 py-2 text-base hover:bg-slate-700 cursor-pointer"
+              onClick={handleRestartLevel}
+            >
+              Restart Level
+            </button>
+          </div>
+        )}
       </div>
 
       {/* <div 

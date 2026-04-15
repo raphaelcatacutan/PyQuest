@@ -74,6 +74,32 @@ log("script-hook")
         );
     });
 
+    it('emits richer statement type traces', async () => {
+        const events: PythonModuleCallEvent[] = [];
+
+        setPythonRuntimeHooks({
+            onFunctionCall: (event) => {
+                events.push(event);
+            }
+        });
+
+        await runPython(`
+value = 1
+value += 2
+goTo("forest")
+        `);
+
+        const statementTypes = events
+            .filter((event) => event.name === 'python.statement')
+            .map((event) => (event.payload as Record<string, unknown>).statementType);
+
+        expect(statementTypes).toEqual(expect.arrayContaining([
+            'AssignmentStatement',
+            'AugmentedAssignmentStatement',
+            'FunctionCallStatement'
+        ]));
+    });
+
     it('emits statement traces with per-instruction delay metadata', async () => {
         const events: PythonModuleCallEvent[] = [];
 

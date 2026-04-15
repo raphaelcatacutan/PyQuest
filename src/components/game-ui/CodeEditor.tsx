@@ -7,11 +7,15 @@ import {
   clearIcon,
   saveIcon
 } from '@/src/assets'
-import { usePlayerStore, useTerminalStore, useEditorStore } from "@/src/game/store";
+import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
 import { runPython } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
 import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
+import showToast from "../ui/Toast";
+import type { MachineProblem } from "@/src/game/types/mp.types";
+import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
+import { validateMachineProblemSolution } from "@/src/game/data/mps";
 
 
 export default function CodeEditor() {
@@ -36,12 +40,89 @@ export default function CodeEditor() {
     }))
   )
   const appendToLogs = useTerminalStore((s) => s.appendToLog)
+  const addInventoryItem = useInventoryStore((s) => s.addInventoryItem)
+  const gainXP = usePlayerStore((s) => s.gainXP)
+  const gainCoins = usePlayerStore((s) => s.gainCoins)
+  const { inCombat, isEnemy } = useGameStore(
+    useShallow((s) => ({
+      inCombat: s.inCombat,
+      isEnemy: s.isEnemy,
+    }))
+  )
   const { activeFile, setActiveCode } = useEditorStore(
     useShallow((s) => ({
       activeFile: s.activeFile,
       setActiveCode: s.setActiveCode,
     }))
   )
+
+  function randomBetween(min: number, max: number): number {
+    const low = Math.max(0, Math.floor(Math.min(min, max)));
+    const high = Math.max(low, Math.floor(Math.max(min, max)));
+    return Math.floor(Math.random() * (high - low + 1)) + low;
+  }
+
+  function grantLootItems(reward: LootDrop): number {
+    let totalGranted = 0;
+
+    const grantCategory = (items: LootItem[], kind: "weapon" | "armor" | "consumable") => {
+      items.forEach((item) => {
+        const quantity = Math.max(1, item.quantity ?? 1);
+        for (let index = 0; index < quantity; index += 1) {
+          const uniqueId = `mp-loot-${item.itemId}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+          addInventoryItem("pickedup_folder", {
+            id: uniqueId,
+            kind,
+            itemId: item.itemId,
+            name: item.itemId,
+          });
+          totalGranted += 1;
+        }
+      });
+    };
+
+    grantCategory(reward.weapons, "weapon");
+    grantCategory(reward.armors, "armor");
+    grantCategory(reward.consumables, "consumable");
+
+    return totalGranted;
+  }
+
+  function completeMachineProblemAndDefeatTarget(activeProblem: MachineProblem): void {
+    const reward = activeProblem.reward;
+    const xpReward = randomBetween(reward.xpDropMin, reward.xpDropMax);
+    const coinReward = randomBetween(reward.coinDropMin, reward.coinDropMax);
+    const grantedLootCount = grantLootItems(reward);
+
+    if (xpReward > 0) {
+      gainXP(xpReward);
+    }
+
+    if (coinReward > 0) {
+      gainCoins(coinReward);
+    }
+
+    const rewardSuffix = grantedLootCount > 0 ? ` + ${grantedLootCount} loot item(s)` : "";
+
+    appendToLogs(`[PY]: Machine problem solved. +${xpReward} XP, +${coinReward} coins${rewardSuffix}.`);
+    showToast({
+      variant: "success",
+      message: `Machine problem solved! +${xpReward} XP, +${coinReward} coins${rewardSuffix}`,
+    });
+
+    if (isEnemy) {
+      const enemy = useEnemyStore.getState().enemy;
+      if (enemy && enemy.hp > 0) {
+        useEnemyStore.getState().takeDamage(enemy.hp);
+      }
+      return;
+    }
+
+    const boss = useBossStore.getState();
+    if (boss.hp > 0) {
+      useBossStore.getState().takeDamage(boss.hp);
+    }
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -93,6 +174,21 @@ export default function CodeEditor() {
     }
 
     runningRef.current = true;
+
+    if (inCombat) {
+      const activeProblem = isEnemy
+        ? useEnemyStore.getState().activeProblem
+        : useBossStore.getState().activeProblem;
+
+      const solved = validateMachineProblemSolution(activeProblem, code);
+      if (solved) {
+        appendToLogs("[PY]: Machine problem requirements satisfied.");
+        completeMachineProblemAndDefeatTarget(activeProblem);
+        runningRef.current = false;
+        return;
+      }
+    }
+
     appendToLogs("[PY]: Running script...");
     bindPythonRuntimeToZustand((event) => {
       dispatchPythonRuntimeEvent(event);

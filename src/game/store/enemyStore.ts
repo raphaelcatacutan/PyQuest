@@ -25,7 +25,10 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
   enemy: null,
   activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
   
-  spawnEnemy: (enemy: Enemy) => set({ enemy }),
+  spawnEnemy: (enemy: Enemy) => set({
+    enemy,
+    activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
+  }),
   
   takeDamage: (amount: number) => set((state) => {
     useSoundStore.getState().playSfx('hit')

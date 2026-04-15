@@ -132,6 +132,50 @@ function buildProblemChecks(problemText: string): RegExp[] {
   if (/\breturn\b/.test(lowerProblem)) checks.push(/\breturn\b/m);
   if (/\bpass\b/.test(lowerProblem)) checks.push(/\bpass\b/m);
   if (/\bfunction\b|\bdefine\b|\bdef\b/.test(lowerProblem)) checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/m);
+  if (/\bclass\b/.test(lowerProblem) || lowerProblem.includes("object-oriented programming") || /\boop\b/.test(lowerProblem)) {
+    checks.push(/^\s*class\s+[A-Za-z_][A-Za-z0-9_]*\s*(\([^)]*\))?\s*:/m);
+  }
+  if (lowerProblem.includes("abstraction") || lowerProblem.includes("abstract")) {
+    checks.push(/(raise\s+NotImplementedError|\bpass\b)/m);
+  }
+  if (lowerProblem.includes("inheritance") || lowerProblem.includes("inherits") || lowerProblem.includes("subclass")) {
+    checks.push(/^\s*class\s+[A-Za-z_][A-Za-z0-9_]*\s*\([^)]*\)\s*:/m);
+  }
+  if (lowerProblem.includes("polymorphism") || lowerProblem.includes("override")) {
+    checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\(\s*self(?:\s*,|\s*\))/m);
+  }
+  if (lowerProblem.includes("encapsulation") || lowerProblem.includes("private attribute") || lowerProblem.includes("private")) {
+    checks.push(/self\._[A-Za-z_][A-Za-z0-9_]*/m);
+  }
+  if (lowerProblem.includes("super()") || /\bsuper\b/.test(lowerProblem)) {
+    checks.push(/\bsuper\s*\(\s*\)\s*(\.\s*__init__\s*\()?/m);
+  }
+  if (lowerProblem.includes("static method") || lowerProblem.includes("staticmethod")) {
+    checks.push(/@staticmethod/m);
+  }
+  if (lowerProblem.includes("default argument") || lowerProblem.includes("default arguments")) {
+    checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\([^)]*=\s*[^)]*\)\s*:/m);
+  }
+  if (lowerProblem.includes("*args")) checks.push(/\*args\b/m);
+  if (lowerProblem.includes("**kwargs")) checks.push(/\*\*kwargs\b/m);
+
+  if (/(create|define)\s+a\s+list|list\s+named|\blists\b/.test(lowerProblem)) checks.push(/\[[^\]]*\]/m);
+  if (/(create|define)\s+a\s+dictionary|dictionary\s+named|\bdictionary\b|\bdict\b/.test(lowerProblem)) checks.push(/\{[^{}]*:[^{}]*\}/m);
+  if (/(create|define)\s+a\s+tuple|tuple\s+named|\btuples\b|\btuple\b/.test(lowerProblem)) checks.push(/\([^\)]*,[^\)]*\)/m);
+  if (/(create|define)\s+a\s+set|set\s+named|unique\s+values|\bsets\b/.test(lowerProblem)) checks.push(/\{[^{}]*\}/m);
+
+  if (lowerProblem.includes("membership operator") || /\bnot in\b/.test(lowerProblem)) {
+    checks.push(/\b(?:not\s+in|in)\b/m);
+  }
+
+  const builtinFunctionNames = ["len", "sum", "max", "min", "range", "sorted", "type", "int", "str", "float", "print"];
+  builtinFunctionNames.forEach((name) => {
+    const mentionPattern = new RegExp(`\\b${name}\\b`);
+    if (mentionPattern.test(lowerProblem)) {
+      checks.push(new RegExp(`\\b${escapeRegex(name)}\\s*\\(`, "m"));
+    }
+  });
+
   if (lowerProblem.includes("uppercase")) checks.push(/\.upper\s*\(/m);
   if (lowerProblem.includes("lowercase")) checks.push(/\.lower\s*\(/m);
 

@@ -4,6 +4,7 @@ import { Tutorial, TutorialTest } from "../types/tutorial.types";
 import { Tutorials } from "../data/tutorial";
 import { useEditorStore } from "./editorStore";
 import { useBountyQuestStore } from "./bountyQuestStore";
+import { useSoundStore } from "./soundStore";
 
 /**
  * 
@@ -114,6 +115,8 @@ export const useTutorialStore = create<TutorialStoreProps>()(
         const currentStep = currentPhase?.instructions[currentInstructionIndex];
 
         if (!currentPhase || !currentStep) return;
+
+        useSoundStore.getState().playSfx('innkeeper')
 
         if (currentStep.test) {
           const currentCode = useEditorStore.getState().activeCode;

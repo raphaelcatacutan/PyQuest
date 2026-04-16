@@ -61,10 +61,8 @@ print(greet("World"))
             expect(output).toContain('Error');
         });
 
-        it('should expose builtin helpers and user modules', async () => {
+        it('should expose remaining builtin helpers', async () => {
             const code = `
-from user.weapons import spear
-
 goTo("village")
 print("Buy")
             `;

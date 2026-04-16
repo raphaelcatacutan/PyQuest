@@ -19,12 +19,15 @@ import {
 } from "./module-registry.ts";
 import {
     buildConsumableModuleCode,
+    buildPickedupModuleCode,
     buildWeaponModuleCode,
     isConsumableModule,
+    isPickedupModule,
     isWeaponModule
 } from "./shop-item-modules";
 import {
     getUnlockedConsumableImportIds,
+    getUnlockedPickedupImportState,
     getUnlockedWeaponImportIds,
     isRuntimeImportUnlocked
 } from "./runtime-module-gates";
@@ -560,6 +563,10 @@ function normalizeRuntimeModuleRequest(filename: string): string {
 
 function resolveDynamicShopModuleCode(filename: string): string | undefined {
     const moduleName = normalizeRuntimeModuleRequest(filename);
+
+    if (isPickedupModule(moduleName)) {
+        return buildPickedupModuleCode(getUnlockedPickedupImportState());
+    }
 
     if (isWeaponModule(moduleName)) {
         return buildWeaponModuleCode(getUnlockedWeaponImportIds());

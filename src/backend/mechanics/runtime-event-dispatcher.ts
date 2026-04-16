@@ -2,10 +2,13 @@ import { useBossStore, useBountyQuestStore, useDungeonStore, useEnemyStore, useG
 import { MachineProblems } from "../../game/data/mps";
 import { Consumables } from "../../game/data/consumables";
 import { Weapons } from "../../game/data/weapons";
+import { Armors } from "../../game/data/armors";
 import type { Consumable } from "../../game/types/consumable.types";
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { Weapon } from "../../game/types/weapon.types";
 import type { PythonModuleCallEvent } from "./parser";
+import { resolveConsumableUseEnergyCost, resolveWeaponUseEnergyCost } from "./item-energy-costs";
+import { getUnlockedPickedupImportState } from "./runtime-module-gates";
 import { getWeaponSkillMethodEntries, normalizeItemId } from "./shop-item-modules";
 import statementDamageTable from "./damage.json";
 
@@ -207,16 +210,28 @@ function isEnemyCombatActive(): boolean {
 
 function isPurchasedWeapon(itemId: string): boolean {
     const normalizedItemId = normalizeItemId(itemId);
-    return useInventoryStore.getState().purchasedWeaponIds
+    const purchased = useInventoryStore.getState().purchasedWeaponIds
         .map((purchasedItemId) => normalizeItemId(purchasedItemId))
         .includes(normalizedItemId);
+
+    if (purchased) {
+        return true;
+    }
+
+    return getUnlockedPickedupImportState().weaponItemIds.includes(normalizedItemId);
 }
 
 function isPurchasedConsumable(itemId: string): boolean {
     const normalizedItemId = normalizeItemId(itemId);
-    return useInventoryStore.getState().purchasedConsumableIds
+    const purchased = useInventoryStore.getState().purchasedConsumableIds
         .map((purchasedItemId) => normalizeItemId(purchasedItemId))
         .includes(normalizedItemId);
+
+    if (purchased) {
+        return true;
+    }
+
+    return getUnlockedPickedupImportState().consumableItemIds.includes(normalizedItemId);
 }
 
 function applyEnemyDamage(damage: number): void {
@@ -412,6 +427,49 @@ function applyConsumableEffects(itemId: string, consumable: Consumable): void {
     appendRuntimeDebug("consumable used", { itemId, effectCount: consumable.effects.length });
 }
 
+function applyArmorActivation(itemId: string): void {
+    const armor = Armors[itemId];
+    if (!armor) {
+        appendTerminalLog(`Armor '${itemId}' is not registered.`);
+        return;
+    }
+
+    const player = usePlayerStore.getState();
+
+    player.gainDef(Math.max(0, Math.floor(armor.baseDef)));
+
+    for (const modifier of armor.modifiers) {
+        const magnitude = Math.max(0, Math.floor(modifier.value));
+        const signedMagnitude = modifier.nature === "penalty" ? -magnitude : magnitude;
+
+        if (modifier.stat === "def") {
+            player.gainDef(signedMagnitude);
+            continue;
+        }
+
+        if (modifier.stat === "health") {
+            player.gainHP(signedMagnitude);
+            continue;
+        }
+
+        if (modifier.stat === "energy") {
+            player.gainEnergy(signedMagnitude);
+            continue;
+        }
+
+        if (modifier.stat === "dmg") {
+            player.setDamage(signedMagnitude);
+            continue;
+        }
+
+        if (modifier.stat === "atkSpeed") {
+            player.setAtkSpeed(modifier.nature === "penalty" ? magnitude : -magnitude);
+        }
+    }
+
+    appendRuntimeDebug("armor activated", { itemId, baseDef: armor.baseDef, modifiers: armor.modifiers.length });
+}
+
 export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
     const payload = event.payload;
 
@@ -569,7 +627,7 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             }
 
             if (!isPurchasedWeapon(itemId)) {
-                appendTerminalLog(`'${itemId}' is not unlocked. Purchase it from the shop first.`);
+                appendTerminalLog(`'${itemId}' is not available in pickedup inventory.`);
                 return;
             }
 
@@ -579,7 +637,7 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
-            const weaponEnergyCost = Math.max(0, Math.floor(weapon.energyCostPerSwing));
+            const weaponEnergyCost = resolveWeaponUseEnergyCost(itemId, weapon.energyCostPerSwing);
             if (!trySpendPlayerEnergy(weaponEnergyCost)) {
                 appendTerminalLog(`Not enough energy to use '${itemId}'.`);
                 return;
@@ -618,7 +676,7 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             }
 
             if (!isPurchasedWeapon(itemId)) {
-                appendTerminalLog(`'${itemId}' is not unlocked. Purchase it from the shop first.`);
+                appendTerminalLog(`'${itemId}' is not available in pickedup inventory.`);
                 return;
             }
 
@@ -646,7 +704,7 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             }
 
             if (!isPurchasedConsumable(itemId)) {
-                appendTerminalLog(`'${itemId}' is not unlocked. Purchase it from the shop first.`);
+                appendTerminalLog(`'${itemId}' is not available in pickedup inventory.`);
                 return;
             }
 
@@ -656,7 +714,30 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
+            const consumableEnergyCost = resolveConsumableUseEnergyCost(itemId, 1);
+            if (!trySpendPlayerEnergy(consumableEnergyCost)) {
+                appendTerminalLog(`Not enough energy to consume '${itemId}'.`);
+                return;
+            }
+
             applyConsumableEffects(itemId, consumable);
+            appendRuntimeDebug("consumable energy spent", { itemId, energyCost: consumableEnergyCost });
+            return;
+        }
+
+        case "pickedup.armor.activate": {
+            const itemId = normalizeItemId(readString(payload, "itemId", ""));
+            if (itemId.length === 0) {
+                appendTerminalLog("Armor activation failed: missing item id.");
+                return;
+            }
+
+            if (!getUnlockedPickedupImportState().armorItemIds.includes(itemId)) {
+                appendTerminalLog(`'${itemId}' is not available in pickedup inventory.`);
+                return;
+            }
+
+            applyArmorActivation(itemId);
             return;
         }
 

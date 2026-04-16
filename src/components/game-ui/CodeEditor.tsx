@@ -1,5 +1,5 @@
 import Editor, { OnMount } from "@monaco-editor/react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as monaco from 'monaco-editor';
 import Button from "../ui/Button";  
 import {
@@ -55,6 +55,8 @@ export default function CodeEditor() {
       setActiveCode: s.setActiveCode,
     }))
   )
+  const highlightRange = useEditorStore((state) => state.highlightRange);
+  const decorationRef = useRef<string[]>([]);
 
   function randomBetween(min: number, max: number): number {
     const low = Math.max(0, Math.floor(Math.min(min, max)));
@@ -136,6 +138,39 @@ export default function CodeEditor() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    if (!editorRef.current) return;
+
+    // 1. Always clear old decorations first
+    const newDecorations = [];
+
+    // 2. If we have a range, create the new decoration
+    if (highlightRange) {
+      newDecorations.push({
+        range: new monaco.Range(
+          highlightRange.start, 
+          1, 
+          highlightRange.end, 
+          1
+        ),
+        options: {
+          isWholeLine: true,
+          className: 'bg-yellow-700', // Your CSS class
+          linesDecorationsClassName: 'myGutterHighlight', // Optional: highlight the line number gutter too
+        },
+      });
+      
+      // Reveal the start of the range so it's visible
+      editorRef.current.revealLineInCenterIfOutsideViewport(highlightRange.start);
+    }
+
+    // 3. Sync with Monaco
+    decorationRef.current = editorRef.current.deltaDecorations(
+      decorationRef.current,
+      newDecorations
+    );
+  }, [highlightRange]);
+  
   function handleClear() {
     if (editorRef.current) {
       editorRef.current.setValue("");

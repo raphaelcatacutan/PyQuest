@@ -105,8 +105,17 @@ function getUnlockedPlacesByQuestLevel(level: number): SceneTypes[] {
     return MACHINE_PROBLEM_PLACES.slice(0, unlockedCount);
 }
 
-function appendRuntimeLog(message: string): void {
+function appendTerminalLog(message: string): void {
     useTerminalStore.getState().appendToLog(`[PY]: ${message}`);
+}
+
+function appendRuntimeDebug(message: string, payload?: unknown): void {
+    if (payload === undefined) {
+        console.log("[PY-DEBUG]", message);
+        return;
+    }
+
+    console.log("[PY-DEBUG]", message, payload);
 }
 
 function isWorldSyntaxUnlocked(): boolean {
@@ -135,18 +144,18 @@ function applyPlayerAttackDamage(damage: number): void {
 
     const gameState = useGameStore.getState();
     if (!gameState.inCombat) {
-        appendRuntimeLog(`Attack skipped (${damage}) because combat is not active.`);
+        appendRuntimeDebug("attack skipped", { damage, reason: "combat is not active" });
         return;
     }
 
     if (gameState.isEnemy) {
         useEnemyStore.getState().takeDamage(damage);
-        appendRuntimeLog(`Enemy took ${damage} damage.`);
+        appendRuntimeDebug("enemy took damage", { damage });
         return;
     }
 
     useBossStore.getState().takeDamage(damage);
-    appendRuntimeLog(`Boss took ${damage} damage.`);
+    appendRuntimeDebug("boss took damage", { damage });
 }
 
 function normalizeNonNegativeInt(value: unknown): number {
@@ -192,7 +201,7 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
     switch (event.name) {
         case "builtin.goTo": {
             if (!isWorldSyntaxUnlocked()) {
-                appendRuntimeLog("goTo() is locked during tutorial.");
+                appendTerminalLog("goTo() is locked during tutorial.");
                 return;
             }
 
@@ -201,54 +210,54 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             const unlockedPlaces = getUnlockedPlacesByQuestLevel(questLevel);
 
             if (!isSceneType(locationId)) {
-                appendRuntimeLog(`Unknown scene '${locationId}'.`);
+                appendTerminalLog(`Unknown scene '${locationId}'.`);
                 return;
             }
 
             if (!MACHINE_PROBLEM_PLACE_SET.has(locationId)) {
-                appendRuntimeLog(`'${locationId}' is not a goTo() destination.`);
+                appendTerminalLog(`'${locationId}' is not a goTo() destination.`);
                 return;
             }
 
             if (!unlockedPlaces.includes(locationId)) {
                 const unlockedText = unlockedPlaces.length > 0 ? unlockedPlaces.join(", ") : "none";
-                appendRuntimeLog(`'${locationId}' is locked for level ${questLevel}. Unlocked places: ${unlockedText}.`);
+                appendTerminalLog(`'${locationId}' is locked for level ${questLevel}. Unlocked places: ${unlockedText}.`);
                 return;
             }
 
             setSceneAndFlags(locationId);
-            appendRuntimeLog(`Moved to ${locationId}.`);
+            appendRuntimeDebug("scene changed", { locationId });
             return;
         }
 
         case "builtin.scavenge": {
             if (!isWorldSyntaxUnlocked()) {
-                appendRuntimeLog("scavenge() is locked during tutorial.");
+                appendTerminalLog("scavenge() is locked during tutorial.");
                 return;
             }
 
             const amount = Math.max(0, readNumber(payload, "coins", 1));
             usePlayerStore.getState().gainCoins(amount);
-            appendRuntimeLog(`Scavenge rewarded ${amount} coin(s).`);
+            appendRuntimeDebug("scavenge rewarded", { amount });
             return;
         }
 
         case "builtin.explore": {
             if (!isWorldSyntaxUnlocked()) {
-                appendRuntimeLog("explore() is locked during tutorial.");
+                appendTerminalLog("explore() is locked during tutorial.");
                 return;
             }
 
             const state = readBoolean(payload, "state", true);
             useGameStore.getState().toggleInCombat(state);
-            appendRuntimeLog(`Explore set combat to ${state}.`);
+            appendRuntimeDebug("explore set combat", { state });
             return;
         }
 
         case "player.gain_hp": {
             const amount = Math.max(0, readNumber(payload, "amount", 0));
             usePlayerStore.getState().gainHP(amount);
-            appendRuntimeLog(`Player healed for ${amount}.`);
+            appendRuntimeDebug("player healed", { amount });
             return;
         }
 
@@ -257,42 +266,42 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             const player = usePlayerStore.getState();
             player.takeDamage(amount);
             player.toggleIsDamaged(true);
-            appendRuntimeLog(`Player took ${amount} damage.`);
+            appendRuntimeDebug("player took damage", { amount });
             return;
         }
 
         case "player.gain_coins": {
             const amount = Math.max(0, readNumber(payload, "amount", 0));
             usePlayerStore.getState().gainCoins(amount);
-            appendRuntimeLog(`Player gained ${amount} coin(s).`);
+            appendRuntimeDebug("player gained coins", { amount });
             return;
         }
 
         case "player.gain_xp": {
             const amount = Math.max(0, readNumber(payload, "amount", 0));
             usePlayerStore.getState().gainXP(amount);
-            appendRuntimeLog(`Player gained ${amount} XP.`);
+            appendRuntimeDebug("player gained xp", { amount });
             return;
         }
 
         case "game.combat": {
             const state = readBoolean(payload, "state", false);
             useGameStore.getState().toggleInCombat(state);
-            appendRuntimeLog(`Combat set to ${state}.`);
+            appendRuntimeDebug("combat state changed", { state });
             return;
         }
 
         case "game.is_enemy": {
             const state = readBoolean(payload, "state", true);
             useGameStore.getState().toggleIsEnemy(state);
-            appendRuntimeLog(`Encounter target set to ${state ? "enemy" : "boss"}.`);
+            appendRuntimeDebug("encounter target set", { target: state ? "enemy" : "boss" });
             return;
         }
 
         case "terminal.log": {
             const message = readString(payload, "message", "");
             if (message.length > 0) {
-                appendRuntimeLog(message);
+                appendRuntimeDebug("module log", { message });
             }
             return;
         }
@@ -302,13 +311,17 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             const lineNumber = Math.max(0, readNumber(payload, "lineNumber", 0));
             const delayValue = Math.max(0, readNumber(payload, "delayMs", 0));
             const statementMechanics = resolveStatementMechanics(statementType);
-            const delaySuffix = delayValue > 0 ? ` | delay ${delayValue}ms` : "";
-            const energySuffix = statementMechanics.energyCost > 0 ? ` | energy ${statementMechanics.energyCost}` : "";
-            appendRuntimeLog(`[TRACE] ${statementType} @ line ${lineNumber}${delaySuffix}${energySuffix}`);
+            appendRuntimeDebug("statement trace", {
+                statementType,
+                lineNumber,
+                delayMs: delayValue,
+                energyCost: statementMechanics.energyCost,
+                damage: statementMechanics.damage
+            });
 
             const hasSpentEnergy = trySpendPlayerEnergy(statementMechanics.energyCost);
             if (!hasSpentEnergy) {
-                appendRuntimeLog(`Insufficient energy for ${statementType} (required ${statementMechanics.energyCost}).`);
+                appendTerminalLog(`Insufficient energy for ${statementType} (required ${statementMechanics.energyCost}).`);
                 return;
             }
 

@@ -204,7 +204,14 @@ export default function CodeEditor() {
       if (lines.length === 0) {
         appendToLogs("[PY]: Script finished.");
       } else {
-        lines.forEach((line) => appendToLogs(`[PY-OUT]: ${line}`));
+        lines.forEach((line) => {
+          if (/^Error:/i.test(line)) {
+            appendToLogs(`[PY-ERR]: ${line}`);
+            return;
+          }
+
+          appendToLogs(`[PY-OUT]: ${line}`);
+        });
       }
     } catch (error) {
       appendToLogs(`[PY-ERR]: ${error instanceof Error ? error.message : String(error)}`);

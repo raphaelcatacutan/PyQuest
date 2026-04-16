@@ -2,10 +2,14 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { customModules } from '../src/backend/mechanics/game-modules';
 import { runPython, validatePythonCodeDetailed, isModuleWhitelisted } from '../src/backend/mechanics/parser';
 import { initializeModules, getAvailableModules, getModuleDocumentation, loadModule, loadModules, unloadModule, unloadModules } from '../src/backend/mechanics/module-init';
+import { useGameStore } from '../src/game/store/gameStore';
+import { useInventoryStore } from '../src/game/store/inventoryStore';
 
 describe('Custom Module System', () => {
     beforeEach(() => {
         initializeModules();
+        useGameStore.setState({ inCombat: false, isEnemy: true });
+        useInventoryStore.setState({ purchasedWeaponIds: [], purchasedConsumableIds: [] });
     });
 
     it('registers the user module in order', () => {
@@ -21,6 +25,54 @@ describe('Custom Module System', () => {
         const result = validatePythonCodeDetailed('from user.weapons import spear');
         expect(result.valid).toBe(true);
         expect(result.errors).toHaveLength(0);
+    });
+
+    it('locks weapon imports until purchase and enemy battle', () => {
+        const lockedResult = validatePythonCodeDetailed('from weapon import wooden_wand');
+        expect(lockedResult.valid).toBe(false);
+
+        useInventoryStore.setState({ purchasedWeaponIds: ['wooden_wand'] });
+        useGameStore.setState({ inCombat: true, isEnemy: true });
+
+        const unlockedResult = validatePythonCodeDetailed('from weapon import wooden_wand');
+        expect(unlockedResult.valid).toBe(true);
+        expect(unlockedResult.errors).toHaveLength(0);
+    });
+
+    it('locks consumable imports until purchase and enemy battle', () => {
+        const lockedResult = validatePythonCodeDetailed('from consumable import health_potion');
+        expect(lockedResult.valid).toBe(false);
+
+        useInventoryStore.setState({ purchasedConsumableIds: ['health_potion'] });
+        useGameStore.setState({ inCombat: true, isEnemy: true });
+
+        const unlockedResult = validatePythonCodeDetailed('from consumable import health_potion');
+        expect(unlockedResult.valid).toBe(true);
+        expect(unlockedResult.errors).toHaveLength(0);
+    });
+
+    it('supports consumable consume() style after unlock', async () => {
+        useInventoryStore.setState({ purchasedConsumableIds: ['health_potion'] });
+        useGameStore.setState({ inCombat: true, isEnemy: true });
+
+        const output = await runPython(`
+from consumable import health_potion
+health_potion.consume()
+        `);
+
+        expect(output).not.toContain('Error');
+    });
+
+    it('supports named weapon skill methods after unlock', async () => {
+        useInventoryStore.setState({ purchasedWeaponIds: ['great_forests_wand'] });
+        useGameStore.setState({ inCombat: true, isEnemy: true });
+
+        const output = await runPython(`
+from weapon import great_forests_wand
+great_forests_wand.heal_skill("Enemy")
+        `);
+
+        expect(output).not.toContain('Error');
     });
 
     it('blocks internal module imports', () => {

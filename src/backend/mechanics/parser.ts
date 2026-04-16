@@ -17,6 +17,17 @@ import {
     whitelistPythonModule,
     type PythonModuleRecord
 } from "./module-registry.ts";
+import {
+    buildConsumableModuleCode,
+    buildWeaponModuleCode,
+    isConsumableModule,
+    isWeaponModule
+} from "./shop-item-modules";
+import {
+    getUnlockedConsumableImportIds,
+    getUnlockedWeaponImportIds,
+    isRuntimeImportUnlocked
+} from "./runtime-module-gates";
 
 export type CustomModule = {
     name: string;
@@ -495,6 +506,76 @@ function normalizeImportedModuleName(importedModule: string): string {
     return importedModule.replace(/\s+as\s+.*$/i, "").trim();
 }
 
+type ImportRequest = {
+    moduleName: string;
+    importedNames?: string[];
+};
+
+function extractImportedNames(importClause: string): string[] {
+    return importClause
+        .split(",")
+        .map((part) => part.trim())
+        .map((part) => part.replace(/\s+as\s+.*$/i, ""))
+        .map((part) => part.trim())
+        .filter((part) => part.length > 0 && part !== "*");
+}
+
+function parseImportRequests(importStatement: string): ImportRequest[] {
+    const normalizedStatement = importStatement.trim();
+
+    if (normalizedStatement.startsWith("import ")) {
+        return normalizedStatement
+            .slice("import ".length)
+            .split(",")
+            .map((part) => part.trim())
+            .map((part) => part.replace(/\s+as\s+.*$/i, ""))
+            .map((part) => part.trim())
+            .filter((part) => part.length > 0)
+            .map((moduleName) => ({ moduleName }));
+    }
+
+    const fromMatch = normalizedStatement.match(/^from\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s+import\s+(.+)$/);
+
+    if (fromMatch) {
+        return [{
+            moduleName: fromMatch[1],
+            importedNames: extractImportedNames(fromMatch[2])
+        }];
+    }
+
+    return [];
+}
+
+function normalizeRuntimeModuleRequest(filename: string): string {
+    const strippedQuery = filename.split("?")[0];
+    const normalizedPath = strippedQuery.replace(/\\/g, "/").replace(/^\.\//, "").replace(/^\/+/, "");
+    const pathWithoutExtension = normalizedPath.endsWith(".py")
+        ? normalizedPath.slice(0, -3)
+        : normalizedPath;
+
+    return pathWithoutExtension.endsWith("/__init__")
+        ? pathWithoutExtension.slice(0, -"/__init__".length).replace(/\//g, ".")
+        : pathWithoutExtension.replace(/\//g, ".");
+}
+
+function resolveDynamicShopModuleCode(filename: string): string | undefined {
+    const moduleName = normalizeRuntimeModuleRequest(filename);
+
+    if (isWeaponModule(moduleName)) {
+        return buildWeaponModuleCode(getUnlockedWeaponImportIds());
+    }
+
+    if (isConsumableModule(moduleName)) {
+        return buildConsumableModuleCode(getUnlockedConsumableImportIds());
+    }
+
+    return undefined;
+}
+
+function isModuleImportAllowed(moduleName: string, importedNames?: string[]): boolean {
+    return isPublicPythonModule(moduleName) && isRuntimeImportUnlocked(moduleName, importedNames);
+}
+
 function expandCustomModuleImports(code: string): string {
     const inlinedModules: Set<string> = new Set();
     const inlinedModuleCode: string[] = [];
@@ -507,9 +588,10 @@ function expandCustomModuleImports(code: string): string {
 
         if (fromMatch) {
             const moduleName = normalizeImportedModuleName(fromMatch[1]);
+            const importedNames = extractImportedNames(fromMatch[2]);
             const moduleRecord = getPythonModule(moduleName);
 
-            if (moduleRecord && isPublicPythonModule(moduleName)) {
+            if (moduleRecord && isModuleImportAllowed(moduleName, importedNames)) {
                 if (!inlinedModules.has(moduleName)) {
                     inlinedModules.add(moduleName);
                     inlinedModuleCode.push(moduleRecord.code);
@@ -531,7 +613,7 @@ function expandCustomModuleImports(code: string): string {
                 for (const moduleName of requestedModules) {
                     const moduleRecord = getPythonModule(moduleName);
 
-                    if (!(moduleRecord && isPublicPythonModule(moduleName))) {
+                    if (!(moduleRecord && isModuleImportAllowed(moduleName))) {
                         allInlined = false;
                         break;
                     }
@@ -583,9 +665,22 @@ export function runPython(code: string): Promise<string> {
                 output += text;
             },
             read: (filename: string) => {
+                const dynamicModuleCode = resolveDynamicShopModuleCode(filename);
+                if (dynamicModuleCode !== undefined) {
+                    const dynamicModuleName = normalizeRuntimeModuleRequest(filename);
+                    if (!isModuleImportAllowed(dynamicModuleName)) {
+                        throw new Error(`Module '${filename}' is not available. Only registered modules can be imported.`);
+                    }
+
+                    return dynamicModuleCode;
+                }
+
                 const module = resolvePythonModule(filename);
 
                 if (module) {
+                    if (!module.isPackage && !isModuleImportAllowed(module.name)) {
+                        throw new Error(`Module '${filename}' is not available. Only registered modules can be imported.`);
+                    }
                     return module.code;
                 }
 
@@ -624,10 +719,10 @@ export function validatePythonCode(code: string): boolean {
     tree.cursor().iterate((node) => {
         if (node.type.name === "ImportStatement" || node.type.name === "ImportFrom") {
             const importText = code.substring(node.from, node.to);
-            const moduleNames = extractModuleNames(importText);
+            const requests = parseImportRequests(importText);
 
-            for (const moduleName of moduleNames) {
-                if (!isPublicPythonModule(moduleName)) {
+            for (const request of requests) {
+                if (!isModuleImportAllowed(request.moduleName, request.importedNames)) {
                     allowed = false;
                 }
             }
@@ -653,11 +748,11 @@ export function validatePythonCodeDetailed(code: string): {
     tree.cursor().iterate((node) => {
         if (node.type.name === "ImportStatement" || node.type.name === "ImportFrom") {
             const importText = code.substring(node.from, node.to);
-            const moduleNames = extractModuleNames(importText);
+            const requests = parseImportRequests(importText);
 
-            for (const moduleName of moduleNames) {
-                if (!isPublicPythonModule(moduleName)) {
-                    errors.push(`Import of '${moduleName}' is not allowed. Available modules: ${getPublicPythonModuleNames().join(", ") || "none"}`);
+            for (const request of requests) {
+                if (!isModuleImportAllowed(request.moduleName, request.importedNames)) {
+                    errors.push(`Import of '${request.moduleName}' is not allowed. Available modules: ${getPublicPythonModuleNames().join(", ") || "none"}`);
                 }
             }
         }
@@ -669,24 +764,4 @@ export function validatePythonCodeDetailed(code: string): {
     };
 }
 
-function extractModuleNames(importStatement: string): string[] {
-    const normalizedStatement = importStatement.trim();
-
-    if (normalizedStatement.startsWith("import ")) {
-        return normalizedStatement
-            .slice("import ".length)
-            .split(",")
-            .map((part) => part.trim())
-            .map((part) => part.replace(/\s+as\s+.*$/i, ""))
-            .filter((part) => part.length > 0);
-    }
-
-    const fromMatch = normalizedStatement.match(/^from\s+([a-zA-Z_][a-zA-Z0-9_.]*)\s+import\b/);
-
-    if (fromMatch) {
-        return [fromMatch[1]];
-    }
-
-    return [];
-}
 

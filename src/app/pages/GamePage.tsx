@@ -167,6 +167,11 @@ export default function GamePage() {
     });
   }
 
+  function handleShopItemBought(item: InventoryNode) {
+    handleItemTransferred(item);
+    useInventoryStore.getState().markItemPurchased(item);
+  }
+
   return (
     <div className="relative flex flex-col w-full h-full">
       <NavBar />
@@ -216,7 +221,7 @@ export default function GamePage() {
             <div className="absolute flex right-0 h-full z-50">
               <RightSideBar
                 onClose={toggleRightPanel}
-                onItemTransferred={handleItemTransferred}
+                onItemTransferred={handleShopItemBought}
                 lootInventoryRef={lootInventoryRef}
                 atVillage={inVillage}
               />

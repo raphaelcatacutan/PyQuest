@@ -17,7 +17,11 @@ export const loadInventoryProfile = async (playerId: string) => {
 
   // Only reset to initial state if this is a BRAND NEW player
   if (isNewPlayer) {
-    useInventoryStore.setState({ playerInventory: InitialPlayerInventory });
+    useInventoryStore.setState({
+      playerInventory: InitialPlayerInventory,
+      purchasedWeaponIds: [],
+      purchasedConsumableIds: [],
+    });
   }
 
   // Load from localStorage for this player (or keep initial if new)
@@ -52,8 +56,11 @@ const InitialPlayerInventory: InventoryNode[] = [
 interface InventoryStoreProps {
   player_id: string;
   playerInventory: InventoryNode[];
+  purchasedWeaponIds: string[];
+  purchasedConsumableIds: string[];
   setPlayerId: (id: string) => void;
   addInventoryItem: (parentId: string | undefined, item: InventoryNode) => void;
+  markItemPurchased: (item: InventoryNode) => void;
   deleteInventoryItem: (nodeId: string) => void;
   renameInventoryItem: (nodeId: string, newName: string) => void;
   moveInventoryItem: (dragIds: string[], parentId: string | null, index: number) => void;
@@ -65,6 +72,8 @@ export const useInventoryStore = create<InventoryStoreProps>()(
     (set) => ({
       player_id: "",
       playerInventory: InitialPlayerInventory,
+      purchasedWeaponIds: [],
+      purchasedConsumableIds: [],
 
       setPlayerId: (id) => set({ player_id: id }),
 
@@ -87,6 +96,30 @@ export const useInventoryStore = create<InventoryStoreProps>()(
           addToFolder(newInventory);
         }
         return { playerInventory: newInventory };
+      }),
+
+      markItemPurchased: (item) => set((state) => {
+        if (item.kind === "weapon") {
+          if (state.purchasedWeaponIds.includes(item.itemId)) {
+            return {};
+          }
+
+          return {
+            purchasedWeaponIds: [...state.purchasedWeaponIds, item.itemId],
+          };
+        }
+
+        if (item.kind === "consumable") {
+          if (state.purchasedConsumableIds.includes(item.itemId)) {
+            return {};
+          }
+
+          return {
+            purchasedConsumableIds: [...state.purchasedConsumableIds, item.itemId],
+          };
+        }
+
+        return {};
       }),
 
       deleteInventoryItem: (nodeId) => set((state) => {
@@ -147,7 +180,11 @@ export const useInventoryStore = create<InventoryStoreProps>()(
         return { playerInventory: newInventory };
       }),
 
-      resetInventory: () => set({ playerInventory: InitialPlayerInventory }),
+      resetInventory: () => set({
+        playerInventory: InitialPlayerInventory,
+        purchasedWeaponIds: [],
+        purchasedConsumableIds: [],
+      }),
     }),
     {
       name: "player-inventory-default", // Default key, will be changed dynamically

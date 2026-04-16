@@ -24,6 +24,7 @@ import showToast from "./ui/Toast"
 import { getDPByDifficulty } from "../game/data/trials"
 import { Tutorials } from "../game/data/tutorial"
 import { useSoundStore } from "../game/store/soundStore"
+import { LootDrop, LootItem } from "../game/types/loot.types"
 
 export default function DevTool(){
   const { devTool, toggleDevTool } = useDevToolStore(
@@ -35,9 +36,10 @@ export default function DevTool(){
   if (!devTool) return null
 
   const [input, setInput] = useState("")
-  const { playerId } = useInventoryStore(
+  const { playerId, addInventoryItem } = useInventoryStore(
   useShallow((s) => ({
-    playerId: s.player_id
+    playerId: s.player_id,
+    addInventoryItem: s.addInventoryItem,
   }))
   );
   const { inCombat, toggleInCombat } = useGameStore(
@@ -53,7 +55,11 @@ export default function DevTool(){
     }))
   )
   const clearEnemy = useEnemyStore(s => s.clearEnemy)
+  const enemyHp = useEnemyStore(s => s.enemy?.hp ?? 0)
+  const enemyProblem = useEnemyStore(s => s.activeProblem)
   const enemyTakeDamage = useEnemyStore(s => s.takeDamage)
+  const bossHp = useBossStore(s => s.hp)
+  const bossProblem = useBossStore(s => s.activeProblem)
   const bossTakeDamage = useBossStore(s => s.takeDamage)
   const { isDamaged, toggleIsDamaged } = usePlayerStore(
     useShallow((s) => ({
@@ -103,6 +109,62 @@ export default function DevTool(){
   const bounty = useBountyQuestStore()
   const kill = useKillTrackerStore()
 
+  function randomBetween(min: number, max: number): number {
+    const low = Math.max(0, Math.floor(Math.min(min, max)));
+    const high = Math.max(low, Math.floor(Math.max(min, max)));
+    return Math.floor(Math.random() * (high - low + 1)) + low;
+  }
+
+  function grantLootItems(reward: LootDrop): number {
+    let totalGranted = 0;
+
+    const grantCategory = (items: LootItem[], kind: "weapon" | "armor" | "consumable") => {
+      items.forEach((item) => {
+        const quantity = Math.max(1, item.quantity ?? 1);
+        for (let index = 0; index < quantity; index += 1) {
+          const uniqueId = `dev-loot-${item.itemId}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+          addInventoryItem("pickedup_folder", {
+            id: uniqueId,
+            kind,
+            itemId: item.itemId,
+            name: item.itemId,
+          });
+          totalGranted += 1;
+        }
+      });
+    };
+
+    grantCategory(reward.weapons, "weapon");
+    grantCategory(reward.armors, "armor");
+    grantCategory(reward.consumables, "consumable");
+
+    return totalGranted;
+  }
+
+  function devKillLikeNormalFlow() {
+    const activeProblem = isEnemy ? enemyProblem : bossProblem;
+    const reward = activeProblem.reward;
+
+    const xpReward = randomBetween(reward.xpDropMin, reward.xpDropMax);
+    const coinReward = randomBetween(reward.coinDropMin, reward.coinDropMax);
+    const lootCount = grantLootItems(reward);
+
+    if (xpReward > 0) gainXP(xpReward)
+    if (coinReward > 0) gainCoin(coinReward)
+
+    if (isEnemy) {
+      enemyTakeDamage(enemyHp)
+    } else {
+      bossTakeDamage(bossHp)
+    }
+
+    const lootSuffix = lootCount > 0 ? ` + ${lootCount} loot item(s)` : "";
+    showToast({
+      variant: "success",
+      message: `Dev kill applied rewards: +${xpReward} XP, +${coinReward} coins${lootSuffix}`,
+    })
+  }
+
 
   return (
     <>
@@ -136,6 +198,9 @@ export default function DevTool(){
         <Button text="Hit" onClick={() => {
           if (isEnemy){ enemyTakeDamage(20) }
           else { bossTakeDamage(20) }
+        }}/>
+        <Button text="Kill Enemy" onClick={() => {
+          devKillLikeNormalFlow()
         }}/>
         <Button text={BountyQuestText} onClick={() => toggleDisplayBountyQuest()}/>
         <Button text='Refresh Quests' onClick={() => {

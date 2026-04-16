@@ -5,7 +5,8 @@ import Button from "../ui/Button";
 import {
   playIcon,
   clearIcon,
-  saveIcon
+  saveIcon,
+  closeIcon
 } from '@/src/assets'
 import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
@@ -20,6 +21,7 @@ import { validateMachineProblemSolution } from "@/src/game/data/mps";
 
 
 export default function CodeEditor() {
+  const [ hover, isHovered ] = useState(false)
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const runningRef = useRef(false);
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
@@ -404,13 +406,24 @@ export default function CodeEditor() {
     }
   }
 
+  function handleExitFile() {
+
+  }
+
   return (
     <div id="code-editor" className="relative w-150 flex flex-col h-full bg-[#23100a]">
       <div className="flex flex-row m-1">
         <div className="flex w-10/12 pl-1 gap-1">
           <span className="truncate">Current File:</span>
-          <span className="truncate border rounded-lg px-2">{activeFilePath || activeFile}</span>
-          {isActiveFileReadOnly && <span className="truncate text-amber-300">read-only</span>}
+          <span className="truncate border rounded-lg px-2">
+            {activeFilePath || activeFile}
+            {activeFilePath !== 'main.py' && <Button variant="icon-only-btn" icon={closeIcon} iconSize={15} onClick={handleExitFile}/>}
+          </span>
+          {isActiveFileReadOnly && (
+            <>
+              <span className="truncate text-amber-300">read-only</span>
+            </>
+          )}
         </div>
         <div className="flex flex-row-reverse gap-2">
           <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>

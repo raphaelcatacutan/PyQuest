@@ -32,8 +32,8 @@ interface EditorStoreProps {
 
 export const useEditorStore = create<EditorStoreProps>((set) => ({
   activeFileId: null,
-  activeFile: "hello_world.py",
-  activeFilePath: "hello_world.py",
+  activeFile: "main.py",
+  activeFilePath: "main.py",
   activeCode: "# Welcome to PyQuest!\n# Start writing your coding journey in Python here!",
   isActiveFileReadOnly: false,
 

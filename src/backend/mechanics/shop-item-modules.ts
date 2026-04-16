@@ -116,6 +116,8 @@ def _emit(event_name, payload=None):
 class _ConsumableRef:
     def __init__(self, item_id):
         self.item_id = item_id
+        self.name = item_id
+        self.item_type = "consumable"
 
     def consume(self):
         return _emit("shop.consumable.use", {"itemId": self.item_id})
@@ -139,6 +141,8 @@ def _emit(event_name, payload=None):
 class _WeaponRefBase:
     def __init__(self, item_id):
         self.item_id = item_id
+        self.name = item_id
+        self.item_type = "weapon"
 
     def strike(self):
         return _emit("shop.weapon.use", {"itemId": self.item_id})
@@ -211,6 +215,8 @@ def _emit(event_name, payload=None):
 class _ConsumableRef:
     def __init__(self, item_id):
         self.item_id = item_id
+        self.name = item_id
+        self.item_type = "consumable"
 
     def consume(self):
         return _emit("shop.consumable.use", {"itemId": self.item_id})
@@ -219,6 +225,8 @@ class _ConsumableRef:
 class _WeaponRefBase:
     def __init__(self, item_id):
         self.item_id = item_id
+        self.name = item_id
+        self.item_type = "weapon"
 
     def strike(self):
         return _emit("shop.weapon.use", {"itemId": self.item_id})
@@ -227,6 +235,8 @@ class _WeaponRefBase:
 class _ArmorRef:
     def __init__(self, item_id):
         self.item_id = item_id
+        self.name = item_id
+        self.item_type = "armor"
 
     def activate(self):
         return _emit("pickedup.armor.activate", {"itemId": self.item_id})

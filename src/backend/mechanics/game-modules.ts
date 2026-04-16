@@ -19,6 +19,18 @@ def _state(path, fallback=None):
     return __pyquest_state(path, fallback)
 
 
+def _resolve_item_payload(item):
+    if item is None:
+        return {"itemId": "", "itemType": ""}
+
+    item_id = getattr(item, "item_id", "")
+    if item_id == "":
+        item_id = getattr(item, "name", "")
+
+    item_type = getattr(item, "item_type", "")
+    return {"itemId": item_id, "itemType": item_type}
+
+
 class _ArmorProxy:
     @property
     def type(self) -> str:
@@ -43,11 +55,10 @@ class _PlayerProxy:
         return _ArmorProxy()
 
     def equip(self, item):
-        item_name = getattr(item, "name", "")
-        return _emit("player.equip", {"item": item_name})
+        return _emit("player.equip", _resolve_item_payload(item))
 
-    def unequip(self):
-        return _emit("player.unequip", None)
+    def unequip(self, item=None):
+        return _emit("player.unequip", _resolve_item_payload(item))
 
 def chance(percentage):
     result = percentage >= 50
@@ -82,6 +93,18 @@ def _emit(event_name, payload=None):
 
 def _state(path, fallback=None):
     return __pyquest_state(path, fallback)
+
+
+def _resolve_item_payload(item):
+    if item is None:
+        return {"itemId": "", "itemType": ""}
+
+    item_id = getattr(item, "item_id", "")
+    if item_id == "":
+        item_id = getattr(item, "name", "")
+
+    item_type = getattr(item, "item_type", "")
+    return {"itemId": item_id, "itemType": item_type}
 
 
 class Armor:
@@ -126,11 +149,10 @@ class Player:
         return Armor()
 
     def equip(self, item: Item):
-        item_name = getattr(item, "name", "")
-        return _emit("player.equip", {"item": item_name})
+        return _emit("player.equip", _resolve_item_payload(item))
 
-    def unequip(self):
-        return _emit("player.unequip", None)
+    def unequip(self, item: Item = None):
+        return _emit("player.unequip", _resolve_item_payload(item))
 
 class Enemy(Entity):
     pass

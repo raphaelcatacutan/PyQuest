@@ -11,6 +11,7 @@ import {
   useGameStore,
   usePlayerStore,
   useInventoryStore,
+  useEditorStore,
   useTutorialStore,
   useBountyQuestStore,
   loadTutorialProfile,
@@ -172,6 +173,16 @@ export default function GamePage() {
     useInventoryStore.getState().markItemPurchased(item);
   }
 
+  function handleOpenInventoryFile(file: {
+    id: string;
+    name: string;
+    path: string;
+    code: string;
+    readOnly?: boolean;
+  }) {
+    useEditorStore.getState().openFile(file);
+  }
+
   return (
     <div className="relative flex flex-col w-full h-full">
       <NavBar />
@@ -206,6 +217,7 @@ export default function GamePage() {
               deleteInventoryItem={deleteInventoryItem}
               renameInventoryItem={renameInventoryItem}
               moveInventoryItem={moveInventoryItem}
+              openInventoryFile={handleOpenInventoryFile}
             />
           </div>
           {!rightPanel ? (

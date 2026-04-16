@@ -15,9 +15,16 @@ interface LeftSideBarProps {
   renameInventoryItem: (nodeId: string, newName: string) => void;
   moveInventoryItem: (dragIds: string[], parentId: string | null, index: number) => void;
   addInventoryItem?: (parentId: string | undefined, item: InventoryNode) => void;
+  openInventoryFile?: (file: {
+    id: string;
+    name: string;
+    path: string;
+    code: string;
+    readOnly?: boolean;
+  }) => void;
 }
 
-export default function LeftSideBar({ playerInventory, deleteInventoryItem, renameInventoryItem, moveInventoryItem, addInventoryItem }: LeftSideBarProps){
+export default function LeftSideBar({ playerInventory, deleteInventoryItem, renameInventoryItem, moveInventoryItem, addInventoryItem, openInventoryFile }: LeftSideBarProps){
   const [inv, toggleInv] = useState(false)
   const coins = usePlayerStore(s => s.coins);
 
@@ -32,6 +39,7 @@ export default function LeftSideBar({ playerInventory, deleteInventoryItem, rena
               onRenameItem={renameInventoryItem}
               onMoveItem={moveInventoryItem}
               onAddItem={addInventoryItem}
+              onOpenFile={openInventoryFile}
             />
           </div>
           <div className="pt-1 pb-1">

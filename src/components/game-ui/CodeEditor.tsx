@@ -9,12 +9,13 @@ import {
 } from '@/src/assets'
 import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
-import { runPython } from "@/src/backend/mechanics/parser";
+import { getAllModules, registerModules, runPython, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
 import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
 import showToast from "../ui/Toast";
 import type { MachineProblem } from "@/src/game/types/mp.types";
 import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
+import type { InventoryNode } from "@/src/game/types/inventory.types";
 import { validateMachineProblemSolution } from "@/src/game/data/mps";
 
 
@@ -40,7 +41,13 @@ export default function CodeEditor() {
     }))
   )
   const appendToLogs = useTerminalStore((s) => s.appendToLog)
-  const addInventoryItem = useInventoryStore((s) => s.addInventoryItem)
+  const { addInventoryItem, playerInventory, setInventoryItemCode } = useInventoryStore(
+    useShallow((s) => ({
+      addInventoryItem: s.addInventoryItem,
+      playerInventory: s.playerInventory,
+      setInventoryItemCode: s.setInventoryItemCode,
+    }))
+  )
   const gainXP = usePlayerStore((s) => s.gainXP)
   const gainCoins = usePlayerStore((s) => s.gainCoins)
   const { inCombat, isEnemy } = useGameStore(
@@ -49,14 +56,135 @@ export default function CodeEditor() {
       isEnemy: s.isEnemy,
     }))
   )
-  const { activeFile, setActiveCode } = useEditorStore(
+  const {
+    activeFile,
+    activeFileId,
+    activeFilePath,
+    activeCode,
+    isActiveFileReadOnly,
+    setActiveCode,
+  } = useEditorStore(
     useShallow((s) => ({
       activeFile: s.activeFile,
+      activeFileId: s.activeFileId,
+      activeFilePath: s.activeFilePath,
+      activeCode: s.activeCode,
+      isActiveFileReadOnly: s.isActiveFileReadOnly,
       setActiveCode: s.setActiveCode,
     }))
   )
   const highlightRange = useEditorStore((state) => state.highlightRange);
   const decorationRef = useRef<string[]>([]);
+  const registeredUserModuleNamesRef = useRef<Set<string>>(new Set())
+
+  function isInitFileName(name: string): boolean {
+    const normalized = name.trim().toLowerCase()
+    return normalized === "init.py" || normalized === "__init__.py"
+  }
+
+  function isPythonScriptNode(node: InventoryNode): node is Exclude<InventoryNode, { kind: "folder" }> {
+    return node.kind !== "folder" && node.name.toLowerCase().endsWith(".py") && !isInitFileName(node.name)
+  }
+
+  function normalizeModuleSegment(segment: string): string {
+    const sanitized = segment
+      .trim()
+      .replace(/\.[^.]+$/, "")
+      .replace(/[^a-zA-Z0-9_]/g, "_")
+      .replace(/^_+|_+$/g, "")
+
+    if (!sanitized) {
+      return "module"
+    }
+
+    return /^[0-9]/.test(sanitized) ? `_${sanitized}` : sanitized
+  }
+
+  function buildUserScriptModules(mainCode: string): Array<{ name: string; code: string; sourcePath: string }> {
+    const modulesByName = new Map<string, { name: string; code: string; sourcePath: string }>()
+    const baseNameCandidates = new Map<string, { code: string }[]>()
+
+    const walk = (nodes: InventoryNode[], folderSegments: string[]) => {
+      nodes.forEach((node) => {
+        if (node.kind === "folder") {
+          const nextFolderSegment = normalizeModuleSegment(node.name)
+          walk(node.children, [...folderSegments, nextFolderSegment])
+          return
+        }
+
+        if (!isPythonScriptNode(node)) {
+          return
+        }
+
+        const baseSegment = normalizeModuleSegment(node.name)
+        const fullName = [...folderSegments, baseSegment].filter(Boolean).join(".")
+        if (!fullName) {
+          return
+        }
+
+        const code = node.id === activeFileId ? mainCode : (node.code ?? "")
+        modulesByName.set(fullName, {
+          name: fullName,
+          code,
+          sourcePath: `${fullName.replace(/\./g, "/")}.py`,
+        })
+
+        const candidates = baseNameCandidates.get(baseSegment) ?? []
+        candidates.push({ code })
+        baseNameCandidates.set(baseSegment, candidates)
+      })
+    }
+
+    walk(playerInventory, [])
+
+    baseNameCandidates.forEach((candidates, aliasName) => {
+      if (candidates.length !== 1 || modulesByName.has(aliasName)) {
+        return
+      }
+
+      modulesByName.set(aliasName, {
+        name: aliasName,
+        code: candidates[0].code,
+        sourcePath: `${aliasName}.py`,
+      })
+    })
+
+    return Array.from(modulesByName.values())
+  }
+
+  function syncUserScriptModules(mainCode: string): number {
+    const moduleDefinitions = buildUserScriptModules(mainCode)
+    const previouslyRegistered = registeredUserModuleNamesRef.current
+    const existingModuleNames = new Set(getAllModules().map((moduleRecord) => moduleRecord.name))
+
+    previouslyRegistered.forEach((moduleName) => existingModuleNames.delete(moduleName))
+
+    const filteredDefinitions = moduleDefinitions.filter((moduleDefinition) => !existingModuleNames.has(moduleDefinition.name))
+    const newNames = new Set(filteredDefinitions.map((moduleDefinition) => moduleDefinition.name))
+
+    previouslyRegistered.forEach((moduleName) => {
+      if (!newNames.has(moduleName)) {
+        unregisterModule(moduleName)
+      }
+    })
+
+    const modulesToRegister: CustomModule[] = filteredDefinitions.map((moduleDefinition) => ({
+      name: moduleDefinition.name,
+      code: moduleDefinition.code,
+      sourcePath: moduleDefinition.sourcePath,
+      visibility: "public",
+      prelude: false,
+      description: "User script module",
+    }))
+
+    if (modulesToRegister.length > 0) {
+      registerModules(modulesToRegister)
+    }
+
+    registeredUserModuleNamesRef.current = newNames
+
+    return moduleDefinitions.length - filteredDefinitions.length
+  }
 
   function randomBetween(min: number, max: number): number {
     const low = Math.max(0, Math.floor(Math.min(min, max)));
@@ -172,26 +300,41 @@ export default function CodeEditor() {
   }, [highlightRange]);
   
   function handleClear() {
-    if (editorRef.current) {
-      editorRef.current.setValue("");
-      setActiveCode("");
-    }
+    setActiveCode("");
   }
 
-  // TODO: Save changes to File Tree only
   function handleSave() {
-    // if (editorRef.current) {
-    //   const code = editorRef.current.getValue();
-    //   const blob = new Blob([code], { type: "text/plain" });
-    //   const url = URL.createObjectURL(blob);
+    if (!activeFileId) {
+      showToast({
+        variant: "warning",
+        message: "Open a file from the inventory first.",
+      })
+      return
+    }
 
-    //   const a = document.createElement("a");
-    //   a.href = url;
-    //   a.download = "code.py";
-    //   a.click();
+    if (isActiveFileReadOnly) {
+      showToast({
+        variant: "warning",
+        message: "This file is read-only.",
+      })
+      return
+    }
 
-    //   URL.revokeObjectURL(url);
-    // }
+    if (isInitFileName(activeFile)) {
+      showToast({
+        variant: "warning",
+        message: "init files cannot be edited.",
+      })
+      return
+    }
+
+    const code = editorRef.current?.getValue() ?? activeCode
+    setInventoryItemCode(activeFileId, code)
+    setActiveCode(code)
+    showToast({
+      variant: "success",
+      message: `Saved ${activeFile}.`,
+    })
   }
   
   async function handleRun() {
@@ -209,6 +352,11 @@ export default function CodeEditor() {
     }
 
     runningRef.current = true;
+
+    const skippedModuleCount = syncUserScriptModules(code)
+    if (skippedModuleCount > 0) {
+      appendToLogs(`[PY]: ${skippedModuleCount} user module(s) were skipped due to name conflicts.`)
+    }
 
     if (inCombat) {
       const activeProblem = isEnemy
@@ -261,7 +409,8 @@ export default function CodeEditor() {
       <div className="flex flex-row m-1">
         <div className="flex w-10/12 pl-1 gap-1">
           <span className="truncate">Current File:</span>
-          <span className="truncate border rounded-lg px-2">{activeFile}</span>
+          <span className="truncate border rounded-lg px-2">{activeFilePath || activeFile}</span>
+          {isActiveFileReadOnly && <span className="truncate text-amber-300">read-only</span>}
         </div>
         <div className="flex flex-row-reverse gap-2">
           <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
@@ -274,12 +423,10 @@ export default function CodeEditor() {
         <Editor
           height="100%"
           defaultLanguage="python"
-          defaultValue="# Welcome to PyQuest! 
-# Start writing your coding journey in Python here!"
+          value={activeCode}
           theme="vs-dark"
           onMount={(editor, monacoInstance) => {
             handleEditorDidMount(editor, monacoInstance);
-            setActiveCode(editor.getValue());
           }}
           onChange={(value) => setActiveCode(value ?? "")}
           options={{
@@ -296,6 +443,7 @@ export default function CodeEditor() {
             parameterHints: {
               enabled: false
             },
+            readOnly: isActiveFileReadOnly,
             wordBasedSuggestions: "off", // Prevents suggesting words found in the document
             snippetSuggestions: "none",  // Prevents code snippets from popping up
           }}

@@ -1,322 +1,1211 @@
-# PyQuest Python Function Index
+# PyQuest Python Runtime Reference
 
-## src/backend/mechanics/game-modules.ts
+This reference includes every player-facing callable currently available in the Python runtime.
 
-### Built-in preloaded functions (no import)
-- set_delay(milliseconds=0)
-- sleep(milliseconds=0)
-- roll_dice(sides=6, count=1)
-- chance(percentage)
-- random_choice(items)
-- clamp(value, min_value, max_value)
+## Preloaded callables (no import required)
+
+Global functions:
 - goTo(locationId)
-- gain_hp(amount=10)
-- take_damage(amount=10)
-- gain_coins(amount=1)
-- gain_xp(amount=10)
-- combat(state=True)
-- target_enemy(state=True)
-- log(message="")
+  - effect: requests scene transition to locationId
 - scavenge()
+  - effect: emits scavenge event for current scene
 - explore(state=True)
+  - effect: emits explore event for current scene
 
-### Preloaded object: player
+Preloaded object: player
 - player.equip(item)
+  - effect: equips an item object that has a name field
 - player.unequip()
-- player.gain_hp(amount=10)
-- player.take_damage(amount=10)
-- player.gain_coins(amount=1)
-- player.gain_xp(amount=10)
-- player.go_to(location_id)
+  - effect: unequips current player equipment
 
-### Module user.weapons
-Import style: from user.weapons import spear
-- spear.attack()
-- spear.thrust()
-- spear.pierce()
+Readable player properties:
+- player.hp
+- player.energy
+- player.armor.type
+- player.armor.durability
 
-### Module spear
-- Spear(damage=10, durability=100)
-- Spear.attack(target_name="Enemy")
-- Spear.thrust(target_name="Enemy")
-- Spear.repair(amount=50)
-- attack(target_name="Enemy", damage=10)
-- create_spear(damage=10)
+## Module importability status
 
-### Module inventory
-- Item(name, quantity=1, value=0)
-- add_item(name, quantity=1, value=0)
-- remove_item(name, quantity=1)
-- get_item(name)
-- list_items()
-- get_total_value()
-- clear_inventory()
+Importable module(s):
+- from pickedup import <item_id>
 
-### Module magic
-- Spell(name, mana_cost, damage, spell_type="offensive")
-- Spell.cast(caster_mana, target_name="Enemy")
-- cast_spell(spell_name, caster_mana, target_name="Enemy")
-- mana_cost(spell_name)
+Internal or blocked from direct import in player scripts:
+- builtin
+- abstracts
+- weapon (legacy/blocked)
+- consumable (legacy/blocked)
+- user.weapons (removed)
+- spear (removed)
+- inventory (removed)
+- magic (removed)
+- utils (removed)
 
-### Module utils
-- roll_dice(sides=6, count=1)
-- chance(percentage)
-- random_choice(items)
-- clamp(value, min_value, max_value)
+## Pickedup item callables
 
-## src/backend/mechanics/shop-item-modules.ts
+Only this module is player-accessible for items:
+- from pickedup import <item_id>
 
-### Module consumable
-Import style: from consumable import health_potion
+## Consumables
 
-Per-symbol methods:
+from pickedup import berserk_draught
 - consume()
-- use()
+  - effect: buff dmg by 22% for 13000ms
+  - energy cost: 5
 
-Importable symbols:
-- berserk_draught
-- chaos_elixir
-- corrosion_vial
-- dense_tar_essence
-- focus_concoction
-- grand_berserk_draught
-- grand_guard_elixir
-- grand_haste_phial
-- greater_health_potion
-- greater_mana_potion
-- guard_elixir
-- haste_phial
-- health_potion
-- iron_stew
-- juggernaut_tonic
-- lesser_berserk_draught
-- lesser_guard_elixir
-- lesser_haste_phial
-- mana_potion
-- mind_leech
-- risky_war_broth
-- severe_corrosion_vial
-- severe_mind_leech
-- spark_noodle_bowl
-- superior_health_potion
-- superior_mana_potion
-- tar_essence
-- weak_corrosion_vial
-- weak_mind_leech
-- weak_tar_essence
+from pickedup import chaos_elixir
+- consume()
+  - effect: buff dmg by 30% for 14000ms; buff speed by 15% for 14000ms; debuff enemy hp by 22 for 14000ms
+  - energy cost: 12
 
-### Module weapon
-Import style: from weapon import wooden_wand
+from pickedup import corrosion_vial
+- consume()
+  - effect: debuff enemy hp by 24 for 13000ms
+  - energy cost: 4
 
-Per-symbol methods:
-- use(target_name="Enemy")
-- attack(target_name="Enemy")
-- named skill methods (see list below)
+from pickedup import dense_tar_essence
+- consume()
+  - effect: debuff enemy speed by 0.18 for 16000ms
+  - energy cost: 5
 
-Importable symbols:
-- academy_wand
-- amethyst_staff
-- ancient_of_rites
-- ashen_sword
-- blighted_bow
-- butterfly_knife
-- coated_blade
-- common_sword
-- crossbow
-- cursed_wand
-- dagger
-- diamond_staff
-- duskblade
-- elbrauns_blade
-- elven_bow
-- fire_drake_wand
-- fire_fang
-- floyds_sage_wand
-- galaxies_tear
-- great_forests_wand
-- heavenly_sword
-- hells_bane
-- lantiers_hidden_blade
-- last_whisper
-- lightning_bow
-- lightning_dagger
-- lightning_spear
-- lightning_staff
-- lunar_promise
-- multishot_bow
-- old_compound_bow
-- old_staff
-- poisoned_throwing_knives
-- quickblade
-- rapier
-- rusted_kukri
-- rusty_axe
-- seasons_blessing
-- serrated_dirk
-- shadow_glaive
-- slingshot
-- sorbets_great_bow
-- spear
-- staff_of_ages
-- steel_axe
-- steel_crossbow
-- steel_kukri
-- steel_sword
-- stiletto
-- training_sword
-- vampire_fans
-- volcanic_bow
-- wilted_bow
-- wilted_wand
-- wooden_bow
-- wooden_wand
+from pickedup import focus_concoction
+- consume()
+  - effect: buff speed by 22% for 12000ms; debuff enemy energy by 18 for 12000ms
+  - energy cost: 8
 
-Named skill methods by symbol:
-- ancient_of_rites: damage(), stun(), heal()
-- ashen_sword: bleed()
-- blighted_bow: bleed(), damage()
-- coated_blade: bleed()
-- cursed_wand: bleed()
-- diamond_staff: damage()
-- duskblade: damage(), bleed()
-- elbrauns_blade: damage(), stun()
-- elven_bow: heal()
-- fire_drake_wand: damage()
-- fire_fang: damage()
-- floyds_sage_wand: heal(), damage()
-- galaxies_tear: damage(), heal(), stun()
-- great_forests_wand: heal()
-- heavenly_sword: heal(), damage()
-- hells_bane: damage(), bleed()
-- lantiers_hidden_blade: stun(), bleed()
-- last_whisper: damage(), stun(), bleed()
-- lightning_bow: stun()
-- lightning_dagger: stun()
-- lightning_spear: stun()
-- lightning_staff: stun()
-- lunar_promise: damage(), stun(), heal()
-- multishot_bow: damage()
-- poisoned_throwing_knives: bleed()
-- seasons_blessing: heal(), damage()
-- serrated_dirk: bleed()
-- shadow_glaive: bleed(), damage()
-- sorbets_great_bow: damage(), stun()
-- staff_of_ages: damage(), heal()
-- steel_axe: damage()
-- steel_crossbow: damage()
-- steel_kukri: damage()
-- steel_sword: damage()
-- vampire_fans: heal(), bleed()
-- volcanic_bow: damage()
+from pickedup import grand_berserk_draught
+- consume()
+  - effect: buff dmg by 35% for 16000ms
+  - energy cost: 7
 
-### Module pickedup
-Import style: from pickedup import health_potion
+from pickedup import grand_guard_elixir
+- consume()
+  - effect: buff def by 55% for 18000ms
+  - energy cost: 9
 
-Per-symbol methods depend on item kind:
-- picked-up consumables: consume(), use()
-- picked-up weapons: use(target_name="Enemy"), attack(target_name="Enemy"), plus named skill methods
-- picked-up armors: equip(), use()
+from pickedup import grand_haste_phial
+- consume()
+  - effect: buff speed by 25% for 15000ms
+  - energy cost: 6
 
-Importable symbols:
-- dynamic from player inventory folder pickedup (pickedup_folder)
-- symbol names are normalized from itemId (lowercase with underscores)
+from pickedup import greater_health_potion
+- consume()
+  - effect: restore 45 hp
+  - energy cost: 3
 
-## src/backend/mechanics/item-energy-costs.ts
+from pickedup import greater_mana_potion
+- consume()
+  - effect: restore 45 energy
+  - energy cost: 3
 
-Functions:
-- resolveWeaponUseEnergyCost(itemId, fallback=1)
-- resolveConsumableUseEnergyCost(itemId, fallback=1)
+from pickedup import guard_elixir
+- consume()
+  - effect: buff def by 35% for 15000ms
+  - energy cost: 7
 
-Runtime event usage:
-- shop.weapon.use uses resolveWeaponUseEnergyCost(...)
-- shop.consumable.use uses resolveConsumableUseEnergyCost(...)
+from pickedup import haste_phial
+- consume()
+  - effect: buff speed by 15% for 12000ms
+  - energy cost: 4
 
-Weapon use energy cost by symbol:
-- academy_wand: 8
-- amethyst_staff: 8
-- ancient_of_rites: 16
-- ashen_sword: 12
-- blighted_bow: 13
-- butterfly_knife: 7
-- coated_blade: 12
-- common_sword: 10
-- crossbow: 9
-- cursed_wand: 10
-- dagger: 7
-- diamond_staff: 10
-- duskblade: 11
-- elbrauns_blade: 14
-- elven_bow: 11
-- fire_drake_wand: 10
-- fire_fang: 9
-- floyds_sage_wand: 12
-- galaxies_tear: 14
-- great_forests_wand: 10
-- heavenly_sword: 14
-- hells_bane: 13
-- lantiers_hidden_blade: 11
-- last_whisper: 13
-- lightning_bow: 11
-- lightning_dagger: 9
-- lightning_spear: 12
-- lightning_staff: 10
-- lunar_promise: 15
-- multishot_bow: 11
-- old_compound_bow: 9
-- old_staff: 8
-- poisoned_throwing_knives: 9
-- quickblade: 7
-- rapier: 10
-- rusted_kukri: 7
-- rusty_axe: 10
-- seasons_blessing: 12
-- serrated_dirk: 9
-- shadow_glaive: 14
-- slingshot: 9
-- sorbets_great_bow: 13
-- spear: 10
-- staff_of_ages: 12
-- steel_axe: 12
-- steel_crossbow: 11
-- steel_kukri: 9
-- steel_sword: 12
-- stiletto: 7
-- training_sword: 10
-- vampire_fans: 11
-- volcanic_bow: 11
-- wilted_bow: 9
-- wilted_wand: 8
-- wooden_bow: 9
-- wooden_wand: 8
+from pickedup import health_potion
+- consume()
+  - effect: restore 25 hp
+  - energy cost: 2
 
-Consumable use energy cost by symbol:
-- berserk_draught: 5
-- chaos_elixir: 12
-- corrosion_vial: 4
-- dense_tar_essence: 5
-- focus_concoction: 8
-- grand_berserk_draught: 7
-- grand_guard_elixir: 9
-- grand_haste_phial: 6
-- greater_health_potion: 3
-- greater_mana_potion: 3
-- guard_elixir: 7
-- haste_phial: 4
-- health_potion: 2
-- iron_stew: 7
-- juggernaut_tonic: 11
-- lesser_berserk_draught: 4
-- lesser_guard_elixir: 4
-- lesser_haste_phial: 3
-- mana_potion: 2
-- mind_leech: 4
-- risky_war_broth: 8
-- severe_corrosion_vial: 5
-- severe_mind_leech: 5
-- spark_noodle_bowl: 7
-- superior_health_potion: 5
-- superior_mana_potion: 5
-- tar_essence: 4
-- weak_corrosion_vial: 4
-- weak_mind_leech: 4
-- weak_tar_essence: 3
+from pickedup import iron_stew
+- consume()
+  - effect: restore 35 hp; buff def by 15% for 12000ms
+  - energy cost: 7
+
+from pickedup import juggernaut_tonic
+- consume()
+  - effect: buff def by 45% for 15000ms; debuff enemy speed by 0.1 for 13000ms
+  - energy cost: 11
+
+from pickedup import lesser_berserk_draught
+- consume()
+  - effect: buff dmg by 12% for 10000ms
+  - energy cost: 4
+
+from pickedup import lesser_guard_elixir
+- consume()
+  - effect: buff def by 20% for 12000ms
+  - energy cost: 4
+
+from pickedup import lesser_haste_phial
+- consume()
+  - effect: buff speed by 8% for 9000ms
+  - energy cost: 3
+
+from pickedup import mana_potion
+- consume()
+  - effect: restore 25 energy
+  - energy cost: 2
+
+from pickedup import mind_leech
+- consume()
+  - effect: debuff enemy energy by 24 for 13000ms
+  - energy cost: 4
+
+from pickedup import risky_war_broth
+- consume()
+  - effect: buff dmg by 25% for 12000ms; debuff enemy hp by 16 for 12000ms
+  - energy cost: 8
+
+from pickedup import severe_corrosion_vial
+- consume()
+  - effect: debuff enemy hp by 38 for 16000ms
+  - energy cost: 5
+
+from pickedup import severe_mind_leech
+- consume()
+  - effect: debuff enemy energy by 38 for 16000ms
+  - energy cost: 5
+
+from pickedup import spark_noodle_bowl
+- consume()
+  - effect: restore 35 energy; buff speed by 12% for 10000ms
+  - energy cost: 7
+
+from pickedup import superior_health_potion
+- consume()
+  - effect: restore 70 hp
+  - energy cost: 5
+
+from pickedup import superior_mana_potion
+- consume()
+  - effect: restore 70 energy
+  - energy cost: 5
+
+from pickedup import tar_essence
+- consume()
+  - effect: debuff enemy speed by 0.12 for 13000ms
+  - energy cost: 4
+
+from pickedup import weak_corrosion_vial
+- consume()
+  - effect: debuff enemy hp by 12 for 10000ms
+  - energy cost: 4
+
+from pickedup import weak_mind_leech
+- consume()
+  - effect: debuff enemy energy by 12 for 10000ms
+  - energy cost: 4
+
+from pickedup import weak_tar_essence
+- consume()
+  - effect: debuff enemy speed by 0.06 for 10000ms
+  - energy cost: 3
+
+## Weapons
+
+from pickedup import academy_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 8
+
+from pickedup import amethyst_staff
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 8
+
+from pickedup import ancient_of_rites
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 16
+- damage()
+  - effect: damage enemy by 18
+  - energy cost: 18
+- stun()
+  - effect: stun enemy for 1300
+  - energy cost: 18
+- heal()
+  - effect: heal player by 14
+  - energy cost: 18
+
+from pickedup import ashen_sword
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- bleed()
+  - effect: bleed enemy by 2 over 3000
+  - energy cost: 10
+
+from pickedup import blighted_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 13
+- bleed()
+  - effect: bleed enemy by 3 over 4000
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+
+from pickedup import butterfly_knife
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 7
+
+from pickedup import coated_blade
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- bleed()
+  - effect: bleed enemy by 2 over 3000
+  - energy cost: 10
+
+from pickedup import common_sword
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+
+from pickedup import crossbow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+
+from pickedup import cursed_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+- bleed()
+  - effect: bleed enemy by 2 over 3000
+  - energy cost: 10
+
+from pickedup import dagger
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 7
+
+from pickedup import diamond_staff
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import duskblade
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+- bleed()
+  - effect: bleed enemy by 3 over 4000
+  - energy cost: 14
+
+from pickedup import elbrauns_blade
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+- stun()
+  - effect: stun enemy for 1000
+  - energy cost: 14
+
+from pickedup import elven_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- heal()
+  - effect: heal player by 5
+  - energy cost: 10
+
+from pickedup import fire_drake_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import fire_fang
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import floyds_sage_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- heal()
+  - effect: heal player by 9
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+
+from pickedup import galaxies_tear
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 18
+  - energy cost: 18
+- heal()
+  - effect: heal player by 14
+  - energy cost: 18
+- stun()
+  - effect: stun enemy for 1300
+  - energy cost: 18
+
+from pickedup import great_forests_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+- heal()
+  - effect: heal player by 5
+  - energy cost: 10
+
+from pickedup import heavenly_sword
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 14
+- heal()
+  - effect: heal player by 9
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+
+from pickedup import hells_bane
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 13
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+- bleed()
+  - effect: bleed enemy by 3 over 4000
+  - energy cost: 14
+
+from pickedup import lantiers_hidden_blade
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- stun()
+  - effect: stun enemy for 1000
+  - energy cost: 14
+- bleed()
+  - effect: bleed enemy by 3 over 4000
+  - energy cost: 14
+
+from pickedup import last_whisper
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 13
+- damage()
+  - effect: damage enemy by 18
+  - energy cost: 18
+- stun()
+  - effect: stun enemy for 1300
+  - energy cost: 18
+- bleed()
+  - effect: bleed enemy by 4 over 5000
+  - energy cost: 18
+
+from pickedup import lightning_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- stun()
+  - effect: stun enemy for 700
+  - energy cost: 10
+
+from pickedup import lightning_dagger
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+- stun()
+  - effect: stun enemy for 700
+  - energy cost: 10
+
+from pickedup import lightning_spear
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- stun()
+  - effect: stun enemy for 700
+  - energy cost: 10
+
+from pickedup import lightning_staff
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+- stun()
+  - effect: stun enemy for 700
+  - energy cost: 10
+
+from pickedup import lunar_promise
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 15
+- damage()
+  - effect: damage enemy by 18
+  - energy cost: 18
+- stun()
+  - effect: stun enemy for 1300
+  - energy cost: 18
+- heal()
+  - effect: heal player by 14
+  - energy cost: 18
+
+from pickedup import multishot_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import old_compound_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+
+from pickedup import old_staff
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 8
+
+from pickedup import poisoned_throwing_knives
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+- bleed()
+  - effect: bleed enemy by 2 over 3000
+  - energy cost: 10
+
+from pickedup import quickblade
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 7
+
+from pickedup import rapier
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+
+from pickedup import rusted_kukri
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 7
+
+from pickedup import rusty_axe
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+
+from pickedup import seasons_blessing
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- heal()
+  - effect: heal player by 9
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+
+from pickedup import serrated_dirk
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+- bleed()
+  - effect: bleed enemy by 2 over 3000
+  - energy cost: 10
+
+from pickedup import shadow_glaive
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 14
+- bleed()
+  - effect: bleed enemy by 3 over 4000
+  - energy cost: 14
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+
+from pickedup import slingshot
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+
+from pickedup import sorbets_great_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 13
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+- stun()
+  - effect: stun enemy for 1000
+  - energy cost: 14
+
+from pickedup import spear
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+
+from pickedup import staff_of_ages
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- damage()
+  - effect: damage enemy by 12
+  - energy cost: 14
+- heal()
+  - effect: heal player by 9
+  - energy cost: 14
+
+from pickedup import steel_axe
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import steel_crossbow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import steel_kukri
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import steel_sword
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 12
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import stiletto
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 7
+
+from pickedup import training_sword
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 10
+
+from pickedup import vampire_fans
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- heal()
+  - effect: heal player by 9
+  - energy cost: 14
+- bleed()
+  - effect: bleed enemy by 3 over 4000
+  - energy cost: 14
+
+from pickedup import volcanic_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 11
+- damage()
+  - effect: damage enemy by 7
+  - energy cost: 10
+
+from pickedup import wilted_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+
+from pickedup import wilted_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 8
+
+from pickedup import wooden_bow
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 9
+
+from pickedup import wooden_wand
+- strike()
+  - effect: base attack using item stats; applies weapon inflictions if present
+  - energy cost: 8
+
+## Armors
+
+from pickedup import academy_hat
+- activate()
+  - effect: gain base def 2; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import aegis_helmet
+- activate()
+  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import apprentice_hat
+- activate()
+  - effect: gain base def 2; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import apprentice_robe
+- activate()
+  - effect: gain base def 3; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import archer_hood
+- activate()
+  - effect: gain base def 2; modifiers: bonus evasion 0.02
+  - energy cost: 0
+
+from pickedup import archers_garb
+- activate()
+  - effect: gain base def 3; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import ashen_helm
+- activate()
+  - effect: gain base def 4; modifiers: bonus dmg 2; penalty def 1
+  - energy cost: 0
+
+from pickedup import ashen_plate
+- activate()
+  - effect: gain base def 6; modifiers: bonus dmg 2; penalty def 1
+  - energy cost: 0
+
+from pickedup import bastion_mail
+- activate()
+  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import blackthorn_mask
+- activate()
+  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import blackweave_tunic
+- activate()
+  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import bulwark_great_helmet
+- activate()
+  - effect: gain base def 7; modifiers: bonus dmgReduction 0.04; bonus def 3; penalty energy 10
+  - energy cost: 0
+
+from pickedup import chainmail_armor
+- activate()
+  - effect: gain base def 3; modifiers: bonus def 1
+  - energy cost: 0
+
+from pickedup import chosen_eclipse
+- activate()
+  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import cloth_mask
+- activate()
+  - effect: gain base def 2; modifiers: bonus evasion 0.02
+  - energy cost: 0
+
+from pickedup import crown_of_the_seventh_circle
+- activate()
+  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import dawnbreak_visor
+- activate()
+  - effect: gain base def 7; modifiers: bonus dmg 3; bonus energy 18; penalty def 2
+  - energy cost: 0
+
+from pickedup import daybreak_hat
+- activate()
+  - effect: gain base def 7; modifiers: bonus health 32; bonus dmg 3; penalty atkSpeed 130
+  - energy cost: 0
+
+from pickedup import dusk_and_dawn
+- activate()
+  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import duskleather_armor
+- activate()
+  - effect: gain base def 6; modifiers: bonus dmg 2; penalty dmgReduction 0.01
+  - energy cost: 0
+
+from pickedup import duskwrap_mask
+- activate()
+  - effect: gain base def 4; modifiers: bonus dmg 2; penalty dmgReduction 0.01
+  - energy cost: 0
+
+from pickedup import elbrauns_helm
+- activate()
+  - effect: gain base def 7; modifiers: bonus def 3; bonus health 32; penalty atkSpeed 130
+  - energy cost: 0
+
+from pickedup import elbrauns_iron_will
+- activate()
+  - effect: gain base def 10; modifiers: bonus def 3; bonus health 32; penalty atkSpeed 130
+  - energy cost: 0
+
+from pickedup import elven_hood
+- activate()
+  - effect: gain base def 4; modifiers: bonus evasion 0.03; penalty health 10
+  - energy cost: 0
+
+from pickedup import elven_leather
+- activate()
+  - effect: gain base def 6; modifiers: bonus atkSpeed 110; penalty def 1
+  - energy cost: 0
+
+from pickedup import falconhide_vest
+- activate()
+  - effect: gain base def 6; modifiers: bonus dmg 2; penalty dmgReduction 0.01
+  - energy cost: 0
+
+from pickedup import feather_charm
+- activate()
+  - effect: gain base def 2; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import final_memorial
+- activate()
+  - effect: gain base def 10; modifiers: bonus dmg 3; bonus dmgReduction 0.04; penalty energy 10
+  - energy cost: 0
+
+from pickedup import floyds_big_hat
+- activate()
+  - effect: gain base def 7; modifiers: bonus energy 18; bonus dmg 3; penalty def 2
+  - energy cost: 0
+
+from pickedup import floyds_star_cloak
+- activate()
+  - effect: gain base def 10; modifiers: bonus energy 18; bonus dmg 3; penalty def 2
+  - energy cost: 0
+
+from pickedup import galaxies_heart
+- activate()
+  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import galeforce_amulet
+- activate()
+  - effect: gain base def 7; modifiers: bonus dmg 3; bonus atkSpeed 150; penalty health 16
+  - energy cost: 0
+
+from pickedup import guard_helm
+- activate()
+  - effect: gain base def 2; modifiers: bonus dmgReduction 0.01
+  - energy cost: 0
+
+from pickedup import guard_mail
+- activate()
+  - effect: gain base def 3; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import hawkeye_band
+- activate()
+  - effect: gain base def 4; modifiers: bonus dmg 2; penalty dmgReduction 0.01
+  - energy cost: 0
+
+from pickedup import heavy_helm
+- activate()
+  - effect: gain base def 2; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import high_wizard_hat
+- activate()
+  - effect: gain base def 4; modifiers: bonus dmg 2; penalty def 1
+  - energy cost: 0
+
+from pickedup import high_wizard_robe
+- activate()
+  - effect: gain base def 6; modifiers: bonus dmg 2; penalty def 1
+  - energy cost: 0
+
+from pickedup import horus_mantle
+- activate()
+  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import hunter_cap
+- activate()
+  - effect: gain base def 2; modifiers: bonus atkSpeed 70
+  - energy cost: 0
+
+from pickedup import hunter_tunic
+- activate()
+  - effect: gain base def 3; modifiers: bonus evasion 0.02
+  - energy cost: 0
+
+from pickedup import iron_cuirass
+- activate()
+  - effect: gain base def 3; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import iron_helm
+- activate()
+  - effect: gain base def 2; modifiers: bonus def 1
+  - energy cost: 0
+
+from pickedup import knight_armor
+- activate()
+  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import knight_helm
+- activate()
+  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import lantiers_blessing
+- activate()
+  - effect: gain base def 10; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty def 2
+  - energy cost: 0
+
+from pickedup import lantiers_persona
+- activate()
+  - effect: gain base def 7; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty def 2
+  - energy cost: 0
+
+from pickedup import last_bastion
+- activate()
+  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import leather_jerkin
+- activate()
+  - effect: gain base def 3; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import leather_mask
+- activate()
+  - effect: gain base def 2; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import leather_vest
+- activate()
+  - effect: gain base def 3; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import light_jerkin
+- activate()
+  - effect: gain base def 3; modifiers: bonus evasion 0.02
+  - energy cost: 0
+
+from pickedup import lost_from_light
+- activate()
+  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
+  - energy cost: 0
+
+from pickedup import monocle
+- activate()
+  - effect: gain base def 2; modifiers: bonus atkSpeed 70
+  - energy cost: 0
+
+from pickedup import moonthread_hat
+- activate()
+  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import moonthread_robe
+- activate()
+  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import mountains_heart
+- activate()
+  - effect: gain base def 10; modifiers: bonus health 32; bonus dmgReduction 0.04; penalty atkSpeed 130
+  - energy cost: 0
+
+from pickedup import nightrunner_garb
+- activate()
+  - effect: gain base def 6; modifiers: bonus evasion 0.03; penalty health 10
+  - energy cost: 0
+
+from pickedup import nightstalker_mask
+- activate()
+  - effect: gain base def 4; modifiers: bonus evasion 0.03; penalty health 10
+  - energy cost: 0
+
+from pickedup import north_wind_armor
+- activate()
+  - effect: gain base def 10; modifiers: bonus dmg 3; bonus evasion 0.05; penalty health 16
+  - energy cost: 0
+
+from pickedup import old_mantle
+- activate()
+  - effect: gain base def 3; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import puppeteers_mask
+- activate()
+  - effect: gain base def 7; modifiers: bonus evasion 0.05; bonus dmg 3; penalty health 16
+  - energy cost: 0
+
+from pickedup import ranger_amulet
+- activate()
+  - effect: gain base def 4; modifiers: bonus atkSpeed 110; penalty def 1
+  - energy cost: 0
+
+from pickedup import ranger_jerkin
+- activate()
+  - effect: gain base def 6; modifiers: bonus evasion 0.03; penalty health 10
+  - energy cost: 0
+
+from pickedup import runed_greathelm
+- activate()
+  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import runic_monocle
+- activate()
+  - effect: gain base def 4; modifiers: bonus atkSpeed 110; penalty health 10
+  - energy cost: 0
+
+from pickedup import runic_robe
+- activate()
+  - effect: gain base def 6; modifiers: bonus atkSpeed 110; penalty health 10
+  - energy cost: 0
+
+from pickedup import scholars_glasses
+- activate()
+  - effect: gain base def 2; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import scout_band
+- activate()
+  - effect: gain base def 2; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import scout_vest
+- activate()
+  - effect: gain base def 3; modifiers: bonus atkSpeed 70
+  - energy cost: 0
+
+from pickedup import shade_scarf
+- activate()
+  - effect: gain base def 2; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import shadow_realm_mask
+- activate()
+  - effect: gain base def 7; modifiers: bonus dmg 3; bonus energy 18; penalty health 16
+  - energy cost: 0
+
+from pickedup import shadow_tunic
+- activate()
+  - effect: gain base def 3; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import shadoweave_cloak
+- activate()
+  - effect: gain base def 10; modifiers: bonus evasion 0.05; bonus dmg 3; penalty health 16
+  - energy cost: 0
+
+from pickedup import shadowthread_cloak
+- activate()
+  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import shadowveil_hood
+- activate()
+  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import silent_hood
+- activate()
+  - effect: gain base def 4; modifiers: bonus atkSpeed 110; penalty def 1
+  - energy cost: 0
+
+from pickedup import silentstep_vest
+- activate()
+  - effect: gain base def 6; modifiers: bonus atkSpeed 110; penalty def 1
+  - energy cost: 0
+
+from pickedup import silverweave_cloak
+- activate()
+  - effect: gain base def 6; modifiers: bonus def 2; penalty atkSpeed 90
+  - energy cost: 0
+
+from pickedup import silverweave_hat
+- activate()
+  - effect: gain base def 4; modifiers: bonus def 2; penalty atkSpeed 90
+  - energy cost: 0
+
+from pickedup import simple_cloak
+- activate()
+  - effect: gain base def 3; modifiers: bonus atkSpeed 70
+  - energy cost: 0
+
+from pickedup import skies_blessing
+- activate()
+  - effect: gain base def 7; modifiers: bonus evasion 0.05; bonus health 32; penalty def 2
+  - energy cost: 0
+
+from pickedup import soldier_armor
+- activate()
+  - effect: gain base def 3; modifiers: bonus dmgReduction 0.01
+  - energy cost: 0
+
+from pickedup import soldier_helm
+- activate()
+  - effect: gain base def 2; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import sorbets_wind_amulet
+- activate()
+  - effect: gain base def 7; modifiers: bonus atkSpeed 150; bonus energy 18; penalty def 2
+  - energy cost: 0
+
+from pickedup import sorbets_windbreaker
+- activate()
+  - effect: gain base def 10; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty def 2
+  - energy cost: 0
+
+from pickedup import star_shatterer_cloak
+- activate()
+  - effect: gain base def 10; modifiers: bonus dmg 3; bonus health 32; penalty atkSpeed 130
+  - energy cost: 0
+
+from pickedup import starreader_hat
+- activate()
+  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import starwoven_mantle
+- activate()
+  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import steel_cuirass
+- activate()
+  - effect: gain base def 6; modifiers: bonus def 2; penalty atkSpeed 90
+  - energy cost: 0
+
+from pickedup import steel_helm
+- activate()
+  - effect: gain base def 4; modifiers: bonus def 2; penalty atkSpeed 90
+  - energy cost: 0
+
+from pickedup import stormwatch_circlet
+- activate()
+  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import stormweave_tunic
+- activate()
+  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
+  - energy cost: 0
+
+from pickedup import street_hood
+- activate()
+  - effect: gain base def 2; modifiers: bonus atkSpeed 70
+  - energy cost: 0
+
+from pickedup import student_robe
+- activate()
+  - effect: gain base def 3; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import sulgatas_shadow
+- activate()
+  - effect: gain base def 10; modifiers: bonus dmg 3; bonus energy 18; penalty health 16
+  - energy cost: 0
+
+from pickedup import tempestveil_cloak
+- activate()
+  - effect: gain base def 10; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty health 16
+  - energy cost: 0
+
+from pickedup import thiefs_garb
+- activate()
+  - effect: gain base def 3; modifiers: bonus atkSpeed 70
+  - energy cost: 0
+
+from pickedup import trail_amulet
+- activate()
+  - effect: gain base def 2; modifiers: bonus health 12
+  - energy cost: 0
+
+from pickedup import travelers_coat
+- activate()
+  - effect: gain base def 3; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import vanguard_armor
+- activate()
+  - effect: gain base def 6; modifiers: bonus dmgReduction 0.02; penalty atkSpeed 90
+  - energy cost: 0
+
+from pickedup import vanguard_helm
+- activate()
+  - effect: gain base def 4; modifiers: bonus dmgReduction 0.02; penalty atkSpeed 90
+  - energy cost: 0
+
+from pickedup import voidpetal_hat
+- activate()
+  - effect: gain base def 7; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty health 16
+  - energy cost: 0
+
+from pickedup import windcall_charm
+- activate()
+  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import windrunner_coat
+- activate()
+  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
+  - energy cost: 0
+
+from pickedup import worn_cloak
+- activate()
+  - effect: gain base def 3; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import worn_greathelm
+- activate()
+  - effect: gain base def 2; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import worn_plate
+- activate()
+  - effect: gain base def 3; modifiers: bonus dmg 1
+  - energy cost: 0
+
+from pickedup import worn_veil
+- activate()
+  - effect: gain base def 2; modifiers: bonus energy 8
+  - energy cost: 0
+
+from pickedup import woven_hat
+- activate()
+  - effect: gain base def 2; modifiers: bonus def 1
+  - energy cost: 0
+
+from pickedup import woven_robe
+- activate()
+  - effect: gain base def 3; modifiers: bonus def 1
+  - energy cost: 0
+
+from pickedup import yggdrasil_shroud
+- activate()
+  - effect: gain base def 10; modifiers: bonus health 32; bonus energy 18; penalty atkSpeed 130
+  - energy cost: 0
+

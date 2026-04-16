@@ -36,7 +36,7 @@ export function skillNameToMethodName(skillName: string): string {
         .replace(/_+$/, "");
 
     if (normalized.length === 0) {
-        return "use";
+        return "skill";
     }
 
     if (/^[0-9]/.test(normalized)) {
@@ -49,11 +49,12 @@ export function skillNameToMethodName(skillName: string): string {
 export function getWeaponSkillMethodEntries(weapon: Weapon): Array<{ methodName: string; skillIndex: number }> {
     const usedNames = new Set<string>();
     const entries: Array<{ methodName: string; skillIndex: number }> = [];
+    const reservedNames = new Set(["use", "attack", "equip", "strike", "consume"]);
 
     weapon.skills.forEach((skill, skillIndex) => {
         const methodName = skillNameToMethodName(skill.name);
 
-        if (methodName === "use" || methodName === "attack") {
+        if (reservedNames.has(methodName)) {
             return;
         }
 
@@ -89,7 +90,7 @@ function createWeaponVariableCode(weapon: Weapon): string {
     const itemId = normalizeItemId(weapon.id);
     const variableName = normalizeIdentifier(weapon.id);
     const skillMethods = getWeaponSkillMethodEntries(weapon)
-        .map((entry) => `    def ${entry.methodName}(self, target_name="Enemy"):\n        return _emit("shop.weapon.skill", {"itemId": self.item_id, "target": target_name, "skillName": ${toPythonString(entry.methodName)}, "skillIndex": ${entry.skillIndex}})`)
+        .map((entry) => `    def ${entry.methodName}(self):\n        return _emit("shop.weapon.skill", {"itemId": self.item_id, "skillName": ${toPythonString(entry.methodName)}, "skillIndex": ${entry.skillIndex}})`)
         .join("\n\n");
 
     const className = `_WeaponRef_${variableName}`;
@@ -108,7 +109,8 @@ export function buildConsumableModuleCode(consumableItemIds: string[]): string {
         .map((consumable) => createConsumableVariableCode(consumable));
 
     return `
-from abstracts import _emit
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
 
 
 class _ConsumableRef:
@@ -117,9 +119,6 @@ class _ConsumableRef:
 
     def consume(self):
         return _emit("shop.consumable.use", {"itemId": self.item_id})
-
-    def use(self):
-        return self.consume()
 
 
 ${lines.join("\n")}
@@ -133,18 +132,16 @@ export function buildWeaponModuleCode(weaponItemIds: string[]): string {
         .map((weapon) => createWeaponVariableCode(weapon));
 
     return `
-from abstracts import _emit
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
 
 
 class _WeaponRefBase:
     def __init__(self, item_id):
         self.item_id = item_id
 
-    def use(self, target_name="Enemy"):
-        return _emit("shop.weapon.use", {"itemId": self.item_id, "target": target_name})
-
-    def attack(self, target_name="Enemy"):
-        return self.use(target_name)
+    def strike(self):
+        return _emit("shop.weapon.use", {"itemId": self.item_id})
 
 
 ${lines.join("\n\n")}
@@ -207,7 +204,8 @@ export function buildPickedupModuleCode(input: PickedupModuleInput): string {
     const lines = buildPickedupSymbolLines(input);
 
     return `
-from abstracts import _emit
+def _emit(event_name, payload=None):
+    return __pyquest_callback(event_name, payload)
 
 
 class _ConsumableRef:
@@ -217,30 +215,21 @@ class _ConsumableRef:
     def consume(self):
         return _emit("shop.consumable.use", {"itemId": self.item_id})
 
-    def use(self):
-        return self.consume()
-
 
 class _WeaponRefBase:
     def __init__(self, item_id):
         self.item_id = item_id
 
-    def use(self, target_name="Enemy"):
-        return _emit("shop.weapon.use", {"itemId": self.item_id, "target": target_name})
-
-    def attack(self, target_name="Enemy"):
-        return self.use(target_name)
+    def strike(self):
+        return _emit("shop.weapon.use", {"itemId": self.item_id})
 
 
 class _ArmorRef:
     def __init__(self, item_id):
         self.item_id = item_id
 
-    def equip(self):
-        return _emit("player.equip", {"item": self.item_id})
-
-    def use(self):
-        return self.equip()
+    def activate(self):
+        return _emit("pickedup.armor.activate", {"itemId": self.item_id})
 
 
 ${lines.join("\n\n")}

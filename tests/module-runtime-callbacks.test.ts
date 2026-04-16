@@ -42,7 +42,7 @@ player.unequip()
         expect(goToEvent?.payload).toEqual({ locationId: 'village' });
     });
 
-    it('supports player and combat abstraction callbacks', async () => {
+    it('supports remaining exploration callbacks', async () => {
         const events: PythonModuleCallEvent[] = [];
 
         setPythonRuntimeHooks({
@@ -52,24 +52,16 @@ player.unequip()
         });
 
         await runPython(`
-gain_hp(25)
-take_damage(8)
-gain_coins(3)
-gain_xp(17)
-combat(True)
-target_enemy(False)
-log("script-hook")
+scavenge()
+    explore()
+player.unequip()
         `);
 
         expect(events.map((event) => event.name)).toEqual(
             expect.arrayContaining([
-                'player.gain_hp',
-                'player.take_damage',
-                'player.gain_coins',
-                'player.gain_xp',
-                'game.combat',
-                'game.is_enemy',
-                'terminal.log'
+                'builtin.scavenge',
+                'builtin.explore',
+                'player.unequip'
             ])
         );
     });
@@ -110,7 +102,6 @@ goTo("forest")
         });
 
         await runPython(`
-set_delay(10)
 counter = 0
 while counter < 1: # delay=120
     print(counter) # delay=40

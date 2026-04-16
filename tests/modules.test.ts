@@ -14,7 +14,8 @@ describe('Custom Module System', () => {
     });
 
     it('registers the user module in order', () => {
-        expect(getAvailableModules()).toEqual(expect.arrayContaining(['user.weapons', 'pickedup']));
+        expect(getAvailableModules()).toEqual(expect.arrayContaining(['pickedup']));
+        expect(getAvailableModules()).not.toEqual(expect.arrayContaining(['user.weapons', 'spear', 'inventory', 'magic', 'utils', 'weapon', 'consumable']));
     });
 
     it('locks pickedup imports when item is not in pickedup folder', () => {
@@ -41,63 +42,50 @@ health_potion.consume()
         expect(output).not.toContain('Error');
     });
 
+    it('supports pickedup weapon methods without parameters in enemy combat', async () => {
+        useInventoryStore.getState().addInventoryItem('pickedup_folder', {
+            id: 'pickedup-weapon-great-forests-wand',
+            kind: 'weapon',
+            itemId: 'great_forests_wand',
+            name: 'great_forests_wand'
+        });
+        useGameStore.setState({ inCombat: true, isEnemy: true });
+
+        const output = await runPython(`
+from pickedup import great_forests_wand
+great_forests_wand.strike()
+great_forests_wand.heal()
+        `);
+
+        expect(output).not.toContain('Error');
+    });
+
+    it('supports pickedup armor activation without parameters', async () => {
+        useInventoryStore.getState().addInventoryItem('pickedup_folder', {
+            id: 'pickedup-armor-academy-hat',
+            kind: 'armor',
+            itemId: 'academy_hat',
+            name: 'academy_hat'
+        });
+
+        const output = await runPython(`
+from pickedup import academy_hat
+academy_hat.activate()
+        `);
+
+        expect(output).not.toContain('Error');
+    });
+
     it('keeps internal support modules unavailable for import', () => {
         expect(isModuleWhitelisted('builtin')).toBe(false);
         expect(isModuleWhitelisted('abstracts')).toBe(false);
     });
 
-    it('allows user module imports', () => {
-        const result = validatePythonCodeDetailed('from user.weapons import spear');
-        expect(result.valid).toBe(true);
-        expect(result.errors).toHaveLength(0);
-    });
-
-    it('locks weapon imports until purchase and enemy battle', () => {
-        const lockedResult = validatePythonCodeDetailed('from weapon import wooden_wand');
-        expect(lockedResult.valid).toBe(false);
-
-        useInventoryStore.setState({ purchasedWeaponIds: ['wooden_wand'] });
-        useGameStore.setState({ inCombat: true, isEnemy: true });
-
-        const unlockedResult = validatePythonCodeDetailed('from weapon import wooden_wand');
-        expect(unlockedResult.valid).toBe(true);
-        expect(unlockedResult.errors).toHaveLength(0);
-    });
-
-    it('locks consumable imports until purchase and enemy battle', () => {
-        const lockedResult = validatePythonCodeDetailed('from consumable import health_potion');
-        expect(lockedResult.valid).toBe(false);
-
-        useInventoryStore.setState({ purchasedConsumableIds: ['health_potion'] });
-        useGameStore.setState({ inCombat: true, isEnemy: true });
-
-        const unlockedResult = validatePythonCodeDetailed('from consumable import health_potion');
-        expect(unlockedResult.valid).toBe(true);
-        expect(unlockedResult.errors).toHaveLength(0);
-    });
-
-    it('supports consumable consume() style after unlock', async () => {
-        useInventoryStore.setState({ purchasedConsumableIds: ['health_potion'] });
-        useGameStore.setState({ inCombat: true, isEnemy: true });
-
-        const output = await runPython(`
-from consumable import health_potion
-health_potion.consume()
-        `);
-
-        expect(output).not.toContain('Error');
-    });
-
-    it('supports named weapon skill methods after unlock', async () => {
-        useInventoryStore.setState({ purchasedWeaponIds: ['great_forests_wand'] });
-        useGameStore.setState({ inCombat: true, isEnemy: true });
-
-        const output = await runPython(`
-from weapon import great_forests_wand
-    great_forests_wand.heal("Enemy")
-        `);
-
-        expect(output).not.toContain('Error');
+    it('blocks legacy shop module imports', () => {
+        const lockedWeapon = validatePythonCodeDetailed('from weapon import wooden_wand');
+        expect(lockedWeapon.valid).toBe(false);
+        const lockedConsumable = validatePythonCodeDetailed('from consumable import health_potion');
+        expect(lockedConsumable.valid).toBe(false);
     });
 
     it('blocks internal module imports', () => {
@@ -106,10 +94,8 @@ from weapon import great_forests_wand
         expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('runs builtin helpers without explicit imports', async () => {
+    it('runs allowed builtin helpers without explicit imports', async () => {
         const output = await runPython(`
-from user.weapons import spear
-
 goTo("village")
 print("Buy")
         `);
@@ -119,31 +105,29 @@ print("Buy")
 
     it('exposes module documentation entries', () => {
         const documentation = getModuleDocumentation();
-        expect(documentation.some((module) => module.name === 'user.weapons')).toBe(true);
+        expect(documentation.some((module) => module.name === 'pickedup')).toBe(true);
     });
 
     it('unloads a specific module and blocks its imports', () => {
-        const removed = unloadModule('user.weapons');
+        const removed = unloadModule('pickedup');
 
         expect(removed).toBe(true);
-        expect(getAvailableModules()).not.toContain('user.weapons');
+        expect(getAvailableModules()).not.toContain('pickedup');
 
-        const result = validatePythonCodeDetailed('from user.weapons import spear');
+        const result = validatePythonCodeDetailed('from pickedup import health_potion');
         expect(result.valid).toBe(false);
         expect(result.errors.length).toBeGreaterThan(0);
     });
 
     it('unloads selected modules and can load them back', () => {
-        const removedModules = unloadModules(['inventory', 'magic', 'missing.module']);
-        expect(removedModules).toEqual(['inventory', 'magic']);
-        expect(getAvailableModules()).not.toContain('inventory');
-        expect(getAvailableModules()).not.toContain('magic');
+        const removedModules = unloadModules(['pickedup', 'missing.module']);
+        expect(removedModules).toEqual(['pickedup']);
+        expect(getAvailableModules()).not.toContain('pickedup');
 
-        const reloaded = customModules.filter((module) => module.name === 'inventory' || module.name === 'magic');
+        const reloaded = customModules.filter((module) => module.name === 'pickedup');
         loadModules(reloaded);
 
-        expect(getAvailableModules()).toContain('inventory');
-        expect(getAvailableModules()).toContain('magic');
+        expect(getAvailableModules()).toContain('pickedup');
     });
 
     it('loads a brand-new module not included in initial modules', async () => {

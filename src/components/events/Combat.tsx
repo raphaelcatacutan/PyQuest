@@ -72,7 +72,21 @@ export default function Combat() {
 
     if (latestBounty.questLevel >= maxQuestLevel) {
       latestBounty.setHeader("All bounty quests are complete.");
-      latestBounty.toggleDisplayBountyQuest(true);
+      latestBounty.toggleDisplayBountyQuest(false);
+
+      const tutorial = useTutorialStore.getState();
+      const finalPhaseIndex = tutorial.sequence.findIndex((phase) => phase.phase === "phase-7");
+
+      if (finalPhaseIndex >= 0) {
+        const alreadyCompletedFinalPhase =
+          tutorial.isCompleted && tutorial.currentPhaseIndex === finalPhaseIndex;
+
+        if (!alreadyCompletedFinalPhase) {
+          tutorial.skipToPhase(finalPhaseIndex);
+          tutorial.toggleIsTutorial(true);
+        }
+      }
+
       return;
     }
 

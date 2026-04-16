@@ -139,8 +139,12 @@ export const useTutorialStore = create<TutorialStoreProps>()(
             hasStoredProgress: true,
           });
         } else {
-          useBountyQuestStore.getState().setHeader("New bounty quests are available.");
-          useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
+          const isFreeRoamPhase = currentPhase.phase === "phase-7";
+          if (!isFreeRoamPhase) {
+            useBountyQuestStore.getState().setHeader("New bounty quests are available.");
+            useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
+          }
+
           set({
             isTutorial: false,
             blockedReason: "",

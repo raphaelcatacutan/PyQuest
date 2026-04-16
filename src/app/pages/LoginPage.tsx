@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { usePlayerStore } from "@/src/game/store";
+import { useGuideStore, usePlayerStore } from "@/src/game/store";
 import { useState } from "react";
 import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
@@ -25,6 +25,7 @@ export default function LoginPage() {
   )
   const initSounds = useSoundStore(s => s.initSounds)
   const playMusic = useSoundStore(s => s.playMusic)
+  const toggleGuide = useGuideStore(s => s.toggleGuide)
 
   const proceedToGame = async (usernameToProcess: string) => {
     setUserId(usernameToProcess);
@@ -60,6 +61,7 @@ export default function LoginPage() {
     if (registerUser(pendingUsername)) {
       setShowConfirmDialog(false);
       setUsername("");
+      toggleGuide(true);
       await proceedToGame(pendingUsername);
     } else {
       showToast({ variant: "error", message: "Failed to create account" });

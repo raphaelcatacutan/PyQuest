@@ -6,6 +6,7 @@
     { "targetId": "code-editor", "text": "This is your Code Editor—where logic becomes power. Type your commands here." },
     { "targetId": "status-bar", "text": "Your Health and Energy. Keep an eye on these; syntax errors can be draining." },
     { "targetId": "lvl-bar", "text": "This is your Level. Grow your knowledge to unlock more complex syntax." },
-    { "targetId": "bounty-quest", "text": "Your bounty quest. Accomplish the tasks to proceed to the next level." },
+    { "targetId": "bounty-quest", "text": "Access the bounty quest to check your remaining tasks before leveling up." },
+    { "targetId": "bounty-quest", "text": "If ever you feel confused with the interface, just toggle the Guide button." },
     { "targetId": "origin", "text": "The environment is initialized. Good luck surviving the logic ahead!" }
 ]

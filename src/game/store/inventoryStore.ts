@@ -39,14 +39,15 @@ const InitialPlayerInventory: InventoryNode[] = [
     kind: "folder", 
     name: "user", 
     children: [
-      { id: "init_file_root", kind: "util", itemId: "init_file_wp" , name: "init.py" },
-      { id: "wp_folder", kind: "folder", name: "weapons", children: [{ id: "init_file_wp", kind: "util", itemId: "init_file_wp" , name: "init.py" }]},   
-      { id: "arm_folder", kind: "folder", name: "armors", children: [{ id: "init_file_arm", kind: "util", itemId: "init_file_arm" , name: "init.py" }]},    
-      { id: "cons_folder", kind: "folder", name: "consumables", children: [{ id: "init_file_cons", kind: "util", itemId: "init_file_cons" , name: "init.py" }]},   
+      { id: "init_file_root", kind: "util", itemId: "init_file_wp" , name: "__init__.py" },
+      { id: "main_root", kind: "misc", itemId: "main_file" , name: "main.py" },
+      { id: "wp_folder", kind: "folder", name: "weapons", children: [{ id: "init_file_wp", kind: "util", itemId: "init_file_wp" , name: "__init__.py" }]},   
+      { id: "arm_folder", kind: "folder", name: "armors", children: [{ id: "init_file_arm", kind: "util", itemId: "init_file_arm" , name: "__init__.py" }]},    
+      { id: "cons_folder", kind: "folder", name: "consumables", children: [{ id: "init_file_cons", kind: "util", itemId: "init_file_cons" , name: "__init__.py" }]},   
     ]
   },
   { id: "misc_folder", kind: "folder", name: "miscellaneous", children: [
-    { id: "init_file_misc", kind: "util", itemId: "init_file_misc" , name: "init.py" },
+    { id: "init_file_misc", kind: "util", itemId: "init_file_misc" , name: "__init__.py" },
     { id: "handbook", kind: "util", itemId: "handboom_misc" , name: "handbook.py" },
     { id: "abilities", kind: "util", itemId: "abilities_misc" , name: "abilities.py" },
   ]},   

@@ -1,4 +1,5 @@
-import { useBossStore, useDungeonStore, useEnemyStore, useGameStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore, useTutorialStore } from "../../game/store";
+import { useBossStore, useBountyQuestStore, useDungeonStore, useEnemyStore, useGameStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore, useTutorialStore } from "../../game/store";
+import { MachineProblems } from "../../game/data/mps";
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { PythonModuleCallEvent } from "./parser";
 import statementDamageTable from "./damage.json";
@@ -19,6 +20,12 @@ const SCENE_VALUES: SceneTypes[] = [
 ];
 
 const SCENE_SET = new Set<string>(SCENE_VALUES);
+
+const MACHINE_PROBLEM_PLACES: SceneTypes[] = Object.keys(MachineProblems)
+    .map((scene) => scene.trim().toLowerCase())
+    .filter(isSceneType);
+
+const MACHINE_PROBLEM_PLACE_SET = new Set<string>(MACHINE_PROBLEM_PLACES);
 
 type StatementMechanics = {
     damage: number;
@@ -79,6 +86,23 @@ function readBoolean(payload: unknown, key: string, fallback = false): boolean {
 
 function isSceneType(scene: string): scene is SceneTypes {
     return SCENE_SET.has(scene);
+}
+
+function normalizeQuestLevel(level: unknown): number {
+    if (typeof level !== "number" || !Number.isFinite(level)) {
+        return 1;
+    }
+
+    return Math.max(1, Math.floor(level));
+}
+
+function getUnlockedPlacesByQuestLevel(level: number): SceneTypes[] {
+    if (MACHINE_PROBLEM_PLACES.length === 0) {
+        return [];
+    }
+
+    const unlockedCount = Math.min(level, MACHINE_PROBLEM_PLACES.length);
+    return MACHINE_PROBLEM_PLACES.slice(0, unlockedCount);
 }
 
 function appendRuntimeLog(message: string): void {
@@ -173,9 +197,22 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             }
 
             const locationId = readString(payload, "locationId", "").trim().toLowerCase();
+            const questLevel = normalizeQuestLevel(useBountyQuestStore.getState().questLevel);
+            const unlockedPlaces = getUnlockedPlacesByQuestLevel(questLevel);
 
             if (!isSceneType(locationId)) {
                 appendRuntimeLog(`Unknown scene '${locationId}'.`);
+                return;
+            }
+
+            if (!MACHINE_PROBLEM_PLACE_SET.has(locationId)) {
+                appendRuntimeLog(`'${locationId}' is not a goTo() destination.`);
+                return;
+            }
+
+            if (!unlockedPlaces.includes(locationId)) {
+                const unlockedText = unlockedPlaces.length > 0 ? unlockedPlaces.join(", ") : "none";
+                appendRuntimeLog(`'${locationId}' is locked for level ${questLevel}. Unlocked places: ${unlockedText}.`);
                 return;
             }
 

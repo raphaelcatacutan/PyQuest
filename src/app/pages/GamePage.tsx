@@ -28,6 +28,7 @@ import Dungeon from "@/src/components/events/Dungeon";
 import Trials from "@/src/components/events/Trials";
 import NPC from "@/src/components/events/NPC";
 import Tutorial from "@/src/components/events/Tutorial";
+import { Info } from "@/src/components/ui/Info"
 import { loadBountyProfile } from "@/src/game/store";
 import { loadKillProfile } from "@/src/game/store/killTrackerStore";
 
@@ -192,7 +193,7 @@ export default function GamePage() {
         {/* body div */}
         <CodeEditor />
         <div id="scene" className="relative flex h-full w-full bg-black">
-          {" "}
+          <Info/>
           {/* scene */}
           <NPC />
           <Trials />

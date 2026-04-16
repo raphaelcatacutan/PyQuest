@@ -19,7 +19,18 @@ const SCENE_VALUES: SceneTypes[] = [
 ];
 
 const SCENE_SET = new Set<string>(SCENE_VALUES);
-const STATEMENT_DAMAGE = statementDamageTable as Record<string, number>;
+
+type StatementMechanics = {
+    damage: number;
+    energyCost: number;
+};
+
+const DEFAULT_STATEMENT_MECHANICS: StatementMechanics = {
+    damage: 0,
+    energyCost: 0
+};
+
+const STATEMENT_MECHANICS = statementDamageTable as Record<string, StatementMechanics>;
 
 function readPayload(payload: unknown): Record<string, unknown> {
     if (payload && typeof payload === "object") {
@@ -114,14 +125,41 @@ function applyPlayerAttackDamage(damage: number): void {
     appendRuntimeLog(`Boss took ${damage} damage.`);
 }
 
-function resolveStatementDamage(statementType: string): number {
-    const rawValue = STATEMENT_DAMAGE[statementType] ?? STATEMENT_DAMAGE.Statement ?? 0;
-
-    if (typeof rawValue !== "number" || !Number.isFinite(rawValue)) {
+function normalizeNonNegativeInt(value: unknown): number {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
         return 0;
     }
 
-    return Math.max(0, Math.floor(rawValue));
+    return Math.max(0, Math.floor(value));
+}
+
+function resolveStatementMechanics(statementType: string): StatementMechanics {
+    const rawValue = STATEMENT_MECHANICS[statementType] ?? STATEMENT_MECHANICS.Statement ?? DEFAULT_STATEMENT_MECHANICS;
+
+    if (!rawValue || typeof rawValue !== "object") {
+        return DEFAULT_STATEMENT_MECHANICS;
+    }
+
+    return {
+        damage: normalizeNonNegativeInt(rawValue.damage),
+        energyCost: normalizeNonNegativeInt(rawValue.energyCost)
+    };
+}
+
+function trySpendPlayerEnergy(cost: number): boolean {
+    if (cost <= 0) {
+        return true;
+    }
+
+    const player = usePlayerStore.getState();
+    const availableEnergy = normalizeNonNegativeInt(player.energy);
+
+    if (availableEnergy < cost) {
+        return false;
+    }
+
+    player.spendEnergy(cost);
+    return true;
 }
 
 export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
@@ -226,11 +264,18 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             const statementType = readString(payload, "statementType", "Statement");
             const lineNumber = Math.max(0, readNumber(payload, "lineNumber", 0));
             const delayValue = Math.max(0, readNumber(payload, "delayMs", 0));
+            const statementMechanics = resolveStatementMechanics(statementType);
             const delaySuffix = delayValue > 0 ? ` | delay ${delayValue}ms` : "";
-            appendRuntimeLog(`[TRACE] ${statementType} @ line ${lineNumber}${delaySuffix}`);
+            const energySuffix = statementMechanics.energyCost > 0 ? ` | energy ${statementMechanics.energyCost}` : "";
+            appendRuntimeLog(`[TRACE] ${statementType} @ line ${lineNumber}${delaySuffix}${energySuffix}`);
 
-            const statementDamage = resolveStatementDamage(statementType);
-            applyPlayerAttackDamage(statementDamage);
+            const hasSpentEnergy = trySpendPlayerEnergy(statementMechanics.energyCost);
+            if (!hasSpentEnergy) {
+                appendRuntimeLog(`Insufficient energy for ${statementType} (required ${statementMechanics.energyCost}).`);
+                return;
+            }
+
+            applyPlayerAttackDamage(statementMechanics.damage);
             return;
         }
 

@@ -1,7 +1,12 @@
-import { useBossStore, useBountyQuestStore, useDungeonStore, useEnemyStore, useGameStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore, useTutorialStore } from "../../game/store";
+import { useBossStore, useBountyQuestStore, useDungeonStore, useEnemyStore, useGameStore, useInventoryStore, usePlayerStore, useSceneStore, useTerminalStore, useTrialsStore, useTutorialStore } from "../../game/store";
 import { MachineProblems } from "../../game/data/mps";
+import { Consumables } from "../../game/data/consumables";
+import { Weapons } from "../../game/data/weapons";
+import type { Consumable } from "../../game/types/consumable.types";
 import type { SceneTypes } from "../../game/types/scene.types";
+import type { Weapon } from "../../game/types/weapon.types";
 import type { PythonModuleCallEvent } from "./parser";
+import { getWeaponSkillMethodEntries, normalizeItemId } from "./shop-item-modules";
 import statementDamageTable from "./damage.json";
 
 const SCENE_VALUES: SceneTypes[] = [
@@ -195,6 +200,218 @@ function trySpendPlayerEnergy(cost: number): boolean {
     return true;
 }
 
+function isEnemyCombatActive(): boolean {
+    const gameState = useGameStore.getState();
+    return gameState.inCombat && gameState.isEnemy;
+}
+
+function isPurchasedWeapon(itemId: string): boolean {
+    const normalizedItemId = normalizeItemId(itemId);
+    return useInventoryStore.getState().purchasedWeaponIds
+        .map((purchasedItemId) => normalizeItemId(purchasedItemId))
+        .includes(normalizedItemId);
+}
+
+function isPurchasedConsumable(itemId: string): boolean {
+    const normalizedItemId = normalizeItemId(itemId);
+    return useInventoryStore.getState().purchasedConsumableIds
+        .map((purchasedItemId) => normalizeItemId(purchasedItemId))
+        .includes(normalizedItemId);
+}
+
+function applyEnemyDamage(damage: number): void {
+    if (damage <= 0) {
+        return;
+    }
+
+    useEnemyStore.getState().takeDamage(damage);
+    appendRuntimeDebug("enemy took item damage", { damage });
+}
+
+function computeWeaponModifierDamageDelta(weapon: Weapon): number {
+    return weapon.modifiers
+        .filter((modifier) => modifier.stat === "dmg")
+        .reduce((total, modifier) => {
+            const value = Number.isFinite(modifier.value) ? modifier.value : 0;
+            return total + (modifier.nature === "penalty" ? -value : value);
+        }, 0);
+}
+
+function applyWeaponInflictions(weapon: Weapon): number {
+    return weapon.inflictions.reduce((totalBonusDamage, infliction) => {
+        const durationSeconds = infliction.duration > 100
+            ? Math.max(1, Math.floor(infliction.duration / 1000))
+            : Math.max(1, Math.floor(infliction.duration));
+
+        if (infliction.type === "stun") {
+            useEnemyStore.getState().takeEnergyCost(Math.max(1, durationSeconds));
+            appendRuntimeDebug("weapon infliction applied", {
+                type: infliction.type,
+                duration: infliction.duration
+            });
+            return totalBonusDamage;
+        }
+
+        const basePerSecond = infliction.type === "burn" ? 3 : 2;
+        const expectedDamage = Math.max(0, Math.round(basePerSecond * durationSeconds * infliction.chance));
+
+        if (expectedDamage > 0) {
+            appendRuntimeDebug("weapon infliction applied", {
+                type: infliction.type,
+                duration: infliction.duration,
+                chance: infliction.chance,
+                expectedDamage
+            });
+        }
+
+        return totalBonusDamage + expectedDamage;
+    }, 0);
+}
+
+function resolveWeaponSkillIndex(weapon: Weapon, skillName: string, fallbackSkillIndex: number): number {
+    if (skillName.length === 0) {
+        return fallbackSkillIndex;
+    }
+
+    const skillEntry = getWeaponSkillMethodEntries(weapon)
+        .find((entry) => entry.methodName === skillName);
+
+    if (!skillEntry) {
+        return fallbackSkillIndex;
+    }
+
+    return skillEntry.skillIndex;
+}
+
+function applyWeaponSkill(itemId: string, weapon: Weapon, skillName: string, fallbackSkillIndex: number): void {
+    const skillIndex = resolveWeaponSkillIndex(weapon, skillName, fallbackSkillIndex);
+    const skill = weapon.skills[skillIndex];
+    if (!skill) {
+        appendTerminalLog(`${itemId} has no skill named '${skillName || "skill"}'.`);
+        return;
+    }
+
+    const energyCost = Math.max(0, Math.floor(skill.energyCost));
+    if (!trySpendPlayerEnergy(energyCost)) {
+        appendTerminalLog(`Not enough energy to use ${itemId} skill '${skill.name}'.`);
+        return;
+    }
+
+    switch (skill.effect.type) {
+        case "damage": {
+            applyEnemyDamage(Math.max(0, Math.floor(skill.effect.value)));
+            break;
+        }
+
+        case "heal": {
+            usePlayerStore.getState().gainHP(Math.max(0, Math.floor(skill.effect.value)));
+            break;
+        }
+
+        case "stun": {
+            const durationValue = skill.effect.duration ?? skill.effect.value;
+            const energyDrain = durationValue > 100
+                ? Math.max(1, Math.floor(durationValue / 1000))
+                : Math.max(1, Math.floor(durationValue));
+            useEnemyStore.getState().takeEnergyCost(energyDrain);
+            break;
+        }
+
+        case "bleed": {
+            const durationValue = skill.effect.duration ?? 1;
+            const durationSeconds = durationValue > 100
+                ? Math.max(1, Math.floor(durationValue / 1000))
+                : Math.max(1, Math.floor(durationValue));
+            const bleedDamage = Math.max(0, Math.floor(skill.effect.value)) * durationSeconds;
+            applyEnemyDamage(bleedDamage);
+            break;
+        }
+
+        default: {
+            break;
+        }
+    }
+
+    appendRuntimeDebug("weapon skill used", {
+        itemId,
+        skillIndex,
+        requestedSkillName: skillName,
+        resolvedSkillName: skill.name,
+        effectType: skill.effect.type,
+        effectValue: skill.effect.value,
+        energyCost
+    });
+}
+
+function applyConsumableEffects(itemId: string, consumable: Consumable): void {
+    const player = usePlayerStore.getState();
+
+    for (const effect of consumable.effects) {
+        if (effect.type === "restore") {
+            if (effect.stat === "hp") {
+                player.gainHP(Math.max(0, Math.floor(effect.amount)));
+                continue;
+            }
+
+            if (effect.stat === "energy") {
+                player.gainEnergy(Math.max(0, Math.floor(effect.amount)));
+                continue;
+            }
+
+            if (effect.stat === "def") {
+                player.gainDef(Math.max(0, Math.floor(effect.amount)));
+                continue;
+            }
+        }
+
+        if (effect.type === "buff") {
+            const multiplier = Number.isFinite(effect.multiplier) ? effect.multiplier : 1;
+            if (multiplier <= 1) {
+                continue;
+            }
+
+            if (effect.stat === "dmg") {
+                const damageBoost = Math.max(1, Math.floor(player.baseDmg * (multiplier - 1)));
+                player.setDamage(damageBoost);
+                continue;
+            }
+
+            if (effect.stat === "def") {
+                const defenseBoost = Math.max(1, Math.floor(Math.max(1, player.def) * (multiplier - 1)));
+                player.gainDef(defenseBoost);
+                continue;
+            }
+
+            if (effect.stat === "speed") {
+                const speedBoost = Math.max(1, Math.floor(player.atkSpeed * (1 - (1 / multiplier))));
+                player.setAtkSpeed(-speedBoost);
+                continue;
+            }
+        }
+
+        if (effect.type === "debuff") {
+            const amount = Math.max(0, Math.floor(effect.amount));
+
+            if (effect.stat === "hp") {
+                applyEnemyDamage(amount);
+                continue;
+            }
+
+            if (effect.stat === "energy") {
+                useEnemyStore.getState().takeEnergyCost(amount);
+                continue;
+            }
+
+            if (effect.stat === "speed") {
+                useEnemyStore.getState().takeEnergyCost(Math.max(1, Math.floor(amount / 2)));
+                continue;
+            }
+        }
+    }
+
+    appendRuntimeDebug("consumable used", { itemId, effectCount: consumable.effects.length });
+}
+
 export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
     const payload = event.payload;
 
@@ -335,6 +552,111 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
         case "spear.pierce": {
             const damage = Math.max(0, readNumber(payload, "damage", 0));
             applyPlayerAttackDamage(damage);
+            return;
+        }
+
+        case "shop.weapon.use": {
+            const itemId = normalizeItemId(readString(payload, "itemId", ""));
+
+            if (itemId.length === 0) {
+                appendTerminalLog("Weapon use failed: missing item id.");
+                return;
+            }
+
+            if (!isEnemyCombatActive()) {
+                appendTerminalLog(`'${itemId}' can only be used during enemy combat.`);
+                return;
+            }
+
+            if (!isPurchasedWeapon(itemId)) {
+                appendTerminalLog(`'${itemId}' is not unlocked. Purchase it from the shop first.`);
+                return;
+            }
+
+            const weapon = Weapons[itemId];
+            if (!weapon) {
+                appendTerminalLog(`Weapon '${itemId}' is not registered.`);
+                return;
+            }
+
+            const weaponEnergyCost = Math.max(0, Math.floor(weapon.energyCostPerSwing));
+            if (!trySpendPlayerEnergy(weaponEnergyCost)) {
+                appendTerminalLog(`Not enough energy to use '${itemId}'.`);
+                return;
+            }
+
+            const basePlayerDamage = Math.max(0, Math.floor(usePlayerStore.getState().baseDmg));
+            const modifierDelta = computeWeaponModifierDamageDelta(weapon);
+            const inflictionBonusDamage = applyWeaponInflictions(weapon);
+            const totalDamage = Math.max(0, Math.floor(weapon.baseDmg + basePlayerDamage + modifierDelta + inflictionBonusDamage));
+
+            applyEnemyDamage(totalDamage);
+            appendRuntimeDebug("shop weapon used", {
+                itemId,
+                totalDamage,
+                energyCost: weaponEnergyCost,
+                basePlayerDamage,
+                modifierDelta,
+                inflictionBonusDamage
+            });
+            return;
+        }
+
+        case "shop.weapon.skill": {
+            const itemId = normalizeItemId(readString(payload, "itemId", ""));
+            const skillName = readString(payload, "skillName", "").trim().toLowerCase();
+            const skillIndex = Math.max(0, Math.floor(readNumber(payload, "skillIndex", 0)));
+
+            if (itemId.length === 0) {
+                appendTerminalLog("Weapon skill failed: missing item id.");
+                return;
+            }
+
+            if (!isEnemyCombatActive()) {
+                appendTerminalLog(`'${itemId}' skill can only be used during enemy combat.`);
+                return;
+            }
+
+            if (!isPurchasedWeapon(itemId)) {
+                appendTerminalLog(`'${itemId}' is not unlocked. Purchase it from the shop first.`);
+                return;
+            }
+
+            const weapon = Weapons[itemId];
+            if (!weapon) {
+                appendTerminalLog(`Weapon '${itemId}' is not registered.`);
+                return;
+            }
+
+            applyWeaponSkill(itemId, weapon, skillName, skillIndex);
+            return;
+        }
+
+        case "shop.consumable.use": {
+            const itemId = normalizeItemId(readString(payload, "itemId", ""));
+
+            if (itemId.length === 0) {
+                appendTerminalLog("Consumable use failed: missing item id.");
+                return;
+            }
+
+            if (!isEnemyCombatActive()) {
+                appendTerminalLog(`'${itemId}' can only be consumed during enemy combat.`);
+                return;
+            }
+
+            if (!isPurchasedConsumable(itemId)) {
+                appendTerminalLog(`'${itemId}' is not unlocked. Purchase it from the shop first.`);
+                return;
+            }
+
+            const consumable = Consumables[itemId];
+            if (!consumable) {
+                appendTerminalLog(`Consumable '${itemId}' is not registered.`);
+                return;
+            }
+
+            applyConsumableEffects(itemId, consumable);
             return;
         }
 

@@ -3,6 +3,7 @@
  */
 
 import type { CustomModule } from './parser';
+import { generatedConsumableModules, generatedWeaponModules } from './shop-item-modules';
 
 export const builtinModule: CustomModule = {
     name: 'builtin',
@@ -491,7 +492,9 @@ export const customModules: CustomModule[] = [
     spearModule,
     inventoryModule,
     magicModule,
-    utilsModule
+    utilsModule,
+    ...generatedWeaponModules,
+    ...generatedConsumableModules
 ];
 
 export const gameModules: CustomModule[] = customModules;

@@ -6,6 +6,8 @@ import type { Consumable } from "../../game/types/consumable.types";
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { Weapon } from "../../game/types/weapon.types";
 import type { PythonModuleCallEvent } from "./parser";
+import { resolveConsumableUseEnergyCost, resolveWeaponUseEnergyCost } from "./item-energy-costs";
+import { getUnlockedPickedupImportState } from "./runtime-module-gates";
 import { getWeaponSkillMethodEntries, normalizeItemId } from "./shop-item-modules";
 import statementDamageTable from "./damage.json";
 
@@ -207,16 +209,28 @@ function isEnemyCombatActive(): boolean {
 
 function isPurchasedWeapon(itemId: string): boolean {
     const normalizedItemId = normalizeItemId(itemId);
-    return useInventoryStore.getState().purchasedWeaponIds
+    const purchased = useInventoryStore.getState().purchasedWeaponIds
         .map((purchasedItemId) => normalizeItemId(purchasedItemId))
         .includes(normalizedItemId);
+
+    if (purchased) {
+        return true;
+    }
+
+    return getUnlockedPickedupImportState().weaponItemIds.includes(normalizedItemId);
 }
 
 function isPurchasedConsumable(itemId: string): boolean {
     const normalizedItemId = normalizeItemId(itemId);
-    return useInventoryStore.getState().purchasedConsumableIds
+    const purchased = useInventoryStore.getState().purchasedConsumableIds
         .map((purchasedItemId) => normalizeItemId(purchasedItemId))
         .includes(normalizedItemId);
+
+    if (purchased) {
+        return true;
+    }
+
+    return getUnlockedPickedupImportState().consumableItemIds.includes(normalizedItemId);
 }
 
 function applyEnemyDamage(damage: number): void {
@@ -579,7 +593,7 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
-            const weaponEnergyCost = Math.max(0, Math.floor(weapon.energyCostPerSwing));
+            const weaponEnergyCost = resolveWeaponUseEnergyCost(itemId, weapon.energyCostPerSwing);
             if (!trySpendPlayerEnergy(weaponEnergyCost)) {
                 appendTerminalLog(`Not enough energy to use '${itemId}'.`);
                 return;
@@ -656,7 +670,14 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
+            const consumableEnergyCost = resolveConsumableUseEnergyCost(itemId, 1);
+            if (!trySpendPlayerEnergy(consumableEnergyCost)) {
+                appendTerminalLog(`Not enough energy to consume '${itemId}'.`);
+                return;
+            }
+
             applyConsumableEffects(itemId, consumable);
+            appendRuntimeDebug("consumable energy spent", { itemId, energyCost: consumableEnergyCost });
             return;
         }
 

@@ -9,11 +9,36 @@ describe('Custom Module System', () => {
     beforeEach(() => {
         initializeModules();
         useGameStore.setState({ inCombat: false, isEnemy: true });
+        useInventoryStore.getState().resetInventory();
         useInventoryStore.setState({ purchasedWeaponIds: [], purchasedConsumableIds: [] });
     });
 
     it('registers the user module in order', () => {
-        expect(getAvailableModules()).toEqual(expect.arrayContaining(['user.weapons']));
+        expect(getAvailableModules()).toEqual(expect.arrayContaining(['user.weapons', 'pickedup']));
+    });
+
+    it('locks pickedup imports when item is not in pickedup folder', () => {
+        const result = validatePythonCodeDetailed('from pickedup import health_potion');
+        expect(result.valid).toBe(false);
+    });
+
+    it('allows pickedup imports when item exists in pickedup folder', async () => {
+        useInventoryStore.getState().addInventoryItem('pickedup_folder', {
+            id: 'pickedup-consumable-health-potion',
+            kind: 'consumable',
+            itemId: 'health_potion',
+            name: 'health_potion'
+        });
+
+        const result = validatePythonCodeDetailed('from pickedup import health_potion');
+        expect(result.valid).toBe(true);
+
+        const output = await runPython(`
+from pickedup import health_potion
+health_potion.consume()
+        `);
+
+        expect(output).not.toContain('Error');
     });
 
     it('keeps internal support modules unavailable for import', () => {
@@ -69,7 +94,7 @@ health_potion.consume()
 
         const output = await runPython(`
 from weapon import great_forests_wand
-great_forests_wand.heal_skill("Enemy")
+    great_forests_wand.heal("Enemy")
         `);
 
         expect(output).not.toContain('Error');

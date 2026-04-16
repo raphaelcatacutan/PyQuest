@@ -60,6 +60,7 @@ interface InventoryStoreProps {
   purchasedConsumableIds: string[];
   setPlayerId: (id: string) => void;
   addInventoryItem: (parentId: string | undefined, item: InventoryNode) => void;
+  setInventoryItemCode: (nodeId: string, code: string) => void;
   markItemPurchased: (item: InventoryNode) => void;
   deleteInventoryItem: (nodeId: string) => void;
   renameInventoryItem: (nodeId: string, newName: string) => void;
@@ -96,6 +97,24 @@ export const useInventoryStore = create<InventoryStoreProps>()(
           addToFolder(newInventory);
         }
         return { playerInventory: newInventory };
+      }),
+
+      setInventoryItemCode: (nodeId, code) => set((state) => {
+        const updateNodeCode = (items: InventoryNode[]): InventoryNode[] => {
+          return items.map((item) => {
+            if (item.kind === "folder") {
+              return { ...item, children: updateNodeCode(item.children) };
+            }
+
+            if (item.id === nodeId) {
+              return { ...item, code };
+            }
+
+            return item;
+          });
+        };
+
+        return { playerInventory: updateNodeCode(state.playerInventory) };
       }),
 
       markItemPurchased: (item) => set((state) => {

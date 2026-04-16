@@ -11,6 +11,7 @@ export type InventoryNode =
       kind: "weapon" | "armor" | "consumable" | "misc" | "util" | "function" | "" ;
       itemId: string;        // points to registry
       name: string;
+      code?: string;
       
       // Weapons and Armors
       cursed?: boolean;      

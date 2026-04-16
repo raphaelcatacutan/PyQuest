@@ -22,6 +22,7 @@ interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onAddFolder: (parentId?: string) => void;
   onAddFile: (parentId?: string) => void;
   onRename: (nodeId: string, newName: string) => void;
+  onOpenFile: (nodeId: string) => void;
   onSelect: (
     nodeId: string,
     isShiftClick: boolean,
@@ -48,6 +49,7 @@ export function PlayerInventoryNode({
   onAddFolder,
   onAddFile,
   onRename,
+  onOpenFile,
   onSelect,
   selectedNodeIds,
 }: PlayerInventoryNodeProps) {
@@ -108,11 +110,13 @@ export function PlayerInventoryNode({
   function handleDoubleClick(e: React.MouseEvent<HTMLDivElement>) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("PlayerInventoryNode double clicked:", {
-      id: node.id,
-      name: node.data.name,
-      kind: node.data.kind,
-    });
+
+    if (node.data.kind === "folder") {
+      node.toggle();
+      return;
+    }
+
+    onOpenFile(node.id);
   }
 
   // Track mouse coordinates

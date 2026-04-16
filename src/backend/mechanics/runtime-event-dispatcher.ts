@@ -3,6 +3,7 @@ import { MachineProblems } from "../../game/data/mps";
 import { Consumables } from "../../game/data/consumables";
 import { Weapons } from "../../game/data/weapons";
 import { Armors } from "../../game/data/armors";
+import type { Armor } from "../../game/types/armor.types";
 import type { Consumable } from "../../game/types/consumable.types";
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { Weapon } from "../../game/types/weapon.types";
@@ -232,6 +233,46 @@ function isPurchasedConsumable(itemId: string): boolean {
     }
 
     return getUnlockedPickedupImportState().consumableItemIds.includes(normalizedItemId);
+}
+
+function isImportedArmor(itemId: string): boolean {
+    const normalizedItemId = normalizeItemId(itemId);
+    return getUnlockedPickedupImportState().armorItemIds.includes(normalizedItemId);
+}
+
+function resolveArmorDefenseContribution(armor: Armor): number {
+    const baseDef = normalizeNonNegativeInt(armor.baseDef);
+    const modifierDelta = armor.modifiers
+        .filter((modifier) => modifier.stat === "def")
+        .reduce((total, modifier) => {
+            const value = normalizeNonNegativeInt(modifier.value);
+            return total + (modifier.nature === "penalty" ? -value : value);
+        }, 0);
+
+    return Math.max(0, baseDef + modifierDelta);
+}
+
+function resolveEquippedArmorDefense(headArmorId: string, bodyArmorId: string): number {
+    const headArmor = Armors[headArmorId];
+    const bodyArmor = Armors[bodyArmorId];
+    const headDefense = headArmor ? resolveArmorDefenseContribution(headArmor) : 0;
+    const bodyDefense = bodyArmor ? resolveArmorDefenseContribution(bodyArmor) : 0;
+
+    return Math.max(0, headDefense + bodyDefense);
+}
+
+function applyEquippedArmorSlots(headArmorId: string, bodyArmorId: string): void {
+    const player = usePlayerStore.getState();
+    const previousArmorDefense = normalizeNonNegativeInt(player.maxDef);
+    const nextArmorDefense = resolveEquippedArmorDefense(headArmorId, bodyArmorId);
+    const baseDefense = Math.max(0, normalizeNonNegativeInt(player.def) - previousArmorDefense);
+
+    usePlayerStore.setState({
+        headSlot: headArmorId,
+        bodySlot: bodyArmorId,
+        maxDef: nextArmorDefense,
+        def: Math.max(0, baseDefense + nextArmorDefense)
+    });
 }
 
 function applyEnemyDamage(damage: number): void {
@@ -741,8 +782,87 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             return;
         }
 
-        case "player.equip":
-        case "player.unequip":
+        case "player.equip": {
+            const itemId = normalizeItemId(readString(payload, "itemId", readString(payload, "item", "")));
+            const itemType = readString(payload, "itemType", "").trim().toLowerCase();
+
+            if (itemId.length === 0) {
+                appendTerminalLog("player.equip() failed: missing armor item id.");
+                return;
+            }
+
+            if (itemType !== "armor") {
+                appendTerminalLog("player.equip() only accepts imported armors.");
+                return;
+            }
+
+            if (!isImportedArmor(itemId)) {
+                appendTerminalLog(`'${itemId}' is not available in pickedup inventory.`);
+                return;
+            }
+
+            const armor = Armors[itemId];
+            if (!armor) {
+                appendTerminalLog(`Armor '${itemId}' is not registered.`);
+                return;
+            }
+
+            const player = usePlayerStore.getState();
+            const currentHeadSlot = normalizeItemId(player.headSlot);
+            const currentBodySlot = normalizeItemId(player.bodySlot);
+
+            if (armor.slotType === "head") {
+                applyEquippedArmorSlots(itemId, currentBodySlot);
+                appendRuntimeDebug("player armor equipped", { itemId, slotType: armor.slotType });
+                return;
+            }
+
+            if (armor.slotType === "body") {
+                applyEquippedArmorSlots(currentHeadSlot, itemId);
+                appendRuntimeDebug("player armor equipped", { itemId, slotType: armor.slotType });
+                return;
+            }
+
+            appendTerminalLog(`Armor '${itemId}' cannot be equipped.`);
+            return;
+        }
+
+        case "player.unequip": {
+            const itemId = normalizeItemId(readString(payload, "itemId", ""));
+            const itemType = readString(payload, "itemType", "").trim().toLowerCase();
+            const player = usePlayerStore.getState();
+            const currentHeadSlot = normalizeItemId(player.headSlot);
+            const currentBodySlot = normalizeItemId(player.bodySlot);
+
+            if (itemId.length === 0) {
+                applyEquippedArmorSlots("", "");
+                appendRuntimeDebug("player armor unequipped", { scope: "all" });
+                return;
+            }
+
+            if (itemType !== "armor") {
+                appendTerminalLog("player.unequip() only accepts imported armors.");
+                return;
+            }
+
+            if (!isImportedArmor(itemId)) {
+                appendTerminalLog(`'${itemId}' is not available in pickedup inventory.`);
+                return;
+            }
+
+            const nextHeadSlot = currentHeadSlot === itemId ? "" : currentHeadSlot;
+            const nextBodySlot = currentBodySlot === itemId ? "" : currentBodySlot;
+
+            if (nextHeadSlot === currentHeadSlot && nextBodySlot === currentBodySlot) {
+                appendTerminalLog(`'${itemId}' is not currently equipped.`);
+                return;
+            }
+
+            applyEquippedArmorSlots(nextHeadSlot, nextBodySlot);
+            appendRuntimeDebug("player armor unequipped", { itemId });
+            return;
+        }
+
         case "spear.repair":
         case "spear.create":
         case "builtin.roll_dice":

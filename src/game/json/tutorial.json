@@ -150,5 +150,18 @@
         "You’re no longer just writing code; you’re sculpting data. Use these new tools to navigate the instabilities of the Outer Rim.",
         "Off with ya! Don't let a ValueError be the end of your tale!"
       ]
+  },
+  {
+    "phase": "phase-7",
+    "instructions": [
+      "HEEEEAWDA! Champion, breathe it in. You have conquered every lesson carved into the halls of PyWorld.",
+      "From Variables to OOP, from loops to deep structures, your code now carries the weight of a true realm-walker.",
+      "But the world is not yet spotless. Stray bugs still crawl through the wilds, and they will not vanish on their own.",
+      "Your main training quests are complete. No new bounty scroll shall be forced upon you now.",
+      "From this point on, the road is yours: roam any unlocked land, hunt remaining enemies, and sharpen your instincts at your own pace.",
+      "If you wish, revisit the machine problems and solve them again. Great coders are forged by repetition, not luck.",
+      "Think of this as your free-roam chapter, adventurer. Explore, experiment, and write your own legend in this world.",
+      "Off with ya, Grand Debugger. The map is open, the bugs are restless, and your story no longer needs permission to continue."
+    ]
   }
 ]

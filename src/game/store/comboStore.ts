@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useSoundStore } from "./soundStore";
 
 const COMBO_DECAY_THRESHOLD_MS = 5000; // 5 seconds of inactivity before reset
 
@@ -22,6 +23,11 @@ export const useComboStore = create<ComboStore>((set, get) => ({
     // Example: Increase multiplier by 0.1 for every 5 hits
     const newMultiplier = 1 + Math.floor(newCount / 5) * 0.1;
     
+    if (state.count >= 9) { useSoundStore.getState().playSfx('combo4') } 
+    else if (state.count >= 5) { useSoundStore.getState().playSfx('combo3') } 
+    else if (state.count >= 2) { useSoundStore.getState().playSfx('combo2') } 
+    else if (state.count >= 1) { useSoundStore.getState().playSfx('combo1') }
+
     return {
       count: newCount,
       multiplier: Number(newMultiplier.toFixed(1)),

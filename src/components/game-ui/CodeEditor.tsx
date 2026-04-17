@@ -151,7 +151,7 @@ export default function CodeEditor() {
     return Array.from(modulesByName.values())
   }
 
-  function syncUserScriptModules(mainCode: string): number {
+  function syncUserScriptModules(mainCode: string): string[] {
     const moduleDefinitions = buildUserScriptModules(mainCode)
     const previouslyRegistered = registeredUserModuleNamesRef.current
     const existingModuleNames = new Set(getAllModules().map((moduleRecord) => moduleRecord.name))
@@ -159,6 +159,9 @@ export default function CodeEditor() {
     previouslyRegistered.forEach((moduleName) => existingModuleNames.delete(moduleName))
 
     const filteredDefinitions = moduleDefinitions.filter((moduleDefinition) => !existingModuleNames.has(moduleDefinition.name))
+    const skippedModuleNames = moduleDefinitions
+      .filter((moduleDefinition) => existingModuleNames.has(moduleDefinition.name))
+      .map((moduleDefinition) => moduleDefinition.name)
     const newNames = new Set(filteredDefinitions.map((moduleDefinition) => moduleDefinition.name))
 
     previouslyRegistered.forEach((moduleName) => {
@@ -182,7 +185,7 @@ export default function CodeEditor() {
 
     registeredUserModuleNamesRef.current = newNames
 
-    return moduleDefinitions.length - filteredDefinitions.length
+    return skippedModuleNames
   }
 
   function completeMachineProblemAndDefeatTarget(): void {
@@ -304,9 +307,9 @@ export default function CodeEditor() {
 
     runningRef.current = true;
 
-    const skippedModuleCount = syncUserScriptModules(code)
-    if (skippedModuleCount > 0) {
-      appendToLogs(`[PY]: ${skippedModuleCount} user module(s) were skipped due to name conflicts.`)
+    const skippedModuleNames = syncUserScriptModules(code)
+    if (skippedModuleNames.length > 0) {
+      console.info("[PY]: Skipped user modules due to name conflicts:", skippedModuleNames)
     }
 
     if (inCombat) {

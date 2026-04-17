@@ -1,5 +1,6 @@
 import { useShallow } from "zustand/shallow";
 import { useEnemyStore } from "@/src/game/store";
+import { use, useEffect, useRef, useState } from "react";
 
 export default function EnemyEncounter() {
   const { name, hp, maxHp, energy, maxEnergy, enemyImg, activeProblem } = useEnemyStore(
@@ -20,6 +21,19 @@ export default function EnemyEncounter() {
   const energyPercentage = (energy / safeMaxEnergy) * 100;
   const activeProblemText = activeProblem?.problem ?? "No machine problem available for this scene.";
 
+  const [isHurt, setIsHurt] = useState(false);
+  const prevHpRef = useRef(hp);
+
+  useEffect(() => {
+    // Trigger animation if HP decreased
+    if (hp < prevHpRef.current) {
+      setIsHurt(true);
+      const timer = setTimeout(() => setIsHurt(false), 300);
+      return () => clearTimeout(timer);
+    }
+    prevHpRef.current = hp;
+  }, [hp]);
+  
   return (
     <div className="absolute z-5 w-full h-full opacity-100">
       <div className="flex flex-col items-center justify-center h-full">
@@ -44,7 +58,10 @@ export default function EnemyEncounter() {
                 </div>
                 
                 <div className=" flex justify-center items-center">
-                  <img src={enemyImg} className="w-80 h-80" draggable={false}></img>
+                  <img 
+                    src={enemyImg} 
+                    className={`w-80 h-80 transition-transform ${isHurt ? "animate-monster-hurt" : ""}`} 
+                    draggable={false}/>
                 </div>
               </div>
               <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">

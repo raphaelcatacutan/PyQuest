@@ -30,16 +30,39 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
     activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
   }),
   
-  takeDamage: (amount: number) => set((state) => {
-    useSoundStore.getState().playSfx('hit')
+  takeDamage: (amount) => set((state) => {
+    // 1. Guard clause: If there is no enemy, do nothing
     if (!state.enemy) return {};
+
+    const newHp = Math.max(0, state.enemy.hp - amount);
+
+    // 2. Play Sound Effects
+    if (newHp > 0) { 
+      useSoundStore.getState().playSfx('hit'); 
+    } else { 
+      // Assuming 'death' or 'critical' exists in your SFX type
+      useSoundStore.getState().playSfx('critical'); 
+    }
+
+    // 3. Return the updated nested enemy object
     return {
       enemy: {
         ...state.enemy,
-        hp: Math.max(0, state.enemy.hp - amount),
-      },
+        hp: newHp
+      }
     };
   }),
+
+  // takeDamage: (amount: number) => set((state) => {
+  //   useSoundStore.getState().playSfx('hit')
+  //   if (!state.enemy) return {};
+  //   return {
+  //     enemy: {
+  //       ...state.enemy,
+  //       hp: Math.max(0, state.enemy.hp - amount),
+  //     },
+  //   };
+  // }),
 
   gainHp: (amount: number) => set((state) => {
     if (!state.enemy) return {};

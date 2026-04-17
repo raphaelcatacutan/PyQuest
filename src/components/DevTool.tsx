@@ -14,7 +14,8 @@ import {
   useTrialsStore,
   useTutorialStore,
   useNPCStore,
-  useKillTrackerStore
+  useKillTrackerStore,
+  useComboStore
 } from "../game/store"
 import { SceneTypes } from "../game/types/scene.types"
 import { useState } from "react"
@@ -119,6 +120,7 @@ export default function DevTool() {
       clearCombatLogs: s.clearLogs,
     })),
   );
+  const combo = useComboStore()
 
   const dev = useDevToolStore()
 
@@ -235,6 +237,10 @@ export default function DevTool() {
         <Button text="Guide" onClick={() => guide.toggleGuide(null)}/>
         {/* <Button text="NPC" onClick={() =>  {npc.toggleDisplayNPC()}}/> */}
         <Button text="Tutorial" onClick={() => tutorial.toggleIsTutorial()}/>
+        <Button text="+Combo" onClick={() => {
+          combo.increaseCombo()
+          console.log(combo.count)
+          }}/>
       </div>
 
       {showCombatDebug && (

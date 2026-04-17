@@ -11,6 +11,7 @@ const INITIAL_BOSS: Boss = {
   maxHp: 120,
   energy: 80,
   maxEnergy: 80,
+  energyRegenPerSecond: 3,
   def: 15,
   maxDef: 15,
   skills: [],

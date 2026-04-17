@@ -5,6 +5,7 @@ import BossEncounter from "./BossEncounter";
 import {
   useBountyQuestStore,
   useBossStore,
+  useCombatDebugStore,
   useEnemyStore,
   useGameStore,
   useInventoryStore,
@@ -15,14 +16,55 @@ import {
   useTutorialStore,
 } from "@/src/game/store";
 import {
+  clearPlayerAttacks,
   createEncounterController,
+  drainPlayerAttacks,
   EncounterController,
+  EnemySkill,
 } from "@/src/backend/mechanics/combat";
 import { getEnemiesByLocation } from "@/src/game/data/enemies";
 import { getBossesByLocation } from "@/src/game/data/bosses";
+import { pickWorldEncounterKind } from "./worldEncounterSpawn";
 import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
 
 const DEBUG_AI = true;
+
+function toCombatSkills(skills: unknown[]): EnemySkill[] {
+  if (!Array.isArray(skills)) return [];
+
+  const validSkills: EnemySkill[] = [];
+  skills.forEach((rawSkill) => {
+    if (!rawSkill || typeof rawSkill !== "object") return;
+
+    const skill = rawSkill as Partial<EnemySkill> & {
+      name?: unknown;
+      id?: unknown;
+      energyCost?: unknown;
+      cooldownSeconds?: unknown;
+      effect?: unknown;
+    };
+
+    if (
+      typeof skill.id !== "string" ||
+      typeof skill.name !== "string" ||
+      typeof skill.energyCost !== "number" ||
+      typeof skill.cooldownSeconds !== "number" ||
+      !skill.effect
+    ) {
+      return;
+    }
+
+    validSkills.push({
+      id: skill.id,
+      name: skill.name,
+      energyCost: skill.energyCost,
+      cooldownSeconds: skill.cooldownSeconds,
+      effect: skill.effect as EnemySkill["effect"],
+    });
+  });
+
+  return validSkills;
+}
 
 export default function Combat() {
   const scene = useSceneStore((s) => s.scene);
@@ -42,8 +84,8 @@ export default function Combat() {
   const playerHp = usePlayerStore((s) => s.hp);
 
   const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
-  const clearEnemy = useEnemyStore((s) => s.clearEnemy);
   const spawnBoss = useBossStore((s) => s.spawnBoss);
+  const clearEnemy = useEnemyStore((s) => s.clearEnemy);
   const clearBoss = useBossStore((s) => s.clearBoss);
 
   const handleQuestProgressAfterKill = (targetId: string) => {
@@ -59,7 +101,8 @@ export default function Combat() {
     const currentLevelKey = latestBounty.questLevel.toString();
     const currentLevelQuests = latestBounty.allQuests[currentLevelKey] || [];
     const hasQuestList = currentLevelQuests.length > 0;
-    const isLevelComplete = hasQuestList && currentLevelQuests.every((quest) => quest.isCompleted);
+    const isLevelComplete =
+      hasQuestList && currentLevelQuests.every((quest) => quest.isCompleted);
 
     if (!isLevelComplete) {
       return;
@@ -68,18 +111,24 @@ export default function Combat() {
     const availableLevels = Object.keys(latestBounty.allQuests)
       .map((level) => Number(level))
       .filter((level) => Number.isFinite(level));
-    const maxQuestLevel = availableLevels.length > 0 ? Math.max(...availableLevels) : latestBounty.questLevel;
+    const maxQuestLevel =
+      availableLevels.length > 0
+        ? Math.max(...availableLevels)
+        : latestBounty.questLevel;
 
     if (latestBounty.questLevel >= maxQuestLevel) {
       latestBounty.setHeader("All bounty quests are complete.");
       latestBounty.toggleDisplayBountyQuest(false);
 
       const tutorial = useTutorialStore.getState();
-      const finalPhaseIndex = tutorial.sequence.findIndex((phase) => phase.phase === "phase-7");
+      const finalPhaseIndex = tutorial.sequence.findIndex(
+        (phase) => phase.phase === "phase-7",
+      );
 
       if (finalPhaseIndex >= 0) {
         const alreadyCompletedFinalPhase =
-          tutorial.isCompleted && tutorial.currentPhaseIndex === finalPhaseIndex;
+          tutorial.isCompleted &&
+          tutorial.currentPhaseIndex === finalPhaseIndex;
 
         if (!alreadyCompletedFinalPhase) {
           tutorial.skipToPhase(finalPhaseIndex);
@@ -94,7 +143,9 @@ export default function Combat() {
     const nextLevel = useBountyQuestStore.getState().questLevel;
     usePlayerStore.getState().levelUp();
     useTutorialStore.getState().toggleIsTutorial(false);
-    useBountyQuestStore.getState().setHeader(`New bounty quests unlocked for level ${nextLevel}.`);
+    useBountyQuestStore
+      .getState()
+      .setHeader(`New bounty quests unlocked for level ${nextLevel}.`);
     useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
   };
 
@@ -137,7 +188,10 @@ export default function Combat() {
     const addInventoryItem = useInventoryStore.getState().addInventoryItem;
     let totalGranted = 0;
 
-    const grantCategory = (items: LootItem[], kind: "weapon" | "armor" | "consumable") => {
+    const grantCategory = (
+      items: LootItem[],
+      kind: "weapon" | "armor" | "consumable",
+    ) => {
       items.forEach((item) => {
         const dropRate = normalizeDropRate(item.dropRate);
         const quantity = Math.max(1, Math.floor(item.quantity ?? 1));
@@ -166,7 +220,11 @@ export default function Combat() {
     return totalGranted;
   };
 
-  const grantRewardsForDefeat = (reward: LootDrop, targetType: "enemy" | "boss", targetId: string): void => {
+  const grantRewardsForDefeat = (
+    reward: LootDrop,
+    targetType: "enemy" | "boss",
+    targetId: string,
+  ): void => {
     const xpReward = randomBetween(reward.xpDropMin, reward.xpDropMax);
     const coinReward = randomBetween(reward.coinDropMin, reward.coinDropMax);
     const grantedLootCount = grantLootItems(reward);
@@ -179,21 +237,13 @@ export default function Combat() {
       usePlayerStore.getState().gainCoins(coinReward);
     }
 
-    const rewardParts: string[] = [];
-    if (xpReward > 0) {
-      rewardParts.push(`+${xpReward} XP`);
-    }
-    if (coinReward > 0) {
-      rewardParts.push(`+${coinReward} coins`);
-    }
-    if (grantedLootCount > 0) {
-      rewardParts.push(`+${grantedLootCount} loot item(s)`);
-    }
-
-    const rewardSummary = rewardParts.length > 0 ? rewardParts.join(", ") : "No rewards";
+    const rewardSuffix =
+      grantedLootCount > 0 ? ` + ${grantedLootCount} loot item(s)` : "";
     useTerminalStore
       .getState()
-      .appendToLog(`[SYSTEM]: Defeated ${targetType} '${targetId}'. ${rewardSummary}.`);
+      .appendToLog(
+        `[SYSTEM]: Defeated ${targetType} '${targetId}'. +${xpReward} XP, +${coinReward} coins${rewardSuffix}.`,
+      );
   };
 
   const processTargetDefeat = (
@@ -227,7 +277,17 @@ export default function Combat() {
     playerHp: number;
     enemyHp: number;
     enemyEnergy: number;
-    tickMs: number;
+    tickSeconds: number;
+    playerAttacksConsumed: number;
+    damageCauses: string[];
+    analyticsElapsedSeconds: number;
+    analyticsToPlayer: number;
+    analyticsToEnemy: number;
+    analyticsDotToPlayer: number;
+    analyticsDotToEnemy: number;
+    analyticsPlayerAttacks: number;
+    analyticsEnemyActions: number;
+    analyticsEnemySkillCasts: number;
     done: boolean;
   } | null>(null);
 
@@ -243,7 +303,28 @@ export default function Combat() {
       window.clearInterval(timerRef.current);
       timerRef.current = null;
     }
+
+    clearPlayerAttacks();
   };
+
+  useEffect(() => {
+    if (inCombat) {
+      return;
+    }
+
+    let lastTick = performance.now();
+    const ticker = window.setInterval(() => {
+      const now = performance.now();
+      const deltaSeconds = Math.max(0, (now - lastTick) / 1000);
+      lastTick = now;
+      usePlayerStore.getState().applyEnergyRegen(deltaSeconds, "out_of_combat");
+      usePlayerStore.getState().applyHpRegen(deltaSeconds, "out_of_combat");
+    }, 200);
+
+    return () => {
+      window.clearInterval(ticker);
+    };
+  }, [inCombat]);
 
   useEffect(() => {
     if (!inCombat) {
@@ -258,40 +339,41 @@ export default function Combat() {
     const enemyKeys = Object.keys(enemies);
     const bossKeys = Object.keys(bosses);
 
-    const canSpawnEnemy = enemyKeys.length > 0;
-    const canSpawnBoss = bossKeys.length > 0;
-    if (!canSpawnEnemy && !canSpawnBoss) {
+    const encounterKind = pickWorldEncounterKind({
+      enemyCount: enemyKeys.length,
+      bossCount: bossKeys.length,
+      enemyChance: 0.9,
+    });
+
+    if (!encounterKind) {
       toggleInCombat(false);
       return;
     }
 
-    const shouldSpawnBoss =
-      canSpawnBoss && (!canSpawnEnemy || Math.random() <= 0.5);
-
-    if (shouldSpawnBoss) {
-      const randomBossKey =
-        bossKeys[Math.floor(Math.random() * bossKeys.length)];
-      spawnBoss(bosses[randomBossKey]);
-      clearEnemy();
-      toggleIsEnemy(false);
+    if (encounterKind === "enemy") {
+      const randomEnemyKey =
+        enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
+      spawnEnemy(enemies[randomEnemyKey]);
+      clearBoss();
+      toggleIsEnemy(true);
       return;
     }
 
-    const randomEnemyKey =
-      enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
-    spawnEnemy(enemies[randomEnemyKey]);
-    clearBoss();
-    toggleIsEnemy(true);
+    const randomBossKey = bossKeys[Math.floor(Math.random() * bossKeys.length)];
+    spawnBoss(bosses[randomBossKey]);
+    clearEnemy();
+    toggleIsEnemy(false);
   }, [
     inCombat,
     enemyId,
     bossId,
     scene,
     spawnEnemy,
-    clearEnemy,
     spawnBoss,
+    clearEnemy,
     clearBoss,
     toggleIsEnemy,
+    toggleInCombat,
   ]);
 
   useEffect(() => {
@@ -358,15 +440,22 @@ export default function Combat() {
           maxHp: target.maxHp,
           energy: target.energy,
           maxEnergy: target.maxEnergy,
+          energyRegenPerSecond: target.energyRegenPerSecond,
           def: target.def,
           dmg: target.dmg,
           critChance: target.critChance,
           critDmg: target.critDmg,
-          atkSpeed: target.atkSpeed,
-          skills: target.skills,
+          atkSpeedSeconds: target.atkSpeed,
+          skills: toCombatSkills(target.skills),
         },
       });
       activeKeyRef.current = key;
+      useCombatDebugStore.getState().clearLogs();
+      useCombatDebugStore
+        .getState()
+        .appendLog(
+          `Encounter started: ${isEnemy ? "mob" : "boss"} ${target.id}`,
+        );
     }
 
     if (timerRef.current == null) {
@@ -376,14 +465,16 @@ export default function Combat() {
         if (!controller) return;
 
         const now = performance.now();
-        const deltaMs = now - lastTickRef.current;
+        const deltaSeconds = Math.max(0, (now - lastTickRef.current) / 1000);
         lastTickRef.current = now;
+        usePlayerStore.getState().applyEnergyRegen(deltaSeconds, "combat");
 
         const player = usePlayerStore.getState();
         const enemyState = isEnemy ? useEnemyStore.getState() : null;
         const bossState = !isEnemy ? useBossStore.getState() : null;
         const target = isEnemy ? enemyState?.enemy : bossState;
         if (!target?.id) return;
+        const playerAttacks = drainPlayerAttacks();
 
         const result = controller.tick({
           player: {
@@ -393,7 +484,7 @@ export default function Combat() {
             baseDmg: player.baseDmg,
             baseCritChance: player.baseCritChance,
             baseCritDmg: player.baseCritDmg,
-            atkSpeed: player.atkSpeed,
+            atkSpeedSeconds: player.atkSpeed,
             level: player.level,
           },
           enemy: {
@@ -401,14 +492,16 @@ export default function Combat() {
             maxHp: target.maxHp,
             energy: target.energy,
             maxEnergy: target.maxEnergy,
+            energyRegenPerSecond: target.energyRegenPerSecond,
             def: target.def,
             dmg: target.dmg,
             critChance: target.critChance,
             critDmg: target.critDmg,
-            atkSpeed: target.atkSpeed,
-            skills: target.skills,
+            atkSpeedSeconds: target.atkSpeed,
+            skills: toCombatSkills(target.skills),
           },
-          deltaMs,
+          playerAttacks,
+          deltaSeconds,
         });
 
         if (result.damageToPlayer > 0) {
@@ -449,7 +542,7 @@ export default function Combat() {
             ? useEnemyStore.getState().enemy
             : useBossStore.getState();
           if (enemyAfter) {
-            setDebugState({
+            const snapshot = {
               isBoss: !isEnemy,
               enemyId: enemyAfter.id,
               action: result.enemyAction?.label ?? "none",
@@ -461,9 +554,52 @@ export default function Combat() {
               playerHp: playerAfter.hp,
               enemyHp: enemyAfter.hp,
               enemyEnergy: enemyAfter.energy,
-              tickMs: Math.round(deltaMs),
+              tickSeconds: Number(deltaSeconds.toFixed(3)),
+              playerAttacksConsumed: result.playerAttacksConsumed,
+              damageCauses: result.damageCauses,
+              analyticsElapsedSeconds: Number(result.analytics.elapsedSeconds.toFixed(3)),
+              analyticsToPlayer: result.analytics.totalDamageToPlayer,
+              analyticsToEnemy: result.analytics.totalDamageToEnemy,
+              analyticsDotToPlayer: result.analytics.totalDotDamageToPlayer,
+              analyticsDotToEnemy: result.analytics.totalDotDamageToEnemy,
+              analyticsPlayerAttacks: result.analytics.totalPlayerAttacks,
+              analyticsEnemyActions: result.analytics.totalEnemyActions,
+              analyticsEnemySkillCasts: result.analytics.totalEnemySkillCasts,
               done: result.done,
+            };
+            setDebugState(snapshot);
+            useCombatDebugStore.getState().setLatest({
+              isBoss: snapshot.isBoss,
+              enemyId: snapshot.enemyId,
+              action: snapshot.action,
+              reward: snapshot.reward,
+              dmgToPlayer: snapshot.dmgToPlayer,
+              dmgToEnemy: snapshot.dmgToEnemy,
+              healEnemy: snapshot.healEnemy,
+              energyDelta: snapshot.energyDelta,
+              playerHp: snapshot.playerHp,
+              enemyHp: snapshot.enemyHp,
+              enemyEnergy: snapshot.enemyEnergy,
+              tickSeconds: snapshot.tickSeconds,
+              done: snapshot.done,
+              playerAttacksConsumed: snapshot.playerAttacksConsumed,
+              damageCauses: snapshot.damageCauses,
+              analytics: result.analytics,
             });
+
+            if (
+              result.damageCauses.length > 0 ||
+              result.damageToEnemy > 0 ||
+              result.damageToPlayer > 0 ||
+              result.didEnemyAct
+            ) {
+              const causes = result.damageCauses.join(", ") || "none";
+              useCombatDebugStore
+                .getState()
+                .appendLog(
+                  `Tick ${deltaSeconds.toFixed(3)}s | action=${snapshot.action} | p=-${result.damageToPlayer} e=-${result.damageToEnemy} | causes=${causes}`,
+                );
+            }
           }
         }
 
@@ -516,7 +652,7 @@ export default function Combat() {
           <div>Enemy: {debugState.enemyId || "-"}</div>
           <div>Action: {debugState.action}</div>
           <div>Reward: {debugState.reward}</div>
-          <div>Tick: {debugState.tickMs}ms</div>
+          <div>Tick: {debugState.tickSeconds}s</div>
           <div>Player HP: {debugState.playerHp}</div>
           <div>Enemy HP: {debugState.enemyHp}</div>
           <div>Enemy EN: {debugState.enemyEnergy}</div>
@@ -524,6 +660,17 @@ export default function Combat() {
           <div>DMG to Enemy: {debugState.dmgToEnemy}</div>
           <div>Heal Enemy: {debugState.healEnemy}</div>
           <div>Energy Delta: {debugState.energyDelta}</div>
+          <div>Player Attacks: {debugState.playerAttacksConsumed}</div>
+          <div>Causes: {debugState.damageCauses.join(", ") || "none"}</div>
+          <div className="mt-1 font-semibold">Analytics</div>
+          <div>Elapsed: {debugState.analyticsElapsedSeconds}s</div>
+          <div>Total DMG to Player: {debugState.analyticsToPlayer}</div>
+          <div>Total DMG to Enemy: {debugState.analyticsToEnemy}</div>
+          <div>DOT to Player: {debugState.analyticsDotToPlayer}</div>
+          <div>DOT to Enemy: {debugState.analyticsDotToEnemy}</div>
+          <div>Total Player Attacks: {debugState.analyticsPlayerAttacks}</div>
+          <div>Total Enemy Actions: {debugState.analyticsEnemyActions}</div>
+          <div>Enemy Skill Casts: {debugState.analyticsEnemySkillCasts}</div>
           <div>Done: {debugState.done ? "yes" : "no"}</div>
         </div>
       )}

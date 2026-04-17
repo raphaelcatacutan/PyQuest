@@ -4,7 +4,8 @@ import type { Consumable } from "../../game/types/consumable.types";
 import { normalizeItemId } from "./shop-item-modules";
 
 function computeConsumableEnergyCost(consumable: Consumable): number {
-    const cooldownCost = Math.max(1, Math.round(consumable.cooldown / 2000));
+    // Cooldown is stored in seconds.
+    const cooldownCost = Math.max(1, Math.round(consumable.cooldown / 2));
 
     const effectCost = consumable.effects.reduce((total, effect) => {
         if (effect.type === "restore") {

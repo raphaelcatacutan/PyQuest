@@ -1,12 +1,16 @@
-import { buildActions, createFallbackAction, getValidActionIndices, resolveEnemyAction } from './actions';
+import { buildActions, clamp, computeDamage, getAttackIntervalSeconds, getValidSkillIndices } from './actions';
 import { buildStateKey, bucketEnergy, bucketHp, bucketLevel, bucketRecentDamage, getPhase } from './state-buckets';
 import { selectActionIndex, updateQ } from './qlearning';
 import {
   Action,
   ActionTag,
   CombatantKind,
+  EncounterAnalytics,
   EncounterConfig,
+  EnemySkill,
+  EnemySkillEffect,
   EnemySnapshot,
+  PlayerAttackInput,
   PlayerSnapshot,
   TickInput,
   TickResult,
@@ -18,6 +22,48 @@ const DEFAULT_PARAMS = {
   epsilon: 0.2,
 };
 
+type DotEffectType = 'poison' | 'bleed';
+
+type DotInstance = {
+  type: DotEffectType;
+  dmgPerSecond: number;
+  remainingSeconds: number;
+  tickIntervalSeconds: number;
+  tickAccumulatorSeconds: number;
+};
+
+type UnitStatusState = {
+  stunSeconds: number;
+  confusionSeconds: number;
+  empowerSeconds: number;
+  empowerMultiplier: number;
+  speedUpSeconds: number;
+  speedUpMultiplier: number;
+  dots: DotInstance[];
+};
+
+type SkillOutcome = {
+  damageToPlayer: number;
+  damageToEnemy: number;
+  healEnemy: number;
+};
+
+type EffectTarget = 'self' | 'player';
+
+type DotTickResult = {
+  total: number;
+  poison: number;
+  bleed: number;
+};
+
+type PlayerAttackResolution = {
+  damageToEnemy: number;
+  damageToPlayer: number;
+  appliedCount: number;
+  redirectedCount: number;
+  blockedCount: number;
+};
+
 export class EncounterController {
   private kind: CombatantKind;
   private actions: Action[];
@@ -25,7 +71,11 @@ export class EncounterController {
   private lastAction: ActionTag;
   private lastDamageToPlayer: number;
   private lastDamageToEnemy: number;
-  private enemyCooldownMs: number;
+  private enemyAttackAccumulatorSeconds: number;
+  private skillCooldownsSeconds: number[];
+  private enemyStatus: UnitStatusState;
+  private playerStatus: UnitStatusState;
+  private analytics: EncounterAnalytics;
 
   constructor(config: EncounterConfig) {
     this.kind = config.kind;
@@ -34,7 +84,11 @@ export class EncounterController {
     this.lastAction = 'none';
     this.lastDamageToPlayer = 0;
     this.lastDamageToEnemy = 0;
-    this.enemyCooldownMs = 0;
+    this.enemyAttackAccumulatorSeconds = 0;
+    this.skillCooldownsSeconds = new Array(this.actions.length).fill(0);
+    this.enemyStatus = createUnitStatusState();
+    this.playerStatus = createUnitStatusState();
+    this.analytics = createEncounterAnalytics();
   }
 
   tick(input: TickInput): TickResult {
@@ -46,97 +100,181 @@ export class EncounterController {
         healEnemy: 0,
         energyDelta: 0,
         reward: 0,
+        damageCauses: [],
+        playerAttacksConsumed: 0,
+        analytics: { ...this.analytics },
         done: true,
       };
     }
 
-    const delta = Math.max(0, input.deltaMs || 0);
-    this.enemyCooldownMs += delta;
+    const deltaSeconds = Math.max(0, input.deltaSeconds || 0);
+    tickCooldowns(this.skillCooldownsSeconds, deltaSeconds);
+    tickUnitDurations(this.enemyStatus, deltaSeconds);
+    tickUnitDurations(this.playerStatus, deltaSeconds);
 
-    const enemyAtkMs = toMsFromAtkSpeed(input.enemy.atkSpeed, 1200);
-    const enemyReady = this.enemyCooldownMs >= enemyAtkMs;
-    if (!enemyReady) {
-      return {
-        didEnemyAct: false,
-        damageToPlayer: 0,
-        damageToEnemy: 0,
-        healEnemy: 0,
-        energyDelta: 0,
-        reward: 0,
-        done: false,
-      };
+    let enemyEnergy = input.enemy.energy;
+    const regenPerSecond = Math.max(0, input.enemy.energyRegenPerSecond);
+    if (regenPerSecond > 0 && input.enemy.maxEnergy > 0) {
+      enemyEnergy = clamp(
+        enemyEnergy + (regenPerSecond * deltaSeconds),
+        0,
+        input.enemy.maxEnergy,
+      );
     }
 
-    this.enemyCooldownMs -= enemyAtkMs;
+    let damageToPlayer = 0;
+    let damageToEnemy = 0;
+    let healEnemy = 0;
+    const damageCauses: string[] = [];
+    let didEnemyAct = false;
+    let enemyAction: Action | undefined;
+    let selectedSkillIndex = -1;
+    let selectedSkillStateKey: string | null = null;
+    let totalDotDamageToPlayer = 0;
+    let totalDotDamageToEnemy = 0;
+
+    const playerDotDamage = applyDotTicks(this.playerStatus, deltaSeconds);
+    if (playerDotDamage.total > 0) {
+      damageToPlayer += playerDotDamage.total;
+      totalDotDamageToPlayer += playerDotDamage.total;
+      if (playerDotDamage.poison > 0) {
+        damageCauses.push(`poison_to_player(${playerDotDamage.poison})`);
+      }
+      if (playerDotDamage.bleed > 0) {
+        damageCauses.push(`bleed_to_player(${playerDotDamage.bleed})`);
+      }
+    }
+
+    const enemyDotDamage = applyDotTicks(this.enemyStatus, deltaSeconds);
+    if (enemyDotDamage.total > 0) {
+      damageToEnemy += enemyDotDamage.total;
+      totalDotDamageToEnemy += enemyDotDamage.total;
+      if (enemyDotDamage.poison > 0) {
+        damageCauses.push(`poison_to_enemy(${enemyDotDamage.poison})`);
+      }
+      if (enemyDotDamage.bleed > 0) {
+        damageCauses.push(`bleed_to_enemy(${enemyDotDamage.bleed})`);
+      }
+    }
+
+    const playerAttacks = input.playerAttacks ?? [];
+    const playerAttacksConsumed = playerAttacks.length;
+    const playerAttackResolution = this.resolvePlayerAttacks(
+      playerAttacks,
+      input.player,
+      input.enemy.def,
+    );
+    if (playerAttackResolution.damageToEnemy > 0) {
+      damageToEnemy += playerAttackResolution.damageToEnemy;
+      damageCauses.push(`player_attack(${playerAttackResolution.appliedCount})`);
+    }
+    if (playerAttackResolution.damageToPlayer > 0) {
+      damageToPlayer += playerAttackResolution.damageToPlayer;
+      damageCauses.push(`player_confusion_self_hit(${playerAttackResolution.redirectedCount})`);
+    }
+    if (playerAttackResolution.blockedCount > 0) {
+      damageCauses.push(`player_attack_blocked_stun(${playerAttackResolution.blockedCount})`);
+    }
+
+    const isEnemyStunned = this.enemyStatus.stunSeconds > 0;
+    if (isEnemyStunned) {
+      damageCauses.push('enemy_stunned');
+    }
+    if (!isEnemyStunned) {
+      const attackIntervalSeconds = getAttackIntervalSeconds(
+        input.enemy.atkSpeedSeconds,
+        getSpeedUpMultiplier(this.enemyStatus),
+      );
+
+      if (attackIntervalSeconds != null) {
+        this.enemyAttackAccumulatorSeconds += deltaSeconds;
+        if (this.enemyAttackAccumulatorSeconds >= attackIntervalSeconds) {
+          this.enemyAttackAccumulatorSeconds -= attackIntervalSeconds;
+          didEnemyAct = true;
+
+          const stateKey = buildStateKey(
+            buildState(
+              input.player,
+              { ...input.enemy, energy: enemyEnergy },
+              this.lastAction,
+              this.lastDamageToPlayer,
+              this.lastDamageToEnemy,
+              this.kind,
+            ),
+            this.kind,
+          );
+
+          const validSkillIndices = getValidSkillIndices(
+            this.actions,
+            enemyEnergy,
+            this.skillCooldownsSeconds,
+          );
+
+          if (validSkillIndices.length > 0) {
+            selectedSkillIndex = selectActionIndex(
+              this.qtable,
+              stateKey,
+              this.actions,
+              validSkillIndices,
+              DEFAULT_PARAMS.epsilon,
+            );
+            selectedSkillStateKey = stateKey;
+
+            const action = this.actions[selectedSkillIndex];
+            const skill = getSkillByAction(input.enemy, action);
+            if (skill) {
+              enemyAction = action;
+              enemyEnergy = clamp(enemyEnergy - skill.energyCost, 0, input.enemy.maxEnergy);
+              this.skillCooldownsSeconds[selectedSkillIndex] = Math.max(0, skill.cooldownSeconds);
+
+              const outcome = applySkillEffect(skill, this.enemyStatus, this.playerStatus);
+              damageToPlayer += outcome.damageToPlayer;
+              damageToEnemy += outcome.damageToEnemy;
+              healEnemy += outcome.healEnemy;
+              damageCauses.push(`enemy_skill:${skill.id}`);
+              this.lastAction = 'skill';
+            } else {
+              this.lastAction = 'skip';
+            }
+          } else {
+            enemyAction = {
+              id: 'base_attack',
+              type: 'base_attack',
+              label: this.enemyStatus.confusionSeconds > 0 ? 'Confused Self Attack' : 'Base Attack',
+              energyCost: 0,
+              source: 'base_runtime',
+            };
+
+            const outgoingBaseDamage =
+              input.enemy.dmg * getEmpowerMultiplier(this.enemyStatus);
+            const targetDef = this.enemyStatus.confusionSeconds > 0 ? input.enemy.def : input.player.def;
+            const damage = computeDamage(
+              outgoingBaseDamage,
+              input.enemy.critChance,
+              input.enemy.critDmg,
+              targetDef,
+            );
+
+            if (this.enemyStatus.confusionSeconds > 0) {
+              damageToEnemy += damage;
+              damageCauses.push(`enemy_confusion_self_hit(${damage})`);
+            } else {
+              damageToPlayer += damage;
+              damageCauses.push(`enemy_base_attack(${damage})`);
+            }
+
+            this.lastAction = 'base_attack';
+          }
+        }
+      }
+    }
 
     const beforePlayerHp = input.player.hp;
     const beforeEnemyHp = input.enemy.hp;
-
-    let enemyAction: Action | undefined;
-    let damageToPlayer = 0;
-    let healEnemy = 0;
-    let energyDelta = 0;
-    let reward = 0;
-    let selectedSkillIndex = -1;
-
-    const stateKey = buildStateKey(
-      buildState(
-        input.player,
-        input.enemy,
-        this.lastAction,
-        this.lastDamageToPlayer,
-        this.lastDamageToEnemy,
-        this.kind,
-      ),
-      this.kind,
-    );
-
-    const validSkillIndices = getValidActionIndices(this.actions, input.enemy.energy);
-    if (this.actions.length > 0 && validSkillIndices.length > 0) {
-      selectedSkillIndex = selectActionIndex(
-        this.qtable,
-        stateKey,
-        this.actions,
-        validSkillIndices,
-        DEFAULT_PARAMS.epsilon,
-      );
-      enemyAction = this.actions[selectedSkillIndex];
-    } else {
-      const fallbackAction = createFallbackAction(input.enemy);
-      if (!fallbackAction) {
-        this.lastAction = 'skip';
-        this.lastDamageToPlayer = 0;
-        this.lastDamageToEnemy = 0;
-        warnDevelopment('Enemy has no usable JSON skill and no safe fallback action. Turn skipped.');
-        return {
-          didEnemyAct: false,
-          damageToPlayer: 0,
-          damageToEnemy: 0,
-          healEnemy: 0,
-          energyDelta: 0,
-          reward: 0,
-          done: false,
-        };
-      }
-
-      enemyAction = fallbackAction;
-      const reason = this.actions.length === 0
-        ? 'no JSON skills defined'
-        : 'no JSON skills were usable this tick';
-      warnDevelopment(`Using fallback action "${enemyAction.id}" because ${reason}.`);
-    }
-
-    const outcome = resolveEnemyAction(enemyAction, input.enemy, input.player);
-    damageToPlayer = outcome.damageToPlayer;
-    healEnemy = outcome.healEnemy;
-    energyDelta = outcome.energyDelta;
-    this.lastAction = outcome.actionTag;
-
     const afterPlayerHp = clamp(beforePlayerHp - damageToPlayer, 0, input.player.maxHP);
-    const afterEnemyHp = clamp(beforeEnemyHp + healEnemy, 0, input.enemy.maxHp);
-    const nextEnemyEnergy = clamp(input.enemy.energy + energyDelta, 0, input.enemy.maxEnergy);
+    const afterEnemyHp = clamp(beforeEnemyHp - damageToEnemy + healEnemy, 0, input.enemy.maxHp);
 
-    reward = computeReward(
+    const reward = computeReward(
       beforePlayerHp,
       afterPlayerHp,
       beforeEnemyHp,
@@ -146,14 +284,27 @@ export class EncounterController {
     );
 
     this.lastDamageToPlayer = damageToPlayer;
-    this.lastDamageToEnemy = 0;
-
+    this.lastDamageToEnemy = damageToEnemy;
     const done = afterPlayerHp <= 0 || afterEnemyHp <= 0;
-    if (selectedSkillIndex >= 0) {
+
+    this.analytics.elapsedSeconds += deltaSeconds;
+    this.analytics.totalDamageToPlayer += damageToPlayer;
+    this.analytics.totalDamageToEnemy += damageToEnemy;
+    this.analytics.totalDotDamageToPlayer += totalDotDamageToPlayer;
+    this.analytics.totalDotDamageToEnemy += totalDotDamageToEnemy;
+    this.analytics.totalPlayerAttacks += playerAttacksConsumed;
+    if (didEnemyAct) {
+      this.analytics.totalEnemyActions += 1;
+      if (enemyAction?.type === 'skill') {
+        this.analytics.totalEnemySkillCasts += 1;
+      }
+    }
+
+    if (selectedSkillIndex >= 0 && selectedSkillStateKey) {
       const nextStateKey = buildStateKey(
         buildState(
           { ...input.player, hp: afterPlayerHp },
-          { ...input.enemy, hp: afterEnemyHp, energy: nextEnemyEnergy },
+          { ...input.enemy, hp: afterEnemyHp, energy: enemyEnergy },
           this.lastAction,
           this.lastDamageToPlayer,
           this.lastDamageToEnemy,
@@ -164,7 +315,7 @@ export class EncounterController {
 
       updateQ(
         this.qtable,
-        stateKey,
+        selectedSkillStateKey,
         selectedSkillIndex,
         reward,
         nextStateKey,
@@ -175,13 +326,16 @@ export class EncounterController {
     }
 
     return {
-      didEnemyAct: true,
+      didEnemyAct,
       enemyAction,
       damageToPlayer,
-      damageToEnemy: 0,
+      damageToEnemy,
       healEnemy,
-      energyDelta,
+      energyDelta: enemyEnergy - input.enemy.energy,
       reward,
+      damageCauses,
+      playerAttacksConsumed,
+      analytics: { ...this.analytics },
       done,
     };
   }
@@ -191,11 +345,252 @@ export class EncounterController {
     this.lastAction = 'none';
     this.lastDamageToEnemy = 0;
     this.lastDamageToPlayer = 0;
+    this.enemyAttackAccumulatorSeconds = 0;
+    this.skillCooldownsSeconds.fill(0);
+    this.enemyStatus = createUnitStatusState();
+    this.playerStatus = createUnitStatusState();
+    this.analytics = createEncounterAnalytics();
+  }
+
+  private resolvePlayerAttacks(
+    attacks: PlayerAttackInput[],
+    player: PlayerSnapshot,
+    enemyDef: number,
+  ): PlayerAttackResolution {
+    const result: PlayerAttackResolution = {
+      damageToEnemy: 0,
+      damageToPlayer: 0,
+      appliedCount: 0,
+      redirectedCount: 0,
+      blockedCount: 0,
+    };
+
+    if (attacks.length === 0) {
+      return result;
+    }
+
+    if (this.playerStatus.stunSeconds > 0) {
+      result.blockedCount = attacks.length;
+      return result;
+    }
+
+    const isPlayerConfused = this.playerStatus.confusionSeconds > 0;
+    for (const attack of attacks) {
+      const outgoingDamage = computeDamage(
+        attack.baseDamage,
+        player.baseCritChance,
+        player.baseCritDmg,
+        isPlayerConfused ? player.def : enemyDef,
+      );
+      if (isPlayerConfused) {
+        result.damageToPlayer += outgoingDamage;
+        result.redirectedCount += 1;
+      } else {
+        result.damageToEnemy += outgoingDamage;
+        result.appliedCount += 1;
+      }
+    }
+
+    return result;
   }
 }
 
 export function createEncounterController(config: EncounterConfig): EncounterController {
   return new EncounterController(config);
+}
+
+function getSkillByAction(enemy: EnemySnapshot, action: Action): EnemySkill | null {
+  const index = action.skillIndex;
+  if (index == null || index < 0 || index >= enemy.skills.length) {
+    return null;
+  }
+
+  const skill = enemy.skills[index];
+  if (!skill) {
+    return null;
+  }
+
+  if (!Number.isFinite(skill.energyCost) || skill.energyCost < 0) {
+    return null;
+  }
+
+  if (!Number.isFinite(skill.cooldownSeconds) || skill.cooldownSeconds < 0) {
+    return null;
+  }
+
+  return skill;
+}
+
+function createUnitStatusState(): UnitStatusState {
+  return {
+    stunSeconds: 0,
+    confusionSeconds: 0,
+    empowerSeconds: 0,
+    empowerMultiplier: 1,
+    speedUpSeconds: 0,
+    speedUpMultiplier: 1,
+    dots: [],
+  };
+}
+
+function tickCooldowns(cooldownsSeconds: number[], deltaSeconds: number): void {
+  if (deltaSeconds <= 0) return;
+  for (let i = 0; i < cooldownsSeconds.length; i++) {
+    cooldownsSeconds[i] = Math.max(0, (cooldownsSeconds[i] ?? 0) - deltaSeconds);
+  }
+}
+
+function tickUnitDurations(status: UnitStatusState, deltaSeconds: number): void {
+  if (deltaSeconds <= 0) return;
+
+  status.stunSeconds = Math.max(0, status.stunSeconds - deltaSeconds);
+  status.confusionSeconds = Math.max(0, status.confusionSeconds - deltaSeconds);
+  status.empowerSeconds = Math.max(0, status.empowerSeconds - deltaSeconds);
+  status.speedUpSeconds = Math.max(0, status.speedUpSeconds - deltaSeconds);
+
+  if (status.empowerSeconds <= 0) {
+    status.empowerMultiplier = 1;
+  }
+  if (status.speedUpSeconds <= 0) {
+    status.speedUpMultiplier = 1;
+  }
+}
+
+function applyDotTicks(status: UnitStatusState, deltaSeconds: number): DotTickResult {
+  if (deltaSeconds <= 0 || status.dots.length === 0) {
+    return {
+      total: 0,
+      poison: 0,
+      bleed: 0,
+    };
+  }
+
+  let poison = 0;
+  let bleed = 0;
+  const nextDots: DotInstance[] = [];
+  for (const dot of status.dots) {
+    dot.remainingSeconds -= deltaSeconds;
+    dot.tickAccumulatorSeconds += deltaSeconds;
+
+    while (dot.tickAccumulatorSeconds >= dot.tickIntervalSeconds && dot.remainingSeconds > -dot.tickIntervalSeconds) {
+      dot.tickAccumulatorSeconds -= dot.tickIntervalSeconds;
+      const tickDamage = Math.max(0, Math.round(dot.dmgPerSecond * dot.tickIntervalSeconds));
+      if (dot.type === 'poison') {
+        poison += tickDamage;
+      } else {
+        bleed += tickDamage;
+      }
+    }
+
+    if (dot.remainingSeconds > 0) {
+      nextDots.push(dot);
+    }
+  }
+
+  status.dots = nextDots;
+  return {
+    total: poison + bleed,
+    poison,
+    bleed,
+  };
+}
+
+function applySkillEffect(
+  skill: EnemySkill,
+  enemyStatus: UnitStatusState,
+  playerStatus: UnitStatusState,
+): SkillOutcome {
+  const effect = skill.effect;
+  const target = resolveEffectTarget(effect);
+
+  const targetStatus = target === 'self' ? enemyStatus : playerStatus;
+  const outcome: SkillOutcome = {
+    damageToPlayer: 0,
+    damageToEnemy: 0,
+    healEnemy: 0,
+  };
+
+  switch (effect.type) {
+    case 'heal':
+      if (target === 'self') {
+        outcome.healEnemy += Math.max(0, effect.healAmount);
+      }
+      break;
+    case 'stun':
+      targetStatus.stunSeconds = Math.max(targetStatus.stunSeconds, toNonNegative(effect.durationSeconds));
+      break;
+    case 'poison':
+    case 'bleed':
+      targetStatus.dots.push({
+        type: effect.type,
+        dmgPerSecond: toNonNegative(effect.dmgPerSecond),
+        remainingSeconds: toNonNegative(effect.durationSeconds),
+        tickIntervalSeconds: Math.max(0.001, toNonNegative(effect.tickIntervalSeconds)),
+        tickAccumulatorSeconds: 0,
+      });
+      break;
+    case 'empower':
+      if (target === 'self') {
+        enemyStatus.empowerMultiplier = Math.max(
+          enemyStatus.empowerMultiplier,
+          Math.max(1, toNonNegative(effect.dmgMultiplier)),
+        );
+        enemyStatus.empowerSeconds = Math.max(enemyStatus.empowerSeconds, toNonNegative(effect.durationSeconds));
+      }
+      break;
+    case 'speedup':
+      if (target === 'self') {
+        enemyStatus.speedUpMultiplier = Math.max(
+          enemyStatus.speedUpMultiplier,
+          1 + toNonNegative(effect.speedUp),
+        );
+        enemyStatus.speedUpSeconds = Math.max(enemyStatus.speedUpSeconds, toNonNegative(effect.durationSeconds));
+      }
+      break;
+    case 'confusion':
+      targetStatus.confusionSeconds = Math.max(targetStatus.confusionSeconds, toNonNegative(effect.durationSeconds));
+      break;
+    default:
+      break;
+  }
+
+  return outcome;
+}
+
+function resolveEffectTarget(effect: EnemySkillEffect): EffectTarget {
+  if (effect.target) {
+    return effect.target;
+  }
+
+  switch (effect.type) {
+    case 'heal':
+    case 'empower':
+    case 'speedup':
+      return 'self';
+    case 'stun':
+    case 'poison':
+    case 'bleed':
+    case 'confusion':
+    default:
+      return 'player';
+  }
+}
+
+function getEmpowerMultiplier(status: UnitStatusState): number {
+  if (status.empowerSeconds <= 0) return 1;
+  return Math.max(1, status.empowerMultiplier);
+}
+
+function getSpeedUpMultiplier(status: UnitStatusState): number {
+  if (status.speedUpSeconds <= 0) return 1;
+  return Math.max(1, status.speedUpMultiplier);
+}
+
+function toNonNegative(value: number): number {
+  if (!Number.isFinite(value) || value < 0) {
+    return 0;
+  }
+  return value;
 }
 
 function buildState(
@@ -254,26 +649,16 @@ function computeReward(
   return reward;
 }
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
+function createEncounterAnalytics(): EncounterAnalytics {
+  return {
+    elapsedSeconds: 0,
+    totalDamageToPlayer: 0,
+    totalDamageToEnemy: 0,
+    totalDotDamageToPlayer: 0,
+    totalDotDamageToEnemy: 0,
+    totalPlayerAttacks: 0,
+    totalEnemyActions: 0,
+    totalEnemySkillCasts: 0,
+  };
 }
 
-function toMsFromAtkSpeed(value: number, fallback: number): number {
-  if (!Number.isFinite(value) || value <= 0) return fallback;
-  if (value <= 10) return Math.round(value * 1000);
-  return Math.round(value);
-}
-
-function warnDevelopment(message: string): void {
-  const isDev = (() => {
-    try {
-      return Boolean(import.meta.env.DEV);
-    } catch {
-      return true;
-    }
-  })();
-
-  if (isDev) {
-    console.warn(`[CombatAI] ${message}`);
-  }
-}

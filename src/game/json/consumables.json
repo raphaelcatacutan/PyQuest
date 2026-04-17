@@ -1,576 +1,576 @@
 {
-	"health_potion": {
-		"id": "health_potion",
-		"name": "Health Potion",
-		"description": "A basic red potion that restores a small amount of HP.",
-		"consumableImg": "/src/assets/consumables/health_potion.png",
-		"cooldown": 3000,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "hp",
-				"amount": 25
-			}
-		],
-		"dropRate": 0.2,
-		"sellCost": 12,
-		"buyCost": 24
-	},
-	"greater_health_potion": {
-		"id": "greater_health_potion",
-		"name": "Greater Health Potion",
-		"description": "A refined blend for solid frontline recovery.",
-		"consumableImg": "/src/assets/consumables/greater_health_potion.png",
-		"cooldown": 4500,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "hp",
-				"amount": 45
-			}
-		],
-		"dropRate": 0.12,
-		"sellCost": 23,
-		"buyCost": 46
-	},
-	"superior_health_potion": {
-		"id": "superior_health_potion",
-		"name": "Superior Health Potion",
-		"description": "A high-grade restorative reserved for dangerous fights.",
-		"consumableImg": "/src/assets/consumables/superior_health_potion.png",
-		"cooldown": 6500,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "hp",
-				"amount": 70
-			}
-		],
-		"dropRate": 0.06,
-		"sellCost": 41,
-		"buyCost": 82
-	},
-	"mana_potion": {
-		"id": "mana_potion",
-		"name": "Mana Potion",
-		"description": "A light tonic that restores a small amount of energy.",
-		"consumableImg": "/src/assets/consumables/mana_potion.png",
-		"cooldown": 3000,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "energy",
-				"amount": 25
-			}
-		],
-		"dropRate": 0.2,
-		"sellCost": 12,
-		"buyCost": 24
-	},
-	"greater_mana_potion": {
-		"id": "greater_mana_potion",
-		"name": "Greater Mana Potion",
-		"description": "An efficient energy refuel for longer engagements.",
-		"consumableImg": "/src/assets/consumables/greater_mana_potion.png",
-		"cooldown": 4500,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "energy",
-				"amount": 45
-			}
-		],
-		"dropRate": 0.12,
-		"sellCost": 23,
-		"buyCost": 46
-	},
-	"superior_mana_potion": {
-		"id": "superior_mana_potion",
-		"name": "Superior Mana Potion",
-		"description": "Concentrated essence that heavily restores energy.",
-		"consumableImg": "/src/assets/consumables/superior_mana_potion.png",
-		"cooldown": 6500,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "energy",
-				"amount": 70
-			}
-		],
-		"dropRate": 0.06,
-		"sellCost": 41,
-		"buyCost": 82
-	},
-	"lesser_berserk_draught": {
-		"id": "lesser_berserk_draught",
-		"name": "Lesser Berserk Draught",
-		"description": "A mild stimulant that boosts damage output.",
-		"consumableImg": "/src/assets/consumables/lesser_berserk_draught.png",
-		"cooldown": 5500,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "dmg",
-				"multiplier": 1.12,
-				"duration": 10000
-			}
-		],
-		"dropRate": 0.12,
-		"sellCost": 22,
-		"buyCost": 44
-	},
-	"berserk_draught": {
-		"id": "berserk_draught",
-		"name": "Berserk Draught",
-		"description": "A stronger combat brew for aggressive pushes.",
-		"consumableImg": "/src/assets/consumables/berserk_draught.png",
-		"cooldown": 6500,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "dmg",
-				"multiplier": 1.22,
-				"duration": 13000
-			}
-		],
-		"dropRate": 0.09,
-		"sellCost": 34,
-		"buyCost": 68
-	},
-	"grand_berserk_draught": {
-		"id": "grand_berserk_draught",
-		"name": "Grand Berserk Draught",
-		"description": "Top-tier damage stimulant for boss phases.",
-		"consumableImg": "/src/assets/consumables/grand_berserk_draught.png",
-		"cooldown": 8000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "dmg",
-				"multiplier": 1.35,
-				"duration": 16000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 54,
-		"buyCost": 108
-	},
-	"lesser_guard_elixir": {
-		"id": "lesser_guard_elixir",
-		"name": "Lesser Guard Elixir",
-		"description": "A protective mix that hardens defense slightly.",
-		"consumableImg": "/src/assets/consumables/lesser_guard_elixir.png",
-		"cooldown": 5500,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "def",
-				"multiplier": 1.2,
-				"duration": 12000
-			}
-		],
-		"dropRate": 0.12,
-		"sellCost": 22,
-		"buyCost": 44
-	},
-	"guard_elixir": {
-		"id": "guard_elixir",
-		"name": "Guard Elixir",
-		"description": "Improves resistance during sustained fights.",
-		"consumableImg": "/src/assets/consumables/guard_elixir.png",
-		"cooldown": 7000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "def",
-				"multiplier": 1.35,
-				"duration": 15000
-			}
-		],
-		"dropRate": 0.09,
-		"sellCost": 35,
-		"buyCost": 70
-	},
-	"grand_guard_elixir": {
-		"id": "grand_guard_elixir",
-		"name": "Grand Guard Elixir",
-		"description": "Elite-grade defense tonic for critical battles.",
-		"consumableImg": "/src/assets/consumables/grand_guard_elixir.png",
-		"cooldown": 8500,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "def",
-				"multiplier": 1.55,
-				"duration": 18000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 56,
-		"buyCost": 112
-	},
-	"lesser_haste_phial": {
-		"id": "lesser_haste_phial",
-		"name": "Lesser Haste Phial",
-		"description": "A small speed stimulant for repositioning.",
-		"consumableImg": "/src/assets/consumables/lesser_haste_phial.png",
-		"cooldown": 5000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "speed",
-				"multiplier": 1.08,
-				"duration": 9000
-			}
-		],
-		"dropRate": 0.12,
-		"sellCost": 20,
-		"buyCost": 40
-	},
-	"haste_phial": {
-		"id": "haste_phial",
-		"name": "Haste Phial",
-		"description": "A potent enhancer for faster tempo in combat.",
-		"consumableImg": "/src/assets/consumables/haste_phial.png",
-		"cooldown": 6000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "speed",
-				"multiplier": 1.15,
-				"duration": 12000
-			}
-		],
-		"dropRate": 0.09,
-		"sellCost": 31,
-		"buyCost": 62
-	},
-	"grand_haste_phial": {
-		"id": "grand_haste_phial",
-		"name": "Grand Haste Phial",
-		"description": "High-end speed buff for burst windows.",
-		"consumableImg": "/src/assets/consumables/grand_haste_phial.png",
-		"cooldown": 7500,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "speed",
-				"multiplier": 1.25,
-				"duration": 15000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 49,
-		"buyCost": 98
-	},
-	"weak_corrosion_vial": {
-		"id": "weak_corrosion_vial",
-		"name": "Weak Corrosion Vial",
-		"description": "Applies a light corrosive HP debuff.",
-		"consumableImg": "/src/assets/consumables/weak_corrosion_vial.png",
-		"cooldown": 5500,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "hp",
-				"amount": 12,
-				"duration": 10000
-			}
-		],
-		"dropRate": 0.11,
-		"sellCost": 19,
-		"buyCost": 38
-	},
-	"corrosion_vial": {
-		"id": "corrosion_vial",
-		"name": "Corrosion Vial",
-		"description": "A stronger corrosive compound that eats at HP.",
-		"consumableImg": "/src/assets/consumables/corrosion_vial.png",
-		"cooldown": 6500,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "hp",
-				"amount": 24,
-				"duration": 13000
-			}
-		],
-		"dropRate": 0.08,
-		"sellCost": 30,
-		"buyCost": 60
-	},
-	"severe_corrosion_vial": {
-		"id": "severe_corrosion_vial",
-		"name": "Severe Corrosion Vial",
-		"description": "A brutal acid blend for heavy HP suppression.",
-		"consumableImg": "/src/assets/consumables/severe_corrosion_vial.png",
-		"cooldown": 8000,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "hp",
-				"amount": 38,
-				"duration": 16000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 48,
-		"buyCost": 96
-	},
-	"weak_mind_leech": {
-		"id": "weak_mind_leech",
-		"name": "Weak Mind Leech",
-		"description": "A mild siphon that reduces energy reserves.",
-		"consumableImg": "/src/assets/consumables/weak_mind_leech.png",
-		"cooldown": 5500,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "energy",
-				"amount": 12,
-				"duration": 10000
-			}
-		],
-		"dropRate": 0.11,
-		"sellCost": 19,
-		"buyCost": 38
-	},
-	"mind_leech": {
-		"id": "mind_leech",
-		"name": "Mind Leech",
-		"description": "A focused drain that heavily cuts energy flow.",
-		"consumableImg": "/src/assets/consumables/mind_leech.png",
-		"cooldown": 6500,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "energy",
-				"amount": 24,
-				"duration": 13000
-			}
-		],
-		"dropRate": 0.08,
-		"sellCost": 30,
-		"buyCost": 60
-	},
-	"severe_mind_leech": {
-		"id": "severe_mind_leech",
-		"name": "Severe Mind Leech",
-		"description": "An intense psychic siphon for major energy loss.",
-		"consumableImg": "/src/assets/consumables/severe_mind_leech.png",
-		"cooldown": 8000,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "energy",
-				"amount": 38,
-				"duration": 16000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 48,
-		"buyCost": 96
-	},
-	"weak_tar_essence": {
-		"id": "weak_tar_essence",
-		"name": "Weak Tar Essence",
-		"description": "Sticky residue that lightly slows movement speed.",
-		"consumableImg": "/src/assets/consumables/weak_tar_essence.png",
-		"cooldown": 5000,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "speed",
-				"amount": 0.06,
-				"duration": 10000
-			}
-		],
-		"dropRate": 0.11,
-		"sellCost": 17,
-		"buyCost": 34
-	},
-	"tar_essence": {
-		"id": "tar_essence",
-		"name": "Tar Essence",
-		"description": "Dense pitch that significantly reduces speed.",
-		"consumableImg": "/src/assets/consumables/tar_essence.png",
-		"cooldown": 6000,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "speed",
-				"amount": 0.12,
-				"duration": 13000
-			}
-		],
-		"dropRate": 0.08,
-		"sellCost": 28,
-		"buyCost": 56
-	},
-	"dense_tar_essence": {
-		"id": "dense_tar_essence",
-		"name": "Dense Tar Essence",
-		"description": "Heavy black pitch for severe speed suppression.",
-		"consumableImg": "/src/assets/consumables/dense_tar_essence.png",
-		"cooldown": 7500,
-		"effects": [
-			{
-				"type": "debuff",
-				"stat": "speed",
-				"amount": 0.18,
-				"duration": 16000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 45,
-		"buyCost": 90
-	},
-	"iron_stew": {
-		"id": "iron_stew",
-		"name": "Iron Stew",
-		"description": "A fortified meal that restores HP and hardens defense.",
-		"consumableImg": "/src/assets/consumables/iron_stew.png",
-		"cooldown": 8500,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "hp",
-				"amount": 35
-			},
-			{
-				"type": "buff",
-				"stat": "def",
-				"multiplier": 1.15,
-				"duration": 12000
-			}
-		],
-		"dropRate": 0.07,
-		"sellCost": 36,
-		"buyCost": 72
-	},
-	"spark_noodle_bowl": {
-		"id": "spark_noodle_bowl",
-		"name": "Spark Noodle Bowl",
-		"description": "A hot meal that restores energy and boosts speed.",
-		"consumableImg": "/src/assets/consumables/spark_noodle_bowl.png",
-		"cooldown": 8500,
-		"effects": [
-			{
-				"type": "restore",
-				"stat": "energy",
-				"amount": 35
-			},
-			{
-				"type": "buff",
-				"stat": "speed",
-				"multiplier": 1.12,
-				"duration": 10000
-			}
-		],
-		"dropRate": 0.07,
-		"sellCost": 35,
-		"buyCost": 70
-	},
-	"risky_war_broth": {
-		"id": "risky_war_broth",
-		"name": "Risky War Broth",
-		"description": "High-risk mixture: more damage at the cost of HP stability.",
-		"consumableImg": "/src/assets/consumables/risky_war_broth.png",
-		"cooldown": 9000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "dmg",
-				"multiplier": 1.25,
-				"duration": 12000
-			},
-			{
-				"type": "debuff",
-				"stat": "hp",
-				"amount": 16,
-				"duration": 12000
-			}
-		],
-		"dropRate": 0.06,
-		"sellCost": 40,
-		"buyCost": 80
-	},
-	"focus_concoction": {
-		"id": "focus_concoction",
-		"name": "Focus Concoction",
-		"description": "Sharpens speed but drains energy over time.",
-		"consumableImg": "/src/assets/consumables/focus_concoction.png",
-		"cooldown": 9000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "speed",
-				"multiplier": 1.22,
-				"duration": 12000
-			},
-			{
-				"type": "debuff",
-				"stat": "energy",
-				"amount": 18,
-				"duration": 12000
-			}
-		],
-		"dropRate": 0.06,
-		"sellCost": 39,
-		"buyCost": 78
-	},
-	"juggernaut_tonic": {
-		"id": "juggernaut_tonic",
-		"name": "Juggernaut Tonic",
-		"description": "Greatly improves defense while slowing movement.",
-		"consumableImg": "/src/assets/consumables/juggernaut_tonic.png",
-		"cooldown": 9500,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "def",
-				"multiplier": 1.45,
-				"duration": 15000
-			},
-			{
-				"type": "debuff",
-				"stat": "speed",
-				"amount": 0.1,
-				"duration": 13000
-			}
-		],
-		"dropRate": 0.05,
-		"sellCost": 45,
-		"buyCost": 90
-	},
-	"chaos_elixir": {
-		"id": "chaos_elixir",
-		"name": "Chaos Elixir",
-		"description": "A volatile blend: huge offensive tempo with HP drawback.",
-		"consumableImg": "/src/assets/consumables/chaos_elixir.png",
-		"cooldown": 10000,
-		"effects": [
-			{
-				"type": "buff",
-				"stat": "dmg",
-				"multiplier": 1.3,
-				"duration": 14000
-			},
-			{
-				"type": "buff",
-				"stat": "speed",
-				"multiplier": 1.15,
-				"duration": 14000
-			},
-			{
-				"type": "debuff",
-				"stat": "hp",
-				"amount": 22,
-				"duration": 14000
-			}
-		],
-		"dropRate": 0.04,
-		"sellCost": 60,
-		"buyCost": 120
-	}
+  "health_potion": {
+    "id": "health_potion",
+    "name": "Health Potion",
+    "description": "A basic red potion that restores a small amount of HP.",
+    "consumableImg": "/src/assets/consumables/health_potion.png",
+    "cooldown": 3,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "hp",
+        "amount": 25
+      }
+    ],
+    "dropRate": 0.2,
+    "sellCost": 12,
+    "buyCost": 24
+  },
+  "greater_health_potion": {
+    "id": "greater_health_potion",
+    "name": "Greater Health Potion",
+    "description": "A refined blend for solid frontline recovery.",
+    "consumableImg": "/src/assets/consumables/greater_health_potion.png",
+    "cooldown": 4.5,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "hp",
+        "amount": 45
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 23,
+    "buyCost": 46
+  },
+  "superior_health_potion": {
+    "id": "superior_health_potion",
+    "name": "Superior Health Potion",
+    "description": "A high-grade restorative reserved for dangerous fights.",
+    "consumableImg": "/src/assets/consumables/superior_health_potion.png",
+    "cooldown": 6.5,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "hp",
+        "amount": 70
+      }
+    ],
+    "dropRate": 0.06,
+    "sellCost": 41,
+    "buyCost": 82
+  },
+  "mana_potion": {
+    "id": "mana_potion",
+    "name": "Mana Potion",
+    "description": "A light tonic that restores a small amount of energy.",
+    "consumableImg": "/src/assets/consumables/mana_potion.png",
+    "cooldown": 3,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "energy",
+        "amount": 25
+      }
+    ],
+    "dropRate": 0.2,
+    "sellCost": 12,
+    "buyCost": 24
+  },
+  "greater_mana_potion": {
+    "id": "greater_mana_potion",
+    "name": "Greater Mana Potion",
+    "description": "An efficient energy refuel for longer engagements.",
+    "consumableImg": "/src/assets/consumables/greater_mana_potion.png",
+    "cooldown": 4.5,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "energy",
+        "amount": 45
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 23,
+    "buyCost": 46
+  },
+  "superior_mana_potion": {
+    "id": "superior_mana_potion",
+    "name": "Superior Mana Potion",
+    "description": "Concentrated essence that heavily restores energy.",
+    "consumableImg": "/src/assets/consumables/superior_mana_potion.png",
+    "cooldown": 6.5,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "energy",
+        "amount": 70
+      }
+    ],
+    "dropRate": 0.06,
+    "sellCost": 41,
+    "buyCost": 82
+  },
+  "lesser_berserk_draught": {
+    "id": "lesser_berserk_draught",
+    "name": "Lesser Berserk Draught",
+    "description": "A mild stimulant that boosts damage output.",
+    "consumableImg": "/src/assets/consumables/lesser_berserk_draught.png",
+    "cooldown": 5.5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "dmg",
+        "multiplier": 1.12,
+        "duration": 10
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 22,
+    "buyCost": 44
+  },
+  "berserk_draught": {
+    "id": "berserk_draught",
+    "name": "Berserk Draught",
+    "description": "A stronger combat brew for aggressive pushes.",
+    "consumableImg": "/src/assets/consumables/berserk_draught.png",
+    "cooldown": 6.5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "dmg",
+        "multiplier": 1.22,
+        "duration": 13
+      }
+    ],
+    "dropRate": 0.09,
+    "sellCost": 34,
+    "buyCost": 68
+  },
+  "grand_berserk_draught": {
+    "id": "grand_berserk_draught",
+    "name": "Grand Berserk Draught",
+    "description": "Top-tier damage stimulant for boss phases.",
+    "consumableImg": "/src/assets/consumables/grand_berserk_draught.png",
+    "cooldown": 8,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "dmg",
+        "multiplier": 1.35,
+        "duration": 16
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 54,
+    "buyCost": 108
+  },
+  "lesser_guard_elixir": {
+    "id": "lesser_guard_elixir",
+    "name": "Lesser Guard Elixir",
+    "description": "A protective mix that hardens defense slightly.",
+    "consumableImg": "/src/assets/consumables/lesser_guard_elixir.png",
+    "cooldown": 5.5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "def",
+        "multiplier": 1.2,
+        "duration": 12
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 22,
+    "buyCost": 44
+  },
+  "guard_elixir": {
+    "id": "guard_elixir",
+    "name": "Guard Elixir",
+    "description": "Improves resistance during sustained fights.",
+    "consumableImg": "/src/assets/consumables/guard_elixir.png",
+    "cooldown": 7,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "def",
+        "multiplier": 1.35,
+        "duration": 15
+      }
+    ],
+    "dropRate": 0.09,
+    "sellCost": 35,
+    "buyCost": 70
+  },
+  "grand_guard_elixir": {
+    "id": "grand_guard_elixir",
+    "name": "Grand Guard Elixir",
+    "description": "Elite-grade defense tonic for critical battles.",
+    "consumableImg": "/src/assets/consumables/grand_guard_elixir.png",
+    "cooldown": 8.5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "def",
+        "multiplier": 1.55,
+        "duration": 18
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 56,
+    "buyCost": 112
+  },
+  "lesser_haste_phial": {
+    "id": "lesser_haste_phial",
+    "name": "Lesser Haste Phial",
+    "description": "A small speed stimulant for repositioning.",
+    "consumableImg": "/src/assets/consumables/lesser_haste_phial.png",
+    "cooldown": 5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "speed",
+        "multiplier": 1.08,
+        "duration": 9
+      }
+    ],
+    "dropRate": 0.12,
+    "sellCost": 20,
+    "buyCost": 40
+  },
+  "haste_phial": {
+    "id": "haste_phial",
+    "name": "Haste Phial",
+    "description": "A potent enhancer for faster tempo in combat.",
+    "consumableImg": "/src/assets/consumables/haste_phial.png",
+    "cooldown": 6,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "speed",
+        "multiplier": 1.15,
+        "duration": 12
+      }
+    ],
+    "dropRate": 0.09,
+    "sellCost": 31,
+    "buyCost": 62
+  },
+  "grand_haste_phial": {
+    "id": "grand_haste_phial",
+    "name": "Grand Haste Phial",
+    "description": "High-end speed buff for burst windows.",
+    "consumableImg": "/src/assets/consumables/grand_haste_phial.png",
+    "cooldown": 7.5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "speed",
+        "multiplier": 1.25,
+        "duration": 15
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 49,
+    "buyCost": 98
+  },
+  "weak_corrosion_vial": {
+    "id": "weak_corrosion_vial",
+    "name": "Weak Corrosion Vial",
+    "description": "Applies a light corrosive HP debuff.",
+    "consumableImg": "/src/assets/consumables/weak_corrosion_vial.png",
+    "cooldown": 5.5,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "hp",
+        "amount": 12,
+        "duration": 10
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 19,
+    "buyCost": 38
+  },
+  "corrosion_vial": {
+    "id": "corrosion_vial",
+    "name": "Corrosion Vial",
+    "description": "A stronger corrosive compound that eats at HP.",
+    "consumableImg": "/src/assets/consumables/corrosion_vial.png",
+    "cooldown": 6.5,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "hp",
+        "amount": 24,
+        "duration": 13
+      }
+    ],
+    "dropRate": 0.08,
+    "sellCost": 30,
+    "buyCost": 60
+  },
+  "severe_corrosion_vial": {
+    "id": "severe_corrosion_vial",
+    "name": "Severe Corrosion Vial",
+    "description": "A brutal acid blend for heavy HP suppression.",
+    "consumableImg": "/src/assets/consumables/severe_corrosion_vial.png",
+    "cooldown": 8,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "hp",
+        "amount": 38,
+        "duration": 16
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 48,
+    "buyCost": 96
+  },
+  "weak_mind_leech": {
+    "id": "weak_mind_leech",
+    "name": "Weak Mind Leech",
+    "description": "A mild siphon that reduces energy reserves.",
+    "consumableImg": "/src/assets/consumables/weak_mind_leech.png",
+    "cooldown": 5.5,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "energy",
+        "amount": 12,
+        "duration": 10
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 19,
+    "buyCost": 38
+  },
+  "mind_leech": {
+    "id": "mind_leech",
+    "name": "Mind Leech",
+    "description": "A focused drain that heavily cuts energy flow.",
+    "consumableImg": "/src/assets/consumables/mind_leech.png",
+    "cooldown": 6.5,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "energy",
+        "amount": 24,
+        "duration": 13
+      }
+    ],
+    "dropRate": 0.08,
+    "sellCost": 30,
+    "buyCost": 60
+  },
+  "severe_mind_leech": {
+    "id": "severe_mind_leech",
+    "name": "Severe Mind Leech",
+    "description": "An intense psychic siphon for major energy loss.",
+    "consumableImg": "/src/assets/consumables/severe_mind_leech.png",
+    "cooldown": 8,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "energy",
+        "amount": 38,
+        "duration": 16
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 48,
+    "buyCost": 96
+  },
+  "weak_tar_essence": {
+    "id": "weak_tar_essence",
+    "name": "Weak Tar Essence",
+    "description": "Sticky residue that lightly slows movement speed.",
+    "consumableImg": "/src/assets/consumables/weak_tar_essence.png",
+    "cooldown": 5,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "speed",
+        "amount": 0.06,
+        "duration": 10
+      }
+    ],
+    "dropRate": 0.11,
+    "sellCost": 17,
+    "buyCost": 34
+  },
+  "tar_essence": {
+    "id": "tar_essence",
+    "name": "Tar Essence",
+    "description": "Dense pitch that significantly reduces speed.",
+    "consumableImg": "/src/assets/consumables/tar_essence.png",
+    "cooldown": 6,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "speed",
+        "amount": 0.12,
+        "duration": 13
+      }
+    ],
+    "dropRate": 0.08,
+    "sellCost": 28,
+    "buyCost": 56
+  },
+  "dense_tar_essence": {
+    "id": "dense_tar_essence",
+    "name": "Dense Tar Essence",
+    "description": "Heavy black pitch for severe speed suppression.",
+    "consumableImg": "/src/assets/consumables/dense_tar_essence.png",
+    "cooldown": 7.5,
+    "effects": [
+      {
+        "type": "debuff",
+        "stat": "speed",
+        "amount": 0.18,
+        "duration": 16
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 45,
+    "buyCost": 90
+  },
+  "iron_stew": {
+    "id": "iron_stew",
+    "name": "Iron Stew",
+    "description": "A fortified meal that restores HP and hardens defense.",
+    "consumableImg": "/src/assets/consumables/iron_stew.png",
+    "cooldown": 8.5,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "hp",
+        "amount": 35
+      },
+      {
+        "type": "buff",
+        "stat": "def",
+        "multiplier": 1.15,
+        "duration": 12
+      }
+    ],
+    "dropRate": 0.07,
+    "sellCost": 36,
+    "buyCost": 72
+  },
+  "spark_noodle_bowl": {
+    "id": "spark_noodle_bowl",
+    "name": "Spark Noodle Bowl",
+    "description": "A hot meal that restores energy and boosts speed.",
+    "consumableImg": "/src/assets/consumables/spark_noodle_bowl.png",
+    "cooldown": 8.5,
+    "effects": [
+      {
+        "type": "restore",
+        "stat": "energy",
+        "amount": 35
+      },
+      {
+        "type": "buff",
+        "stat": "speed",
+        "multiplier": 1.12,
+        "duration": 10
+      }
+    ],
+    "dropRate": 0.07,
+    "sellCost": 35,
+    "buyCost": 70
+  },
+  "risky_war_broth": {
+    "id": "risky_war_broth",
+    "name": "Risky War Broth",
+    "description": "High-risk mixture: more damage at the cost of HP stability.",
+    "consumableImg": "/src/assets/consumables/risky_war_broth.png",
+    "cooldown": 9,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "dmg",
+        "multiplier": 1.25,
+        "duration": 12
+      },
+      {
+        "type": "debuff",
+        "stat": "hp",
+        "amount": 16,
+        "duration": 12
+      }
+    ],
+    "dropRate": 0.06,
+    "sellCost": 40,
+    "buyCost": 80
+  },
+  "focus_concoction": {
+    "id": "focus_concoction",
+    "name": "Focus Concoction",
+    "description": "Sharpens speed but drains energy over time.",
+    "consumableImg": "/src/assets/consumables/focus_concoction.png",
+    "cooldown": 9,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "speed",
+        "multiplier": 1.22,
+        "duration": 12
+      },
+      {
+        "type": "debuff",
+        "stat": "energy",
+        "amount": 18,
+        "duration": 12
+      }
+    ],
+    "dropRate": 0.06,
+    "sellCost": 39,
+    "buyCost": 78
+  },
+  "juggernaut_tonic": {
+    "id": "juggernaut_tonic",
+    "name": "Juggernaut Tonic",
+    "description": "Greatly improves defense while slowing movement.",
+    "consumableImg": "/src/assets/consumables/juggernaut_tonic.png",
+    "cooldown": 9.5,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "def",
+        "multiplier": 1.45,
+        "duration": 15
+      },
+      {
+        "type": "debuff",
+        "stat": "speed",
+        "amount": 0.1,
+        "duration": 13
+      }
+    ],
+    "dropRate": 0.05,
+    "sellCost": 45,
+    "buyCost": 90
+  },
+  "chaos_elixir": {
+    "id": "chaos_elixir",
+    "name": "Chaos Elixir",
+    "description": "A volatile blend: huge offensive tempo with HP drawback.",
+    "consumableImg": "/src/assets/consumables/chaos_elixir.png",
+    "cooldown": 10,
+    "effects": [
+      {
+        "type": "buff",
+        "stat": "dmg",
+        "multiplier": 1.3,
+        "duration": 14
+      },
+      {
+        "type": "buff",
+        "stat": "speed",
+        "multiplier": 1.15,
+        "duration": 14
+      },
+      {
+        "type": "debuff",
+        "stat": "hp",
+        "amount": 22,
+        "duration": 14
+      }
+    ],
+    "dropRate": 0.04,
+    "sellCost": 60,
+    "buyCost": 120
+  }
 }

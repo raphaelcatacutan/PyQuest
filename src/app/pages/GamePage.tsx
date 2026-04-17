@@ -122,7 +122,7 @@ export default function GamePage() {
 
     if (enteredVillage) {
       const progressIncrement = useBountyQuestStore.getState().questLevel;
-      useTutorialStore.getState().startGameLoop(progressIncrement);
+      useTutorialStore.getState().startGameLoop(progressIncrement, { openTutorial: false });
     }
 
     previousInVillageRef.current = inVillage;

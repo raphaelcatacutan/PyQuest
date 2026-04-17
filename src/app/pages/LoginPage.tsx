@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useGuideStore, usePlayerStore } from "@/src/game/store";
+import { useGameStore, useGuideStore, usePlayerStore, useSceneStore, useTerminalStore } from "@/src/game/store";
 import { useState } from "react";
 import showToast from '@/src/components/ui/Toast'
 import { useShallow } from "zustand/shallow";
@@ -27,7 +27,16 @@ export default function LoginPage() {
   const playMusic = useSoundStore(s => s.playMusic)
   const toggleGuide = useGuideStore(s => s.toggleGuide)
 
-  const proceedToGame = async (usernameToProcess: string) => {
+  const proceedToGame = async (usernameToProcess: string, options?: { isNewUser?: boolean }) => {
+    if (options?.isNewUser) {
+      useSceneStore.getState().setScene("village");
+      useGameStore.setState({
+        inVillage: true,
+        inCombat: false,
+      });
+      useTerminalStore.getState().clearLogs();
+    }
+
     setUserId(usernameToProcess);
     setPlayerId(usernameToProcess);
     // Load other data
@@ -62,7 +71,7 @@ export default function LoginPage() {
       setShowConfirmDialog(false);
       setUsername("");
       toggleGuide(true);
-      await proceedToGame(pendingUsername);
+      await proceedToGame(pendingUsername, { isNewUser: true });
     } else {
       showToast({ variant: "error", message: "Failed to create account" });
       setShowConfirmDialog(false);

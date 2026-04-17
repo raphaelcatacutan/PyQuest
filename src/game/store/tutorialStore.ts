@@ -72,6 +72,12 @@ const resetToPhaseStart = (sequence: Tutorial[], phaseIndex: number) => ({
 
 const clampIndex = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
+const clearBountyQuestState = () => {
+  const bountyQuestStore = useBountyQuestStore.getState();
+  bountyQuestStore.toggleDisplayBountyQuest(false);
+  bountyQuestStore.setHeader("Active Bounties");
+};
+
 export const useTutorialStore = create<TutorialStoreProps>()(
   persist(
     (set, get) => ({
@@ -221,6 +227,7 @@ export const useTutorialStore = create<TutorialStoreProps>()(
         const shouldOpenTutorial = options?.openTutorial ?? true;
 
         if (!hasStoredProgress) {
+          clearBountyQuestState();
           set({
             currentPhaseIndex: 0,
             currentInstructionIndex: 0,
@@ -241,6 +248,10 @@ export const useTutorialStore = create<TutorialStoreProps>()(
 
         const phaseIndexToUse = shouldAdvanceFromIncrement ? incrementPhaseIndex : safeStoredPhaseIndex;
         const instructionIndexToUse = shouldAdvanceFromIncrement ? 0 : safeStoredInstructionIndex;
+
+        if (shouldAdvanceFromIncrement) {
+          clearBountyQuestState();
+        }
 
         const shouldDisplayTutorial = shouldOpenTutorial && (shouldAdvanceFromIncrement || !isCompleted);
 

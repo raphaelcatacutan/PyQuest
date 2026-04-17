@@ -14,18 +14,19 @@ import {
   useTrialsStore,
   useTutorialStore,
   useNPCStore,
-  useKillTrackerStore,
-} from "../game/store";
-import { SceneTypes } from "../game/types/scene.types";
-import { useState } from "react";
-import { Enemies } from "../game/data/enemies";
-import { MachineProblems } from "../game/data/dungeon";
-import { useShallow } from "zustand/shallow";
-import showToast from "./ui/Toast";
-import { getDPByDifficulty } from "../game/data/trials";
-import { Tutorials } from "../game/data/tutorial";
-import { useSoundStore } from "../game/store/soundStore";
-import { LootDrop, LootItem } from "../game/types/loot.types";
+  useKillTrackerStore
+} from "../game/store"
+import { SceneTypes } from "../game/types/scene.types"
+import { useState } from "react"
+import { Enemies } from "../game/data/enemies"
+import { MachineProblems } from "../game/data/dungeon"
+import { useShallow } from "zustand/shallow"
+import showToast from "./ui/Toast"
+import { getDPByDifficulty } from "../game/data/trials"
+import { Tutorials } from "../game/data/tutorial"
+import { useSoundStore } from "../game/store/soundStore"
+import { LootDrop, LootItem } from "../game/types/loot.types"
+import { closeIcon } from "../assets"
 
 export default function DevTool() {
   const { devTool, toggleDevTool } = useDevToolStore(
@@ -119,6 +120,8 @@ export default function DevTool() {
     })),
   );
 
+  const dev = useDevToolStore()
+
   function randomBetween(min: number, max: number): number {
     const low = Math.max(0, Math.floor(Math.min(min, max)));
     const high = Math.max(low, Math.floor(Math.max(min, max)));
@@ -181,135 +184,57 @@ export default function DevTool() {
   return (
     <>
       <div className="absolute z-101 bottom-0 right-0 flex gap-2 w-fit p-1 border bg-zinc-900 flex-wrap">
+        {/* <Button variant="icon-only-btn" icon={closeIcon} iconSize={20} title="Close Dev Tool" onClick={() => useDevToolStore.getState().toggleDevTool()}/> */}
         <span>DevTool:</span>
         {/* <span className="text-yellow-300">{playerDataText}</span> */}
-        <input
-          type="text"
-          className="border bg-zinc-800"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        ></input>
-        <Button
-          text="Print All"
-          onClick={() => {
-            console.log("=== PLAYER DATA ===");
-            console.log("user_id:", user_id);
-            console.log("playerId:", playerId);
-            console.log("localStorage keys:", Object.keys(localStorage));
-            console.log("Full inventoryStore:", useInventoryStore.getState());
-            console.log("Full playerStore:", usePlayerStore.getState());
-          }}
-        />
-        <Button text="Print" onClick={() => console.log(user_id)} />
-        {/* <Button text="Next" onClick={() => tuts.nextStep()}/> */}
-        <Button
-          text="Add to Terminal"
-          onClick={() => {
-            appendToLogs(input);
-          }}
-        />
-        <Button text="Coin+" onClick={() => gainCoin(100)} />
-        <Button text="Hp-" onClick={() => selfHarm(20)} />
+        <input type="text" className="border bg-zinc-800" value={input} onChange={(e) => setInput(e.target.value)}></input>
+        <Button text="Add to Terminal" onClick={() => {appendToLogs(input)}}/>
+        <Button text="Print Player Data" onClick={() => {
+          console.log("=== PLAYER DATA ===");
+          console.log("user_id:", user_id);
+          console.log("playerId:", playerId);
+          console.log("localStorage keys:", Object.keys(localStorage));
+          console.log("Full inventoryStore:", useInventoryStore.getState());
+          console.log("Full playerStore:", usePlayerStore.getState());
+        }}/>
+        <Button text="Print" onClick={() => console.log(user_id)}/>
+        <Button text="Hp-" onClick={() => selfHarm(20)}/>
         <span>{hp}</span>
-        <Button text="Hp+" onClick={() => gainHP(10)} />
-        <Button text="XP+" onClick={() => gainXP(100)} />
-        <Button
-          text="Toast"
-          onClick={() => {
-            showToast({ variant: "info", message: "Test" });
-          }}
+        <Button text="Hp+" onClick={() => gainHP(10)}/>
+        <Button text="Coin+" onClick={() => gainCoin(100)}/>
+        <Button text="XP+" onClick={() => gainXP(100)}/>
+        {/* <Button text="Toast" onClick={() => {showToast({variant: "info", message: "Test"})}}/> */}
+        <Button text={combatText} onClick={() => { toggleInCombat(null) }}/>
+        <Button text="Enemy/Boss" onClick={() => { 
+          toggleIsEnemy(null)
+          console.log(`Toggled Enemy/Boss: ${isEnemy}`) 
+        }}
         />
-        <Button
-          text={combatText}
-          onClick={() => {
-            toggleInCombat(null);
-          }}
-        />
-        <Button
-          text="Enemy/Boss"
-          onClick={() => {
-            toggleIsEnemy(null);
-            console.log(`Toggled Enemy/Boss: ${isEnemy}`);
-          }}
-        />
-        <Button
-          text="Hit"
-          onClick={() => {
-            if (isEnemy) {
-              enemyTakeDamage(20);
-            } else {
-              bossTakeDamage(20);
-            }
-          }}
-        />
-        <Button
-          text="Kill Enemy"
-          onClick={() => {
-            devKillLikeNormalFlow();
-          }}
-        />
-        <Button
-          text={BountyQuestText}
-          onClick={() => toggleDisplayBountyQuest()}
-        />
-        <Button
-          text="Refresh Quests"
-          onClick={() => {
-            bounty.refreshQuest();
-            console.log("Toggled Refresh Quests");
-          }}
-        />
-        <Button
-          text="+Quest Lvl"
-          onClick={() => bounty.incrementQuestLevel()}
-        />
-        <Button
-          text="Record Slime Kill"
-          onClick={() => kill.recordKill("slime")}
-        />
+        <Button text="Hit" onClick={() => {
+          if (isEnemy){ enemyTakeDamage(20) }
+          else { bossTakeDamage(20) }
+        }}/>
+        <Button text="Kill Enemy" onClick={() => {
+          devKillLikeNormalFlow()
+        }}/>
+        <Button text={BountyQuestText} onClick={() => toggleDisplayBountyQuest()}/>
+        <Button text='Refresh Quests' onClick={() => {
+          bounty.refreshQuest()
+          console.log("Toggled Refresh Quests")
+        }}/>
+        <Button text="+BtyLvl" onClick={() => useBountyQuestStore.getState().incrementQuestLevel()}/>
+        {/* <Button text='+Quest Lvl' onClick={() => bounty.incrementQuestLevel()}/> */}
+        {/* <Button text='Record Slime Kill' onClick={() => kill.recordKill('slime')}/> */}
         {/* <Button text='+Slime Kill' onClick={() => bounty.incrementQuestLevel()}/> */}
-        <Button
-          text="Check"
-          onClick={() => {
-            bounty.toggleQuest("1");
-          }}
-        />
-        <Button
-          text={sceneText}
-          onClick={() => {
-            const scenes: SceneTypes[] = [
-              "village",
-              "forest",
-              "temple",
-              "cemetery",
-              "swamp",
-              "jungle",
-              "desert",
-            ];
-            const randomScene =
-              scenes[Math.floor(Math.random() * scenes.length)];
-            setScene(randomScene);
-          }}
-        />
-        <Button text="Guide" onClick={() => guide.toggleGuide(null)} />
-        <Button
-          text="NPC"
-          onClick={() => {
-            npc.toggleDisplayNPC();
-          }}
-        />
-        <Button text="Tutorial" onClick={() => tutorial.toggleIsTutorial()} />
-        <Button
-          text="SFX"
-          onClick={() => {
-            useSoundStore.getState().playSfx("click");
-            console.log("Played Hit SFX");
-          }}
-        />
-        <Button
-          text={`Combat Log (${showCombatDebug ? "on" : "off"})`}
-          onClick={() => setShowCombatDebug((s) => !s)}
-        />
+        {/* <Button text="Check" onClick={() => { bounty.toggleQuest("1") }}/> */}
+        <Button text={sceneText} onClick={() => {
+          const scenes: SceneTypes[] = ['village', 'forest', 'temple', 'cemetery', 'swamp', 'jungle', 'desert'];
+          const randomScene = scenes[Math.floor(Math.random() * scenes.length)];
+          setScene(randomScene)
+        }}/>
+        <Button text="Guide" onClick={() => guide.toggleGuide(null)}/>
+        {/* <Button text="NPC" onClick={() =>  {npc.toggleDisplayNPC()}}/> */}
+        <Button text="Tutorial" onClick={() => tutorial.toggleIsTutorial()}/>
       </div>
 
       {showCombatDebug && (

@@ -53,9 +53,10 @@ export const useBountyQuestStore = create<BountyQuestProps>()(
       
       setHeader: (text) => set({ header: text }),
 
-      incrementQuestLevel: () => set((state) => ({ 
-        questLevel: state.questLevel + 1 
-      })),
+      incrementQuestLevel: () => {
+        useKillTrackerStore.getState().resetTracker()
+        set((state) => ({ questLevel: state.questLevel + 1 }))
+      },
 
       setAllQuests: (data) => set({ allQuests: data }),
 

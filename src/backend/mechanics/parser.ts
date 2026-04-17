@@ -56,6 +56,10 @@ export type PythonExecutionOptions = {
     enableStatementLogging?: boolean;
 };
 
+export type PythonRunOptions = {
+    onOutputChunk?: (text: string) => void;
+};
+
 let runtimeHooks: PythonRuntimeHooks = {};
 let runtimeExecutionOptions: Required<PythonExecutionOptions> = {
     defaultInstructionDelayMs: 1000,
@@ -685,7 +689,7 @@ function expandCustomModuleImports(code: string): string {
     return `${inlinedModuleCode.join("\n\n")}\n\n${remainingLines.join("\n")}`;
 }
 
-export function runPython(code: string): Promise<string> {
+export function runPython(code: string, options?: PythonRunOptions): Promise<string> {
     return new Promise((resolve) => {
         ensurePythonModulesInitialized();
         const executionController: PythonExecutionController = {
@@ -713,6 +717,7 @@ export function runPython(code: string): Promise<string> {
         Sk.configure({
             output: (text: string) => {
                 output += text;
+                options?.onOutputChunk?.(text);
             },
             read: (filename: string) => {
                 const dynamicModuleCode = resolveDynamicShopModuleCode(filename);

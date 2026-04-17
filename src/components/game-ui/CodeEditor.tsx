@@ -344,23 +344,49 @@ export default function CodeEditor() {
     });
 
     try {
-      const output = await runPython(code);
+      let streamedBuffer = "";
+      let hasPrintedOutput = false;
+
+      const flushStreamedLines = (force = false) => {
+        const parts = streamedBuffer.split(/\r?\n/);
+
+        if (!force) {
+          streamedBuffer = parts.pop() ?? "";
+        } else {
+          streamedBuffer = "";
+        }
+
+        parts
+          .map((line) => line.trim())
+          .filter((line) => line.length > 0)
+          .forEach((line) => {
+            hasPrintedOutput = true;
+            appendToLogs(`[PY-OUT]: ${line}`);
+          });
+      };
+
+      const output = await runPython(code, {
+        onOutputChunk: (chunk) => {
+          streamedBuffer += chunk;
+          flushStreamedLines(false);
+        },
+      });
+
+      if (streamedBuffer.trim().length > 0) {
+        hasPrintedOutput = true;
+        appendToLogs(`[PY-OUT]: ${streamedBuffer.trim()}`);
+      }
+
       const lines = output
         .split(/\r?\n/)
         .map((line) => line.trim())
         .filter((line) => line.length > 0);
+      const errorLines = lines.filter((line) => /^Error:/i.test(line));
 
-      if (lines.length === 0) {
+      if (errorLines.length > 0) {
+        errorLines.forEach((line) => appendToLogs(`[PY-ERR]: ${line}`));
+      } else if (!hasPrintedOutput) {
         appendToLogs("[PY]: Script finished.");
-      } else {
-        lines.forEach((line) => {
-          if (/^Error:/i.test(line)) {
-            appendToLogs(`[PY-ERR]: ${line}`);
-            return;
-          }
-
-          appendToLogs(`[PY-OUT]: ${line}`);
-        });
       }
     } catch (error) {
       appendToLogs(`[PY-ERR]: ${error instanceof Error ? error.message : String(error)}`);

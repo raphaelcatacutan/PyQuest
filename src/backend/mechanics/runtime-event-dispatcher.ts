@@ -705,6 +705,18 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
         return;
       }
 
+      const currentScene = useSceneStore.getState().scene;
+      if (currentScene === "village") {
+        appendTerminalLog(
+          "explore() is not allowed in village. Use goTo(...) first.",
+        );
+        appendRuntimeDebug("explore blocked", {
+          reason: "village scene",
+          scene: currentScene,
+        });
+        return;
+      }
+
       const state = readBoolean(payload, "state", true);
       useGameStore.getState().toggleInCombat(state);
       appendRuntimeDebug("explore set combat", { state });

@@ -241,7 +241,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
           ? Math.max(0, state.energyRegenPerSecond)
           : 0;
         const normalizedDelta = Number.isFinite(deltaSeconds) ? Math.max(0, deltaSeconds) : 0;
-        if (regenBase <= 0 || normalizedDelta <= 0 || state.energy >= state.maxEnergy) {
+        if (state.hp <= 0 || regenBase <= 0 || normalizedDelta <= 0 || state.energy >= state.maxEnergy) {
           return state;
         }
 
@@ -282,7 +282,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
           ? Math.max(0, state.hpRegenPerSecond)
           : 0;
         const normalizedDelta = Number.isFinite(deltaSeconds) ? Math.max(0, deltaSeconds) : 0;
-        if (regenBase <= 0 || normalizedDelta <= 0 || state.hp >= state.maxHP) {
+        if (state.hp <= 0 || regenBase <= 0 || normalizedDelta <= 0 || state.hp >= state.maxHP) {
           return state;
         }
 

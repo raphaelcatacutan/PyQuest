@@ -90,4 +90,31 @@ describe("player regen discretization", () => {
     expect(usePlayerStore.getState().hp).toBe(20);
     expect(Number.isInteger(usePlayerStore.getState().hp)).toBe(true);
   });
+
+  it("does not regenerate energy while dead", () => {
+    usePlayerStore.setState({
+      hp: 0,
+      energy: 10,
+      maxEnergy: 20,
+      energyRegenPerSecond: 4,
+      energyRegenCarry: 0.4,
+    });
+
+    usePlayerStore.getState().applyEnergyRegen(1, "out_of_combat");
+    expect(usePlayerStore.getState().energy).toBe(10);
+    expect(usePlayerStore.getState().energyRegenCarry).toBe(0.4);
+  });
+
+  it("does not regenerate hp while dead", () => {
+    usePlayerStore.setState({
+      hp: 0,
+      maxHP: 20,
+      hpRegenPerSecond: 5,
+      hpRegenCarry: 0.6,
+    });
+
+    usePlayerStore.getState().applyHpRegen(1, "out_of_combat");
+    expect(usePlayerStore.getState().hp).toBe(0);
+    expect(usePlayerStore.getState().hpRegenCarry).toBe(0.6);
+  });
 });

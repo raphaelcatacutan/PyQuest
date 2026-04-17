@@ -3,14 +3,14 @@ import { painHud } from "@/src/assets"
 import { useEffect, useRef } from "react"
 import { useShallow } from "zustand/shallow"
 import { useBountyQuestStore, useBossStore, useEnemyStore, useGameStore, useSceneStore, useTutorialStore } from "@/src/game/store"
-import Button from "../ui/Button"
+
+const RESPAWN_BASE_HP = 1;
+const RESPAWN_BASE_ENERGY = 1;
 
 export default function Damaged(){
-  const { hp, maxHP, maxEnergy, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(
+  const { hp, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(
     useShallow((s) => ({
       hp: s.hp,
-      maxHP: s.maxHP,
-      maxEnergy: s.maxEnergy,
       isDamaged: s.isDamaged,
       toggleIsDamaged: s.toggleIsDamaged,
       takeDamage: s.takeDamage,
@@ -80,9 +80,12 @@ export default function Damaged(){
     clearBoss()
 
     usePlayerStore.setState({
-      hp: maxHP,
-      energy: maxEnergy,
+      hp: RESPAWN_BASE_HP,
+      energy: RESPAWN_BASE_ENERGY,
+      hpRegenCarry: 0,
+      energyRegenCarry: 0,
       isDamaged: false,
+      isHealing: false,
     })
   }
 

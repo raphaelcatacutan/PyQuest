@@ -1,6 +1,7 @@
 import { useShallow } from "zustand/shallow"
 import { useBossStore } from "@/src/game/store"
 import { getRandomMP } from "@/src/game/data/dungeon";
+import { useEffect, useRef, useState } from "react";
 
 // TODO: Bug: terminal outputs double console, meaning useEffect is being performed twice.
 //            This affects which enemy/boss is being rendered
@@ -26,6 +27,17 @@ export default function BossEncounter(){
   const energyPercentage = (energy / safeMaxEnergy) * 100;
   const activeProblemText = activeProblem?.problem ?? "No machine problem available for this scene.";
 
+  const [isHurt, setIsHurt] = useState(false);
+  const prevHpRef = useRef(hp);
+
+  useEffect(() => {
+    if (hp < prevHpRef.current) {
+      setIsHurt(true);
+      setTimeout(() => setIsHurt(false), 300);
+    }
+    prevHpRef.current = hp;
+  }, [hp]);
+
   return (
     <div className="absolute z-5 w-full h-full opacity-100">
       <div className="flex flex-col items-center justify-center h-full">
@@ -50,7 +62,11 @@ export default function BossEncounter(){
                 </div>
                 
                 <div className=" flex justify-center items-center">
-                  <img src={bossImg} className="w-80 h-80" draggable={false}></img>
+                  <img 
+                    src={bossImg} 
+                    className={`w-80 h-80 ${isHurt ? "animate-monster-hurt" : ""}`}
+                    draggable={false}
+                  />
                 </div>
               </div>
               <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">

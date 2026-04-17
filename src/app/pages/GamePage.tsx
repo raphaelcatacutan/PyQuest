@@ -53,6 +53,7 @@ export default function GamePage() {
       moveInventoryItem: s.moveInventoryItem,
     })),
   );
+  const isDamaged = usePlayerStore(s => s.isDamaged)
 
   const lootInventoryRef = useRef<{
     getItems: (nodeIds: string[]) => InventoryNode[];
@@ -200,17 +201,17 @@ export default function GamePage() {
           <Dungeon />
           <Tutorial />
           <div
-            className="absolute flex w-full h-full z-1"
+            className={`absolute flex w-full h-full z-1 ${isDamaged ? "animate-shake" : ""}`}
             style={{
               backgroundImage: `url(${displayBg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "repeat",
-              transition: "opacity 0.3s ease-in, filter 0.3s ease-in-out",
+              transition: "opacity 0.3s ease-in, filter 0.3s ease-in-out, transform 0.1s ease-out",
               opacity: isTransitioning ? 0.4 : 1,
               filter: isTransitioning ? "brightness(0)" : "brightness(1)",
             }}
-          />
+          /> 
           <div className="absolute h-full z-50">
             <LeftSideBar
               playerInventory={playerInventory}

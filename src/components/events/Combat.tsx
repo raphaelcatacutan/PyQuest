@@ -179,10 +179,21 @@ export default function Combat() {
       usePlayerStore.getState().gainCoins(coinReward);
     }
 
-    const rewardSuffix = grantedLootCount > 0 ? ` + ${grantedLootCount} loot item(s)` : "";
+    const rewardParts: string[] = [];
+    if (xpReward > 0) {
+      rewardParts.push(`+${xpReward} XP`);
+    }
+    if (coinReward > 0) {
+      rewardParts.push(`+${coinReward} coins`);
+    }
+    if (grantedLootCount > 0) {
+      rewardParts.push(`+${grantedLootCount} loot item(s)`);
+    }
+
+    const rewardSummary = rewardParts.length > 0 ? rewardParts.join(", ") : "No rewards";
     useTerminalStore
       .getState()
-      .appendToLog(`[SYSTEM]: Defeated ${targetType} '${targetId}'. +${xpReward} XP, +${coinReward} coins${rewardSuffix}.`);
+      .appendToLog(`[SYSTEM]: Defeated ${targetType} '${targetId}'. ${rewardSummary}.`);
   };
 
   const processTargetDefeat = (

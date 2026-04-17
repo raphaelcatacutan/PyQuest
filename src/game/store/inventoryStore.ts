@@ -2,6 +2,11 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { InventoryNode } from "@/src/game/types/inventory.types";
 import handbookFileSource from "@/src/backend/mechanics/handbook.py?raw";
+import {
+  DEFAULT_MAIN_FILE_CODE,
+  DEFAULT_MAIN_FILE_ID,
+  DEFAULT_MAIN_FILE_NAME,
+} from "@/src/game/constants/editor";
 
 const handbookFileCode = `#file:handbook.py\n\n${handbookFileSource}`;
 
@@ -24,6 +29,12 @@ function withBundledUtilityContent(items: InventoryNode[]): { items: InventoryNo
       if (node.kind === "util" && isHandbookFile && node.code !== handbookFileCode) {
         changed = true;
         return { ...node, code: handbookFileCode };
+      }
+
+      const isMainFile = node.id === DEFAULT_MAIN_FILE_ID || node.name === DEFAULT_MAIN_FILE_NAME;
+      if (isMainFile && node.code === undefined) {
+        changed = true;
+        return { ...node, code: DEFAULT_MAIN_FILE_CODE };
       }
 
       return node;
@@ -80,7 +91,7 @@ const InitialPlayerInventory: InventoryNode[] = [
     name: "user", 
     children: [
       { id: "init_file_root", kind: "util", itemId: "init_file_wp" , name: "__init__.py" },
-      { id: "main_root", kind: "util", itemId: "main_file" , name: "main.py" },
+      { id: "main_root", kind: "util", itemId: "main_file" , name: "main.py", code: DEFAULT_MAIN_FILE_CODE },
       { id: "wp_folder", kind: "folder", name: "weapons", children: [{ id: "init_file_wp", kind: "util", itemId: "init_file_wp" , name: "__init__.py" }]},   
       { id: "arm_folder", kind: "folder", name: "armors", children: [{ id: "init_file_arm", kind: "util", itemId: "init_file_arm" , name: "__init__.py" }]},    
       { id: "cons_folder", kind: "folder", name: "consumables", children: [{ id: "init_file_cons", kind: "util", itemId: "init_file_cons" , name: "__init__.py" }]},   

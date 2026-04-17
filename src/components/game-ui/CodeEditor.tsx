@@ -9,7 +9,7 @@ import {
   closeIcon,
   stopIcon
 } from '@/src/assets'
-import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
+import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore, useComboStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
 import { getAllModules, registerModules, runPython, stopPythonExecution, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
@@ -51,6 +51,8 @@ export default function CodeEditor() {
     }))
   )
   const appendToLogs = useTerminalStore((s) => s.appendToLog)
+  const increaseCombo = useComboStore((s) => s.increaseCombo)
+  const resetCombo = useComboStore((s) => s.resetCombo)
   const { playerInventory, setInventoryItemCode } = useInventoryStore(
     useShallow((s) => ({
       playerInventory: s.playerInventory,
@@ -403,10 +405,14 @@ export default function CodeEditor() {
       if (activeProblem) {
         const solved = validateMachineProblemSolution(activeProblem, code, output);
         if (solved) {
+          increaseCombo();
           appendToLogs("[PY]: Machine problem requirements satisfied.");
           completeMachineProblemAndDefeatTarget();
         } else if (errorLines.length === 0) {
+          resetCombo();
           appendToLogs("[PY]: Machine problem output did not match the expected result.");
+        } else {
+          resetCombo();
         }
       }
     } catch (error) {

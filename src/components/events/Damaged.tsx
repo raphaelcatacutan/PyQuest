@@ -64,7 +64,7 @@ export default function Damaged(){
 
   function handleRestartLevel(input: boolean) {
 
-    if (input){
+    if (input == true){
       const targetPhaseIndex = Math.max(0, questLevel - 1)
       useTutorialStore.getState().skipToPhase(targetPhaseIndex)
       useTutorialStore.getState().toggleIsTutorial(true)

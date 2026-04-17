@@ -2,24 +2,24 @@
   "1": [
     {
       "questId": "q1",
-      "description": "Kill 10 Slimes",
+      "description": "Kill 2 Slimes",
       "isCompleted": false,
       "targetId": "slime",
-      "requiredAmount": 10
+      "requiredAmount": 2
     },
     {
       "questId": "q2",
-      "description": "Kill 5 Babies",
+      "description": "Kill 2 Babies",
       "isCompleted": false,
       "targetId": "baby",
-      "requiredAmount": 5
+      "requiredAmount": 2
     },
     {
       "questId": "q3",
-      "description": "Kill 8 Forest Fangs",
+      "description": "Kill 2 Forest Fangs",
       "isCompleted": false,
       "targetId": "forest_fang",
-      "requiredAmount": 8
+      "requiredAmount": 2
     }
   ],
   "2": [

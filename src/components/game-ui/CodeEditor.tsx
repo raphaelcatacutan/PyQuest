@@ -23,10 +23,11 @@ export default function CodeEditor() {
   const [ hover, isHovered ] = useState(false)
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const runningRef = useRef(false);
+  const handleRunRef = useRef<() => void>(() => {});
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
     editorRef.current = editor;
     editor.addCommand(_monaco.KeyMod.CtrlCmd | _monaco.KeyCode.Enter, () => {
-      handleRun();
+      handleRunRef.current();
     });
   };
   const { hp, maxHP } = usePlayerStore(
@@ -208,7 +209,7 @@ export default function CodeEditor() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        handleRun();
+        handleRunRef.current();
       }
     };
 
@@ -353,6 +354,12 @@ export default function CodeEditor() {
       runningRef.current = false;
     }
   }
+
+  useEffect(() => {
+    handleRunRef.current = () => {
+      void handleRun();
+    };
+  }, [handleRun]);
 
   function handleExitFile() {
 

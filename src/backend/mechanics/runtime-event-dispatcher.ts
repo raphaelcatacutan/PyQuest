@@ -550,6 +550,10 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
             }
 
             setSceneAndFlags(locationId);
+            if (locationId === "village") {
+                useEnemyStore.getState().clearEnemy();
+                useBossStore.getState().clearBoss();
+            }
             appendRuntimeDebug("scene changed", { locationId });
             return;
         }
@@ -572,9 +576,18 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
-            const state = readBoolean(payload, "state", true);
+            const requestedState = readBoolean(payload, "state", true);
+            const activeScene = useSceneStore.getState().scene;
+            const state = activeScene === "village" ? false : requestedState;
+
+            if (activeScene === "village" && requestedState) {
+                appendTerminalLog("You cannot explore inside the village.");
+                useEnemyStore.getState().clearEnemy();
+                useBossStore.getState().clearBoss();
+            }
+
             useGameStore.getState().toggleInCombat(state);
-            appendRuntimeDebug("explore set combat", { state });
+            appendRuntimeDebug("explore set combat", { state, requestedState, activeScene });
             return;
         }
 

@@ -14,6 +14,7 @@ import {
   useSceneStore,
   useTerminalStore,
   useTutorialStore,
+  useComboStore,
 } from "@/src/game/store";
 import {
   clearPlayerAttacks,
@@ -26,6 +27,7 @@ import { getEnemiesByLocation } from "@/src/game/data/enemies";
 import { getBossesByLocation } from "@/src/game/data/bosses";
 import { pickWorldEncounterKind } from "./worldEncounterSpawn";
 import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
+import { Combo } from "../ui/Combo";
 
 const DEBUG_AI = false;
 
@@ -643,6 +645,7 @@ export default function Combat() {
 
   return (
     <div className="relative flex h-full w-full z-1">
+      <Combo/>
       {isEnemy ? <EnemyEncounter /> : <BossEncounter />}
 
       {DEBUG_AI && debugState && (

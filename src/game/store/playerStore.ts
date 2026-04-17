@@ -154,7 +154,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
         const hp = Math.max(0, state.hp - amount)
         if (hp <= 0) { useSoundStore.getState().playSfx('death') }
         else { useSoundStore.getState().playSfx('hurt') }
-        return { hp: 100 }
+        return { hp: hp }
       }),
       resetDamage: () => set({ baseDmg: 2 }),
 

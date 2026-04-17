@@ -56,11 +56,11 @@ const builtins: any = {};
     while ((match = tickRegex.exec(code)) !== null) {
       const lineNumber = Number(match[1]);
       const statementType = match[2];
-      const delayMs = match[3] ? Number(parseLiteral(match[3])) : 0;
+      const delaySeconds = match[3] ? Number(parseLiteral(match[3])) : 0;
       emitCallback('python.statement', {
         lineNumber,
         statementType,
-        delayMs: Number.isFinite(delayMs) ? delayMs : 0
+        delaySeconds: Number.isFinite(delaySeconds) ? delaySeconds : 0
       });
     }
     

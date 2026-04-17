@@ -11,13 +11,19 @@ import {
 } from '@/src/assets'
 import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
-import { getAllModules, registerModules, runPython, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
+import { getAllModules, registerModules, runPython, stopPythonExecution, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
 import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
 import showToast from "../ui/Toast";
 import type { MachineProblem } from "@/src/game/types/mp.types";
 import type { InventoryNode } from "@/src/game/types/inventory.types";
 import { validateMachineProblemSolution } from "@/src/game/data/mps";
+import {
+  DEFAULT_MAIN_FILE_CODE,
+  DEFAULT_MAIN_FILE_ID,
+  DEFAULT_MAIN_FILE_NAME,
+  DEFAULT_MAIN_FILE_PATH,
+} from "@/src/game/constants/editor";
 
 
 export default function CodeEditor() {
@@ -62,6 +68,7 @@ export default function CodeEditor() {
     activeFilePath,
     activeCode,
     isActiveFileReadOnly,
+    openFile,
     setActiveCode,
   } = useEditorStore(
     useShallow((s) => ({
@@ -70,6 +77,7 @@ export default function CodeEditor() {
       activeFilePath: s.activeFilePath,
       activeCode: s.activeCode,
       isActiveFileReadOnly: s.isActiveFileReadOnly,
+      openFile: s.openFile,
       setActiveCode: s.setActiveCode,
     }))
   )
@@ -336,23 +344,49 @@ export default function CodeEditor() {
     });
 
     try {
-      const output = await runPython(code);
+      let streamedBuffer = "";
+      let hasPrintedOutput = false;
+
+      const flushStreamedLines = (force = false) => {
+        const parts = streamedBuffer.split(/\r?\n/);
+
+        if (!force) {
+          streamedBuffer = parts.pop() ?? "";
+        } else {
+          streamedBuffer = "";
+        }
+
+        parts
+          .map((line) => line.trim())
+          .filter((line) => line.length > 0)
+          .forEach((line) => {
+            hasPrintedOutput = true;
+            appendToLogs(`[PY-OUT]: ${line}`);
+          });
+      };
+
+      const output = await runPython(code, {
+        onOutputChunk: (chunk) => {
+          streamedBuffer += chunk;
+          flushStreamedLines(false);
+        },
+      });
+
+      if (streamedBuffer.trim().length > 0) {
+        hasPrintedOutput = true;
+        appendToLogs(`[PY-OUT]: ${streamedBuffer.trim()}`);
+      }
+
       const lines = output
         .split(/\r?\n/)
         .map((line) => line.trim())
         .filter((line) => line.length > 0);
+      const errorLines = lines.filter((line) => /^Error:/i.test(line));
 
-      if (lines.length === 0) {
+      if (errorLines.length > 0) {
+        errorLines.forEach((line) => appendToLogs(`[PY-ERR]: ${line}`));
+      } else if (!hasPrintedOutput) {
         appendToLogs("[PY]: Script finished.");
-      } else {
-        lines.forEach((line) => {
-          if (/^Error:/i.test(line)) {
-            appendToLogs(`[PY-ERR]: ${line}`);
-            return;
-          }
-
-          appendToLogs(`[PY-OUT]: ${line}`);
-        });
       }
     } catch (error) {
       appendToLogs(`[PY-ERR]: ${error instanceof Error ? error.message : String(error)}`);
@@ -369,11 +403,47 @@ export default function CodeEditor() {
   }, [handleRun]);
 
   function handleExitFile() {
-    // TODO: Functionality
+    const findMainFile = (nodes: InventoryNode[]): Exclude<InventoryNode, { kind: "folder" }> | null => {
+      for (const node of nodes) {
+        if (node.kind === "folder") {
+          const nestedMain = findMainFile(node.children)
+          if (nestedMain) {
+            return nestedMain
+          }
+          continue
+        }
+
+        if (node.id === DEFAULT_MAIN_FILE_ID || node.name === DEFAULT_MAIN_FILE_NAME) {
+          return node
+        }
+      }
+
+      return null
+    }
+
+    const mainFile = findMainFile(playerInventory)
+    openFile({
+      id: mainFile?.id ?? DEFAULT_MAIN_FILE_ID,
+      name: mainFile?.name ?? DEFAULT_MAIN_FILE_NAME,
+      path: DEFAULT_MAIN_FILE_PATH,
+      code: mainFile?.code ?? DEFAULT_MAIN_FILE_CODE,
+      readOnly: false,
+    })
   }
 
   function handleStop() {
+    if (!runningRef.current) {
+      appendToLogs("[PY]: No running script to stop.")
+      return
+    }
 
+    const didStop = stopPythonExecution()
+    if (didStop) {
+      appendToLogs("[PY]: Stop requested.")
+      return
+    }
+
+    appendToLogs("[PY]: No running script to stop.")
   }
 
   return (

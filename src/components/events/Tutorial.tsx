@@ -1,5 +1,5 @@
 import innKeeperImg from "@/src/assets/npcs/innkeeper3.png"
-import { useTutorialStore } from "@/src/game/store"
+import { useGameStore, useTutorialStore } from "@/src/game/store"
 import { useShallow } from 'zustand/shallow'
 
 
@@ -27,8 +27,11 @@ export default function Tutorial(){
       sequence: s.sequence,
     }))
   )
+  const inCombat = useGameStore(s => s.inCombat)
 
+  // if (!isTutorial && inCombat) return null
   if (!isTutorial) return null
+  if (inCombat) return null
 
   const currentPhase = sequence[currentPhaseIndex]
   const currentStep = currentPhase?.instructions[currentInstructionIndex]

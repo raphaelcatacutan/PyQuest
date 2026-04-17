@@ -80,7 +80,7 @@ const InitialPlayerInventory: InventoryNode[] = [
     name: "user", 
     children: [
       { id: "init_file_root", kind: "util", itemId: "init_file_wp" , name: "__init__.py" },
-      { id: "main_root", kind: "misc", itemId: "main_file" , name: "main.py" },
+      { id: "main_root", kind: "util", itemId: "main_file" , name: "main.py" },
       { id: "wp_folder", kind: "folder", name: "weapons", children: [{ id: "init_file_wp", kind: "util", itemId: "init_file_wp" , name: "__init__.py" }]},   
       { id: "arm_folder", kind: "folder", name: "armors", children: [{ id: "init_file_arm", kind: "util", itemId: "init_file_arm" , name: "__init__.py" }]},    
       { id: "cons_folder", kind: "folder", name: "consumables", children: [{ id: "init_file_cons", kind: "util", itemId: "init_file_cons" , name: "__init__.py" }]},   
@@ -88,9 +88,7 @@ const InitialPlayerInventory: InventoryNode[] = [
   },
   { id: "misc_folder", kind: "folder", name: "miscellaneous", children: [
     { id: "init_file_misc", kind: "util", itemId: "init_file_misc" , name: "__init__.py" },
-    { id: "handbook", kind: "util", itemId: "handboom_misc" , name: "handbook.py", code: handbookFileCode },
-    { id: "manual", kind: "util", itemId: "manual_misc" , name: "manual.py" },
-    { id: "abilities", kind: "util", itemId: "abilities_misc" , name: "abilities.py" },
+    { id: "handbook", kind: "util", itemId: "handboom_misc" , name: "handbook.py" },
   ]},   
   { id: "pickedup_folder", kind: "folder", name: "pickedup", children: []},   
 ];

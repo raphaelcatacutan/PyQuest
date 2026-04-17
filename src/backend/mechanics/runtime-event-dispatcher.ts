@@ -664,6 +664,17 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
       }
 
       const state = readBoolean(payload, "state", true);
+      if (!state && isEnemyCombatActive()) {
+        appendTerminalLog(
+          "explore(False) cannot end an active enemy battle.",
+        );
+        appendRuntimeDebug("explore blocked", {
+          reason: "attempted to end enemy combat",
+          state,
+        });
+        return;
+      }
+
       useGameStore.getState().toggleInCombat(state);
       appendRuntimeDebug("explore set combat", { state });
       return;

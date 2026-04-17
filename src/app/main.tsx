@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage.tsx'
 import GamePage from './pages/GamePage.tsx'
 import SignupPage from './pages/SignupPage.tsx'
 import UnifiedArchitect from './tests/UnifiedArchitect.tsx'
+import MPSAnswerChecker from './tests/MPSAnswerChecker.tsx'
 import { ToastContainer } from "react-toastify"
 import { Guide } from '../components/ui/Guide.tsx'
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path="/architect" element={<UnifiedArchitect/>}/>
+          <Route path="/tests/mps-checker" element={<MPSAnswerChecker/>}/>
         </Routes>
       </BrowserRouter>
     </StrictMode>

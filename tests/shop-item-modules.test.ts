@@ -12,4 +12,15 @@ describe('shop-item-modules code generation', () => {
         expect(code).toContain('class _WeaponRef_great_forests_wand(_WeaponRefBase):');
         expect(code).not.toMatch(/^\s*_WeaponRef_[A-Za-z0-9_]+\(_WeaponRefBase\):$/m);
     });
+
+    it('keeps pickedup armor refs as data-only import objects', () => {
+        const code = buildPickedupModuleCode({
+            weaponItemIds: [],
+            consumableItemIds: [],
+            armorItemIds: []
+        });
+
+        expect(code).toContain('class _ArmorRef:');
+        expect(code).not.toContain('def activate(self):');
+    });
 });

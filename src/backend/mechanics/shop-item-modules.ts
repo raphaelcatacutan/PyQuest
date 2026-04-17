@@ -242,9 +242,6 @@ class _ArmorRef:
         self.name = item_id
         self.item_type = "armor"
 
-    def activate(self):
-        return _emit("pickedup.armor.activate", {"itemId": self.item_id})
-
 
 ${lines.join("\n\n")}
 `;

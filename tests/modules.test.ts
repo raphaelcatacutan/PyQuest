@@ -60,7 +60,7 @@ great_forests_wand.heal()
         expect(output).not.toContain('Error');
     });
 
-    it('supports pickedup armor activation without parameters', async () => {
+    it('supports pickedup armor equip flow without armor methods', async () => {
         useInventoryStore.getState().addInventoryItem('pickedup_folder', {
             id: 'pickedup-armor-academy-hat',
             kind: 'armor',
@@ -70,9 +70,11 @@ great_forests_wand.heal()
 
         const output = await runPython(`
 from pickedup import academy_hat
-academy_hat.activate()
+print(hasattr(academy_hat, "activate"))
+player.equip(academy_hat)
         `);
 
+        expect(output).toContain('False');
         expect(output).not.toContain('Error');
     });
 

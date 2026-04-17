@@ -14,6 +14,7 @@ import { useShallow } from "zustand/shallow";
 import { getAllModules, registerModules, runPython, stopPythonExecution, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
 import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
+import { getUnlockedPickedupImportState } from "@/src/backend/mechanics/runtime-module-gates";
 import showToast from "../ui/Toast";
 import type { MachineProblem } from "@/src/game/types/mp.types";
 import type { InventoryNode } from "@/src/game/types/inventory.types";
@@ -92,7 +93,8 @@ export default function CodeEditor() {
   }
 
   function isPythonScriptNode(node: InventoryNode): node is Exclude<InventoryNode, { kind: "folder" }> {
-    return node.kind !== "folder" && node.name.toLowerCase().endsWith(".py") && !isInitFileName(node.name)
+    const isScriptKind = node.kind === "misc" || node.kind === "util" || node.kind === "function"
+    return isScriptKind && node.name.toLowerCase().endsWith(".py") && !isInitFileName(node.name)
   }
 
   function normalizeModuleSegment(segment: string): string {
@@ -165,6 +167,13 @@ export default function CodeEditor() {
     const moduleDefinitions = buildUserScriptModules(mainCode)
     const previouslyRegistered = registeredUserModuleNamesRef.current
     const existingModuleNames = new Set(getAllModules().map((moduleRecord) => moduleRecord.name))
+
+    Array.from(existingModuleNames)
+      .filter((moduleName) => moduleName.startsWith("pickedup.") && moduleName !== "pickedup")
+      .forEach((moduleName) => {
+        unregisterModule(moduleName)
+        existingModuleNames.delete(moduleName)
+      })
 
     previouslyRegistered.forEach((moduleName) => existingModuleNames.delete(moduleName))
 
@@ -323,6 +332,16 @@ export default function CodeEditor() {
     if (skippedModuleNames.length > 0) {
       console.info("[PY]: Skipped user modules due to name conflicts:", skippedModuleNames)
     }
+
+    const availableModules = getAllModules().map((moduleRecord) => moduleRecord.name)
+    const pickedupImportState = getUnlockedPickedupImportState()
+    const inventoryState = useInventoryStore.getState()
+    console.info("[PY-MODULES] Available runtime modules:", availableModules)
+    console.info("[PY-PICKEDUP] Unlock state:", pickedupImportState)
+    console.info("[PY-PICKEDUP] Purchased IDs:", {
+      weapons: inventoryState.purchasedWeaponIds,
+      consumables: inventoryState.purchasedConsumableIds,
+    })
 
     if (inCombat) {
       const activeProblem = isEnemy

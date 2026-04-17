@@ -47,8 +47,8 @@ export const useSoundStore = create<SoundStoreProps>((set, get) => ({
 
       // ⚡️ Add Music to the map
       main: new Howl({ src: [mainBGM], loop: true, html5: true }), //
-      village: new Howl({ src: [villageBGM], loop: true, html5: true, volume: 0.5 }), //
-      combat: new Howl({ src: [mainBGM], loop: true, html5: true, volume: 0.5 }),
+      village: new Howl({ src: [villageBGM], loop: true, html5: true, volume: 0.3 }), //
+      combat: new Howl({ src: [mainBGM], loop: true, html5: true, volume: 0.3 }),
     };
 
     set({ sounds: soundMap });

@@ -32,11 +32,12 @@ import armorIcon from "./armor.svg"
 import weaponIcon from "./weapon.svg"
 import hintIcon from "./hint.svg"
 import tutorialIcon from "./tutorial.svg"
+import stopIcon from "./stop.svg"
 
 export { 
   addFileIcon, addFolderIcon, addFolder1Icon, bagIcon, buyIcon, clearIcon, closeIcon, closedFolderIcon, 
   closedFolder1Icon, coinsIcon, collapseIcon, consumableIcon, deleteIcon, exitIcon, fileIcon, open1Icon, 
   openFolderIcon, openFolder1Icon, playIcon, poiIcon, refreshIcon, renameIcon, rightPanelIcon, saveIcon, 
   transferIcon, noteIcon, guideIcon, sellIcon, configIcon, functionIcon, armorIcon, weaponIcon, hintIcon,
-  tutorialIcon
+  tutorialIcon, stopIcon
 }

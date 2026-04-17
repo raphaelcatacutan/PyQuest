@@ -389,7 +389,7 @@ export default function Combat() {
       if (defeatedEnemy?.id === enemyId) {
         processTargetDefeat("enemy", enemyId, defeatedEnemy.lootDrop);
       }
-      toggleInCombat(false);
+      stopLoop();
       clearEnemy();
       return;
     }
@@ -399,7 +399,7 @@ export default function Combat() {
       if (defeatedBoss.id === bossId) {
         processTargetDefeat("boss", bossId, defeatedBoss.lootDrop);
       }
-      toggleInCombat(false);
+      stopLoop();
       clearBoss();
     }
   }, [
@@ -620,16 +620,22 @@ export default function Combat() {
               activeTarget.id,
               activeTarget.lootDrop,
             );
+            stopLoop();
+            if (isEnemy) {
+              clearEnemy();
+            } else {
+              clearBoss();
+            }
+            return;
           }
 
           stopLoop();
-          toggleInCombat(false);
         }
       }, 200);
     }
 
     return () => stopLoop();
-  }, [inCombat, isEnemy, enemyId, bossId, toggleInCombat]);
+  }, [inCombat, isEnemy, enemyId, bossId, clearEnemy, clearBoss]);
 
   if (!inCombat) return null;
   if (isEnemy && !enemyId) return null;

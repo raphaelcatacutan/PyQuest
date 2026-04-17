@@ -228,13 +228,13 @@ export default function GamePage() {
                 variant="icon-only-btn"
                 icon={rightPanelIcon}
                 iconSize={25}
-                onClick={toggleRightPanel}
+                onClick={() => toggleRightPanel()}
               />
             </div>
           ) : (
             <div className="absolute flex right-0 h-full z-50">
               <RightSideBar
-                onClose={toggleRightPanel}
+                onClose={() => toggleRightPanel()}
                 onItemTransferred={handleShopItemBought}
                 lootInventoryRef={lootInventoryRef}
                 atVillage={inVillage}

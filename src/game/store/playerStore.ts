@@ -7,6 +7,8 @@ import { resetBountyPersist } from './bountyQuestStore';
 import { resetDungeonPersist } from './dungeonStore';
 import { resetKillTrackerPersist } from './killTrackerStore';
 import showToast from '@/src/components/ui/Toast';
+import { useSceneStore } from './sceneStore';
+import { useTerminalStore } from './terminalStore';
 
 const DEFAULT_PLAYER_ATTACK_INTERVAL_SECONDS = 3.125;
 const MIN_PLAYER_ATTACK_INTERVAL_SECONDS = 0.1;
@@ -283,6 +285,9 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       toggleIsHealing: (bool) => set((s) => ({ isHealing: bool ?? !s.isHealing })),
 
       logOut: () => {
+        useSceneStore.getState().setScene('village')
+        useTerminalStore.getState().clearLogs()
+
         // Reset all persist keys before clearing state to prevent ghost logins
         usePlayerStore.persist.setOptions({
           name: 'pyquest-active-session',

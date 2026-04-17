@@ -32,7 +32,7 @@ interface TutorialStoreProps {
   skipToPhase: (phaseIndex: number) => void;
   toggleEnableNextButton: (state?: boolean) => void;
   setProgress: (phaseIndex: number, instructionIndex: number) => void;
-  startGameLoop: (increment?: number) => void;
+  startGameLoop: (increment?: number, options?: { openTutorial?: boolean }) => void;
   clearTutorial: () => void;
 }
 
@@ -71,6 +71,12 @@ const resetToPhaseStart = (sequence: Tutorial[], phaseIndex: number) => ({
 });
 
 const clampIndex = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+const clearBountyQuestState = () => {
+  const bountyQuestStore = useBountyQuestStore.getState();
+  bountyQuestStore.toggleDisplayBountyQuest(false);
+  bountyQuestStore.setHeader("Active Bounties");
+};
 
 export const useTutorialStore = create<TutorialStoreProps>()(
   persist(
@@ -210,7 +216,7 @@ export const useTutorialStore = create<TutorialStoreProps>()(
         });
       },
 
-      startGameLoop: (increment) => {
+      startGameLoop: (increment, options) => {
         const {
           sequence,
           hasStoredProgress,
@@ -218,8 +224,10 @@ export const useTutorialStore = create<TutorialStoreProps>()(
           currentInstructionIndex,
           isCompleted,
         } = get();
+        const shouldOpenTutorial = options?.openTutorial ?? true;
 
         if (!hasStoredProgress) {
+          clearBountyQuestState();
           set({
             currentPhaseIndex: 0,
             currentInstructionIndex: 0,
@@ -227,7 +235,7 @@ export const useTutorialStore = create<TutorialStoreProps>()(
             blockedReason: "",
             enableNextButton: true,
             isCompleted: false,
-            isTutorial: true,
+            isTutorial: shouldOpenTutorial,
           });
           return;
         }
@@ -241,7 +249,11 @@ export const useTutorialStore = create<TutorialStoreProps>()(
         const phaseIndexToUse = shouldAdvanceFromIncrement ? incrementPhaseIndex : safeStoredPhaseIndex;
         const instructionIndexToUse = shouldAdvanceFromIncrement ? 0 : safeStoredInstructionIndex;
 
-        const shouldOpenTutorial = shouldAdvanceFromIncrement || !isCompleted;
+        if (shouldAdvanceFromIncrement) {
+          clearBountyQuestState();
+        }
+
+        const shouldDisplayTutorial = shouldOpenTutorial && (shouldAdvanceFromIncrement || !isCompleted);
 
         set({
           currentPhaseIndex: phaseIndexToUse,
@@ -250,7 +262,7 @@ export const useTutorialStore = create<TutorialStoreProps>()(
           blockedReason: "",
           enableNextButton: true,
           isCompleted: shouldAdvanceFromIncrement ? false : isCompleted,
-          isTutorial: shouldOpenTutorial,
+          isTutorial: shouldDisplayTutorial,
         });
       },
 

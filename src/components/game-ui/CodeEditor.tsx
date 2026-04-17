@@ -459,6 +459,8 @@ export default function CodeEditor() {
             readOnly: isActiveFileReadOnly,
             wordBasedSuggestions: "off", // Prevents suggesting words found in the document
             snippetSuggestions: "none",  // Prevents code snippets from popping up
+            wordWrap: "on",              // Enables text wrapping
+            wrappingIndent: "indent",    // Keeps the wrapped line indented for readability
           }}
         />
 

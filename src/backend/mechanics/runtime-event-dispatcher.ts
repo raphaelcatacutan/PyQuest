@@ -35,6 +35,8 @@ const MACHINE_PROBLEM_PLACES: SceneTypes[] = Object.keys(MachineProblems)
     .filter(isSceneType);
 
 const MACHINE_PROBLEM_PLACE_SET = new Set<string>(MACHINE_PROBLEM_PLACES);
+const ALWAYS_UNLOCKED_GO_TO_SCENES: SceneTypes[] = ["village"];
+const ALWAYS_UNLOCKED_GO_TO_SET = new Set<string>(ALWAYS_UNLOCKED_GO_TO_SCENES);
 
 type StatementMechanics = {
     damage: number;
@@ -521,6 +523,11 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
+            if (useGameStore.getState().inCombat) {
+                appendTerminalLog("You cannot travel while in combat.");
+                return;
+            }
+
             const locationId = readString(payload, "locationId", "").trim().toLowerCase();
             const questLevel = normalizeQuestLevel(useBountyQuestStore.getState().questLevel);
             const unlockedPlaces = getUnlockedPlacesByQuestLevel(questLevel);
@@ -530,13 +537,14 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
                 return;
             }
 
-            if (!MACHINE_PROBLEM_PLACE_SET.has(locationId)) {
+            if (!ALWAYS_UNLOCKED_GO_TO_SET.has(locationId) && !MACHINE_PROBLEM_PLACE_SET.has(locationId)) {
                 appendTerminalLog(`'${locationId}' is not a goTo() destination.`);
                 return;
             }
 
-            if (!unlockedPlaces.includes(locationId)) {
-                const unlockedText = unlockedPlaces.length > 0 ? unlockedPlaces.join(", ") : "none";
+            if (!ALWAYS_UNLOCKED_GO_TO_SET.has(locationId) && !unlockedPlaces.includes(locationId)) {
+                const unlockedTextList = [...ALWAYS_UNLOCKED_GO_TO_SCENES, ...unlockedPlaces];
+                const unlockedText = unlockedTextList.length > 0 ? unlockedTextList.join(", ") : "none";
                 appendTerminalLog(`'${locationId}' is locked for level ${questLevel}. Unlocked places: ${unlockedText}.`);
                 return;
             }

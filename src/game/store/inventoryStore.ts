@@ -1,6 +1,40 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { InventoryNode } from "@/src/game/types/inventory.types";
+import handbookFileSource from "@/src/backend/mechanics/handbook.py?raw";
+
+const handbookFileCode = `#file:handbook.py\n\n${handbookFileSource}`;
+
+function withBundledUtilityContent(items: InventoryNode[]): { items: InventoryNode[]; changed: boolean } {
+  let changed = false;
+
+  const visit = (nodes: InventoryNode[]): InventoryNode[] => {
+    return nodes.map((node) => {
+      if (node.kind === "folder") {
+        const nextChildren = visit(node.children);
+        if (nextChildren !== node.children) {
+          changed = true;
+          return { ...node, children: nextChildren };
+        }
+
+        return node;
+      }
+
+      const isHandbookFile = node.id === "handbook" || node.name === "handbook.py";
+      if (node.kind === "util" && isHandbookFile && node.code !== handbookFileCode) {
+        changed = true;
+        return { ...node, code: handbookFileCode };
+      }
+
+      return node;
+    });
+  };
+
+  return {
+    items: visit(items),
+    changed,
+  };
+}
 
 export const loadInventoryProfile = async (playerId: string) => {
   if (!playerId) return;
@@ -26,6 +60,12 @@ export const loadInventoryProfile = async (playerId: string) => {
 
   // Load from localStorage for this player (or keep initial if new)
   await useInventoryStore.persist.rehydrate();
+
+  const hydratedInventory = useInventoryStore.getState().playerInventory;
+  const inventoryWithUtilityContent = withBundledUtilityContent(hydratedInventory);
+  if (inventoryWithUtilityContent.changed) {
+    useInventoryStore.setState({ playerInventory: inventoryWithUtilityContent.items });
+  }
   
   // Force the player_id to match the account
   useInventoryStore.setState({ player_id: playerId });

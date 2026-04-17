@@ -67,6 +67,7 @@ let runtimeExecutionOptions: Required<PythonExecutionOptions> = {
 };
 let activeInstructionDelaySeconds = 0;
 const EXECUTION_STOPPED_MESSAGE = "Execution stopped by user.";
+const PYQUEST_TICK_BRIDGE_NAME = "_pyquest_tick";
 
 type PythonExecutionController = {
     stopRequested: boolean;
@@ -87,6 +88,37 @@ function assertExecutionActive(controller: PythonExecutionController): void {
     if (controller.stopRequested) {
         throw new Error(EXECUTION_STOPPED_MESSAGE);
     }
+}
+
+function formatRuntimeErrorMessage(errorMessage: string): string {
+    const suspensionErrorPattern = /SuspensionError:\s*Cannot call a function that blocks or suspends here/i;
+    if (suspensionErrorPattern.test(errorMessage)) {
+        const lineMatch = errorMessage.match(/(?:on\s+)?line\s+(\d+)/i);
+        const lineInfo = lineMatch ? ` (line ${lineMatch[1]})` : "";
+        return `PyQuest runtime error${lineInfo}: this action tried to pause execution in a restricted runtime context. This is a game runtime limitation, not a Python syntax mistake.`;
+    }
+
+    const pickedupAttributePattern = /AttributeError:\s*module\s+['\"]pickedup['\"]\s+has no attribute\s+['\"]([A-Za-z_][A-Za-z0-9_]*)['\"]/i;
+    const pickedupMatch = errorMessage.match(pickedupAttributePattern);
+    if (pickedupMatch) {
+        return `Pickedup item '${pickedupMatch[1]}' is not currently unlocked. Buy or pick up that item first, then import it again.`;
+    }
+
+    const internalHookNameErrorPattern = /NameError:\s*name\s+['\"]([A-Za-z_][A-Za-z0-9_]*)['\"]\s+is not defined/i;
+    const nameErrorMatch = errorMessage.match(internalHookNameErrorPattern);
+    const missingSymbol = nameErrorMatch ? nameErrorMatch[1] : "";
+    const isInternalBridgeSymbol = missingSymbol.includes("pyquest_")
+        || /[A-Za-z_][A-Za-z0-9_]*__pyquest_[A-Za-z0-9_]+/.test(missingSymbol)
+        || errorMessage.includes("__pyquest_")
+        || errorMessage.includes("_pyquest_");
+
+    if (isInternalBridgeSymbol) {
+        const lineMatch = errorMessage.match(/(?:on\s+)?line\s+(\d+)/i);
+        const lineInfo = lineMatch ? ` (line ${lineMatch[1]})` : "";
+        return `PyQuest runtime error${lineInfo}: a built-in game action helper was unavailable while executing your code. This is a game-side issue, not a Python syntax mistake.`;
+    }
+
+    return errorMessage;
 }
 
 export function setPythonRuntimeHooks(hooks: PythonRuntimeHooks): void {
@@ -222,7 +254,7 @@ function installRuntimeBridgeBuiltins(controller: PythonExecutionController): vo
         });
     });
 
-    builtins.__pyquest_tick = createSkBuiltinFunction((lineNumber: unknown, statementType: unknown, explicitDelay?: unknown) => {
+    builtins[PYQUEST_TICK_BRIDGE_NAME] = createSkBuiltinFunction((lineNumber: unknown, statementType: unknown, explicitDelay?: unknown) => {
         assertExecutionActive(controller);
 
         const resolvedLineNumber = Math.max(0, Math.floor(normalizeDelaySeconds(lineNumber, 0)));
@@ -443,8 +475,8 @@ function instrumentPythonInstructions(code: string): string {
             const statementType = inferStatementType(trimmedLine);
             const delayOverride = extractInlineDelayOverride(originalLine);
             const tickCall = delayOverride === undefined
-                ? `${indentation}__pyquest_tick(${index + 1}, "${statementType}")`
-                : `${indentation}__pyquest_tick(${index + 1}, "${statementType}", ${delayOverride})`;
+                ? `${indentation}${PYQUEST_TICK_BRIDGE_NAME}(${index + 1}, "${statementType}")`
+                : `${indentation}${PYQUEST_TICK_BRIDGE_NAME}(${index + 1}, "${statementType}", ${delayOverride})`;
             instrumentedLines.push(tickCall);
         }
 
@@ -625,6 +657,10 @@ function isModuleImportAllowed(moduleName: string, importedNames?: string[]): bo
     return isPublicPythonModule(moduleName) && isRuntimeImportUnlocked(moduleName, importedNames);
 }
 
+function isDynamicRuntimeShopModule(moduleName: string): boolean {
+    return isPickedupModule(moduleName) || isWeaponModule(moduleName) || isConsumableModule(moduleName);
+}
+
 function expandCustomModuleImports(code: string): string {
     const inlinedModules: Set<string> = new Set();
     const inlinedModuleCode: string[] = [];
@@ -640,7 +676,7 @@ function expandCustomModuleImports(code: string): string {
             const importedNames = extractImportedNames(fromMatch[2]);
             const moduleRecord = getPythonModule(moduleName);
 
-            if (moduleRecord && isModuleImportAllowed(moduleName, importedNames)) {
+            if (moduleRecord && isModuleImportAllowed(moduleName, importedNames) && !isDynamicRuntimeShopModule(moduleName)) {
                 if (!inlinedModules.has(moduleName)) {
                     inlinedModules.add(moduleName);
                     inlinedModuleCode.push(moduleRecord.code);
@@ -662,7 +698,7 @@ function expandCustomModuleImports(code: string): string {
                 for (const moduleName of requestedModules) {
                     const moduleRecord = getPythonModule(moduleName);
 
-                    if (!(moduleRecord && isModuleImportAllowed(moduleName))) {
+                    if (isDynamicRuntimeShopModule(moduleName) || !(moduleRecord && isModuleImportAllowed(moduleName))) {
                         allInlined = false;
                         break;
                     }
@@ -701,9 +737,9 @@ export function runPython(code: string, options?: PythonRunOptions): Promise<str
 
         let output = "";
         const builtinPrelude = getBuiltinPreludeCode();
-        const transformedCode = expandCustomModuleImports(code);
-        const instrumentedCode = instrumentPythonInstructions(transformedCode);
-        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${instrumentedCode}` : instrumentedCode;
+        const instrumentedCode = instrumentPythonInstructions(code);
+        const transformedCode = expandCustomModuleImports(instrumentedCode);
+        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${transformedCode}` : transformedCode;
 
         // Ensure each run starts from a clean import/compiler state so newly loaded modules are used.
         if (Sk?.builtin?.dict) {
@@ -766,7 +802,7 @@ export function runPython(code: string, options?: PythonRunOptions): Promise<str
                     return;
                 }
 
-                output += "Error: " + errorMessage;
+                output += "Error: " + formatRuntimeErrorMessage(errorMessage);
                 resolve(output);
             })
             .finally(() => {

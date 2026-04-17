@@ -80,8 +80,41 @@ function appendPickedupItem(item: InventoryNode, state: {
     }
 }
 
+function appendOwnedInventoryItems(items: InventoryNode[], state: {
+    weaponIds: Set<string>;
+    consumableIds: Set<string>;
+    armorIds: Set<string>;
+}): void {
+    for (const item of items) {
+        if (item.kind === "folder") {
+            appendOwnedInventoryItems(item.children, state);
+            continue;
+        }
+
+        const normalizedItemId = normalizeItemId(item.itemId);
+        if (normalizedItemId.length === 0) {
+            continue;
+        }
+
+        if (item.kind === "weapon") {
+            state.weaponIds.add(normalizedItemId);
+            continue;
+        }
+
+        if (item.kind === "consumable") {
+            state.consumableIds.add(normalizedItemId);
+            continue;
+        }
+
+        if (item.kind === "armor") {
+            state.armorIds.add(normalizedItemId);
+        }
+    }
+}
+
 export function getUnlockedPickedupImportState(): PickedupImportState {
-    const inventory = useInventoryStore.getState().playerInventory;
+    const inventoryState = useInventoryStore.getState();
+    const inventory = inventoryState.playerInventory;
     const pickedupFolder = findPickedupFolder(inventory);
     const state = {
         weaponIds: new Set<string>(),
@@ -91,6 +124,23 @@ export function getUnlockedPickedupImportState(): PickedupImportState {
 
     if (pickedupFolder) {
         appendPickedupItem(pickedupFolder, state);
+    }
+
+    // Fallback: include all owned item nodes regardless of folder placement.
+    appendOwnedInventoryItems(inventory, state);
+
+    for (const purchasedWeaponId of inventoryState.purchasedWeaponIds) {
+        const normalizedWeaponId = normalizeItemId(purchasedWeaponId);
+        if (normalizedWeaponId.length > 0) {
+            state.weaponIds.add(normalizedWeaponId);
+        }
+    }
+
+    for (const purchasedConsumableId of inventoryState.purchasedConsumableIds) {
+        const normalizedConsumableId = normalizeItemId(purchasedConsumableId);
+        if (normalizedConsumableId.length > 0) {
+            state.consumableIds.add(normalizedConsumableId);
+        }
     }
 
     const weaponItemIds = Array.from(state.weaponIds);

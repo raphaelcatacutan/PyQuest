@@ -1,9 +1,10 @@
-import { useSceneStore } from "@/src/game/store"
+import { useGameStore, useSceneStore } from "@/src/game/store"
 import { hintIcon } from "@/src/assets";
 
 
 export function Info(){
   const scene = useSceneStore(s => s.scene)
+  const inCombat = useGameStore(s => s.inCombat)
   let text = "";
   let code = "";
   let text1 = "";
@@ -18,6 +19,8 @@ export function Info(){
     text1 = "To hunt, execute: ";
     code1 = "explore(<boolean>)\n";
   }
+
+  if (inCombat) return null
 
   return (
     <div className="absolute z-4 top-5 left-14 bg-black/50 max-w-75">

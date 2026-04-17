@@ -53,17 +53,6 @@ export const useEnemyStore = create<EnemyStoreProps>((set) => ({
     };
   }),
 
-  // takeDamage: (amount: number) => set((state) => {
-  //   useSoundStore.getState().playSfx('hit')
-  //   if (!state.enemy) return {};
-  //   return {
-  //     enemy: {
-  //       ...state.enemy,
-  //       hp: Math.max(0, state.enemy.hp - amount),
-  //     },
-  //   };
-  // }),
-
   gainHp: (amount: number) => set((state) => {
     if (!state.enemy) return {};
     return {

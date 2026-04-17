@@ -27,7 +27,7 @@ import { getBossesByLocation } from "@/src/game/data/bosses";
 import { pickWorldEncounterKind } from "./worldEncounterSpawn";
 import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
 
-const DEBUG_AI = true;
+const DEBUG_AI = false;
 
 function toCombatSkills(skills: unknown[]): EnemySkill[] {
   if (!Array.isArray(skills)) return [];

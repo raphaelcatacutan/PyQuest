@@ -64,11 +64,7 @@ export const useBossStore = create<BossStoreProps>((set) => ({
     else { useSoundStore.getState().playSfx('critical') }
     return { hp: Math.max(0, state.hp - amount) }
   }),
-  // takeDamage: (amount) => {
-  //   useSoundStore.getState().playSfx('hit')
-  //   set((state) => ({ hp: Math.max(0, state.hp - amount) }))
-  // },
-
+  
   gainHp: (amount) => set((state) => ({
     hp: Math.min(state.maxHp, state.hp + amount)
   })),

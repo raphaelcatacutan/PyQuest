@@ -26,6 +26,7 @@ export default function BossEncounter(){
   const healthPercentage = (hp / safeMaxHp) * 100;
   const energyPercentage = (energy / safeMaxEnergy) * 100;
   const activeProblemText = activeProblem?.problem ?? "No machine problem available for this scene.";
+  const expected_output = activeProblem?.expected_output?? "...";
   const displayedEnergy = Math.floor(energy);
   const displayedMaxEnergy = Math.floor(maxEnergy);
 
@@ -45,7 +46,7 @@ export default function BossEncounter(){
       <div className="flex flex-col items-center justify-center h-full">
         <>
           <div className="flex w-full h-full items-center justify-center">
-            <div className="flex w-8/10 h-8/10">
+            <div className="flex flex-col justify-center items-center w-8/10 h-8/10">
               <div className="flex flex-col w-full gap-2 items-center justify-center">
                 <span className="text-3xl text-red-700">{name}</span>
 
@@ -71,9 +72,16 @@ export default function BossEncounter(){
                   />
                 </div>
               </div>
-              <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">
-                <span className="h-full overflow-y-auto">
-                  {activeProblemText}
+              <div className="flex max-w-200 flex-col p-5 rounded-2xl border border-zinc-600 bg-header  justify-center font-[code] overflow-y-auto">
+                <span className="h-full mb-2">
+                  <span className="text-blue-500">Machine Problem:</span> {activeProblemText}
+                </span>
+                <span className="h-full">
+                  <span className="text-blue-500">Expected Output: </span>
+                  {expected_output}
+                </span>
+                <span className="mt-5 text-xs">
+                  <span className="text-amber-400">Hint:</span> Solve this machine problem to insta-kill the enemy.
                 </span>
               </div>
             </div>

@@ -334,14 +334,16 @@ export function PlayerInventoryNode({
           className="flex-2 flex flex-row-reverse w-fit"
           onClick={(e) => e.stopPropagation()}
         >
+          {node.data.kind == 'misc' &&
+            <Button
+              variant="icon-only-btn"
+              icon={deleteIcon}
+              iconSize={20}
+              onClick={handleDeleteClick}
+            />
+          }
           {!isUtilItem(node.data.kind) && (
             <>
-              <Button
-                variant="icon-only-btn"
-                icon={deleteIcon}
-                iconSize={20}
-                onClick={handleDeleteClick}
-              />
               <Button
                 variant="icon-only-btn"
                 icon={renameIcon}

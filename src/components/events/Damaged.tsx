@@ -3,7 +3,7 @@ import { painHud } from "@/src/assets"
 import { useEffect, useRef } from "react"
 import { useShallow } from "zustand/shallow"
 import { useBountyQuestStore, useBossStore, useEnemyStore, useGameStore, useSceneStore, useTutorialStore } from "@/src/game/store"
-
+import Button from "../ui/Button"
 
 export default function Damaged(){
   const { hp, maxHP, maxEnergy, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(
@@ -62,11 +62,13 @@ export default function Damaged(){
     prevHp.current = hp;
   }, [hp, takeDamage])
 
-  function handleRestartLevel() {
-    const targetPhaseIndex = Math.max(0, questLevel - 1)
+  function handleRestartLevel(input: boolean) {
 
-    useTutorialStore.getState().skipToPhase(targetPhaseIndex)
-    useTutorialStore.getState().toggleIsTutorial(true)
+    if (input){
+      const targetPhaseIndex = Math.max(0, questLevel - 1)
+      useTutorialStore.getState().skipToPhase(targetPhaseIndex)
+      useTutorialStore.getState().toggleIsTutorial(true)
+    }
 
     useSceneStore.getState().setScene("village")
     useGameStore.setState({
@@ -98,14 +100,35 @@ export default function Damaged(){
         }}
       >
         {hp <= 0 && (
-          <div className="w-full flex flex-col items-center justify-center gap-4 bg-black/50 py-4" >
-            <span className="text-6xl my-2" >You're Dead</span>
-            <button
-              className="rounded-lg border border-slate-500 px-4 py-2 text-base hover:bg-slate-700 cursor-pointer"
-              onClick={handleRestartLevel}
-            >
-              Restart Level
-            </button>
+          <div className="w-full">
+            <div className="flex flex-col items-center justify-center bg-black/50 py-4" >
+              <span className="text-6xl my-2" >You're Dead</span>
+              {/* <span className="mb-2">Restart Tutorial?</span>
+              <div>
+                <button
+                  className="rounded-lg border border-slate-500 px-4 text-base hover:bg-slate-700 cursor-pointer"
+                  onClick={handleRestartLevel}
+                >
+                  Yes
+                </button>
+              </div> */}
+            </div>
+            <div className="relative flex justify-center align-middle items-center gap-2 mt-2">
+              <span className="">Restart Tutorial?</span>
+              <button
+                className="rounded-lg bg-slate-700 px-4 text-base hover:bg-slate-500 cursor-pointer"
+                onClick={() => handleRestartLevel(true)}
+              >
+                Yes
+              </button>
+              <button
+                className="rounded-lg bg-slate-700 px-4 text-base hover:bg-slate-500 cursor-pointer"
+                onClick={() => handleRestartLevel(false)}
+              >
+                No
+              </button>
+            </div>
+              
           </div>
         )}
       </div>

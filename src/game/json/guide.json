@@ -8,5 +8,6 @@
     { "targetId": "lvl-bar", "text": "This is your Level. Grow your knowledge to unlock more complex syntax." },
     { "targetId": "bounty-quest", "text": "Access the bounty quest to check your remaining tasks before leveling up." },
     { "targetId": "bounty-quest", "text": "If you ever feel confused with the interface, just toggle me again by clicking the Guide button." },
-    { "targetId": "origin", "text": "The environment is initialized. You may now proceed talking with the Innkeeper. Good luck surviving the logic ahead!" }
+    { "targetId": "bounty-quest", "text": "If you wish to open the tutorial, toggle the Dialogue button." },
+    { "targetId": "origin", "text": "Good job, player! The environment is initialized. You may now proceed talking with the Innkeeper. Good luck surviving the logic ahead!" }
 ]

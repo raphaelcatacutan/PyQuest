@@ -31,6 +31,12 @@ import Tutorial from "@/src/components/events/Tutorial";
 import { Info } from "@/src/components/ui/Info"
 import { loadBountyProfile } from "@/src/game/store";
 import { loadKillProfile } from "@/src/game/store/killTrackerStore";
+import {
+  DEFAULT_MAIN_FILE_CODE,
+  DEFAULT_MAIN_FILE_ID,
+  DEFAULT_MAIN_FILE_NAME,
+  DEFAULT_MAIN_FILE_PATH,
+} from "@/src/game/constants/editor";
 
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -147,6 +153,33 @@ export default function GamePage() {
         await loadTutorialProfile(currentId);
         await loadDungeonProfile(currentId);
         await loadKillProfile(currentId);
+
+        const findMainFile = (nodes: InventoryNode[]): Exclude<InventoryNode, { kind: "folder" }> | null => {
+          for (const node of nodes) {
+            if (node.kind === "folder") {
+              const nestedMain = findMainFile(node.children);
+              if (nestedMain) {
+                return nestedMain;
+              }
+              continue;
+            }
+
+            if (node.id === DEFAULT_MAIN_FILE_ID || node.name === DEFAULT_MAIN_FILE_NAME) {
+              return node;
+            }
+          }
+
+          return null;
+        };
+
+        const mainFile = findMainFile(useInventoryStore.getState().playerInventory);
+        useEditorStore.getState().openFile({
+          id: mainFile?.id ?? DEFAULT_MAIN_FILE_ID,
+          name: mainFile?.name ?? DEFAULT_MAIN_FILE_NAME,
+          path: DEFAULT_MAIN_FILE_PATH,
+          code: mainFile?.code ?? DEFAULT_MAIN_FILE_CODE,
+          readOnly: false,
+        });
 
         const progressIncrement = useBountyQuestStore.getState().questLevel;
         useTutorialStore.getState().startGameLoop(progressIncrement);

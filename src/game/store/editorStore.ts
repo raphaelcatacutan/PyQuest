@@ -1,4 +1,10 @@
 import { create } from "zustand";
+import {
+  DEFAULT_MAIN_FILE_CODE,
+  DEFAULT_MAIN_FILE_ID,
+  DEFAULT_MAIN_FILE_NAME,
+  DEFAULT_MAIN_FILE_PATH,
+} from "@/src/game/constants/editor";
 
 /**
  * 
@@ -31,10 +37,10 @@ interface EditorStoreProps {
 }
 
 export const useEditorStore = create<EditorStoreProps>((set) => ({
-  activeFileId: null,
-  activeFile: "main.py",
-  activeFilePath: "main.py",
-  activeCode: "# Welcome to PyQuest!\n# Start writing your coding journey in Python here!",
+  activeFileId: DEFAULT_MAIN_FILE_ID,
+  activeFile: DEFAULT_MAIN_FILE_NAME,
+  activeFilePath: DEFAULT_MAIN_FILE_PATH,
+  activeCode: DEFAULT_MAIN_FILE_CODE,
   isActiveFileReadOnly: false,
 
   highlightRange: null,
@@ -50,10 +56,10 @@ export const useEditorStore = create<EditorStoreProps>((set) => ({
 
   clearActiveFile: () =>
     set({
-      activeFileId: null,
-      activeFile: "main.py",
-      activeFilePath: "main.py",
-      activeCode: "# Welcome to PyQuest!\n# Start writing your coding journey in Python here!",
+      activeFileId: DEFAULT_MAIN_FILE_ID,
+      activeFile: DEFAULT_MAIN_FILE_NAME,
+      activeFilePath: DEFAULT_MAIN_FILE_PATH,
+      activeCode: DEFAULT_MAIN_FILE_CODE,
       isActiveFileReadOnly: false,
       highlightRange: null,
     }),

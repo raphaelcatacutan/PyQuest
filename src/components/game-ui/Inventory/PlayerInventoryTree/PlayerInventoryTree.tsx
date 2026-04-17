@@ -10,6 +10,12 @@ import {
   refreshIcon,
 } from '@/src/assets'
 import showToast from "@/src/components/ui/Toast";
+import {
+  DEFAULT_MAIN_FILE_CODE,
+  DEFAULT_MAIN_FILE_ID,
+  DEFAULT_MAIN_FILE_NAME,
+  DEFAULT_MAIN_FILE_PATH,
+} from "@/src/game/constants/editor";
 
 // RESTRICTIONS: Duplicate Files is not allowed
 //               Duplicate Folder names & File names is not allowed
@@ -378,13 +384,14 @@ export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onM
       ? `from pickedup import ${importName}\n\n${importName}\n`
       : "";
 
-    const readOnly = fileNode.kind !== "misc" && fileNode.kind !== "function";
+    const isMainFile = fileNode.id === DEFAULT_MAIN_FILE_ID || fileNode.name === DEFAULT_MAIN_FILE_NAME;
+    const readOnly = isMainFile ? false : fileNode.kind !== "misc" && fileNode.kind !== "function";
 
     onOpenFile({
       id: fileNode.id,
       name: fileNode.name,
-      path: lookup.pathNames.join("/"),
-      code: fileNode.code ?? defaultPickedupCode,
+      path: isMainFile ? DEFAULT_MAIN_FILE_PATH : lookup.pathNames.join("/"),
+      code: fileNode.code ?? (isMainFile ? DEFAULT_MAIN_FILE_CODE : defaultPickedupCode),
       readOnly,
     });
   }

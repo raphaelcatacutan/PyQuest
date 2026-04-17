@@ -18,6 +18,12 @@ import showToast from "../ui/Toast";
 import type { MachineProblem } from "@/src/game/types/mp.types";
 import type { InventoryNode } from "@/src/game/types/inventory.types";
 import { validateMachineProblemSolution } from "@/src/game/data/mps";
+import {
+  DEFAULT_MAIN_FILE_CODE,
+  DEFAULT_MAIN_FILE_ID,
+  DEFAULT_MAIN_FILE_NAME,
+  DEFAULT_MAIN_FILE_PATH,
+} from "@/src/game/constants/editor";
 
 
 export default function CodeEditor() {
@@ -62,7 +68,7 @@ export default function CodeEditor() {
     activeFilePath,
     activeCode,
     isActiveFileReadOnly,
-    clearActiveFile,
+    openFile,
     setActiveCode,
   } = useEditorStore(
     useShallow((s) => ({
@@ -71,7 +77,7 @@ export default function CodeEditor() {
       activeFilePath: s.activeFilePath,
       activeCode: s.activeCode,
       isActiveFileReadOnly: s.isActiveFileReadOnly,
-      clearActiveFile: s.clearActiveFile,
+      openFile: s.openFile,
       setActiveCode: s.setActiveCode,
     }))
   )
@@ -371,7 +377,32 @@ export default function CodeEditor() {
   }, [handleRun]);
 
   function handleExitFile() {
-    clearActiveFile()
+    const findMainFile = (nodes: InventoryNode[]): Exclude<InventoryNode, { kind: "folder" }> | null => {
+      for (const node of nodes) {
+        if (node.kind === "folder") {
+          const nestedMain = findMainFile(node.children)
+          if (nestedMain) {
+            return nestedMain
+          }
+          continue
+        }
+
+        if (node.id === DEFAULT_MAIN_FILE_ID || node.name === DEFAULT_MAIN_FILE_NAME) {
+          return node
+        }
+      }
+
+      return null
+    }
+
+    const mainFile = findMainFile(playerInventory)
+    openFile({
+      id: mainFile?.id ?? DEFAULT_MAIN_FILE_ID,
+      name: mainFile?.name ?? DEFAULT_MAIN_FILE_NAME,
+      path: DEFAULT_MAIN_FILE_PATH,
+      code: mainFile?.code ?? DEFAULT_MAIN_FILE_CODE,
+      readOnly: false,
+    })
   }
 
   function handleStop() {

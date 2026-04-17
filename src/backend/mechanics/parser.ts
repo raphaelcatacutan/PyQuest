@@ -62,6 +62,28 @@ let runtimeExecutionOptions: Required<PythonExecutionOptions> = {
     enableStatementLogging: true
 };
 let activeInstructionDelayMs = 0;
+const EXECUTION_STOPPED_MESSAGE = "Execution stopped by user.";
+
+type PythonExecutionController = {
+    stopRequested: boolean;
+};
+
+let activeExecutionController: PythonExecutionController | null = null;
+
+export function stopPythonExecution(): boolean {
+    if (!activeExecutionController) {
+        return false;
+    }
+
+    activeExecutionController.stopRequested = true;
+    return true;
+}
+
+function assertExecutionActive(controller: PythonExecutionController): void {
+    if (controller.stopRequested) {
+        throw new Error(EXECUTION_STOPPED_MESSAGE);
+    }
+}
 
 export function setPythonRuntimeHooks(hooks: PythonRuntimeHooks): void {
     runtimeHooks = {
@@ -146,7 +168,7 @@ function createSkBuiltinFunction(fn: (...args: unknown[]) => unknown): any {
     return (...args: unknown[]) => fn(...args);
 }
 
-function installRuntimeBridgeBuiltins(): void {
+function installRuntimeBridgeBuiltins(controller: PythonExecutionController): void {
     if (!Sk) {
         return;
     }
@@ -156,6 +178,8 @@ function installRuntimeBridgeBuiltins(): void {
     const builtins = Sk.builtins ?? (Sk.builtins = {});
 
     builtins.__pyquest_callback = createSkBuiltinFunction((eventName: unknown, payload?: unknown) => {
+        assertExecutionActive(controller);
+
         const normalizedName = typeof eventName === "string" ? eventName : String(eventName ?? "");
         runtimeHooks.onFunctionCall?.({
             name: normalizedName,
@@ -165,6 +189,8 @@ function installRuntimeBridgeBuiltins(): void {
     });
 
     builtins.__pyquest_state = createSkBuiltinFunction((path: unknown, fallback?: unknown) => {
+        assertExecutionActive(controller);
+
         const normalizedPath = typeof path === "string" ? path : String(path ?? "");
         const value = runtimeHooks.getStateValue?.(normalizedPath, fallback);
 
@@ -172,20 +198,29 @@ function installRuntimeBridgeBuiltins(): void {
     });
 
     builtins.__pyquest_set_delay = createSkBuiltinFunction((delay?: unknown) => {
+        assertExecutionActive(controller);
+
         activeInstructionDelayMs = normalizeDelay(delay, activeInstructionDelayMs);
         return activeInstructionDelayMs;
     });
 
     builtins.__pyquest_sleep = createSkBuiltinFunction((delay?: unknown) => {
+        assertExecutionActive(controller);
+
         const normalizedDelay = normalizeDelay(delay, 0);
         if (normalizedDelay <= 0) {
             return null;
         }
 
-        return delayMs(normalizedDelay);
+        return delayMs(normalizedDelay).then(() => {
+            assertExecutionActive(controller);
+            return null;
+        });
     });
 
     builtins.__pyquest_tick = createSkBuiltinFunction((lineNumber: unknown, statementType: unknown, explicitDelay?: unknown) => {
+        assertExecutionActive(controller);
+
         const resolvedLineNumber = normalizeDelay(lineNumber, 0);
         const resolvedStatementType = typeof statementType === "string" ? statementType : "Statement";
         const hasExplicitDelay = explicitDelay !== undefined && explicitDelay !== null;
@@ -208,7 +243,10 @@ function installRuntimeBridgeBuiltins(): void {
             return null;
         }
 
-        return delayMs(resolvedDelay);
+        return delayMs(resolvedDelay).then(() => {
+            assertExecutionActive(controller);
+            return null;
+        });
     });
 }
 
@@ -650,7 +688,12 @@ function expandCustomModuleImports(code: string): string {
 export function runPython(code: string): Promise<string> {
     return new Promise((resolve) => {
         ensurePythonModulesInitialized();
-        installRuntimeBridgeBuiltins();
+        const executionController: PythonExecutionController = {
+            stopRequested: false
+        };
+
+        activeExecutionController = executionController;
+        installRuntimeBridgeBuiltins(executionController);
 
         let output = "";
         const builtinPrelude = getBuiltinPreludeCode();
@@ -711,8 +754,20 @@ export function runPython(code: string): Promise<string> {
                 resolve(output);
             })
             .catch((e: any) => {
-                output += "Error: " + e.toString();
+                const errorMessage = e instanceof Error ? e.message : String(e);
+                if (errorMessage.includes(EXECUTION_STOPPED_MESSAGE)) {
+                    output += EXECUTION_STOPPED_MESSAGE;
+                    resolve(output);
+                    return;
+                }
+
+                output += "Error: " + errorMessage;
                 resolve(output);
+            })
+            .finally(() => {
+                if (activeExecutionController === executionController) {
+                    activeExecutionController = null;
+                }
             });
     });
 }

@@ -11,7 +11,7 @@ import {
 } from '@/src/assets'
 import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
-import { getAllModules, registerModules, runPython, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
+import { getAllModules, registerModules, runPython, stopPythonExecution, unregisterModule, type CustomModule } from "@/src/backend/mechanics/parser";
 import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/src/backend/mechanics/zustand-runtime";
 import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
 import showToast from "../ui/Toast";
@@ -62,6 +62,7 @@ export default function CodeEditor() {
     activeFilePath,
     activeCode,
     isActiveFileReadOnly,
+    clearActiveFile,
     setActiveCode,
   } = useEditorStore(
     useShallow((s) => ({
@@ -70,6 +71,7 @@ export default function CodeEditor() {
       activeFilePath: s.activeFilePath,
       activeCode: s.activeCode,
       isActiveFileReadOnly: s.isActiveFileReadOnly,
+      clearActiveFile: s.clearActiveFile,
       setActiveCode: s.setActiveCode,
     }))
   )
@@ -369,11 +371,22 @@ export default function CodeEditor() {
   }, [handleRun]);
 
   function handleExitFile() {
-    // TODO: Functionality
+    clearActiveFile()
   }
 
   function handleStop() {
+    if (!runningRef.current) {
+      appendToLogs("[PY]: No running script to stop.")
+      return
+    }
 
+    const didStop = stopPythonExecution()
+    if (didStop) {
+      appendToLogs("[PY]: Stop requested.")
+      return
+    }
+
+    appendToLogs("[PY]: No running script to stop.")
   }
 
   return (

@@ -33,121 +33,107 @@ export const getRandomMPByScene = (scene: string): MachineProblem => {
   return problemsForLevel[randomIndex] ?? FALLBACK_PROBLEM;
 }
 
-function escapeRegex(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+function stripInlinePythonComments(code: string): string {
+  const lines = code.replace(/\r/g, "").split("\n");
 
-function extractQuotedTokens(problemText: string): string[] {
-  const tokens: string[] = [];
-  const regex = /['"]([^'"]+)['"]/g;
-  let match: RegExpExecArray | null = regex.exec(problemText);
+  return lines
+    .map((line) => {
+      let quote: "'" | '"' | null = null;
+      let escaped = false;
+      let result = "";
 
-  while (match) {
-    const token = match[1]?.trim();
-    if (token) {
-      tokens.push(token);
-    }
-    match = regex.exec(problemText);
-  }
+      for (let index = 0; index < line.length; index += 1) {
+        const char = line[index] ?? "";
 
-  return tokens;
-}
+        if (quote) {
+          result += char;
 
-function extractVariableNames(problemText: string): string[] {
-  const names = new Set<string>();
-  const patterns = [
-    /variable(?:\s+named|\s+called)?\s+['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?/gi,
-    /assign\s+it\s+to\s+a\s+variable\s+called\s+['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?/gi,
-    /set\s+['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?\s+to\s+/gi,
-  ];
+          if (escaped) {
+            escaped = false;
+            continue;
+          }
 
-  patterns.forEach((pattern) => {
-    let match = pattern.exec(problemText);
-    while (match) {
-      if (match[1]) {
-        names.add(match[1]);
+          if (char === "\\") {
+            escaped = true;
+            continue;
+          }
+
+          if (char === quote) {
+            quote = null;
+          }
+
+          continue;
+        }
+
+        if (char === "'" || char === '"') {
+          quote = char;
+          result += char;
+          continue;
+        }
+
+        if (char === "#") {
+          break;
+        }
+
+        result += char;
       }
-      match = pattern.exec(problemText);
-    }
-  });
 
-  return [...names];
+      return result;
+    })
+    .join("\n");
 }
 
-function extractFunctionNames(problemText: string): string[] {
-  const names = new Set<string>();
-  const patterns = [
-    /function\s+named\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
-    /define\s+a\s+function\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
-    /create\s+a\s+function\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
-    /def\s+['"]([A-Za-z_][A-Za-z0-9_]*)['"]/gi,
-  ];
+function compactCodeOutsideStrings(code: string): string {
+  let quote: "'" | '"' | null = null;
+  let escaped = false;
+  let result = "";
 
-  patterns.forEach((pattern) => {
-    let match = pattern.exec(problemText);
-    while (match) {
-      if (match[1]) {
-        names.add(match[1]);
+  for (let index = 0; index < code.length; index += 1) {
+    const char = code[index] ?? "";
+
+    if (quote) {
+      result += char;
+
+      if (escaped) {
+        escaped = false;
+        continue;
       }
-      match = pattern.exec(problemText);
+
+      if (char === "\\") {
+        escaped = true;
+        continue;
+      }
+
+      if (char === quote) {
+        quote = null;
+      }
+
+      continue;
     }
-  });
 
-  return [...names];
-}
-
-function extractNumericTokens(problemText: string): string[] {
-  const tokens = new Set<string>();
-  const regex = /\b\d+(?:\.\d+)?\b/g;
-  let match = regex.exec(problemText);
-
-  while (match) {
-    if (match[0]) {
-      tokens.add(match[0]);
+    if (char === "'" || char === '"') {
+      quote = char;
+      result += char;
+      continue;
     }
-    match = regex.exec(problemText);
+
+    if (/\s/.test(char)) {
+      continue;
+    }
+
+    result += char;
   }
 
-  return [...tokens];
-}
-
-function containsRegex(code: string, regex: RegExp): boolean {
-  return regex.test(code);
-}
-
-function hasAnyPattern(text: string, patterns: RegExp[]): boolean {
-  return patterns.some((pattern) => pattern.test(text));
-}
-
-function requiresForLoop(problemText: string): boolean {
-  return hasAnyPattern(problemText, [
-    /\bfor\s+loop\b/,
-    /\bfor[-\s]?each\b/,
-    /\bloop\s+through\b/,
-    /\biterate\b/,
-    /\buse\s+a\s+for\b/,
-    /\busing\s+a\s+for\b/,
-    /\bfor\b[^.\n]*\bin\b/
-  ]);
-}
-
-function requiresLogicalOperator(problemText: string, operator: "and" | "or" | "not"): boolean {
-  const quotedOperator = new RegExp(`["']${operator}["']\\s+operator`, "i");
-  const namedOperator = new RegExp(`\\b${operator}\\s+operator\\b`, "i");
-
-  if (quotedOperator.test(problemText) || namedOperator.test(problemText)) {
-    return true;
-  }
-
-  if (/\blogical operators?\b/i.test(problemText)) {
-    return new RegExp(`\\b${operator}\\b`, "i").test(problemText);
-  }
-
-  return false;
+  return result;
 }
 
 function normalizeCodeForComparison(code: string): string {
-  return code
+  const withoutComments = stripInlinePythonComments(code);
+  return compactCodeOutsideStrings(withoutComments);
+}
+
+function normalizeProgramOutput(output: string): string {
+  return output
     .replace(/\r/g, "")
     .split("\n")
     .map((line) => line.trim())
@@ -155,129 +141,169 @@ function normalizeCodeForComparison(code: string): string {
     .join("\n");
 }
 
-function buildProblemChecks(problemText: string): RegExp[] {
-  const checks: RegExp[] = [];
-  const lowerProblem = problemText.toLowerCase();
-
-  if (lowerProblem.includes("print")) checks.push(/\bprint\s*\(/m);
-  if (/\bwhile\b/.test(lowerProblem)) checks.push(/^\s*while\b/m);
-  if (requiresForLoop(lowerProblem)) checks.push(/^\s*for\b/m);
-  if (/\bif\b/.test(lowerProblem)) checks.push(/^\s*if\b/m);
-  if (/\belif\b/.test(lowerProblem)) checks.push(/^\s*elif\b/m);
-  if (/\belse\b/.test(lowerProblem)) checks.push(/^\s*else\b/m);
-  if (/\bmatch\b/.test(lowerProblem)) checks.push(/^\s*match\b/m);
-  if (/\bcase\b/.test(lowerProblem)) checks.push(/^\s*case\b/m);
-  if (/\bbreak\b/.test(lowerProblem)) checks.push(/\bbreak\b/m);
-  if (/\bcontinue\b/.test(lowerProblem)) checks.push(/\bcontinue\b/m);
-  if (/\breturn\b/.test(lowerProblem)) checks.push(/\breturn\b/m);
-  if (/\bpass\b/.test(lowerProblem)) checks.push(/\bpass\b/m);
-  if (/\bfunction\b|\bdefine\b|\bdef\b/.test(lowerProblem)) checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\(/m);
-  if (/\bclass\b/.test(lowerProblem) || lowerProblem.includes("object-oriented programming") || /\boop\b/.test(lowerProblem)) {
-    checks.push(/^\s*class\s+[A-Za-z_][A-Za-z0-9_]*\s*(\([^)]*\))?\s*:/m);
-  }
-  if (lowerProblem.includes("abstraction") || lowerProblem.includes("abstract")) {
-    checks.push(/(raise\s+NotImplementedError|\bpass\b)/m);
-  }
-  if (lowerProblem.includes("inheritance") || lowerProblem.includes("inherits") || lowerProblem.includes("subclass")) {
-    checks.push(/^\s*class\s+[A-Za-z_][A-Za-z0-9_]*\s*\([^)]*\)\s*:/m);
-  }
-  if (lowerProblem.includes("polymorphism") || lowerProblem.includes("override")) {
-    checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\(\s*self(?:\s*,|\s*\))/m);
-  }
-  if (lowerProblem.includes("encapsulation") || lowerProblem.includes("private attribute") || lowerProblem.includes("private")) {
-    checks.push(/self\._[A-Za-z_][A-Za-z0-9_]*/m);
-  }
-  if (lowerProblem.includes("super()") || /\bsuper\b/.test(lowerProblem)) {
-    checks.push(/\bsuper\s*\(\s*\)\s*(\.\s*__init__\s*\()?/m);
-  }
-  if (lowerProblem.includes("static method") || lowerProblem.includes("staticmethod")) {
-    checks.push(/@staticmethod/m);
-  }
-  if (lowerProblem.includes("default argument") || lowerProblem.includes("default arguments")) {
-    checks.push(/^\s*def\s+[A-Za-z_][A-Za-z0-9_]*\s*\([^)]*=\s*[^)]*\)\s*:/m);
-  }
-  if (lowerProblem.includes("*args")) checks.push(/\*args\b/m);
-  if (lowerProblem.includes("**kwargs")) checks.push(/\*\*kwargs\b/m);
-
-  if (/(create|define)\s+a\s+list|list\s+named|\blists\b/.test(lowerProblem)) checks.push(/\[[^\]]*\]/m);
-  if (/(create|define)\s+a\s+dictionary|dictionary\s+named|\bdictionary\b|\bdict\b/.test(lowerProblem)) checks.push(/\{[^{}]*:[^{}]*\}/m);
-  if (/(create|define)\s+a\s+tuple|tuple\s+named|\btuples\b|\btuple\b/.test(lowerProblem)) checks.push(/\([^\)]*,[^\)]*\)/m);
-  if (/(create|define)\s+a\s+set|set\s+named|unique\s+values|\bsets\b/.test(lowerProblem)) checks.push(/\{[^{}]*\}/m);
-
-  if (lowerProblem.includes("membership operator") || /\bnot in\b/.test(lowerProblem)) {
-    checks.push(/\b(?:not\s+in|in)\b/m);
-  }
-
-  const builtinFunctionNames = ["len", "sum", "max", "min", "range", "sorted", "type", "int", "str", "float", "print"];
-  builtinFunctionNames.forEach((name) => {
-    const mentionPattern = new RegExp(`\\b${name}\\b`);
-    if (mentionPattern.test(lowerProblem)) {
-      checks.push(new RegExp(`\\b${escapeRegex(name)}\\s*\\(`, "m"));
-    }
-  });
-
-  if (lowerProblem.includes("uppercase")) checks.push(/\.upper\s*\(/m);
-  if (lowerProblem.includes("lowercase")) checks.push(/\.lower\s*\(/m);
-
-  if (lowerProblem.includes("<=")) checks.push(/<=/m);
-  if (lowerProblem.includes(">=")) checks.push(/>=/m);
-  if (lowerProblem.includes("!=")) checks.push(/!=/m);
-  if (lowerProblem.includes("==")) checks.push(/==/m);
-  if (lowerProblem.includes("%")) checks.push(/%/m);
-  if (lowerProblem.includes("**") || lowerProblem.includes("power")) checks.push(/\*\*/m);
-  if (lowerProblem.includes("+=")) checks.push(/\+=/m);
-  if (lowerProblem.includes("-=")) checks.push(/-=/m);
-  if (requiresLogicalOperator(lowerProblem, "and")) checks.push(/\band\b/m);
-  if (requiresLogicalOperator(lowerProblem, "or")) checks.push(/\bor\b/m);
-  if (requiresLogicalOperator(lowerProblem, "not")) checks.push(/\bnot\b/m);
-
-  const variableNames = extractVariableNames(problemText);
-  variableNames.forEach((name) => {
-    checks.push(new RegExp(`\\b${escapeRegex(name)}\\s*=`, "m"));
-  });
-
-  const functionNames = extractFunctionNames(problemText);
-  functionNames.forEach((name) => {
-    checks.push(new RegExp(`^\\s*def\\s+${escapeRegex(name)}\\s*\\(`, "m"));
-
-    if (/\bcall\b/.test(lowerProblem)) {
-      checks.push(new RegExp(`\\b${escapeRegex(name)}\\s*\\(`, "m"));
-    }
-  });
-
-  const quotedTokens = extractQuotedTokens(problemText);
-  quotedTokens.forEach((token) => {
-    const isNamedIdentifier = variableNames.includes(token) || functionNames.includes(token);
-    const isIdentifierToken = /^[A-Za-z_][A-Za-z0-9_]*$/.test(token);
-    if (!isNamedIdentifier && (!isIdentifierToken || /\bmessage\b|\bprint\b/.test(lowerProblem))) {
-      checks.push(new RegExp(`[\"']${escapeRegex(token)}[\"']`, "m"));
-    }
-  });
-
-  const numericTokens = extractNumericTokens(problemText);
-  numericTokens.forEach((token) => {
-    checks.push(new RegExp(`\\b${escapeRegex(token)}\\b`, "m"));
-  });
-
-  return checks;
+function hasRuntimeError(output: string): boolean {
+  return output
+    .replace(/\r/g, "")
+    .split("\n")
+    .some((line) => /^Error:/i.test(line.trim()));
 }
 
-export const validateMachineProblemSolution = (problem: MachineProblem, code: string): boolean => {
-  const normalizedCode = code.replace(/\r/g, "");
-  if (!normalizedCode.trim()) {
-    return false;
+type ArithmeticOperator = "+" | "-" | "*" | "/" | "%" | "**";
+
+type ArithmeticIntentConstraint = {
+  operator: ArithmeticOperator;
+  operands: string[];
+};
+
+function resolveArithmeticIntentConstraint(problemText: string): ArithmeticIntentConstraint | null {
+  const patterns: Array<{
+    regex: RegExp;
+    operator: ArithmeticOperator;
+  }> = [
+    {
+      regex: /\badd\s+(\d+(?:\.\d+)?)\s+and\s+(\d+(?:\.\d+)?)/i,
+      operator: "+",
+    },
+    {
+      regex: /\bsubtract\s+(\d+(?:\.\d+)?)\s+from\s+(\d+(?:\.\d+)?)/i,
+      operator: "-",
+    },
+    {
+      regex: /\bmultiply\s+(\d+(?:\.\d+)?)\s+by\s+(\d+(?:\.\d+)?)/i,
+      operator: "*",
+    },
+    {
+      regex: /\bdivide\s+(\d+(?:\.\d+)?)\s+by\s+(\d+(?:\.\d+)?)/i,
+      operator: "/",
+    },
+    {
+      regex: /\bremainder\s+of\s+(\d+(?:\.\d+)?)\s+divided\s+by\s+(\d+(?:\.\d+)?)/i,
+      operator: "%",
+    },
+    {
+      regex: /\bmodulo\b[^.\n]*?(\d+(?:\.\d+)?)\s+(?:divided\s+by|by)\s+(\d+(?:\.\d+)?)/i,
+      operator: "%",
+    },
+    {
+      regex: /(\d+(?:\.\d+)?)\s+to\s+the\s+power\s+of\s+(\d+(?:\.\d+)?)/i,
+      operator: "**",
+    },
+  ];
+
+  for (const pattern of patterns) {
+    const match = problemText.match(pattern.regex);
+    if (match && match[1] && match[2]) {
+      return {
+        operator: pattern.operator,
+        operands: [match[1], match[2]],
+      };
+    }
   }
 
-  const comparableCode = normalizeCodeForComparison(normalizedCode);
-  const comparableCorrectCode = normalizeCodeForComparison(problem.correct_code || "");
-  if (comparableCorrectCode.length > 0 && comparableCode === comparableCorrectCode) {
+  return null;
+}
+
+function stripPythonStrings(code: string): string {
+  let quote: "'" | '"' | null = null;
+  let escaped = false;
+  let result = "";
+
+  for (let index = 0; index < code.length; index += 1) {
+    const char = code[index] ?? "";
+
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+
+      if (char === "\\") {
+        escaped = true;
+        continue;
+      }
+
+      if (char === quote) {
+        quote = null;
+      }
+
+      continue;
+    }
+
+    if (char === "'" || char === '"') {
+      quote = char;
+      continue;
+    }
+
+    result += char;
+  }
+
+  return result;
+}
+
+function extractNumericLiterals(code: string): Set<string> {
+  const literals = new Set<string>();
+  const regex = /\b\d+(?:\.\d+)?\b/g;
+  let match = regex.exec(code);
+
+  while (match) {
+    if (match[0]) {
+      literals.add(match[0]);
+    }
+    match = regex.exec(code);
+  }
+
+  return literals;
+}
+
+function satisfiesInstructionIntent(problem: MachineProblem, code: string): boolean {
+  const arithmeticConstraint = resolveArithmeticIntentConstraint(problem.problem || "");
+  if (!arithmeticConstraint) {
     return true;
   }
 
-  const checks = buildProblemChecks(problem.problem || "");
-  if (checks.length === 0) {
-    return comparableCode.length > 0;
+  const codeWithoutComments = stripInlinePythonComments(code);
+  const codeWithoutStrings = stripPythonStrings(codeWithoutComments);
+  const numericLiterals = extractNumericLiterals(codeWithoutStrings);
+
+  const hasOperator = arithmeticConstraint.operator === "**"
+    ? codeWithoutStrings.includes("**")
+    : codeWithoutStrings.includes(arithmeticConstraint.operator);
+
+  if (!hasOperator) {
+    return false;
   }
 
-  return checks.every((regex) => containsRegex(normalizedCode, regex));
+  return arithmeticConstraint.operands.every((operand) => numericLiterals.has(operand));
+}
+
+export const validateMachineProblemSolution = (
+  problem: MachineProblem,
+  code: string,
+  runtimeOutput = "",
+): boolean => {
+  if (hasRuntimeError(runtimeOutput)) {
+    return false;
+  }
+
+  const normalizedExpectedOutput = normalizeProgramOutput(problem.expected_output || "");
+  if (normalizedExpectedOutput.length > 0) {
+    const normalizedRuntimeOutput = normalizeProgramOutput(runtimeOutput);
+    if (normalizedRuntimeOutput !== normalizedExpectedOutput) {
+      return false;
+    }
+
+    return satisfiesInstructionIntent(problem, code);
+  }
+
+  const normalizedUserCode = normalizeCodeForComparison(code);
+  if (!normalizedUserCode.trim()) {
+    return false;
+  }
+
+  const normalizedCanonicalCode = normalizeCodeForComparison(problem.correct_code || "");
+  if (!normalizedCanonicalCode) {
+    return normalizedUserCode.length > 0;
+  }
+
+  return normalizedUserCode === normalizedCanonicalCode;
 }

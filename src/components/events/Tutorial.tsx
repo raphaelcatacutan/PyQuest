@@ -42,14 +42,16 @@ export default function Tutorial(){
           <img className="absolute bottom-20 right-0 w-100 h-100" src={innKeeperImg}/>
         </div>
         <div className="absolute flex flex-col w-full h-40 p-3 bottom-0 rounded-2xl bg-header border border-blue-500">
-          <span className="text-base mb-2">Marta the Innkeeper</span>
-          {isCheckpoint && (
-            <span className="text-xs mb-1 text-yellow-300 uppercase tracking-wide">Checkpoint</span>
-          )}
-          <span className="overflow-y-auto mb-1 font-[code1] text-1xl whitespace-pre-wrap [tab-size:4]">{instruction || "..."}</span>
-          {blockedReason && (
-            <span className="text-xs mb-1 text-red-300">{blockedReason}</span>
-          )}
+          <div className="relative flex flex-col h-full">
+            <span className="text-base mb-2">Marta the Innkeeper</span>
+            {isCheckpoint && (
+              <span className="text-xs mb-1 text-yellow-300 uppercase tracking-wide">Checkpoint</span>
+            )}
+            <span className="overflow-y-auto mb-1 font-[code1] text-1xl whitespace-pre-wrap [tab-size:4]">{instruction || "..."}</span>
+            {blockedReason && (
+              <span className="text-xs mb-1 text-red-300">{blockedReason}</span>
+            )}
+          </div>
           <div className='flex flex-row-reverse mr-10 gap-2'>
             <button
               className='rounded-lg border border-slate-500 px-3 py-1 text-sm hover:bg-slate-700 cursor-pointer'

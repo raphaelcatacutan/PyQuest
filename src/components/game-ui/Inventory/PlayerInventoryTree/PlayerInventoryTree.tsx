@@ -9,6 +9,7 @@ import {
   addFileIcon,
   refreshIcon,
 } from '@/src/assets'
+import showToast from "@/src/components/ui/Toast";
 
 // RESTRICTIONS: Duplicate Files is not allowed
 //               Duplicate Folder names & File names is not allowed
@@ -19,10 +20,34 @@ interface PlayerInventoryTreeProps {
   onRenameItem: (nodeId: string, newName: string) => void;
   onMoveItem: (dragIds: string[], parentId: string | null, index: number) => void;
   onAddItem?: (parentId: string | undefined, item: InventoryNode) => void;
+  onOpenFile?: (file: {
+    id: string;
+    name: string;
+    path: string;
+    code: string;
+    readOnly?: boolean;
+  }) => void;
   onItemTransferred?: (item: InventoryNode) => void;
 }
 
-export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onMoveItem, onAddItem, onItemTransferred }: PlayerInventoryTreeProps){
+const PICKEDUP_FOLDER_ID = "pickedup_folder";
+
+function isInitFileName(name: string): boolean {
+  const normalized = name.trim().toLowerCase();
+  return normalized === "init.py" || normalized === "__init__.py";
+}
+
+function toPythonIdentifier(raw: string): string {
+  const sanitized = raw.replace(/[^a-zA-Z0-9_]/g, "_");
+  if (!sanitized) return "item";
+  return /^[0-9]/.test(sanitized) ? `_${sanitized}` : sanitized;
+}
+
+function isPickedupImportableKind(kind: InventoryNode["kind"]): kind is "weapon" | "armor" | "consumable" {
+  return kind === "weapon" || kind === "armor" || kind === "consumable";
+}
+
+export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onMoveItem, onAddItem, onOpenFile, onItemTransferred }: PlayerInventoryTreeProps){
   const containerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<TreeApi<InventoryNode>>(null);
@@ -128,20 +153,48 @@ export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onM
     return parentChildren ? checkInArray(parentChildren) : false;
   }
 
-  function findNodePathToId(nodeId: string, nodes: InventoryNode[] = inventory): { parentId: string | undefined; node: InventoryNode } | null {
-    const traverse = (items: InventoryNode[], parentId: string | undefined): { parentId: string | undefined; node: InventoryNode } | null => {
+  function findNodePathToId(nodeId: string, nodes: InventoryNode[] = inventory): {
+    parentId: string | undefined;
+    node: InventoryNode;
+    pathIds: string[];
+    pathNames: string[];
+  } | null {
+    const traverse = (
+      items: InventoryNode[],
+      parentId: string | undefined,
+      pathIds: string[],
+      pathNames: string[],
+    ): {
+      parentId: string | undefined;
+      node: InventoryNode;
+      pathIds: string[];
+      pathNames: string[];
+    } | null => {
       for (const item of items) {
+        const nextPathIds = [...pathIds, item.id];
+        const nextPathNames = [...pathNames, item.name];
+
         if (item.id === nodeId) {
-          return { parentId, node: item };
+          return { parentId, node: item, pathIds: nextPathIds, pathNames: nextPathNames };
         }
+
         if (item.kind === "folder") {
-          const result = traverse(item.children, item.id);
+          const result = traverse(item.children, item.id, nextPathIds, nextPathNames);
           if (result) return result;
         }
       }
       return null;
     };
-    return traverse(nodes, undefined);
+    return traverse(nodes, undefined, [], []);
+  }
+
+  function isWithinPickedup(parentId: string | undefined): boolean {
+    if (!parentId) {
+      return false;
+    }
+
+    const parentLookup = findNodePathToId(parentId);
+    return Boolean(parentLookup && parentLookup.pathIds.includes(PICKEDUP_FOLDER_ID));
   }
 
   function getNextNumberForPrefix(parentId: string | undefined, prefix: string): number {
@@ -176,9 +229,10 @@ export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onM
     }
 
     // Extract numbers from names like "New Folder 1", "New Folder 2", etc.
+    const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const numbers = siblings
       .map(item => {
-        const match = item.name.match(new RegExp(`^${prefix} (\\d+)$`));
+        const match = item.name.match(new RegExp(`^${escapedPrefix}(?:\\s+|_)(\\d+)(?:\\.py)?$`, "i"));
         return match ? parseInt(match[1], 10) : 0;
       })
       .filter(num => num > 0);
@@ -252,6 +306,15 @@ export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onM
 
   function handleNodeAddFolder(parentId?: string) {
     if (!onAddItem) return;
+
+    if (isWithinPickedup(parentId)) {
+      showToast({
+        variant: "warning",
+        message: "Creating folders under pickedup is not allowed.",
+      });
+      return;
+    }
+
     const nextNum = getNextNumberForPrefix(parentId, "New Folder");
     const newFolderName = `New Folder ${nextNum}`;
 
@@ -267,17 +330,63 @@ export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onM
 
   function handleNodeAddFile(parentId?: string) {
     if (!onAddItem) return;
-    const nextNum = getNextNumberForPrefix(parentId, "New Item");
-    const newFileName = `New Item ${nextNum}`;
+
+    if (isWithinPickedup(parentId)) {
+      showToast({
+        variant: "warning",
+        message: "Creating files under pickedup is not allowed.",
+      });
+      return;
+    }
+
+    const nextNum = getNextNumberForPrefix(parentId, "new_file");
+    const newFileName = `new_file_${nextNum}.py`;
 
     const newFile: InventoryNode = {
       id: `item-${Date.now()}`,
       kind: "misc",
-      itemId: "abc",
-      name: newFileName
+      itemId: `script_${Date.now()}`,
+      name: newFileName,
+      code: ""
     };
 
     onAddItem(parentId, newFile);
+  }
+
+  function handleNodeOpen(nodeId: string) {
+    if (!onOpenFile) {
+      return;
+    }
+
+    const lookup = findNodePathToId(nodeId);
+    if (!lookup || lookup.node.kind === "folder") {
+      return;
+    }
+
+    const fileNode = lookup.node;
+    if (isInitFileName(fileNode.name)) {
+      showToast({
+        variant: "warning",
+        message: "init files cannot be opened from the file browser.",
+      });
+      return;
+    }
+
+    const inPickedup = lookup.pathIds.includes(PICKEDUP_FOLDER_ID);
+    const importName = toPythonIdentifier(fileNode.itemId || fileNode.name.replace(/\.py$/i, ""));
+    const defaultPickedupCode = inPickedup && isPickedupImportableKind(fileNode.kind)
+      ? `from pickedup import ${importName}\n\n${importName}\n`
+      : "";
+
+    const readOnly = fileNode.kind !== "misc" && fileNode.kind !== "function";
+
+    onOpenFile({
+      id: fileNode.id,
+      name: fileNode.name,
+      path: lookup.pathNames.join("/"),
+      code: fileNode.code ?? defaultPickedupCode,
+      readOnly,
+    });
   }
 
   return (
@@ -328,6 +437,7 @@ export function PlayerInventoryTree({ inventory, onDeleteItem, onRenameItem, onM
             onAddFolder={handleNodeAddFolder}
             onAddFile={handleNodeAddFile}
             onRename={handleRenameNode}
+            onOpenFile={handleNodeOpen}
             onSelect={handleNodeSelect}
             selectedNodeIds={selectedNodeIds}
           />

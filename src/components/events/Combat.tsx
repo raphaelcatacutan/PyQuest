@@ -8,9 +8,11 @@ import {
   useCombatDebugStore,
   useEnemyStore,
   useGameStore,
+  useInventoryStore,
   useKillTrackerStore,
   usePlayerStore,
   useSceneStore,
+  useTerminalStore,
   useTutorialStore,
 } from "@/src/game/store";
 import {
@@ -21,6 +23,8 @@ import {
   EnemySkill,
 } from "@/src/backend/mechanics/combat";
 import { getEnemiesByLocation } from "@/src/game/data/enemies";
+import { getBossesByLocation } from "@/src/game/data/bosses";
+import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
 
 const DEBUG_AI = true;
 
@@ -95,7 +99,8 @@ export default function Combat() {
     const currentLevelKey = latestBounty.questLevel.toString();
     const currentLevelQuests = latestBounty.allQuests[currentLevelKey] || [];
     const hasQuestList = currentLevelQuests.length > 0;
-    const isLevelComplete = hasQuestList && currentLevelQuests.every((quest) => quest.isCompleted);
+    const isLevelComplete =
+      hasQuestList && currentLevelQuests.every((quest) => quest.isCompleted);
 
     if (!isLevelComplete) {
       return;
@@ -104,11 +109,31 @@ export default function Combat() {
     const availableLevels = Object.keys(latestBounty.allQuests)
       .map((level) => Number(level))
       .filter((level) => Number.isFinite(level));
-    const maxQuestLevel = availableLevels.length > 0 ? Math.max(...availableLevels) : latestBounty.questLevel;
+    const maxQuestLevel =
+      availableLevels.length > 0
+        ? Math.max(...availableLevels)
+        : latestBounty.questLevel;
 
     if (latestBounty.questLevel >= maxQuestLevel) {
       latestBounty.setHeader("All bounty quests are complete.");
-      latestBounty.toggleDisplayBountyQuest(true);
+      latestBounty.toggleDisplayBountyQuest(false);
+
+      const tutorial = useTutorialStore.getState();
+      const finalPhaseIndex = tutorial.sequence.findIndex(
+        (phase) => phase.phase === "phase-7",
+      );
+
+      if (finalPhaseIndex >= 0) {
+        const alreadyCompletedFinalPhase =
+          tutorial.isCompleted &&
+          tutorial.currentPhaseIndex === finalPhaseIndex;
+
+        if (!alreadyCompletedFinalPhase) {
+          tutorial.skipToPhase(finalPhaseIndex);
+          tutorial.toggleIsTutorial(true);
+        }
+      }
+
       return;
     }
 
@@ -116,7 +141,9 @@ export default function Combat() {
     const nextLevel = useBountyQuestStore.getState().questLevel;
     usePlayerStore.getState().levelUp();
     useTutorialStore.getState().toggleIsTutorial(false);
-    useBountyQuestStore.getState().setHeader(`New bounty quests unlocked for level ${nextLevel}.`);
+    useBountyQuestStore
+      .getState()
+      .setHeader(`New bounty quests unlocked for level ${nextLevel}.`);
     useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
   };
 
@@ -129,8 +156,112 @@ export default function Combat() {
 
   const controllerRef = useRef<EncounterController | null>(null);
   const activeKeyRef = useRef<string>("");
+  const handledDefeatKeyRef = useRef<string>("");
   const timerRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
+
+  const randomBetween = (min: number, max: number): number => {
+    const low = Math.max(0, Math.floor(Math.min(min, max)));
+    const high = Math.max(low, Math.floor(Math.max(min, max)));
+    return Math.floor(Math.random() * (high - low + 1)) + low;
+  };
+
+  const normalizeDropRate = (dropRate: number): number => {
+    if (!Number.isFinite(dropRate)) {
+      return 1;
+    }
+
+    if (dropRate <= 0) {
+      return 0;
+    }
+
+    if (dropRate > 1) {
+      return Math.min(1, dropRate / 100);
+    }
+
+    return dropRate;
+  };
+
+  const grantLootItems = (reward: LootDrop): number => {
+    const addInventoryItem = useInventoryStore.getState().addInventoryItem;
+    let totalGranted = 0;
+
+    const grantCategory = (
+      items: LootItem[],
+      kind: "weapon" | "armor" | "consumable",
+    ) => {
+      items.forEach((item) => {
+        const dropRate = normalizeDropRate(item.dropRate);
+        const quantity = Math.max(1, Math.floor(item.quantity ?? 1));
+
+        for (let index = 0; index < quantity; index += 1) {
+          if (Math.random() > dropRate) {
+            continue;
+          }
+
+          const uniqueId = `combat-loot-${item.itemId}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+          addInventoryItem("pickedup_folder", {
+            id: uniqueId,
+            kind,
+            itemId: item.itemId,
+            name: item.itemId,
+          });
+          totalGranted += 1;
+        }
+      });
+    };
+
+    grantCategory(reward.weapons, "weapon");
+    grantCategory(reward.armors, "armor");
+    grantCategory(reward.consumables, "consumable");
+
+    return totalGranted;
+  };
+
+  const grantRewardsForDefeat = (
+    reward: LootDrop,
+    targetType: "enemy" | "boss",
+    targetId: string,
+  ): void => {
+    const xpReward = randomBetween(reward.xpDropMin, reward.xpDropMax);
+    const coinReward = randomBetween(reward.coinDropMin, reward.coinDropMax);
+    const grantedLootCount = grantLootItems(reward);
+
+    if (xpReward > 0) {
+      usePlayerStore.getState().gainXP(xpReward);
+    }
+
+    if (coinReward > 0) {
+      usePlayerStore.getState().gainCoins(coinReward);
+    }
+
+    const rewardSuffix =
+      grantedLootCount > 0 ? ` + ${grantedLootCount} loot item(s)` : "";
+    useTerminalStore
+      .getState()
+      .appendToLog(
+        `[SYSTEM]: Defeated ${targetType} '${targetId}'. +${xpReward} XP, +${coinReward} coins${rewardSuffix}.`,
+      );
+  };
+
+  const processTargetDefeat = (
+    targetType: "enemy" | "boss",
+    targetId: string,
+    reward: LootDrop,
+  ): void => {
+    if (!targetId) {
+      return;
+    }
+
+    const defeatKey = `${targetType}:${targetId}`;
+    if (handledDefeatKeyRef.current === defeatKey) {
+      return;
+    }
+
+    handledDefeatKeyRef.current = defeatKey;
+    grantRewardsForDefeat(reward, targetType, targetId);
+    handleQuestProgressAfterKill(targetId);
+  };
 
   const [debugState, setDebugState] = useState<{
     isBoss: boolean;
@@ -163,6 +294,7 @@ export default function Combat() {
       controllerRef.current.endEncounter();
       controllerRef.current = null;
       activeKeyRef.current = "";
+      handledDefeatKeyRef.current = "";
     }
 
     if (timerRef.current != null) {
@@ -215,14 +347,20 @@ export default function Combat() {
     }
 
     if (isEnemy && enemyId && enemyHp <= 0) {
-      handleQuestProgressAfterKill(enemyId);
+      const defeatedEnemy = useEnemyStore.getState().enemy;
+      if (defeatedEnemy?.id === enemyId) {
+        processTargetDefeat("enemy", enemyId, defeatedEnemy.lootDrop);
+      }
       toggleInCombat(false);
       clearEnemy();
       return;
     }
 
     if (!isEnemy && bossId && bossHp <= 0) {
-      handleQuestProgressAfterKill(bossId);
+      const defeatedBoss = useBossStore.getState();
+      if (defeatedBoss.id === bossId) {
+        processTargetDefeat("boss", bossId, defeatedBoss.lootDrop);
+      }
       toggleInCombat(false);
       clearBoss();
     }
@@ -275,9 +413,11 @@ export default function Combat() {
       });
       activeKeyRef.current = key;
       useCombatDebugStore.getState().clearLogs();
-      useCombatDebugStore.getState().appendLog(
-        `Encounter started: ${isEnemy ? "mob" : "boss"} ${target.id}`,
-      );
+      useCombatDebugStore
+        .getState()
+        .appendLog(
+          `Encounter started: ${isEnemy ? "mob" : "boss"} ${target.id}`,
+        );
     }
 
     if (timerRef.current == null) {
@@ -415,9 +555,11 @@ export default function Combat() {
               result.didEnemyAct
             ) {
               const causes = result.damageCauses.join(", ") || "none";
-              useCombatDebugStore.getState().appendLog(
-                `Tick ${Math.round(deltaMs)}ms | action=${snapshot.action} | p=-${result.damageToPlayer} e=-${result.damageToEnemy} | causes=${causes}`,
-              );
+              useCombatDebugStore
+                .getState()
+                .appendLog(
+                  `Tick ${Math.round(deltaMs)}ms | action=${snapshot.action} | p=-${result.damageToPlayer} e=-${result.damageToEnemy} | causes=${causes}`,
+                );
             }
           }
         }
@@ -434,7 +576,11 @@ export default function Combat() {
             : useBossStore.getState();
 
           if (activeTarget?.id && activeTarget.hp <= 0) {
-            handleQuestProgressAfterKill(activeTarget.id);
+            processTargetDefeat(
+              isEnemy ? "enemy" : "boss",
+              activeTarget.id,
+              activeTarget.lootDrop,
+            );
           }
 
           stopLoop();

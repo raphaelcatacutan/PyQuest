@@ -4,6 +4,7 @@ import { Tutorial, TutorialTest } from "../types/tutorial.types";
 import { Tutorials } from "../data/tutorial";
 import { useEditorStore } from "./editorStore";
 import { useBountyQuestStore } from "./bountyQuestStore";
+import { useSoundStore } from "./soundStore";
 
 /**
  * 
@@ -115,6 +116,8 @@ export const useTutorialStore = create<TutorialStoreProps>()(
 
         if (!currentPhase || !currentStep) return;
 
+        useSoundStore.getState().playSfx('innkeeper')
+
         if (currentStep.test) {
           const currentCode = useEditorStore.getState().activeCode;
           const passed = validateTutorialTest(currentStep.test, currentCode);
@@ -139,8 +142,12 @@ export const useTutorialStore = create<TutorialStoreProps>()(
             hasStoredProgress: true,
           });
         } else {
-          useBountyQuestStore.getState().setHeader("New bounty quests are available.");
-          useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
+          const isFreeRoamPhase = currentPhase.phase === "phase-7";
+          if (!isFreeRoamPhase) {
+            useBountyQuestStore.getState().setHeader("New bounty quests are available.");
+            useBountyQuestStore.getState().toggleDisplayBountyQuest(true);
+          }
+
           set({
             isTutorial: false,
             blockedReason: "",

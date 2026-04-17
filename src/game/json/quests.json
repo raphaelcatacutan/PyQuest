@@ -2,16 +2,16 @@
   "1": [
     {
       "questId": "q1",
-      "description": "Kill 10 slimes",
+      "description": "Kill 10 Slimes",
       "isCompleted": false,
       "targetId": "slime",
       "requiredAmount": 10
     },
     {
       "questId": "q2",
-      "description": "Kill 5 skeletons",
+      "description": "Kill 5 Babies",
       "isCompleted": false,
-      "targetId": "skeleton",
+      "targetId": "baby",
       "requiredAmount": 5
     },
     {
@@ -25,44 +25,44 @@
   "2": [
     {
       "questId": "q1",
-      "description": "Kill 12 slimes",
+      "description": "Kill 12 Spiders",
       "isCompleted": false,
-      "targetId": "slime",
-      "requiredAmount": 10
+      "targetId": "spider",
+      "requiredAmount": 12
     },
     {
-      "questId": "q1",
-      "description": "Kill 12 Mire Hag",
+      "questId": "q2",
+      "description": "Kill 12 Mire Hags",
       "isCompleted": false,
       "targetId": "mire_hag",
       "requiredAmount": 12
     },
     {
       "questId": "q3",
-      "description": "Kill 10 stalker",
+      "description": "Kill 10 Scouts",
       "isCompleted": false,
-      "targetId": "stalker",
+      "targetId": "scout",
       "requiredAmount": 10
     }
   ],
   "3": [
     {
       "questId": "q1",
-      "description": "Kill 15 knight",
+      "description": "Kill 15 Knights",
       "isCompleted": false,
       "targetId": "knight",
       "requiredAmount": 15
     },
     {
       "questId": "q2",
-      "description": "Kill 13 scout",
+      "description": "Kill 13 Raiders",
       "isCompleted": false,
-      "targetId": "scout",
+      "targetId": "raider",
       "requiredAmount": 13
     },
     {
       "questId": "q3",
-      "description": "Kill 18 Shaman",
+      "description": "Kill 18 Shamans",
       "isCompleted": false,
       "targetId": "shaman",
       "requiredAmount": 18
@@ -71,23 +71,23 @@
   "4": [
     {
       "questId": "q1",
-      "description": "Kill 15 Frost Wraith",
+      "description": "Kill 15 Frost Wraiths",
       "isCompleted": false,
       "targetId": "frost_wraith",
       "requiredAmount": 15
     },
     {
       "questId": "q2",
-      "description": "Kill 20 Giant",
+      "description": "Kill 20 Giants",
       "isCompleted": false,
       "targetId": "giant",
       "requiredAmount": 20
     },
     {
       "questId": "q3",
-      "description": "Kill 18 Shaman",
+      "description": "Kill 18 Evil Pumpkins",
       "isCompleted": false,
-      "targetId": "shaman",
+      "targetId": "evil_pumpkin",
       "requiredAmount": 18
     }
   ],
@@ -101,39 +101,39 @@
     },
     {
       "questId": "q2",
-      "description": "Kill 20 Giant",
+      "description": "Kill 20 Skulls",
       "isCompleted": false,
-      "targetId": "giant",
+      "targetId": "skull",
       "requiredAmount": 20
     },
     {
       "questId": "q3",
-      "description": "Kill 20 Mire Hag",
+      "description": "Kill 20 Wizard Cats",
       "isCompleted": false,
-      "targetId": "mire_hag",
+      "targetId": "wizard_cat",
       "requiredAmount": 20
     }
   ],
   "6": [
     {
       "questId": "q1",
-      "description": "Kill 25 Skeleton",
+      "description": "Kill 25 Skeletons",
       "isCompleted": false,
       "targetId": "skeleton",
       "requiredAmount": 25
     },
     {
       "questId": "q2",
-      "description": "Kill 25 Shaman",
+      "description": "Kill 25 Zombies",
       "isCompleted": false,
-      "targetId": "shaman",
+      "targetId": "zombie",
       "requiredAmount": 25
     },
     {
       "questId": "q3",
-      "description": "Kill 25 Frost Wraith",
+      "description": "Kill 25 Cursed Cloaks",
       "isCompleted": false,
-      "targetId": "frost_wraith",
+      "targetId": "cursed_cloak",
       "requiredAmount": 25
     }
   ]

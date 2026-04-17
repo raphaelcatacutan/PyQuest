@@ -645,4 +645,499 @@
                                     },
                        "energyRegenPerSecond":  6
                    }
+  "worm": {
+    "id": "worm",
+    "name": "Worm",
+    "description": "A giant rootworm that tunnels beneath wet woodland paths.",
+    "bossImg": "/src/assets/bosses/worm.png",
+    "hp": 145,
+    "maxHp": 145,
+    "energy": 95,
+    "maxEnergy": 95,
+    "def": 17,
+    "maxDef": 17,
+    "skills": [
+      {
+        "name": "Vine Lunge",
+        "description": "Leaps forward with thorned roots.",
+        "energyCost": 12,
+        "effect": {
+          "type": "bleed",
+          "dmgPerSecond": 5
+        }
+      },
+      {
+        "name": "Bog Renewal",
+        "description": "Absorbs damp earth to restore health.",
+        "energyCost": 18,
+        "effect": {
+          "type": "heal",
+          "healAmount": 28
+        }
+      }
+    ],
+    "dmg": 24,
+    "atkSpeed": 1.06,
+    "critDmg": 1.46,
+    "critChance": 0.14,
+    "evasion": 0.1,
+    "location": {
+      "forest": 0.42,
+      "swamp": 0.3
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "red_skull": {
+    "id": "red_skull",
+    "name": "Red Skull",
+    "description": "A silent predator that hunts from canopies and briars.",
+    "bossImg": "/src/assets/bosses/skull.png",
+    "hp": 154,
+    "maxHp": 154,
+    "energy": 108,
+    "maxEnergy": 108,
+    "def": 18,
+    "maxDef": 18,
+    "skills": [
+      {
+        "name": "Canopy Dash",
+        "description": "Accelerates through treetops to strike first.",
+        "energyCost": 14,
+        "effect": {
+          "type": "speedup",
+          "speedUp": 0.35
+        }
+      },
+      {
+        "name": "Needle Burst",
+        "description": "Fires a storm of razor-thorns.",
+        "energyCost": 16,
+        "effect": {
+          "type": "poison",
+          "dmgPerSecond": 6
+        }
+      }
+    ],
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 1.54,
+    "critChance": 0.18,
+    "evasion": 0.14,
+    "location": {
+      "forest": 0.31,
+      "jungle": 0.28
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "abyss_prince": {
+    "id": "abyss_prince",
+    "name": "Abyss Prince",
+    "description": "An ancient guardian that now patrols remote border ruins.",
+    "bossImg": "/src/assets/bosses/abyss_prince.png",
+    "hp": 182,
+    "maxHp": 182,
+    "energy": 118,
+    "maxEnergy": 118,
+    "def": 23,
+    "maxDef": 23,
+    "skills": [
+      {
+        "name": "Sanction",
+        "description": "Marks the target and empowers the next blow.",
+        "energyCost": 20,
+        "effect": {
+          "type": "empower",
+          "dmgMultiplier": 1.45
+        }
+      },
+      {
+        "name": "Judgment Bind",
+        "description": "Pins opponents in place.",
+        "energyCost": 22,
+        "effect": {
+          "type": "stun",
+          "duration": 2
+        }
+      },
+      {
+        "name": "Royal Aegis",
+        "description": "Recovers from damage with disciplined focus.",
+        "energyCost": 24,
+        "effect": {
+          "type": "heal",
+          "healAmount": 40
+        }
+      }
+    ],
+    "dmg": 32,
+    "atkSpeed": 1,
+    "critDmg": 1.62,
+    "critChance": 0.21,
+    "evasion": 0.1,
+    "location": {
+      "forest": 0.27,
+      "desert": 0.23
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "thorn_matriarch": {
+    "id": "thorn_matriarch",
+    "name": "Thorn Matriarch",
+    "description": "A marsh seer that clouds minds with murk.",
+    "bossImg": "/src/assets/bosses/thorn_matriarch.png",
+    "hp": 164,
+    "maxHp": 164,
+    "energy": 118,
+    "maxEnergy": 118,
+    "def": 19,
+    "maxDef": 19,
+    "skills": [
+      {
+        "name": "Mire Hex",
+        "description": "Distorts judgment and causes missteps.",
+        "energyCost": 16,
+        "effect": {
+          "type": "confusion",
+          "dmg": 14
+        }
+      },
+      {
+        "name": "Toxic Chant",
+        "description": "Summons poisonous vapors.",
+        "energyCost": 15,
+        "effect": {
+          "type": "poison",
+          "dmgPerSecond": 7
+        }
+      }
+    ],
+    "dmg": 28,
+    "atkSpeed": 1.08,
+    "critDmg": 1.58,
+    "critChance": 0.2,
+    "evasion": 0.13,
+    "location": {
+      "swamp": 0.34,
+      "jungle": 0.25
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "grove_titan": {
+    "id": "grove_titan",
+    "name": "Grove Titan",
+    "description": "A decaying giant fueled by altar sludge.",
+    "bossImg": "/src/assets/bosses/grove_titan.png",
+    "hp": 174,
+    "maxHp": 174,
+    "energy": 104,
+    "maxEnergy": 104,
+    "def": 22,
+    "maxDef": 22,
+    "skills": [
+      {
+        "name": "Crushing Mire",
+        "description": "Massive slam that leaves lingering wounds.",
+        "energyCost": 20,
+        "effect": {
+          "type": "bleed",
+          "dmgPerSecond": 8
+        }
+      },
+      {
+        "name": "Idol Ward",
+        "description": "Channels temple sigils to harden attacks.",
+        "energyCost": 18,
+        "effect": {
+          "type": "empower",
+          "dmgMultiplier": 1.3
+        }
+      }
+    ],
+    "dmg": 31,
+    "atkSpeed": 0.96,
+    "critDmg": 1.5,
+    "critChance": 0.15,
+    "evasion": 0.08,
+    "location": {
+      "swamp": 0.29,
+      "temple": 0.26
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "mire_typhon": {
+    "id": "mire_typhon",
+    "name": "Mire Typhon",
+    "description": "A warlord wrapped in living vines and shrine glyphs.",
+    "bossImg": "/src/assets/bosses/mire_typhon.png",
+    "hp": 198,
+    "maxHp": 198,
+    "energy": 126,
+    "maxEnergy": 126,
+    "def": 25,
+    "maxDef": 25,
+    "skills": [
+      {
+        "name": "Overgrowth",
+        "description": "Rapid growth boosts combat pace.",
+        "energyCost": 17,
+        "effect": {
+          "type": "speedup",
+          "speedUp": 0.4
+        }
+      },
+      {
+        "name": "Sacred Lash",
+        "description": "A heavy strike powered by old temple roots.",
+        "energyCost": 21,
+        "effect": {
+          "type": "empower",
+          "dmgMultiplier": 1.35
+        }
+      },
+      {
+        "name": "Pulse Bloom",
+        "description": "Drains vitality from nearby life.",
+        "energyCost": 19,
+        "effect": {
+          "type": "heal",
+          "healAmount": 34
+        }
+      }
+    ],
+    "dmg": 35,
+    "atkSpeed": 1,
+    "critDmg": 1.68,
+    "critChance": 0.22,
+    "evasion": 0.11,
+    "location": {
+      "jungle": 0.31,
+      "village": 0.22
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "sun_reaver": {
+    "id": "sun_reaver",
+    "name": "Sun Reaver",
+    "description": "A blazing executioner marching from temple ruins to dunes.",
+    "bossImg": "/src/assets/bosses/sun_reaver.png",
+    "hp": 192,
+    "maxHp": 192,
+    "energy": 126,
+    "maxEnergy": 126,
+    "def": 24,
+    "maxDef": 24,
+    "skills": [
+      {
+        "name": "Solar Rend",
+        "description": "Cuts through armor with heated force.",
+        "energyCost": 20,
+        "effect": {
+          "type": "bleed",
+          "dmgPerSecond": 9
+        }
+      },
+      {
+        "name": "Dazzling Strike",
+        "description": "A bright impact that stuns briefly.",
+        "energyCost": 18,
+        "effect": {
+          "type": "stun",
+          "duration": 2
+        }
+      }
+    ],
+    "dmg": 34,
+    "atkSpeed": 1.02,
+    "critDmg": 1.64,
+    "critChance": 0.21,
+    "evasion": 0.1,
+    "location": {
+      "temple": 0.25,
+      "desert": 0.33
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "dune_emperor": {
+    "id": "dune_emperor",
+    "name": "Dune Emperor",
+    "description": "A tyrant who claims dominion over sand and city walls.",
+    "bossImg": "/src/assets/bosses/dune_emperor.png",
+    "hp": 212,
+    "maxHp": 212,
+    "energy": 134,
+    "maxEnergy": 134,
+    "def": 27,
+    "maxDef": 27,
+    "skills": [
+      {
+        "name": "Imperial Command",
+        "description": "Amplifies damage with absolute authority.",
+        "energyCost": 22,
+        "effect": {
+          "type": "empower",
+          "dmgMultiplier": 1.42
+        }
+      },
+      {
+        "name": "Searing Gale",
+        "description": "Burning wind chips away over time.",
+        "energyCost": 19,
+        "effect": {
+          "type": "poison",
+          "dmgPerSecond": 8
+        }
+      },
+      {
+        "name": "Royal Recover",
+        "description": "Restores endurance mid-fight.",
+        "energyCost": 24,
+        "effect": {
+          "type": "heal",
+          "healAmount": 38
+        }
+      }
+    ],
+    "dmg": 37,
+    "atkSpeed": 0.97,
+    "critDmg": 1.72,
+    "critChance": 0.24,
+    "evasion": 0.09,
+    "location": {
+      "desert": 0.29,
+      "village": 0.31
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  },
+  "echo_golem": {
+    "id": "echo_golem",
+    "name": "Echo Golem",
+    "description": "The final challenger, feared in desert sieges and village courts.",
+    "bossImg": "/src/assets/bosses/echo_golem.png",
+    "hp": 226,
+    "maxHp": 226,
+    "energy": 140,
+    "maxEnergy": 140,
+    "def": 30,
+    "maxDef": 30,
+    "skills": [
+      {
+        "name": "Final Decree",
+        "description": "Cripples movement and opens a lethal window.",
+        "energyCost": 24,
+        "effect": {
+          "type": "stun",
+          "duration": 3
+        }
+      },
+      {
+        "name": "Ruin Spiral",
+        "description": "A relentless combo that speeds up each phase.",
+        "energyCost": 21,
+        "effect": {
+          "type": "speedup",
+          "speedUp": 0.45
+        }
+      },
+      {
+        "name": "Fracture Oath",
+        "description": "Inflicts deep confusion through oppressive force.",
+        "energyCost": 23,
+        "effect": {
+          "type": "confusion",
+          "dmg": 22
+        }
+      },
+      {
+        "name": "Last Stand",
+        "description": "A desperate heal to prolong the final phase.",
+        "energyCost": 28,
+        "effect": {
+          "type": "heal",
+          "healAmount": 46
+        }
+      }
+    ],
+    "dmg": 40,
+    "atkSpeed": 0.96,
+    "critDmg": 1.78,
+    "critChance": 0.25,
+    "evasion": 0.08,
+    "location": {
+      "temple": 0.24,
+      "village": 0.37
+    },
+    "lootDrop": {
+      "xpDropMin": 0,
+      "xpDropMax": 0,
+      "coinDropMin": 0,
+      "coinDropMax": 0,
+      "armors": [],
+      "weapons": [],
+      "consumables": []
+    }
+  }
 }

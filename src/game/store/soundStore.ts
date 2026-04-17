@@ -2,16 +2,18 @@ import { create } from "zustand";
 import { Howl, Howler } from "howler";
 import shotgunSFX from '@/src/assets/audio/sfx/shotgun.mp3'
 import healSFX from '@/src/assets/audio/sfx/heal.mp3'
-import deathSFX from '@/src/assets/audio/sfx/death.mp3'
+import deathSFX from '@/src/assets/audio/sfx/death1.mp3'
 import hitSFX from '@/src/assets/audio/sfx/hit1.mp3'
 import tradeSFX from '@/src/assets/audio/sfx/trade.mp3'
+import hurtSFX from '@/src/assets/audio/sfx/hurt.mp3'
+import innkeeperSFX from '@/src/assets/audio/sfx/innkeeper_v1.mp3'
 
 // ⚡️ Import your music files
 import mainBGM from '@/src/assets/audio/musics/background.mp3'
 import villageBGM from '@/src/assets/audio/musics/villageBGM.mp3'
 // import combatBGM from '@/src/assets/audio/music/combat.mp3'
 
-type SFX = 'click' | 'hit' | 'heal' | 'death' | 'trade'
+type SFX = 'click' | 'hit' | 'heal' | 'death' | 'trade' | 'hurt' | 'innkeeper'
 type BGM = 'main' | 'village' |  'combat' // ⚡️ Define your music keys
 
 interface SoundStoreProps {
@@ -38,11 +40,13 @@ export const useSoundStore = create<SoundStoreProps>((set, get) => ({
       heal: new Howl({ src: [healSFX] }),
       death: new Howl({ src: [deathSFX] }),
       trade: new Howl({ src: [tradeSFX] }),
+      hurt: new Howl({ src: [hurtSFX] }),
+      innkeeper: new Howl({ src: [innkeeperSFX] }),
 
       // ⚡️ Add Music to the map
       main: new Howl({ src: [mainBGM], loop: true, html5: true }), //
-      village: new Howl({ src: [villageBGM], loop: true, html5: true }), //
-      combat: new Howl({ src: [mainBGM], loop: true, html5: true }),
+      village: new Howl({ src: [villageBGM], loop: true, html5: true, volume: 0.5 }), //
+      combat: new Howl({ src: [mainBGM], loop: true, html5: true, volume: 0.5 }),
     };
 
     set({ sounds: soundMap });

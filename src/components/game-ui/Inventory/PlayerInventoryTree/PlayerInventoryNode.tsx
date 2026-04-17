@@ -22,6 +22,7 @@ interface PlayerInventoryNodeProps extends NodeRendererProps<InventoryNode> {
   onAddFolder: (parentId?: string) => void;
   onAddFile: (parentId?: string) => void;
   onRename: (nodeId: string, newName: string) => void;
+  onOpenFile: (nodeId: string) => void;
   onSelect: (
     nodeId: string,
     isShiftClick: boolean,
@@ -48,6 +49,7 @@ export function PlayerInventoryNode({
   onAddFolder,
   onAddFile,
   onRename,
+  onOpenFile,
   onSelect,
   selectedNodeIds,
 }: PlayerInventoryNodeProps) {
@@ -96,6 +98,12 @@ export function PlayerInventoryNode({
 
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     onSelect(node.id, e.shiftKey, e.ctrlKey || e.metaKey);
+
+    if (e.detail === 2 && node.data.kind !== "folder") {
+      onOpenFile(node.id);
+      return;
+    }
+
     if (node.data.kind === "folder") node.toggle();
   }
 
@@ -105,14 +113,20 @@ export function PlayerInventoryNode({
     }
   }
 
-  function handleDoubleClick(e: React.MouseEvent<HTMLDivElement>) {
+  function handleNodeDoubleClick() {
+    if (node.data.kind === "folder") {
+      node.toggle();
+      return;
+    }
+
+    onOpenFile(node.id);
+  }
+
+  function handleDoubleClick(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("PlayerInventoryNode double clicked:", {
-      id: node.id,
-      name: node.data.name,
-      kind: node.data.kind,
-    });
+
+    handleNodeDoubleClick();
   }
 
   // Track mouse coordinates
@@ -286,7 +300,6 @@ export function PlayerInventoryNode({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}
-      onDoubleClick={handleDoubleClick}
       className={`
         border-l-2
         border-transparent
@@ -316,7 +329,9 @@ export function PlayerInventoryNode({
           />
         ) : (
           <>
-          <span className="truncate">{name}</span>
+          <span className="truncate select-none">
+            {name}
+          </span>
           {isHovered && 
             scene == 'village' && 
             isSellableItem(node.data.kind) && (
@@ -330,14 +345,16 @@ export function PlayerInventoryNode({
           className="flex-2 flex flex-row-reverse w-fit"
           onClick={(e) => e.stopPropagation()}
         >
+          {node.data.kind == 'misc' &&
+            <Button
+              variant="icon-only-btn"
+              icon={deleteIcon}
+              iconSize={20}
+              onClick={handleDeleteClick}
+            />
+          }
           {!isUtilItem(node.data.kind) && (
             <>
-              <Button
-                variant="icon-only-btn"
-                icon={deleteIcon}
-                iconSize={20}
-                onClick={handleDeleteClick}
-              />
               <Button
                 variant="icon-only-btn"
                 icon={renameIcon}

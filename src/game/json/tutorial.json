@@ -56,19 +56,78 @@
   {
     "phase": "phase-3",
     "instructions": [
-      "OOP"
+      "HEEEEAWDA! You have returned with dust on your boots and syntax in your hands. Good. Sit by the lantern bench, because this round is all about **Functions**.",
+      "A function is a reusable ritual: you write the logic once, give it a name, and call it whenever you need the same action again. This keeps your code cleaner, shorter, and easier to repair.",
+      "Forge your first ritual. Type:\n\ndef gather_supplies():\n\tprint('Supplies gathered!')",
+      "That line with `def` is a **function definition**. Nothing runs yet. You are only teaching Python a new command. The indented block is the body, which means every indented line belongs to that function.",
+      "Now cast it. Type:\n\ngather_supplies()",
+      "That is a **function call**. Definition stores the ritual; call executes it. You can call a function again and again instead of rewriting the same lines.",
+      "Next concept: **Default Arguments**. A default is a fallback value Python uses when you do not pass one yourself.",
+      "Try this and run it:\n\ndef heal(amount=10):\n\treturn amount\nprint(heal())\nprint(heal(25))",
+      "When you call `heal()` with no input, Python uses 10. When you call `heal(25)`, your explicit value overrides the default. This makes functions flexible without forcing long argument lists every time.",
+      "Now learn **return** by writing a function that sends a value back to the caller:\n\ndef craft_badge(name):\n\treturn f'Ranger {name}'\nprint(craft_badge('Aria'))",
+      "A returned value can be printed, stored in a variable, or passed into another function. Without `return`, many functions only perform actions and give nothing back.",
+      "Use **Built-in Functions** now. They are tools Python already provides so you do not reinvent common logic:\n\nprint(len(['vine', 'stone', 'leaf']))\nprint(sum([2, 3, 4]))\nprint(max([7, 1, 5]))",
+      "`len` counts items, `sum` adds numbers, and `max` finds the largest value. Combining built-ins with your own functions is where your code starts feeling like a real toolkit.",
+      "You also have access to the quartermaster utilities in this phase. Imported tools work like borrowed skills from another script.",
+      "Import and test them:\n\nfrom inventory import add_item, list_items, get_total_value\nadd_item('Potion', 2, 5)\nlist_items()\nprint(get_total_value())",
+      "This is module usage in action. You import only what you need, then call those functions as if they were your own.",
+      "Final drill: wrap repeated store actions into one reusable function so your future scripts stay clean.",
+      "Type:\n\ndef restock(item, qty=1):\n\tadd_item(item, qty, 3)\n\treturn get_total_value()",
+      "This wrapper function combines a side effect (adding stock) with a returned result (current value). That design is common in game and tool scripts.",
+      "Run it:\n\nprint(restock('Herb', 2))",
+      "If the call works, you have practiced definition, calling, defaults, returns, imports, and composition in one flow.",
+      "Off with ya. Keep your rituals sharp: functions are how you turn chaotic steps into commands you can trust."
     ]
   },
   {
     "phase": "phase-4",
     "instructions": [
-      "IMPORT"
+      "HEEEEAWDA! Put the steel down for a moment. In this lesson, you will forge blueprints, not blades. Welcome to **Object-Oriented Programming** training.",
+      "OOP lets you model your world as classes and objects: a class is the blueprint, and an object is a living instance created from that blueprint.",
+      "Start with a class and constructor:\n\nclass Adventurer:\n\tdef __init__(self, name, hp):\n\t\tself.name = name\n\t\tself.hp = hp",
+      "`__init__` runs when you create an object. `self` refers to that object, and attributes like `self.name` and `self.hp` become data each instance carries.",
+      "Create an object and inspect it:\n\nhero = Adventurer('Lyn', 120)\nprint(hero.name)",
+      "Now for **Abstraction**. Build a base contract that says every weapon must define how it attacks:\n\nclass Weapon:\n\tdef attack(self):\n\t\traise NotImplementedError('Define in subclass')",
+      "Abstraction sets expectations without forcing one exact behavior. It tells child classes, 'you must implement this method.'",
+      "Use **Inheritance** so a child class reuses the parent structure:\n\nclass Spear(Weapon):\n\tdef attack(self):\n\t\treturn 'Spear thrust'",
+      "That override is **Polymorphism** in practice: same method name, different behavior by class. Run:\n\nw = Spear()\nprint(w.attack())",
+      "Next is **Encapsulation**. Keep internals guarded and expose controlled access methods.",
+      "Try this pattern:\n\nclass ShieldedHero:\n\tdef __init__(self, hp):\n\t\tself._hp = hp\n\tdef get_hp(self):\n\t\treturn self._hp",
+      "The underscore in `_hp` signals internal state. You can still access it, but the naming warns other coders to use the method interface when possible.",
+      "When extending a parent class, call the parent constructor with **super()**:\n\nclass Guardian(Adventurer):\n\tdef __init__(self, name, hp, shield):\n\t\tsuper().__init__(name, hp)\n\t\tself.shield = shield",
+      "`super()` keeps parent setup logic intact, so subclasses add features without rewriting base initialization.",
+      "For utility logic tied to a class but not a specific object, use a **Static method**:\n\nclass DamageMath:\n\t@staticmethod\n\tdef crit(base, bonus):\n\t\treturn base + bonus\n\nprint(DamageMath.crit(10, 5))",
+      "Static methods group related logic under a class name, which improves organization when no instance data is required.",
+      "Practice with unlocked gear interfaces:\n\nfrom abstracts import Player, Spear\nplayer = Player()\nplayer.equip(Spear())",
+      "Off with ya. You now command blueprint magic: classes, objects, abstraction, inheritance, polymorphism, encapsulation, super(), and static methods."
     ]
   },
   {
     "phase": "phase-5",
     "instructions": [
-      "DATA STRUCTURES"
+      "HEEEEAWDA! Time for **Python Data Structures**. Think of this as inventory discipline: the right container decides how fast and safely you can work.",
+      "Every structure has strengths. Some keep order, some map keys to values, some enforce uniqueness, and some lock data from accidental edits.",
+      "Begin with a **List**. Lists are ordered and mutable, so you can add, remove, and index items:\n\nitems = ['water', 'rope', 'map']\nprint(items[0])",
+      "Indexing starts at 0. So `items[0]` is the first item, `items[1]` is the second, and so on.",
+      "Now use a **Dictionary** for named stats, where each key points to a value:\n\nstats = {'hp': 100, 'energy': 40}\nprint(stats['hp'])",
+      "Dictionaries are best when labels matter more than position. You ask by key name instead of numeric index.",
+      "Next is a **Tuple**. It is ordered like a list, but immutable once created:\n\ncoords = (3, 7, 9)\nprint(coords[1])",
+      "Use tuples for values that should not change accidentally, like fixed coordinates or constant records.",
+      "Now a **Set**, which keeps unique values only:\n\nmarks = {'sun', 'sun', 'dune'}\nprint(marks)",
+      "Notice duplicate entries collapse into one. Sets are useful for tags, membership checks, and deduplication.",
+      "Walk through sequence data with a **for loop**:\n\nfor item in items:\n\tprint(item)",
+      "A loop reads one element at a time. This is cleaner than manually writing index access for every slot.",
+      "Check membership with `in`:\n\nx = 2\nprint(x in [1, 2, 3])",
+      "Membership returns a Boolean: `True` if found, `False` if missing.",
+      "Use `not in` when you need the inverse condition:\n\nprint('storm' not in marks)",
+      "This is common for guard logic such as 'if item not in inventory, add it.'",
+      "Need variable positional inputs? Use `*args` to gather many values into a tuple:\n\ndef total_loot(*args):\n\treturn sum(args)\nprint(total_loot(10, 20, 30))",
+      "With `*args`, the function can accept any count of numbers without changing its signature.",
+      "Need flexible named inputs? Use `**kwargs` to gather keyword pairs into a dictionary:\n\ndef show_stats(**kwargs):\n\tprint(kwargs['hp'])\nshow_stats(hp=90, energy=30)",
+      "`**kwargs` is perfect when optional named fields may vary between calls.",
+      "Final drill: combine nested structures and access deep values precisely:\n\nparty = [{'name': 'Aria', 'gear': ['spear', 'cloak']}]\nprint(party[0]['gear'][1])",
+      "Off with ya. Master these containers and your scripts stay readable, scalable, and battle-ready: lists, dictionaries, tuples, sets, loops, membership, args, kwargs, and nested access."
     ]
   },
   {
@@ -91,5 +150,18 @@
         "You’re no longer just writing code; you’re sculpting data. Use these new tools to navigate the instabilities of the Outer Rim.",
         "Off with ya! Don't let a ValueError be the end of your tale!"
       ]
+  },
+  {
+    "phase": "phase-7",
+    "instructions": [
+      "HEEEEAWDA! Champion, breathe it in. You have conquered every lesson carved into the halls of PyWorld.",
+      "From Variables to OOP, from loops to deep structures, your code now carries the weight of a true realm-walker.",
+      "But the world is not yet spotless. Stray bugs still crawl through the wilds, and they will not vanish on their own.",
+      "Your main training quests are complete. No new bounty scroll shall be forced upon you now.",
+      "From this point on, the road is yours: roam any unlocked land, hunt remaining enemies, and sharpen your instincts at your own pace.",
+      "If you wish, revisit the machine problems and solve them again. Great coders are forged by repetition, not luck.",
+      "Think of this as your free-roam chapter, adventurer. Explore, experiment, and write your own legend in this world.",
+      "Off with ya, Grand Debugger. The map is open, the bugs are restless, and your story no longer needs permission to continue."
+    ]
   }
 ]

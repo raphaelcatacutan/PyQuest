@@ -33,12 +33,6 @@ const initialInventory: InventoryNode[] = [
               kind: "folder",
               children: [],
             },
-            {
-              id: "functions-category",
-              name: "Functions",
-              kind: "folder",
-              children: [], // TODO: Update Functions
-            },
           ],
         },
       ];

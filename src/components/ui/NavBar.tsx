@@ -1,6 +1,6 @@
-import { exitIcon, noteIcon, guideIcon } from "@/src/assets"
+import { exitIcon, noteIcon, guideIcon, tutorialIcon } from "@/src/assets"
 import Button from "./Button"
-import { usePlayerStore, useBountyQuestStore, useGuideStore, useSoundStore } from "@/src/game/store"
+import { usePlayerStore, useBountyQuestStore, useGuideStore, useSoundStore, useTutorialStore } from "@/src/game/store"
 import { useShallow } from "zustand/shallow"
 import { useNavigate } from "react-router-dom"
 
@@ -18,6 +18,7 @@ export default function NavBar(){
   const logOut = usePlayerStore((s) => s.logOut)
   const toggleGuide = useGuideStore(s => s.toggleGuide)
   const stopMusic = useSoundStore(s => s.stopMusic)
+  const toggleIsTutorial = useTutorialStore(s => s.toggleIsTutorial)
 
   function handleExitGame(){
     logOut()
@@ -45,6 +46,7 @@ export default function NavBar(){
       <div id='bounty-quest' className="flex">      
         <Button variant="icon-only-btn" icon={noteIcon} iconSize={30} title="Bounty Quest" onClick={toggleDisplayBountyQuest}></Button>
         <Button variant="icon-only-btn" icon={guideIcon} iconSize={30} title="Guide" onClick={() => toggleGuide(null)}/>
+        <Button variant="icon-only-btn" icon={tutorialIcon} iconSize={30} title="Tutorial" onClick={() => toggleIsTutorial()}/>
       </div>
     </div> 
 )

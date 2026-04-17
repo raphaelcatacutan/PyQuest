@@ -2,14 +2,14 @@
   "slime": {
     "id": "slime",
     "name": "Slime",
-    "description": "An undead skeleton wielding a bow.",
+    "description": "A slimey creature.",
     "enemyImg": "/src/assets/enemies/slime.png",
-    "hp": 80,
-    "maxHp": 80,
-    "energy": 100,
-    "maxEnergy": 100,
-    "def": 2,
-    "maxDef": 2,
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
     "skills": [
       {
         "name": "Gel Sprint",
@@ -25,21 +25,20 @@
         "cooldownMs": 2000
       }
     ],
-    "dmg": 15,
-    "atkSpeed": 0.4,
-    "critDmg": 0.5,
-    "critChance": 0.1,
-    "evasion": 0.1,
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
     "location": {
-      "village": 0.1,
-      "forest": 0.25,
-      "swamp": 0.2
+      "forest": 0.62,
+      "swamp": 0.38
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -51,12 +50,12 @@
     "name": "Skeleton Archer",
     "description": "An undead skeleton wielding a bow.",
     "enemyImg": "/src/assets/enemies/skeleton_head.png",
-    "hp": 80,
-    "maxHp": 80,
-    "energy": 100,
-    "maxEnergy": 100,
-    "def": 2,
-    "maxDef": 2,
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
     "skills": [
       {
         "name": "Bone Pierce",
@@ -73,24 +72,20 @@
         "cooldownMs": 2250
       }
     ],
-    "dmg": 15,
-    "atkSpeed": 0.4,
-    "critDmg": 0.5,
-    "critChance": 0.1,
-    "evasion": 0.1,
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
     "location": {
-      "village": 0.1,
-      "forest": 0.22,
-      "cave": 0.2,
-      "cemetery": 0.3,
-      "tundra": 0.2,
-      "temple": 0.18
+      "desert": 0.62,
+      "cemetery": 0.38
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 10,
+      "coinDropMax": 20,
+      "xpDropMin": 14,
+      "xpDropMax": 30,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -100,14 +95,14 @@
   "forest_fang": {
     "id": "forest_fang",
     "name": "Forest Fang",
-    "description": "A wild wolf that prowls village roads and dungeon gates.",
+    "description": "A wild wolf that prowls roads and dungeon gates.",
     "enemyImg": "/src/assets/enemies/forest_fang.png",
-    "hp": 95,
-    "maxHp": 95,
-    "energy": 110,
-    "maxEnergy": 110,
-    "def": 4,
-    "maxDef": 4,
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
     "skills": [
       {
         "name": "Predator Rush",
@@ -137,19 +132,19 @@
         "cooldownMs": 3250
       }
     ],
-    "dmg": 18,
-    "atkSpeed": 0.5,
-    "critDmg": 0.6,
-    "critChance": 0.14,
-    "evasion": 0.15,
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
     "location": {
-      "forest": 0.6
+      "forest": 1
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -161,12 +156,12 @@
     "name": "Dune Raider",
     "description": "A rogue bandit hiding in dungeon corridors.",
     "enemyImg": "/src/assets/enemies/dune_raider.png",
-    "hp": 115,
-    "maxHp": 115,
+    "hp": 130,
+    "maxHp": 130,
     "energy": 120,
     "maxEnergy": 120,
-    "def": 6,
-    "maxDef": 6,
+    "def": 8,
+    "maxDef": 8,
     "skills": [
       {
         "name": "Dust Ambush",
@@ -194,19 +189,19 @@
         "cooldownMs": 3500
       }
     ],
-    "dmg": 22,
-    "atkSpeed": 0.43,
-    "critDmg": 0.7,
-    "critChance": 0.16,
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
     "evasion": 0.12,
     "location": {
-      "desert": 0.5
+      "desert": 1
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 24,
+      "coinDropMax": 44,
+      "xpDropMin": 34,
+      "xpDropMax": 68,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -218,12 +213,12 @@
     "name": "Mire Hag",
     "description": "A cursed witch that lurks in mazes and old dungeon halls.",
     "enemyImg": "/src/assets/enemies/mire_hag.png",
-    "hp": 130,
-    "maxHp": 130,
-    "energy": 140,
-    "maxEnergy": 140,
-    "def": 8,
-    "maxDef": 8,
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
     "skills": [
       {
         "name": "Marsh Hex",
@@ -252,25 +247,21 @@
         "cooldownMs": 3250
       }
     ],
-    "dmg": 20,
-    "atkSpeed": 0.34,
-    "critDmg": 0.9,
-    "critChance": 0.18,
-    "evasion": 0.1,
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
     "location": {
-      "dungeon": 0.4,
-      "labyrinth": 0.55,
-      "desert": 0.38,
-      "swamp": 0.62,
-      "cemetery": 0.58,
-      "tundra": 0.21,
-      "temple": 0.36
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -282,12 +273,12 @@
     "name": "Frost Wraith",
     "description": "A cold ghost that appears in maze chambers and trial halls.",
     "enemyImg": "/src/assets/enemies/frost_wraith.png",
-    "hp": 145,
-    "maxHp": 145,
-    "energy": 150,
-    "maxEnergy": 150,
-    "def": 10,
-    "maxDef": 10,
+    "hp": 140,
+    "maxHp": 140,
+    "energy": 125,
+    "maxEnergy": 125,
+    "def": 9,
+    "maxDef": 9,
     "skills": [
       {
         "name": "Cold Snare",
@@ -316,25 +307,21 @@
         "cooldownMs": 4250
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 0.4,
-    "critDmg": 1,
-    "critChance": 0.2,
-    "evasion": 0.13,
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 0.95,
+    "critChance": 0.15,
+    "evasion": 0.12,
     "location": {
-      "labyrinth": 0.45,
-      "trials": 0.35,
-      "desert": 0.32,
-      "cave": 0.4,
-      "cemetery": 0.42,
-      "tundra": 0.61,
-      "temple": 0.29
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 34,
+      "coinDropMax": 62,
+      "xpDropMin": 50,
+      "xpDropMax": 96,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -346,12 +333,12 @@
     "name": "Labyrinth Guardian",
     "description": "An old stone golem that attacks any intruder.",
     "enemyImg": "/src/assets/enemies/labyrinth_guardian.png",
-    "hp": 185,
-    "maxHp": 185,
-    "energy": 160,
-    "maxEnergy": 160,
-    "def": 14,
-    "maxDef": 14,
+    "hp": 140,
+    "maxHp": 140,
+    "energy": 125,
+    "maxEnergy": 125,
+    "def": 9,
+    "maxDef": 9,
     "skills": [
       {
         "name": "Stone Bulwark",
@@ -379,36 +366,36 @@
         "cooldownMs": 5000
       }
     ],
-    "dmg": 30,
-    "atkSpeed": 0.35,
-    "critDmg": 1.2,
-    "critChance": 0.22,
-    "evasion": 0.08,
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 0.95,
+    "critChance": 0.15,
+    "evasion": 0.12,
     "location": {
-      "labyrinth": 0.75
+      "labyrinth": 1
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 34,
+      "coinDropMax": 62,
+      "xpDropMin": 50,
+      "xpDropMax": 96,
       "weapons": [],
       "armors": [],
       "consumables": []
     },
     "energyRegenPerSecond": 6
   },
-  "village_thief": {
-    "id": "village_thief",
-    "name": "Village Thief",
+  "thief": {
+    "id": "thief",
+    "name": "Thief",
     "description": "A quick thief who targets distracted travelers.",
     "enemyImg": "/src/assets/enemies/village_thief.png",
-    "hp": 105,
-    "maxHp": 105,
+    "hp": 140,
+    "maxHp": 140,
     "energy": 125,
     "maxEnergy": 125,
-    "def": 5,
-    "maxDef": 5,
+    "def": 9,
+    "maxDef": 9,
     "skills": [
       {
         "name": "Pocket Sand",
@@ -436,19 +423,19 @@
         "cooldownMs": 2500
       }
     ],
-    "dmg": 19,
-    "atkSpeed": 0.5,
-    "critDmg": 0.75,
-    "critChance": 0.17,
-    "evasion": 0.16,
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 0.95,
+    "critChance": 0.15,
+    "evasion": 0.12,
     "location": {
-      "village": 0.7
+      "Temple": 0.55
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 34,
+      "coinDropMax": 62,
+      "xpDropMin": 50,
+      "xpDropMax": 96,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -460,12 +447,12 @@
     "name": "Dungeon Puppet",
     "description": "A cursed puppet moving through the dungeon catacombs.",
     "enemyImg": "/src/assets/enemies/dungeon_puppet.png",
-    "hp": 155,
-    "maxHp": 155,
-    "energy": 145,
-    "maxEnergy": 145,
-    "def": 11,
-    "maxDef": 11,
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
     "skills": [
       {
         "name": "Puppet Strings",
@@ -480,19 +467,19 @@
         "cooldownMs": 3750
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 0.38,
-    "critDmg": 1,
-    "critChance": 0.19,
-    "evasion": 0.11,
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
     "location": {
-      "dungeon": 0.72
+      "dungeon": 1
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 10,
+      "coinDropMax": 20,
+      "xpDropMin": 14,
+      "xpDropMax": 30,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -504,12 +491,12 @@
     "name": "Stalker",
     "description": "A lurking stalker that lures prey deeper into the maze.",
     "enemyImg": "/src/assets/enemies/stalker.png",
-    "hp": 170,
-    "maxHp": 170,
-    "energy": 160,
-    "maxEnergy": 160,
-    "def": 12,
-    "maxDef": 12,
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
     "skills": [
       {
         "name": "Shadow Lure",
@@ -539,22 +526,20 @@
         "cooldownMs": 3500
       }
     ],
-    "dmg": 28,
-    "atkSpeed": 0.4,
-    "critDmg": 1.1,
-    "critChance": 0.21,
-    "evasion": 0.14,
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
     "location": {
-      "labyrinth": 0.68,
-      "trials": 0.22,
-      "forest": 0.3,
-      "swamp": 0.27
+      "jungle": 0.62,
+      "temple": 0.38
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 16,
+      "coinDropMax": 30,
+      "xpDropMin": 22,
+      "xpDropMax": 46,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -566,12 +551,12 @@
     "name": "Knight",
     "description": "A relentless knight built to punish hesitation.",
     "enemyImg": "/src/assets/enemies/knight.png",
-    "hp": 195,
-    "maxHp": 195,
-    "energy": 175,
-    "maxEnergy": 175,
-    "def": 15,
-    "maxDef": 15,
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
     "skills": [
       {
         "name": "Shield Break",
@@ -599,22 +584,20 @@
         "cooldownMs": 4250
       }
     ],
-    "dmg": 31,
-    "atkSpeed": 0.37,
-    "critDmg": 1.25,
-    "critChance": 0.23,
-    "evasion": 0.09,
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
     "location": {
-      "trials": 0.74,
-      "labyrinth": 0.25,
-      "desert": 0.29,
-      "jungle": 0.31
+      "jungle": 0.62,
+      "temple": 0.38
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 16,
+      "coinDropMax": 30,
+      "xpDropMin": 22,
+      "xpDropMax": 46,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -626,12 +609,12 @@
     "name": "Giant",
     "description": "A giant sentinel guarding the final trial gate.",
     "enemyImg": "/src/assets/enemies/giant.png",
-    "hp": 230,
-    "maxHp": 230,
-    "energy": 180,
-    "maxEnergy": 180,
-    "def": 18,
-    "maxDef": 18,
+    "hp": 140,
+    "maxHp": 140,
+    "energy": 125,
+    "maxEnergy": 125,
+    "def": 9,
+    "maxDef": 9,
     "skills": [
       {
         "name": "Titan Roar",
@@ -659,27 +642,21 @@
         "cooldownMs": 5500
       }
     ],
-    "dmg": 35,
-    "atkSpeed": 0.34,
-    "critDmg": 1.35,
-    "critChance": 0.24,
-    "evasion": 0.06,
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 0.95,
+    "critChance": 0.15,
+    "evasion": 0.12,
     "location": {
-      "trials": 0.58,
-      "dungeon": 0.18,
-      "labyrinth": 0.3,
-      "desert": 0.27,
-      "swamp": 0.26,
-      "cave": 0.33,
-      "cemetery": 0.2,
-      "tundra": 0.37,
-      "temple": 0.41
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 34,
+      "coinDropMax": 62,
+      "xpDropMin": 50,
+      "xpDropMax": 96,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -689,14 +666,14 @@
   "scout": {
     "id": "scout",
     "name": "Scout",
-    "description": "NEW ENEMY: Asset pending. A fast scout that probes weak defenses.",
-    "enemyImg": "/src/assets/enemies/pending_scout.png",
-    "hp": 118,
-    "maxHp": 118,
-    "energy": 122,
-    "maxEnergy": 122,
-    "def": 6,
-    "maxDef": 6,
+    "description": "A fast scout that probes weak defenses.",
+    "enemyImg": "/src/assets/enemies/scout.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
     "skills": [
       {
         "name": "Flank Step",
@@ -712,21 +689,20 @@
         "cooldownMs": 3000
       }
     ],
-    "dmg": 21,
-    "atkSpeed": 0.45,
-    "critDmg": 0.8,
-    "critChance": 0.16,
-    "evasion": 0.15,
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
     "location": {
-      "forest": 0.34,
-      "jungle": 0.33,
-      "village": 0.25
+      "forest": 0.62,
+      "swamp": 0.38
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -736,14 +712,14 @@
   "shaman": {
     "id": "shaman",
     "name": "Shaman",
-    "description": "NEW ENEMY: Asset pending. A ritual caster drawing power from old shrines.",
-    "enemyImg": "/src/assets/enemies/pending_shaman.png",
-    "hp": 142,
-    "maxHp": 142,
-    "energy": 152,
-    "maxEnergy": 152,
-    "def": 9,
-    "maxDef": 9,
+    "description": "A ritual caster drawing power from old shrines.",
+    "enemyImg": "/src/assets/enemies/shaman.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
     "skills": [
       {
         "name": "Hex Mark",
@@ -772,23 +748,21 @@
         "cooldownMs": 4500
       }
     ],
-    "dmg": 25,
-    "atkSpeed": 0.35,
-    "critDmg": 1,
-    "critChance": 0.19,
-    "evasion": 0.11,
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
     "location": {
-      "swamp": 0.35,
-      "jungle": 0.28,
-      "temple": 0.3,
-      "cemetery": 0.24,
-      "tundra": 0.2
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -798,14 +772,14 @@
   "raider": {
     "id": "raider",
     "name": "Raider",
-    "description": "NEW ENEMY: Asset pending. A disciplined attacker trained for siege pushes.",
-    "enemyImg": "/src/assets/enemies/pending_raider.png",
-    "hp": 166,
-    "maxHp": 166,
-    "energy": 150,
-    "maxEnergy": 150,
-    "def": 12,
-    "maxDef": 12,
+    "description": "A disciplined attacker trained for siege pushes.",
+    "enemyImg": "/src/assets/enemies/raider.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
     "skills": [
       {
         "name": "War Cry",
@@ -833,22 +807,21 @@
         "cooldownMs": 4000
       }
     ],
-    "dmg": 29,
-    "atkSpeed": 0.37,
-    "critDmg": 1.15,
-    "critChance": 0.2,
-    "evasion": 0.1,
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
     "location": {
-      "dungeon": 0.26,
-      "jungle": 0.22,
-      "trials": 0.18,
-      "village": 0.2
+      "swamp": 0.55,
+      "jungle": 0.3,
+      "temple": 0.15
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 10,
+      "coinDropMax": 20,
+      "xpDropMin": 14,
+      "xpDropMax": 30,
       "weapons": [],
       "armors": [],
       "consumables": []
@@ -858,14 +831,14 @@
   "warden": {
     "id": "warden",
     "name": "Warden",
-    "description": "NEW ENEMY: Asset pending. A stoic enforcer guarding key entrances.",
-    "enemyImg": "/src/assets/enemies/pending_warden.png",
-    "hp": 178,
-    "maxHp": 178,
-    "energy": 144,
-    "maxEnergy": 144,
-    "def": 14,
-    "maxDef": 14,
+    "description": "A stoic enforcer guarding key entrances.",
+    "enemyImg": "/src/assets/enemies/warden.png",
+    "hp": 140,
+    "maxHp": 140,
+    "energy": 125,
+    "maxEnergy": 125,
+    "def": 9,
+    "maxDef": 9,
     "skills": [
       {
         "name": "Lockdown",
@@ -880,24 +853,691 @@
         "cooldownMs": 4500
       }
     ],
-    "dmg": 30,
-    "atkSpeed": 0.34,
-    "critDmg": 1.2,
-    "critChance": 0.19,
-    "evasion": 0.09,
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 0.95,
+    "critChance": 0.15,
+    "evasion": 0.12,
     "location": {
-      "dungeon": 0.22,
-      "jungle": 0.2
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
     },
     "lootDrop": {
-      "coinDropMin": 0,
-      "coinDropMax": 0,
-      "xpDropMin": 0,
-      "xpDropMax": 0,
+      "coinDropMin": 34,
+      "coinDropMax": 62,
+      "xpDropMin": 50,
+      "xpDropMax": 96,
       "weapons": [],
       "armors": [],
       "consumables": []
+    }
+  },
+  "anguish": {
+    "id": "anguish",
+    "name": "Anguish",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/anguish.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "desert": 0.62,
+      "cemetery": 0.38
     },
-    "energyRegenPerSecond": 6
+    "lootDrop": {
+      "coinDropMin": 24,
+      "coinDropMax": 44,
+      "xpDropMin": 34,
+      "xpDropMax": 68,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "baby": {
+    "id": "baby",
+    "name": "Baby",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/baby.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.62,
+      "swamp": 0.38
+    },
+    "lootDrop": {
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "bat": {
+    "id": "bat",
+    "name": "Bat",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/bat.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "cat": {
+    "id": "cat",
+    "name": "Cat",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/cat.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "child": {
+    "id": "child",
+    "name": "Child",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/child.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "crab": {
+    "id": "crab",
+    "name": "Crab",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/crab.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "crow": {
+    "id": "crow",
+    "name": "Crow",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/crow.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "cursed_cloak": {
+    "id": "cursed_cloak",
+    "name": "Cursed Cloak",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/cursed_cloak.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "cursed_pumpkin": {
+    "id": "cursed_pumpkin",
+    "name": "Cursed Pumpkin",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/cursed_pumpkin.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 16,
+      "coinDropMax": 30,
+      "xpDropMin": 22,
+      "xpDropMax": 46,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "evil_pumpkin": {
+    "id": "evil_pumpkin",
+    "name": "Evil Pumpkin",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/evil_pumpkin.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 16,
+      "coinDropMax": 30,
+      "xpDropMin": 22,
+      "xpDropMax": 46,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "eye": {
+    "id": "eye",
+    "name": "Eye",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/eye.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "halloween_pumpkin": {
+    "id": "halloween_pumpkin",
+    "name": "Halloween Pumpkin",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/halloween_pumpkin.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 16,
+      "coinDropMax": 30,
+      "xpDropMin": 22,
+      "xpDropMax": 46,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "lucifer": {
+    "id": "lucifer",
+    "name": "Lucifer",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/lucifer.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "desert": 0.62,
+      "cemetery": 0.38
+    },
+    "lootDrop": {
+      "coinDropMin": 24,
+      "coinDropMax": 44,
+      "xpDropMin": 34,
+      "xpDropMax": 68,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "mask": {
+    "id": "mask",
+    "name": "Mask",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/mask.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 16,
+      "coinDropMax": 30,
+      "xpDropMin": 22,
+      "xpDropMax": 46,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "mercenary_cat": {
+    "id": "mercenary_cat",
+    "name": "Mercenary Cat",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/mercenary_cat.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "jungle": 0.62,
+      "temple": 0.38
+    },
+    "lootDrop": {
+      "coinDropMin": 10,
+      "coinDropMax": 20,
+      "xpDropMin": 14,
+      "xpDropMax": 30,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "octopus": {
+    "id": "octopus",
+    "name": "Octopus",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/octopus.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 6,
+      "coinDropMax": 12,
+      "xpDropMin": 8,
+      "xpDropMax": 18,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "skull": {
+    "id": "skull",
+    "name": "Skull",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/skull.png",
+    "hp": 140,
+    "maxHp": 140,
+    "energy": 125,
+    "maxEnergy": 125,
+    "def": 9,
+    "maxDef": 9,
+    "skills": [],
+    "dmg": 26,
+    "atkSpeed": 1.16,
+    "critDmg": 0.95,
+    "critChance": 0.15,
+    "evasion": 0.12,
+    "location": {
+      "desert": 0.62,
+      "cemetery": 0.38
+    },
+    "lootDrop": {
+      "coinDropMin": 24,
+      "coinDropMax": 44,
+      "xpDropMin": 34,
+      "xpDropMax": 68,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "spider": {
+    "id": "spider",
+    "name": "Spider",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/spider.png",
+    "hp": 120,
+    "maxHp": 120,
+    "energy": 115,
+    "maxEnergy": 115,
+    "def": 7,
+    "maxDef": 7,
+    "skills": [],
+    "dmg": 22,
+    "atkSpeed": 1.24,
+    "critDmg": 0.85,
+    "critChance": 0.13,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 2,
+      "coinDropMax": 6,
+      "xpDropMin": 4,
+      "xpDropMax": 10,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "werewolf": {
+    "id": "werewolf",
+    "name": "Werewolf",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/werewolf.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "forest": 0.55,
+      "swamp": 0.3,
+      "jungle": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 24,
+      "coinDropMax": 44,
+      "xpDropMin": 34,
+      "xpDropMax": 68,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "wizard_cat": {
+    "id": "wizard_cat",
+    "name": "Wizard Cat",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/wizard_cat.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 10,
+      "coinDropMax": 20,
+      "xpDropMin": 14,
+      "xpDropMax": 30,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
+  },
+  "zombie": {
+    "id": "zombie",
+    "name": "Zombie",
+    "description": "A hostile creature found along dangerous routes.",
+    "enemyImg": "/src/assets/enemies/zombie.png",
+    "hp": 130,
+    "maxHp": 130,
+    "energy": 120,
+    "maxEnergy": 120,
+    "def": 8,
+    "maxDef": 8,
+    "skills": [],
+    "dmg": 24,
+    "atkSpeed": 1.2,
+    "critDmg": 0.9,
+    "critChance": 0.14,
+    "evasion": 0.12,
+    "location": {
+      "temple": 0.55,
+      "desert": 0.3,
+      "cemetery": 0.15
+    },
+    "lootDrop": {
+      "coinDropMin": 10,
+      "coinDropMax": 20,
+      "xpDropMin": 14,
+      "xpDropMax": 30,
+      "weapons": [],
+      "armors": [],
+      "consumables": []
+    }
   }
 }

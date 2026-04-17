@@ -1,6 +1,40 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { InventoryNode } from "@/src/game/types/inventory.types";
+import handbookFileSource from "@/src/backend/mechanics/handbook.py?raw";
+
+const handbookFileCode = `#file:handbook.py\n\n${handbookFileSource}`;
+
+function withBundledUtilityContent(items: InventoryNode[]): { items: InventoryNode[]; changed: boolean } {
+  let changed = false;
+
+  const visit = (nodes: InventoryNode[]): InventoryNode[] => {
+    return nodes.map((node) => {
+      if (node.kind === "folder") {
+        const nextChildren = visit(node.children);
+        if (nextChildren !== node.children) {
+          changed = true;
+          return { ...node, children: nextChildren };
+        }
+
+        return node;
+      }
+
+      const isHandbookFile = node.id === "handbook" || node.name === "handbook.py";
+      if (node.kind === "util" && isHandbookFile && node.code !== handbookFileCode) {
+        changed = true;
+        return { ...node, code: handbookFileCode };
+      }
+
+      return node;
+    });
+  };
+
+  return {
+    items: visit(items),
+    changed,
+  };
+}
 
 export const loadInventoryProfile = async (playerId: string) => {
   if (!playerId) return;
@@ -17,11 +51,21 @@ export const loadInventoryProfile = async (playerId: string) => {
 
   // Only reset to initial state if this is a BRAND NEW player
   if (isNewPlayer) {
-    useInventoryStore.setState({ playerInventory: InitialPlayerInventory });
+    useInventoryStore.setState({
+      playerInventory: InitialPlayerInventory,
+      purchasedWeaponIds: [],
+      purchasedConsumableIds: [],
+    });
   }
 
   // Load from localStorage for this player (or keep initial if new)
   await useInventoryStore.persist.rehydrate();
+
+  const hydratedInventory = useInventoryStore.getState().playerInventory;
+  const inventoryWithUtilityContent = withBundledUtilityContent(hydratedInventory);
+  if (inventoryWithUtilityContent.changed) {
+    useInventoryStore.setState({ playerInventory: inventoryWithUtilityContent.items });
+  }
   
   // Force the player_id to match the account
   useInventoryStore.setState({ player_id: playerId });
@@ -35,16 +79,16 @@ const InitialPlayerInventory: InventoryNode[] = [
     kind: "folder", 
     name: "user", 
     children: [
-      { id: "init_file_root", kind: "util", itemId: "init_file_wp" , name: "init.py" },
-      { id: "wp_folder", kind: "folder", name: "weapons", children: [{ id: "init_file_wp", kind: "util", itemId: "init_file_wp" , name: "init.py" }]},   
-      { id: "arm_folder", kind: "folder", name: "armors", children: [{ id: "init_file_arm", kind: "util", itemId: "init_file_arm" , name: "init.py" }]},    
-      { id: "cons_folder", kind: "folder", name: "consumables", children: [{ id: "init_file_cons", kind: "util", itemId: "init_file_cons" , name: "init.py" }]},   
+      { id: "init_file_root", kind: "util", itemId: "init_file_wp" , name: "__init__.py" },
+      { id: "main_root", kind: "misc", itemId: "main_file" , name: "main.py" },
+      { id: "wp_folder", kind: "folder", name: "weapons", children: [{ id: "init_file_wp", kind: "util", itemId: "init_file_wp" , name: "__init__.py" }]},   
+      { id: "arm_folder", kind: "folder", name: "armors", children: [{ id: "init_file_arm", kind: "util", itemId: "init_file_arm" , name: "__init__.py" }]},    
+      { id: "cons_folder", kind: "folder", name: "consumables", children: [{ id: "init_file_cons", kind: "util", itemId: "init_file_cons" , name: "__init__.py" }]},   
     ]
   },
   { id: "misc_folder", kind: "folder", name: "miscellaneous", children: [
-    { id: "init_file_misc", kind: "util", itemId: "init_file_misc" , name: "init.py" },
+    { id: "init_file_misc", kind: "util", itemId: "init_file_misc" , name: "__init__.py" },
     { id: "handbook", kind: "util", itemId: "handboom_misc" , name: "handbook.py" },
-    { id: "abilities", kind: "util", itemId: "abilities_misc" , name: "abilities.py" },
   ]},   
   { id: "pickedup_folder", kind: "folder", name: "pickedup", children: []},   
 ];
@@ -52,8 +96,12 @@ const InitialPlayerInventory: InventoryNode[] = [
 interface InventoryStoreProps {
   player_id: string;
   playerInventory: InventoryNode[];
+  purchasedWeaponIds: string[];
+  purchasedConsumableIds: string[];
   setPlayerId: (id: string) => void;
   addInventoryItem: (parentId: string | undefined, item: InventoryNode) => void;
+  setInventoryItemCode: (nodeId: string, code: string) => void;
+  markItemPurchased: (item: InventoryNode) => void;
   deleteInventoryItem: (nodeId: string) => void;
   renameInventoryItem: (nodeId: string, newName: string) => void;
   moveInventoryItem: (dragIds: string[], parentId: string | null, index: number) => void;
@@ -65,6 +113,8 @@ export const useInventoryStore = create<InventoryStoreProps>()(
     (set) => ({
       player_id: "",
       playerInventory: InitialPlayerInventory,
+      purchasedWeaponIds: [],
+      purchasedConsumableIds: [],
 
       setPlayerId: (id) => set({ player_id: id }),
 
@@ -87,6 +137,48 @@ export const useInventoryStore = create<InventoryStoreProps>()(
           addToFolder(newInventory);
         }
         return { playerInventory: newInventory };
+      }),
+
+      setInventoryItemCode: (nodeId, code) => set((state) => {
+        const updateNodeCode = (items: InventoryNode[]): InventoryNode[] => {
+          return items.map((item) => {
+            if (item.kind === "folder") {
+              return { ...item, children: updateNodeCode(item.children) };
+            }
+
+            if (item.id === nodeId) {
+              return { ...item, code };
+            }
+
+            return item;
+          });
+        };
+
+        return { playerInventory: updateNodeCode(state.playerInventory) };
+      }),
+
+      markItemPurchased: (item) => set((state) => {
+        if (item.kind === "weapon") {
+          if (state.purchasedWeaponIds.includes(item.itemId)) {
+            return {};
+          }
+
+          return {
+            purchasedWeaponIds: [...state.purchasedWeaponIds, item.itemId],
+          };
+        }
+
+        if (item.kind === "consumable") {
+          if (state.purchasedConsumableIds.includes(item.itemId)) {
+            return {};
+          }
+
+          return {
+            purchasedConsumableIds: [...state.purchasedConsumableIds, item.itemId],
+          };
+        }
+
+        return {};
       }),
 
       deleteInventoryItem: (nodeId) => set((state) => {
@@ -147,7 +239,11 @@ export const useInventoryStore = create<InventoryStoreProps>()(
         return { playerInventory: newInventory };
       }),
 
-      resetInventory: () => set({ playerInventory: InitialPlayerInventory }),
+      resetInventory: () => set({
+        playerInventory: InitialPlayerInventory,
+        purchasedWeaponIds: [],
+        purchasedConsumableIds: [],
+      }),
     }),
     {
       name: "player-inventory-default", // Default key, will be changed dynamically

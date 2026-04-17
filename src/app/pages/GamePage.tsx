@@ -11,6 +11,7 @@ import {
   useGameStore,
   usePlayerStore,
   useInventoryStore,
+  useEditorStore,
   useTutorialStore,
   useBountyQuestStore,
   loadTutorialProfile,
@@ -27,6 +28,7 @@ import Dungeon from "@/src/components/events/Dungeon";
 import Trials from "@/src/components/events/Trials";
 import NPC from "@/src/components/events/NPC";
 import Tutorial from "@/src/components/events/Tutorial";
+import { Info } from "@/src/components/ui/Info"
 import { loadBountyProfile } from "@/src/game/store";
 import { loadKillProfile } from "@/src/game/store/killTrackerStore";
 
@@ -167,6 +169,21 @@ export default function GamePage() {
     });
   }
 
+  function handleShopItemBought(item: InventoryNode) {
+    handleItemTransferred(item);
+    useInventoryStore.getState().markItemPurchased(item);
+  }
+
+  function handleOpenInventoryFile(file: {
+    id: string;
+    name: string;
+    path: string;
+    code: string;
+    readOnly?: boolean;
+  }) {
+    useEditorStore.getState().openFile(file);
+  }
+
   return (
     <div className="relative flex flex-col w-full h-full">
       <NavBar />
@@ -176,7 +193,7 @@ export default function GamePage() {
         {/* body div */}
         <CodeEditor />
         <div id="scene" className="relative flex h-full w-full bg-black">
-          {" "}
+          <Info/>
           {/* scene */}
           <NPC />
           <Trials />
@@ -201,6 +218,7 @@ export default function GamePage() {
               deleteInventoryItem={deleteInventoryItem}
               renameInventoryItem={renameInventoryItem}
               moveInventoryItem={moveInventoryItem}
+              openInventoryFile={handleOpenInventoryFile}
             />
           </div>
           {!rightPanel ? (
@@ -216,7 +234,7 @@ export default function GamePage() {
             <div className="absolute flex right-0 h-full z-50">
               <RightSideBar
                 onClose={toggleRightPanel}
-                onItemTransferred={handleItemTransferred}
+                onItemTransferred={handleShopItemBought}
                 lootInventoryRef={lootInventoryRef}
                 atVillage={inVillage}
               />

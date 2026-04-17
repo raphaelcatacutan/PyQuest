@@ -1,5 +1,4 @@
 {
-  "village": [],
   "forest": [
     {
       "problem": "Print the message 'Exploring the Forest' to the console.",
@@ -292,382 +291,242 @@
       }
     }
   ],
-"jungle": [
+  "jungle": [
     {
-      "problem": "Define a function named 'greet' that prints 'Hello Jungle' and call it.",
-      "correct_code": "def greet():\n    print('Hello Jungle')\ngreet()",
-      "expected_output": "Hello Jungle",
-      "reward": {
-        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a function 'shout' that takes a parameter 'word' and prints it in uppercase. Call it with 'run'.",
-      "correct_code": "def shout(word):\n    print(word.upper())\nshout('run')",
-      "expected_output": "RUN",
-      "reward": {
-        "xpDropMin": 30, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'get_gold' that returns the integer 100. Call it and print the result.",
-      "correct_code": "def get_gold():\n    return 100\nprint(get_gold())",
-      "expected_output": "100",
-      "reward": {
-        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a function 'add_points' with a default argument 'pts=10'. Call it without arguments and print the result.",
-      "correct_code": "def add_points(pts=10):\n    return pts\nprint(add_points())",
-      "expected_output": "10",
-      "reward": {
-        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define 'multiply' that takes a and b, and returns their product. Print multiply(5, 4).",
-      "correct_code": "def multiply(a, b):\n    return a * b\nprint(multiply(5, 4))",
-      "expected_output": "20",
-      "reward": {
-        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a function 'describe_animal' that takes 'name' and 'action' with a default 'action' of 'sleeping'. Call it with 'Tiger'.",
-      "correct_code": "def describe_animal(name, action='sleeping'):\n    print(f'{name} is {action}')\ndescribe_animal('Tiger')",
-      "expected_output": "Tiger is sleeping",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Write a function 'is_even' that returns True if a number is even, False otherwise. Print is_even(8).",
-      "correct_code": "def is_even(n):\n    return n % 2 == 0\nprint(is_even(8))",
-      "expected_output": "True",
-      "reward": {
-        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'make_path' that returns the string 'Left' if an input is 0, else 'Right'. Print make_path(1).",
-      "correct_code": "def make_path(dir):\n    if dir == 0: return 'Left'\n    return 'Right'\nprint(make_path(1))",
-      "expected_output": "Right",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a function 'square' that returns the square of a number. Call it with 6 and print it.",
-      "correct_code": "def square(n):\n    return n * n\nprint(square(6))",
-      "expected_output": "36",
+      "problem": "Define a function named 'gather_jungle' that prints 'Jungle gathered!' and call it.",
+      "correct_code": "def gather_jungle():\n    print('Jungle gathered!')\n\ngather_jungle()",
+      "expected_output": "Jungle gathered!",
       "reward": {
         "xpDropMin": 35, "xpDropMax": 45, "coinDropMin": 25, "coinDropMax": 35,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Define 'check_health' which returns 'Healthy' if hp > 50, else 'Low'. Call with 30 and print.",
-      "correct_code": "def check_health(hp):\n    return 'Healthy' if hp > 50 else 'Low'\nprint(check_health(30))",
-      "expected_output": "Low",
+      "problem": "Create a function 'heal' with default argument amount=10 that returns amount. Print heal() and heal(25).",
+      "correct_code": "def heal(amount=10):\n    return amount\n\nprint(heal())\nprint(heal(25))",
+      "expected_output": "10\n25",
       "reward": {
-        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 35, "coinDropMax": 45,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Write a function 'repeat_msg' that takes 'msg' and 'times' (default 2) and prints the msg 'times' times.",
-      "correct_code": "def repeat_msg(msg, times=2):\n    print(msg * times)\nrepeat_msg('?', 3)",
-      "expected_output": "???",
+      "problem": "Define function 'craft_badge' that takes 'name' and uses return to produce 'Ranger ' plus name. Print craft_badge('Aria').",
+      "correct_code": "def craft_badge(name):\n    return 'Ranger ' + name\n\nprint(craft_badge('Aria'))",
+      "expected_output": "Ranger Aria",
       "reward": {
-        "xpDropMin": 45, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 55,
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 35, "coinDropMax": 45,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Create a function 'find_max' that returns the larger of two numbers. Print find_max(10, 25).",
-      "correct_code": "def find_max(a, b):\n    return a if a > b else b\nprint(find_max(10, 25))",
-      "expected_output": "25",
+      "problem": "Use built-in functions len, sum, and max on [2, 3, 7]. Print each result.",
+      "correct_code": "nums = [2, 3, 7]\nprint(len(nums))\nprint(sum(nums))\nprint(max(nums))",
+      "expected_output": "3\n12\n7",
       "reward": {
-        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 50,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Define a function 'do_nothing' that uses the 'pass' keyword and returns None. Print its call.",
-      "correct_code": "def do_nothing():\n    pass\nprint(do_nothing())",
-      "expected_output": "None",
+      "problem": "Define function 'total_supply' that takes three arguments and returns their sum. Print total_supply(3, 4, 5).",
+      "correct_code": "def total_supply(a, b, c):\n    return a + b + c\n\nprint(total_supply(3, 4, 5))",
+      "expected_output": "12",
       "reward": {
-        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 30, "coinDropMax": 40,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Define a function 'calc_area' (width, height) that returns width * height. Call with 5, 10 and print.",
-      "correct_code": "def calc_area(w, h):\n    return w * h\nprint(calc_area(5, 10))",
-      "expected_output": "50",
+      "problem": "Import add_item, list_items, get_total_value from inventory. Add 2 Potion with value 5 and print get_total_value().",
+      "correct_code": "from inventory import add_item, list_items, get_total_value\n\nadd_item('Potion', 2, 5)\nprint(get_total_value())",
+      "expected_output": "Added 2x Potion to inventory\nTotal inventory value: 10g\n10",
       "reward": {
-        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "xpDropMin": 65, "xpDropMax": 85, "coinDropMin": 50, "coinDropMax": 70,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Create 'set_level' that takes 'lvl' and returns 'Level: ' plus the string version of lvl. Print set_level(5).",
-      "correct_code": "def set_level(lvl):\n    return 'Level: ' + str(lvl)\nprint(set_level(5))",
-      "expected_output": "Level: 5",
+      "problem": "Define function 'steps' with default argument count=3 and use range(count) to print each step number.",
+      "correct_code": "def steps(count=3):\n    for i in range(count):\n        print(i)\n\nsteps()",
+      "expected_output": "0\n1\n2",
       "reward": {
-        "xpDropMin": 40, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "xpDropMin": 55, "xpDropMax": 75, "coinDropMin": 45, "coinDropMax": 60,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Define a function 'apply_poison' that returns current_hp minus 5. Call with 20 and print.",
-      "correct_code": "def apply_poison(hp):\n    return hp - 5\nprint(apply_poison(20))",
-      "expected_output": "15",
+      "problem": "Call built-in type on the result of heal() and print it.",
+      "correct_code": "def heal(amount=10):\n    return amount\n\nprint(type(heal()))",
+      "expected_output": "<class 'int'>",
       "reward": {
-        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Write a function 'power' that takes 'base' and 'exp' (default 2). Print power(3).",
-      "correct_code": "def power(base, exp=2):\n    return base ** exp\nprint(power(3))",
-      "expected_output": "9",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'shout_name' that takes 'name'. If name is empty, return 'Stranger'. Call with '' and print.",
-      "correct_code": "def shout_name(name):\n    if not name: return 'Stranger'\n    return name\nprint(shout_name(''))",
-      "expected_output": "Stranger",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a function 'total_loot' that takes three arguments and returns their sum. Print total_loot(1, 2, 3).",
-      "correct_code": "def total_loot(a, b, c):\n    return a + b + c\nprint(total_loot(1, 2, 3))",
-      "expected_output": "6",
-      "reward": {
-        "xpDropMin": 35, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'end_game' that returns 'Game Over'. Print the result of the call.",
-      "correct_code": "def end_game():\n    return 'Game Over'\nprint(end_game())",
-      "expected_output": "Game Over",
-      "reward": {
-        "xpDropMin": 30, "xpDropMax": 40, "coinDropMin": 20, "coinDropMax": 30,
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 50,
         "armors": [], "weapons": [], "consumables": []
       }
     }
   ],
   "temple": [
     {
-      "problem": "",
-      "correct_code": "",
-      "expected_output": "",
+      "problem": "Use Object-Oriented Programming: create class Adventurer with __init__(name, hp), instantiate hero, and print hero.name.",
+      "correct_code": "class Adventurer:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nhero = Adventurer('Lyn', 120)\nprint(hero.name)",
+      "expected_output": "Lyn",
       "reward": {
-        "xpDropMin": 0,
-        "xpDropMax": 0,
-        "coinDropMin": 0,
-        "coinDropMax": 0,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
+        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 60,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Demonstrate Abstraction by creating class Weapon with attack(self) that raises NotImplementedError.",
+      "correct_code": "class Weapon:\n    def attack(self):\n        raise NotImplementedError('Implement in subclass')\n\nprint('ok')",
+      "expected_output": "ok",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 75, "coinDropMin": 50, "coinDropMax": 65,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Show Inheritance: create class Spear(Weapon) and override attack(self) to return 'Pierce'. Print Spear().attack().",
+      "correct_code": "class Weapon:\n    def attack(self):\n        raise NotImplementedError()\n\nclass Spear(Weapon):\n    def attack(self):\n        return 'Pierce'\n\nprint(Spear().attack())",
+      "expected_output": "Pierce",
+      "reward": {
+        "xpDropMin": 65, "xpDropMax": 80, "coinDropMin": 55, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Show Polymorphism: create Weapon base, Spear and Bow subclasses with attack(), then loop through [Spear(), Bow()] and print attack() result.",
+      "correct_code": "class Weapon:\n    def attack(self):\n        raise NotImplementedError()\n\nclass Spear(Weapon):\n    def attack(self):\n        return 'Spear hit'\n\nclass Bow(Weapon):\n    def attack(self):\n        return 'Bow hit'\n\nfor w in [Spear(), Bow()]:\n    print(w.attack())",
+      "expected_output": "Spear hit\nBow hit",
+      "reward": {
+        "xpDropMin": 70, "xpDropMax": 90, "coinDropMin": 60, "coinDropMax": 80,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Demonstrate Encapsulation: create class ShieldedHero with private attribute _hp, get_hp(), take_damage(amount), and print final hp after taking 20 from 100.",
+      "correct_code": "class ShieldedHero:\n    def __init__(self, hp):\n        self._hp = hp\n\n    def get_hp(self):\n        return self._hp\n\n    def take_damage(self, amount):\n        self._hp -= amount\n\nh = ShieldedHero(100)\nh.take_damage(20)\nprint(h.get_hp())",
+      "expected_output": "80",
+      "reward": {
+        "xpDropMin": 70, "xpDropMax": 90, "coinDropMin": 60, "coinDropMax": 80,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use super(): create class Guardian(Adventurer) that calls super().__init__(name, hp) and stores shield. Print guardian.shield for value 30.",
+      "correct_code": "class Adventurer:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nclass Guardian(Adventurer):\n    def __init__(self, name, hp, shield):\n        super().__init__(name, hp)\n        self.shield = shield\n\nguardian = Guardian('Lyn', 120, 30)\nprint(guardian.shield)",
+      "expected_output": "30",
+      "reward": {
+        "xpDropMin": 75, "xpDropMax": 95, "coinDropMin": 65, "coinDropMax": 85,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use Static methods: create class DamageMath with @staticmethod crit(base, bonus) returning base + bonus. Print DamageMath.crit(10, 5).",
+      "correct_code": "class DamageMath:\n    @staticmethod\n    def crit(base, bonus):\n        return base + bonus\n\nprint(DamageMath.crit(10, 5))",
+      "expected_output": "15",
+      "reward": {
+        "xpDropMin": 75, "xpDropMax": 95, "coinDropMin": 65, "coinDropMax": 85,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Unlocked Weapons n Armors: import Player, Spear, Armor from abstracts, equip a Spear to player, create Armor instance, and print type(armor).__name__.",
+      "correct_code": "from abstracts import Player, Spear, Armor\n\nplayer = Player()\nplayer.equip(Spear())\narmor = Armor()\nprint(type(armor).__name__)",
+      "expected_output": "Armor",
+      "reward": {
+        "xpDropMin": 80, "xpDropMax": 100, "coinDropMin": 70, "coinDropMax": 90,
+        "armors": [], "weapons": [], "consumables": []
       }
     }
   ],
   "desert": [
     {
-      "problem": "Create a list named 'items' with 'map' and 'water'. Print the second element.",
-      "correct_code": "items = ['map', 'water']\nprint(items[1])",
+      "problem": "Python Data Structure drill: create list items = ['water', 'rope', 'map'] and print items[0].",
+      "correct_code": "items = ['water', 'rope', 'map']\nprint(items[0])",
       "expected_output": "water",
       "reward": {
-        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 50,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Use a 'for' loop to print every number in the list [1, 2, 3] on a new line.",
-      "correct_code": "for n in [1, 2, 3]:\n    print(n)",
-      "expected_output": "1\n2\n3",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a dictionary 'oasis' with key 'loc' and value 'West'. Print the value using the key.",
-      "correct_code": "oasis = {'loc': 'West'}\nprint(oasis['loc'])",
-      "expected_output": "West",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a tuple named 'coords' with values (10, 20). Print the whole tuple.",
-      "correct_code": "coords = (10, 20)\nprint(coords)",
-      "expected_output": "(10, 20)",
-      "reward": {
-        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a set named 'stones' with 'ruby', 'ruby', 'jade'. Print the set to see unique values.",
-      "correct_code": "stones = {'ruby', 'ruby', 'jade'}\nprint(sorted(list(stones)))",
-      "expected_output": "['jade', 'ruby']",
-      "reward": {
-        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Use the 'in' operator to check if 'cacti' is in the list ['sand', 'cacti']. Print the result.",
-      "correct_code": "print('cacti' in ['sand', 'cacti'])",
-      "expected_output": "True",
-      "reward": {
-        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'sum_all' using *args that returns the sum of all arguments. Print sum_all(10, 20, 30).",
-      "correct_code": "def sum_all(*args):\n    return sum(args)\nprint(sum_all(10, 20, 30))",
-      "expected_output": "60",
-      "reward": {
-        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'show_stats' using **kwargs. Print the value of the 'hp' argument. Call it with hp=50.",
-      "correct_code": "def show_stats(**kwargs):\n    print(kwargs['hp'])\nshow_stats(hp=50)",
-      "expected_output": "50",
-      "reward": {
-        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Use a 'for' loop with range(3) to print 'Sand' three times.",
-      "correct_code": "for i in range(3):\n    print('Sand')",
-      "expected_output": "Sand\nSand\nSand",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Check if 'gold' is NOT in the list ['sand', 'dust'] using 'not in'. Print the result.",
-      "correct_code": "print('gold' not in ['sand', 'dust'])",
-      "expected_output": "True",
-      "reward": {
-        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Update the 'oasis' dictionary: change 'water' key from 0 to 100. Print the dictionary.",
-      "correct_code": "oasis = {'water': 0}\noasis['water'] = 100\nprint(oasis['water'])",
+      "problem": "Create a dictionary named 'stats' with hp=100 and energy=40. Access and print stats['hp'].",
+      "correct_code": "stats = {'hp': 100, 'energy': 40}\nprint(stats['hp'])",
       "expected_output": "100",
       "reward": {
-        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 50,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Access the last element of the list [5, 10, 15, 20] using index -1.",
-      "correct_code": "l = [5, 10, 15, 20]\nprint(l[-1])",
-      "expected_output": "20",
+      "problem": "Create a tuple named 'coords' with values (3, 7, 9) and print coords[1].",
+      "correct_code": "coords = (3, 7, 9)\nprint(coords[1])",
+      "expected_output": "7",
       "reward": {
-        "xpDropMin": 40, "xpDropMax": 50, "coinDropMin": 30, "coinDropMax": 40,
+        "xpDropMin": 45, "xpDropMax": 60, "coinDropMin": 35, "coinDropMax": 45,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Add 'dunes' to the set {'sun', 'heat'} using .add() and print the set length.",
-      "correct_code": "s = {'sun', 'heat'}\ns.add('dunes')\nprint(len(s))",
-      "expected_output": "3",
-      "reward": {
-        "xpDropMin": 50, "xpDropMax": 60, "coinDropMin": 40, "coinDropMax": 50,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Define a function 'list_gear' that takes *args and prints the first item in args. Call with 'Boot', 'Canteen'.",
-      "correct_code": "def list_gear(*args):\n    print(args[0])\nlist_gear('Boot', 'Canteen')",
-      "expected_output": "Boot",
-      "reward": {
-        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 60,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Use a 'for' loop to iterate through the dictionary {'a': 1, 'b': 2} and print only the keys.",
-      "correct_code": "d = {'a': 1, 'b': 2}\nfor key in d:\n    print(key)",
-      "expected_output": "a\nb",
-      "reward": {
-        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 60,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Create a function 'identify' using **kwargs. Return the value of key 'name'. Call with name='Nomad'.",
-      "correct_code": "def identify(**kwargs):\n    return kwargs['name']\nprint(identify(name='Nomad'))",
-      "expected_output": "Nomad",
-      "reward": {
-        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 70,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Check if key 'heat' exists in {'heat': 'high', 'shade': 'low'} using 'in'. Print the result.",
-      "correct_code": "d = {'heat': 'high', 'shade': 'low'}\nprint('heat' in d)",
-      "expected_output": "True",
-      "reward": {
-        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
-        "armors": [], "weapons": [], "consumables": []
-      }
-    },
-    {
-      "problem": "Count how many times 5 appears in the tuple (5, 10, 5, 20) using .count().",
-      "correct_code": "t = (5, 10, 5, 20)\nprint(t.count(5))",
+      "problem": "Create a set named 'marks' with 'sun', 'sun', 'dune'. Print len(marks).",
+      "correct_code": "marks = {'sun', 'sun', 'dune'}\nprint(len(marks))",
       "expected_output": "2",
       "reward": {
-        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 55,
         "armors": [], "weapons": [], "consumables": []
       }
     },
     {
-      "problem": "Loop through the string 'SUN' and print each character in lowercase.",
-      "correct_code": "for char in 'SUN':\n    print(char.lower())",
-      "expected_output": "s\nu\nn",
+      "problem": "Use a For loop to print each item in ['dust', 'stone', 'wind'].",
+      "correct_code": "for item in ['dust', 'stone', 'wind']:\n    print(item)",
+      "expected_output": "dust\nstone\nwind",
       "reward": {
-        "xpDropMin": 45, "xpDropMax": 55, "coinDropMin": 35, "coinDropMax": 45,
+        "xpDropMin": 55, "xpDropMax": 70, "coinDropMin": 45, "coinDropMax": 55,
         "armors": [], "weapons": [], "consumables": []
-      } 
+      }
     },
     {
-      "problem": "Combine *args and sum: create a function 'average' that returns sum(args) divided by length. Call average(10, 20).",
-      "correct_code": "def average(*args):\n    return sum(args) / len(args)\nprint(average(10, 20))",
-      "expected_output": "15.0",
+      "problem": "Use membership operators: set x = 2 and print x in [1, 2, 3].",
+      "correct_code": "x = 2\nprint(x in [1, 2, 3])",
+      "expected_output": "True",
       "reward": {
-        "xpDropMin": 70, "xpDropMax": 100, "coinDropMin": 60, "coinDropMax": 90,
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Use membership operators with not in: print 'storm' not in ['sun', 'dune'].",
+      "correct_code": "print('storm' not in ['sun', 'dune'])",
+      "expected_output": "True",
+      "reward": {
+        "xpDropMin": 50, "xpDropMax": 65, "coinDropMin": 40, "coinDropMax": 50,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define function 'total_loot' using *args and return sum(args). Print total_loot(10, 20, 30).",
+      "correct_code": "def total_loot(*args):\n    return sum(args)\n\nprint(total_loot(10, 20, 30))",
+      "expected_output": "60",
+      "reward": {
+        "xpDropMin": 65, "xpDropMax": 85, "coinDropMin": 55, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Define function 'show_stats' using **kwargs. Return kwargs['hp'] and print show_stats(hp=90, energy=30).",
+      "correct_code": "def show_stats(**kwargs):\n    return kwargs['hp']\n\nprint(show_stats(hp=90, energy=30))",
+      "expected_output": "90",
+      "reward": {
+        "xpDropMin": 65, "xpDropMax": 85, "coinDropMin": 55, "coinDropMax": 70,
+        "armors": [], "weapons": [], "consumables": []
+      }
+    },
+    {
+      "problem": "Accessing nested data: create party = [{'name': 'Aria', 'gear': ['spear', 'cloak']}] and print party[0]['gear'][1].",
+      "correct_code": "party = [{'name': 'Aria', 'gear': ['spear', 'cloak']}]\nprint(party[0]['gear'][1])",
+      "expected_output": "cloak",
+      "reward": {
+        "xpDropMin": 60, "xpDropMax": 80, "coinDropMin": 50, "coinDropMax": 65,
         "armors": [], "weapons": [], "consumables": []
       }
     }

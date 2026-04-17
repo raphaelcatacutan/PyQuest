@@ -57,10 +57,16 @@ export const useBossStore = create<BossStoreProps>((set) => ({
     activeProblem: getRandomMPByScene(useSceneStore.getState().scene),
   }),  
   
-  takeDamage: (amount) => {
-    useSoundStore.getState().playSfx('hit')
-    set((state) => ({ hp: Math.max(0, state.hp - amount) }))
-  },
+  takeDamage: (amount) => set((state) => {
+    const newHp = Math.max(0, state.hp - amount)
+    if (newHp > 0 ) { useSoundStore.getState().playSfx('hit') }
+    else { useSoundStore.getState().playSfx('critical') }
+    return { hp: Math.max(0, state.hp - amount) }
+  }),
+  // takeDamage: (amount) => {
+  //   useSoundStore.getState().playSfx('hit')
+  //   set((state) => ({ hp: Math.max(0, state.hp - amount) }))
+  // },
 
   gainHp: (amount) => set((state) => ({
     hp: Math.min(state.maxHp, state.hp + amount)

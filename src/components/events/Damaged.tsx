@@ -8,12 +8,10 @@ const RESPAWN_BASE_HP = 1;
 const RESPAWN_BASE_ENERGY = 1;
 
 export default function Damaged(){
-  const { hp, isDamaged, toggleIsDamaged, takeDamage, isHealing, toggleIsHealing} = usePlayerStore(
+  const { isDamaged, toggleIsDamaged, isHealing, toggleIsHealing} = usePlayerStore(
     useShallow((s) => ({
-      hp: s.hp,
       isDamaged: s.isDamaged,
       toggleIsDamaged: s.toggleIsDamaged,
-      takeDamage: s.takeDamage,
       gainHP: s.gainHP,
       isHealing: s.isHealing,
       toggleIsHealing: s.toggleIsHealing
@@ -22,7 +20,13 @@ export default function Damaged(){
   const questLevel = useBountyQuestStore((s) => s.questLevel)
   const clearEnemy = useEnemyStore((s) => s.clearEnemy)
   const clearBoss = useBossStore((s) => s.clearBoss)
-
+  const { hp, takeDamage } = usePlayerStore(
+    useShallow((s) => ({
+      hp: s.hp,
+      takeDamage: s.takeDamage,
+    }))
+  )
+  const isFirstMount = useRef(true);
   const prevHp = useRef(hp)
   let hpOpacity = 1;  
   if (hp >= 80) hpOpacity = 0.2;
@@ -34,8 +38,9 @@ export default function Damaged(){
   const nativeHealingGradient = 'radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(34, 197, 94, 0.25) 80%, rgba(34, 197, 94, 0.5) 100%)';
 
   useEffect(() => {
+
     // --- DAMAGED LOGIC ---
-    if (hp <= prevHp.current) {
+    if (hp < prevHp.current) {
       toggleIsDamaged(true);
 
       const timer = setTimeout(() => {

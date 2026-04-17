@@ -4,7 +4,6 @@ import ArmorsCatalog from "../json/armors.json";
 import WeaponsCatalog from "../json/weapons.json";
 import ConsumablesCatalog from "../json/consumables.json";
 import { useBountyQuestStore } from "./bountyQuestStore";
-import { usePlayerStore } from "./playerStore";
 
 /**
  * Merchant Store - Manages merchant inventory and shop state

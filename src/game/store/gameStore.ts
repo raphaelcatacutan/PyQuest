@@ -15,7 +15,7 @@ interface GameStateProps {
   toggleIsMerchant: () => void;
   toggleIsEnemy: (state: boolean | null) => void;
   toggleInCombat: (state: boolean | null) => void;
-  toggleRightPanel: () => void;
+  toggleRightPanel: (state?: boolean | null) => void;
 }
 
 export const useGameStore = create<GameStateProps>((set) => ({
@@ -41,5 +41,6 @@ export const useGameStore = create<GameStateProps>((set) => ({
       return set((s) => ({ inCombat: !s.inCombat })) 
     } 
   },
-  toggleRightPanel: () => set((state) => ({ rightPanel: !state.rightPanel })),
+  toggleRightPanel: (state) => set((s) => ({ rightPanel: state ?? !s.rightPanel })),
+  
 }))

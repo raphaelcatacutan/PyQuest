@@ -75,6 +75,7 @@ export default function CodeEditor() {
   const highlightRange = useEditorStore((state) => state.highlightRange);
   const decorationRef = useRef<string[]>([]);
   const registeredUserModuleNamesRef = useRef<Set<string>>(new Set())
+  const toggleRightPanel = useGameStore(s => s.toggleRightPanel)
 
   function isInitFileName(name: string): boolean {
     const normalized = name.trim().toLowerCase()
@@ -292,6 +293,8 @@ export default function CodeEditor() {
   }
   
   async function handleRun() {
+    toggleRightPanel(true)
+
     const code = editorRef.current?.getValue() ?? "";
     setActiveCode(code);
 

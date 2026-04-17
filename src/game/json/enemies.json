@@ -17,12 +17,16 @@
         "energyCost": 8,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.18
-        }
+          "speedUp": 0.18,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "gel_sprint_1",
+        "cooldownSeconds": 2
       }
     ],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -38,7 +42,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "skeleton": {
     "id": "skeleton",
@@ -55,15 +60,20 @@
       {
         "name": "Bone Pierce",
         "description": "A jagged arrow that leaves a shallow wound.",
-        "energyCost": 9,
+        "energyCost": 40,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 4
-        }
+          "dmgPerSecond": 4,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "bone_pierce_1",
+        "cooldownSeconds": 2.25
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -79,7 +89,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "forest_fang": {
     "id": "forest_fang",
@@ -99,8 +110,12 @@
         "energyCost": 11,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.25
-        }
+          "speedUp": 0.25,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "predator_rush_1",
+        "cooldownSeconds": 2.75
       },
       {
         "name": "Rending Bite",
@@ -108,12 +123,17 @@
         "energyCost": 13,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 5
-        }
+          "dmgPerSecond": 5,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "rending_bite_2",
+        "cooldownSeconds": 3.25
       }
     ],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -128,7 +148,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "dune_raider": {
     "id": "dune_raider",
@@ -148,8 +169,11 @@
         "energyCost": 12,
         "effect": {
           "type": "stun",
-          "duration": 1
-        }
+          "target": "player",
+          "durationSeconds": 1
+        },
+        "id": "dust_ambush_1",
+        "cooldownSeconds": 3
       },
       {
         "name": "Raid Captain",
@@ -157,12 +181,16 @@
         "energyCost": 14,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.2
-        }
+          "dmgMultiplier": 1.2,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "raid_captain_2",
+        "cooldownSeconds": 3.5
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -177,7 +205,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "mire_hag": {
     "id": "mire_hag",
@@ -197,8 +226,13 @@
         "energyCost": 15,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "marsh_hex_1",
+        "cooldownSeconds": 3.75
       },
       {
         "name": "Wicked Whisper",
@@ -206,12 +240,15 @@
         "energyCost": 13,
         "effect": {
           "type": "confusion",
-          "dmg": 10
-        }
+          "target": "player",
+          "durationSeconds": 3
+        },
+        "id": "wicked_whisper_2",
+        "cooldownSeconds": 3.25
       }
     ],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -228,7 +265,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "frost_wraith": {
     "id": "frost_wraith",
@@ -248,8 +286,11 @@
         "energyCost": 16,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "target": "player",
+          "durationSeconds": 2
+        },
+        "id": "cold_snare_1",
+        "cooldownSeconds": 4
       },
       {
         "name": "Frost Rot",
@@ -257,12 +298,17 @@
         "energyCost": 17,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "frost_rot_2",
+        "cooldownSeconds": 4.25
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 16,
+    "atkSpeed": 3.6,
     "critDmg": 0.95,
     "critChance": 0.15,
     "evasion": 0.12,
@@ -279,7 +325,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "labyrinth_guardian": {
     "id": "labyrinth_guardian",
@@ -299,8 +346,12 @@
         "energyCost": 18,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.35
-        }
+          "dmgMultiplier": 1.35,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "stone_bulwark_1",
+        "cooldownSeconds": 4.5
       },
       {
         "name": "Crushing Step",
@@ -308,12 +359,15 @@
         "energyCost": 20,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "target": "player",
+          "durationSeconds": 2
+        },
+        "id": "crushing_step_2",
+        "cooldownSeconds": 5
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 16,
+    "atkSpeed": 3.6,
     "critDmg": 0.95,
     "critChance": 0.15,
     "evasion": 0.12,
@@ -328,7 +382,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "thief": {
     "id": "thief",
@@ -348,8 +403,11 @@
         "energyCost": 11,
         "effect": {
           "type": "confusion",
-          "dmg": 12
-        }
+          "target": "player",
+          "durationSeconds": 3
+        },
+        "id": "pocket_sand_1",
+        "cooldownSeconds": 2.75
       },
       {
         "name": "Quickstep",
@@ -357,12 +415,16 @@
         "energyCost": 10,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.3
-        }
+          "speedUp": 0.5,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "quickstep_2",
+        "cooldownSeconds": 2.5
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 16,
+    "atkSpeed": 3.6,
     "critDmg": 0.95,
     "critChance": 0.15,
     "evasion": 0.12,
@@ -377,7 +439,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "dungeon_puppet": {
     "id": "dungeon_puppet",
@@ -397,12 +460,15 @@
         "energyCost": 15,
         "effect": {
           "type": "stun",
-          "duration": 1
-        }
+          "target": "player",
+          "durationSeconds": 1
+        },
+        "id": "puppet_strings_1",
+        "cooldownSeconds": 3.75
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -417,7 +483,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "stalker": {
     "id": "stalker",
@@ -437,8 +504,13 @@
         "energyCost": 16,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 8
-        }
+          "dmgPerSecond": 8,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "shadow_lure_1",
+        "cooldownSeconds": 4
       },
       {
         "name": "Silent Hunt",
@@ -446,12 +518,16 @@
         "energyCost": 14,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.32
-        }
+          "speedUp": 0.32,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "silent_hunt_2",
+        "cooldownSeconds": 3.5
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -467,7 +543,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "knight": {
     "id": "knight",
@@ -487,8 +564,12 @@
         "energyCost": 19,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.4
-        }
+          "dmgMultiplier": 1.4,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "shield_break_1",
+        "cooldownSeconds": 4.75
       },
       {
         "name": "Command Halt",
@@ -496,12 +577,15 @@
         "energyCost": 17,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "target": "player",
+          "durationSeconds": 2
+        },
+        "id": "command_halt_2",
+        "cooldownSeconds": 4.25
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -517,7 +601,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 7
   },
   "giant": {
     "id": "giant",
@@ -537,8 +622,12 @@
         "energyCost": 20,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.5
-        }
+          "dmgMultiplier": 1.5,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "titan_roar_1",
+        "cooldownSeconds": 5
       },
       {
         "name": "Second Wind",
@@ -546,12 +635,15 @@
         "energyCost": 22,
         "effect": {
           "type": "heal",
-          "healAmount": 36
-        }
+          "healAmount": 36,
+          "target": "self"
+        },
+        "id": "second_wind_2",
+        "cooldownSeconds": 5.5
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 16,
+    "atkSpeed": 3.6,
     "critDmg": 0.95,
     "critChance": 0.15,
     "evasion": 0.12,
@@ -568,7 +660,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 7
   },
   "scout": {
     "id": "scout",
@@ -588,12 +681,16 @@
         "energyCost": 12,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.28
-        }
+          "speedUp": 0.28,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "flank_step_1",
+        "cooldownSeconds": 3
       }
     ],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -609,7 +706,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "shaman": {
     "id": "shaman",
@@ -629,8 +727,13 @@
         "energyCost": 15,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "hex_mark_1",
+        "cooldownSeconds": 3.75
       },
       {
         "name": "Spirit Mend",
@@ -638,12 +741,15 @@
         "energyCost": 18,
         "effect": {
           "type": "heal",
-          "healAmount": 24
-        }
+          "healAmount": 24,
+          "target": "self"
+        },
+        "id": "spirit_mend_2",
+        "cooldownSeconds": 4.5
       }
     ],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -660,7 +766,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "raider": {
     "id": "raider",
@@ -680,8 +787,12 @@
         "energyCost": 17,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.3
-        }
+          "dmgMultiplier": 1.3,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "war_cry_1",
+        "cooldownSeconds": 4.25
       },
       {
         "name": "Shield Bash",
@@ -689,12 +800,15 @@
         "energyCost": 16,
         "effect": {
           "type": "stun",
-          "duration": 1
-        }
+          "target": "player",
+          "durationSeconds": 1
+        },
+        "id": "shield_bash_2",
+        "cooldownSeconds": 4
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -711,7 +825,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   },
   "warden": {
     "id": "warden",
@@ -731,12 +846,15 @@
         "energyCost": 18,
         "effect": {
           "type": "confusion",
-          "dmg": 16
-        }
+          "target": "player",
+          "durationSeconds": 3
+        },
+        "id": "lockdown_1",
+        "cooldownSeconds": 4.5
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 16,
+    "atkSpeed": 3.6,
     "critDmg": 0.95,
     "critChance": 0.15,
     "evasion": 0.12,
@@ -753,7 +871,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "anguish": {
     "id": "anguish",
@@ -767,8 +886,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -784,7 +903,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "baby": {
     "id": "baby",
@@ -798,8 +918,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -815,7 +935,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "bat": {
     "id": "bat",
@@ -829,8 +950,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -847,7 +968,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "cat": {
     "id": "cat",
@@ -861,8 +983,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -879,7 +1001,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "child": {
     "id": "child",
@@ -893,8 +1016,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -911,7 +1034,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "crab": {
     "id": "crab",
@@ -925,8 +1049,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -943,7 +1067,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "crow": {
     "id": "crow",
@@ -957,8 +1082,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -975,7 +1100,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "cursed_cloak": {
     "id": "cursed_cloak",
@@ -989,8 +1115,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -1007,7 +1133,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "cursed_pumpkin": {
     "id": "cursed_pumpkin",
@@ -1021,8 +1148,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1039,7 +1166,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "evil_pumpkin": {
     "id": "evil_pumpkin",
@@ -1053,8 +1181,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1071,7 +1199,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "eye": {
     "id": "eye",
@@ -1085,8 +1214,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -1103,7 +1232,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "halloween_pumpkin": {
     "id": "halloween_pumpkin",
@@ -1117,8 +1247,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1135,7 +1265,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "lucifer": {
     "id": "lucifer",
@@ -1149,8 +1280,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1166,7 +1297,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "mask": {
     "id": "mask",
@@ -1180,8 +1312,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1198,7 +1330,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "mercenary_cat": {
     "id": "mercenary_cat",
@@ -1212,8 +1345,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1229,7 +1362,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "octopus": {
     "id": "octopus",
@@ -1243,8 +1377,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1261,7 +1395,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "skull": {
     "id": "skull",
@@ -1275,8 +1410,8 @@
     "def": 9,
     "maxDef": 9,
     "skills": [],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 16,
+    "atkSpeed": 3.6,
     "critDmg": 0.95,
     "critChance": 0.15,
     "evasion": 0.12,
@@ -1292,7 +1427,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "spider": {
     "id": "spider",
@@ -1306,8 +1442,8 @@
     "def": 7,
     "maxDef": 7,
     "skills": [],
-    "dmg": 22,
-    "atkSpeed": 1.24,
+    "dmg": 13,
+    "atkSpeed": 4.8,
     "critDmg": 0.85,
     "critChance": 0.13,
     "evasion": 0.12,
@@ -1324,7 +1460,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "werewolf": {
     "id": "werewolf",
@@ -1338,8 +1475,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1356,7 +1493,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "wizard_cat": {
     "id": "wizard_cat",
@@ -1370,8 +1508,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1388,7 +1526,8 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   },
   "zombie": {
     "id": "zombie",
@@ -1402,8 +1541,8 @@
     "def": 8,
     "maxDef": 8,
     "skills": [],
-    "dmg": 24,
-    "atkSpeed": 1.2,
+    "dmg": 14,
+    "atkSpeed": 4.2,
     "critDmg": 0.9,
     "critChance": 0.14,
     "evasion": 0.12,
@@ -1420,6 +1559,7 @@
       "weapons": [],
       "armors": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 0
   }
 }

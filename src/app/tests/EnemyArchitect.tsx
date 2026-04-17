@@ -11,6 +11,7 @@ const INITIAL_ENEMY: Enemy = {
   maxHp: 100,
   energy: 50,
   maxEnergy: 50,
+  energyRegenPerSecond: 2,
   def: 1,
   maxDef: 1,
   skills: [],

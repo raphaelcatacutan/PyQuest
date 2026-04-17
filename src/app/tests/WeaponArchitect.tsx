@@ -300,7 +300,7 @@ export default function WeaponArchitect() {
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
               <input type="text" inputMode="numeric" pattern="[0-9.]*" placeholder="Effect Value" style={{...styles.input, flex: 1}} value={skillInput.effectValue || ''} onChange={e => setSkillInput({...skillInput, effectValue: Number(e.target.value) || 0})} />
-              <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration" style={{...styles.input, flex: 1}} value={skillInput.effectDuration || ''} onChange={e => setSkillInput({...skillInput, effectDuration: Number(e.target.value) || 0})} />
+              <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (s)" style={{...styles.input, flex: 1}} value={skillInput.effectDuration || ''} onChange={e => setSkillInput({...skillInput, effectDuration: Number(e.target.value) || 0})} />
               <button style={styles.addButton} onClick={addSkill}>ADD</button>
             </div>
           </div>
@@ -329,7 +329,7 @@ export default function WeaponArchitect() {
             </select>
             <div style={{ display: 'flex', gap: '8px' }}>
               <input type="text" inputMode="numeric" pattern="[0-9.]*" placeholder="Chance (0.0-1.0)" style={{...styles.input, flex: 1}} value={inflictionInput.chance || ''} onChange={e => setInflictionInput({...inflictionInput, chance: Number(e.target.value) || 0})} />
-              <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration" style={{...styles.input, flex: 1}} value={inflictionInput.duration || ''} onChange={e => setInflictionInput({...inflictionInput, duration: Number(e.target.value) || 0})} />
+              <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (s)" style={{...styles.input, flex: 1}} value={inflictionInput.duration || ''} onChange={e => setInflictionInput({...inflictionInput, duration: Number(e.target.value) || 0})} />
               <button style={styles.addButton} onClick={addInfliction}>ADD</button>
             </div>
           </div>
@@ -338,7 +338,7 @@ export default function WeaponArchitect() {
               <li key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', padding: '8px', backgroundColor: '#0a0a0a', borderRadius: '4px' }}>
                 <div>
                   <div><strong>{inf.type}</strong></div>
-                  <div style={{ fontSize: '11px', color: '#888' }}>Chance: {(inf.chance * 100).toFixed(0)}% | Duration: {inf.duration}</div>
+                  <div style={{ fontSize: '11px', color: '#888' }}>Chance: {(inf.chance * 100).toFixed(0)}% | Duration: {inf.duration}s</div>
                 </div>
                 <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeInfliction(i)}>Remove</button>
               </li>

@@ -6,7 +6,8 @@ import {
   playIcon,
   clearIcon,
   saveIcon,
-  closeIcon
+  closeIcon,
+  stopIcon
 } from '@/src/assets'
 import { usePlayerStore, useTerminalStore, useEditorStore, useGameStore, useEnemyStore, useBossStore, useInventoryStore } from "@/src/game/store";
 import { useShallow } from "zustand/shallow";
@@ -368,6 +369,10 @@ export default function CodeEditor() {
   }, [handleRun]);
 
   function handleExitFile() {
+    // TODO: Functionality
+  }
+
+  function handleStop() {
 
   }
 
@@ -390,6 +395,7 @@ export default function CodeEditor() {
           <Button variant="icon-only-btn" icon={clearIcon} iconSize={20} onClick={handleClear} title="Clear editor"/>
           <Button variant="icon-only-btn" icon={saveIcon} iconSize={20} onClick={handleSave} title="Save code"/>
           {/* <Button variant="icon-only-btn" icon={openIcon} iconSize={20} onClick={handleOpen} title="Open a file"/> */}
+          <Button variant="icon-only-btn" icon={stopIcon} iconSize={20} onClick={handleStop} title="Stop code"/>
           <Button variant="icon-only-btn" icon={playIcon} iconSize={20} onClick={handleRun} title="Execute code (Ctrl + Enter)"/>
         </div>
       </div>

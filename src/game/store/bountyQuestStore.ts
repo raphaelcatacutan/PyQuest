@@ -104,7 +104,7 @@ export const useBountyQuestStore = create<BountyQuestProps>()(
       resetQuest: () => set({ 
         questLevel: 1, 
         header: "Active Bounties",
-        // Note: You might want to reset allQuests completion status here too
+        // allQuests: QuestData
       }),
 
       refreshQuest: () => set({ allQuests: Quests })
@@ -130,7 +130,7 @@ export const loadBountyProfile = async (playerId: string) => {
   });
 
   if (isNewPlayer) {
-    useBountyQuestStore.setState({ allQuests: Quests });
+    useBountyQuestStore.setState({ questLevel: 1, allQuests: Quests });
   }
 
   await useBountyQuestStore.persist.rehydrate();

@@ -3,6 +3,7 @@ import { InventoryNode } from "../types/inventory.types";
 import ArmorsCatalog from "../json/armors.json";
 import WeaponsCatalog from "../json/weapons.json";
 import ConsumablesCatalog from "../json/consumables.json";
+import { useBountyQuestStore } from "./bountyQuestStore";
 import { usePlayerStore } from "./playerStore";
 
 /**
@@ -118,9 +119,9 @@ export const useMerchantStore = create<MerchantStoreProps>((set) => ({
     set(() => {
       // Randomly sample 2-4 items from each catalog
       let multiplier = 0
-      if (usePlayerStore.getState().level >= 6){ multiplier = 3 }
-      else if (usePlayerStore.getState().level >= 5) { multiplier = 2}
-      else if (usePlayerStore.getState().level >= 4) { multiplier = 1 }
+      if (useBountyQuestStore.getState().questLevel >= 6){ multiplier = 3 }
+      else if (useBountyQuestStore.getState().questLevel >= 5) { multiplier = 2}
+      else if (useBountyQuestStore.getState().questLevel >= 4) { multiplier = 1 }
       else { return { merchantInventory: initialInventory, selectedNodeId: null } }
 
       const armorCount = Math.floor(Math.random() * 3) + multiplier; // 2-4 items
@@ -130,7 +131,7 @@ export const useMerchantStore = create<MerchantStoreProps>((set) => ({
       const armorSample = sampleRandomItems(ArmorsCatalog, armorCount).map(
         (item: any) => ({
           id: `armor-${item.id}-${Math.random()}`, // Unique ID for each refresh
-          name: item.name,
+          name: item.name + ".py",
           kind: "armor" as const,
           itemId: item.id,
         })
@@ -139,7 +140,7 @@ export const useMerchantStore = create<MerchantStoreProps>((set) => ({
       const weaponSample = sampleRandomItems(WeaponsCatalog, weaponCount).map(
         (item: any) => ({
           id: `weapon-${item.id}-${Math.random()}`,
-          name: item.name,
+          name: item.name + ".py",
           kind: "weapon" as const,
           itemId: item.id,
           children: [],
@@ -151,7 +152,7 @@ export const useMerchantStore = create<MerchantStoreProps>((set) => ({
         consumableCount
       ).map((item: any) => ({
         id: `consumable-${item.id}-${Math.random()}`,
-        name: item.name,
+        name: item.name + ".py",
         kind: "consumable" as const,
         itemId: item.id,
       }));
@@ -179,12 +180,6 @@ export const useMerchantStore = create<MerchantStoreProps>((set) => ({
               name: "Consumables",
               kind: "folder",
               children: consumableSample,
-            },
-            {
-              id: "functions-category",
-              name: "Functions",
-              kind: "folder",
-              children: [], // TODO: Update Functions
             },
           ],
         },

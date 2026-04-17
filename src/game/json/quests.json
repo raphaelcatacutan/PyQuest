@@ -25,116 +25,116 @@
   "2": [
     {
       "questId": "q1",
-      "description": "Kill 12 Spiders",
+      "description": "Kill 5 Spiders",
       "isCompleted": false,
       "targetId": "spider",
-      "requiredAmount": 12
+      "requiredAmount": 5
     },
     {
       "questId": "q2",
-      "description": "Kill 12 Mire Hags",
+      "description": "Kill 5 Mire Hags",
       "isCompleted": false,
       "targetId": "mire_hag",
-      "requiredAmount": 12
+      "requiredAmount": 5
     },
     {
       "questId": "q3",
-      "description": "Kill 10 Scouts",
+      "description": "Kill 4 Scouts",
       "isCompleted": false,
       "targetId": "scout",
-      "requiredAmount": 10
+      "requiredAmount": 4
     }
   ],
   "3": [
     {
       "questId": "q1",
-      "description": "Kill 15 Knights",
+      "description": "Kill 6 Knights",
       "isCompleted": false,
       "targetId": "knight",
-      "requiredAmount": 15
+      "requiredAmount": 6
     },
     {
       "questId": "q2",
-      "description": "Kill 13 Raiders",
+      "description": "Kill 7 Raiders",
       "isCompleted": false,
       "targetId": "raider",
-      "requiredAmount": 13
+      "requiredAmount": 7
     },
     {
       "questId": "q3",
-      "description": "Kill 18 Shamans",
+      "description": "Kill 8 Shamans",
       "isCompleted": false,
       "targetId": "shaman",
-      "requiredAmount": 18
+      "requiredAmount": 8
     }
   ],
   "4": [
     {
       "questId": "q1",
-      "description": "Kill 15 Frost Wraiths",
+      "description": "Kill 9 Frost Wraiths",
       "isCompleted": false,
       "targetId": "frost_wraith",
-      "requiredAmount": 15
+      "requiredAmount": 9
     },
     {
       "questId": "q2",
-      "description": "Kill 20 Giants",
+      "description": "Kill 10 Giants",
       "isCompleted": false,
       "targetId": "giant",
-      "requiredAmount": 20
+      "requiredAmount": 10
     },
     {
       "questId": "q3",
-      "description": "Kill 18 Evil Pumpkins",
+      "description": "Kill 10 Evil Pumpkins",
       "isCompleted": false,
       "targetId": "evil_pumpkin",
-      "requiredAmount": 18
+      "requiredAmount": 10
     }
   ],
   "5": [
     {
       "questId": "q1",
-      "description": "Kill 22 Dune Raider",
+      "description": "Kill 9 Dune Raider",
       "isCompleted": false,
       "targetId": "knight",
-      "requiredAmount": 22
+      "requiredAmount": 9
     },
     {
       "questId": "q2",
-      "description": "Kill 20 Skulls",
+      "description": "Kill 12 Skulls",
       "isCompleted": false,
       "targetId": "skull",
-      "requiredAmount": 20
+      "requiredAmount": 12
     },
     {
       "questId": "q3",
-      "description": "Kill 20 Wizard Cats",
+      "description": "Kill 10 Wizard Cats",
       "isCompleted": false,
       "targetId": "wizard_cat",
-      "requiredAmount": 20
+      "requiredAmount": 10
     }
   ],
   "6": [
     {
       "questId": "q1",
-      "description": "Kill 25 Skeletons",
+      "description": "Kill 12 Skeletons",
       "isCompleted": false,
       "targetId": "skeleton",
-      "requiredAmount": 25
+      "requiredAmount": 12
     },
     {
       "questId": "q2",
-      "description": "Kill 25 Zombies",
+      "description": "Kill 12 Zombies",
       "isCompleted": false,
       "targetId": "zombie",
-      "requiredAmount": 25
+      "requiredAmount": 12
     },
     {
       "questId": "q3",
-      "description": "Kill 25 Cursed Cloaks",
+      "description": "Kill 15 Cursed Cloaks",
       "isCompleted": false,
       "targetId": "cursed_cloak",
-      "requiredAmount": 25
+      "requiredAmount": 15
     }
   ]
 }

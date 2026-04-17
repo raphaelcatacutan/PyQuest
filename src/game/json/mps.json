@@ -141,9 +141,9 @@
       }
     },
     {
-      "problem": "Print the boolean value of (5 > 10).",
-      "correct_code": "print(5 > 10)",
-      "expected_output": "False",
+      "problem": "Print the value of (5 + 10).",
+      "correct_code": "print(5 + 10)",
+      "expected_output": "15",
       "reward": {
         "xpDropMin": 40,
         "xpDropMax": 50,
@@ -309,8 +309,8 @@
       }
     },
     {
-      "problem": "Use floor division for 21 and 6, then print the result.",
-      "correct_code": "print(21 // 6)",
+      "problem": "Use division for 21 and 6, then print the result.",
+      "correct_code": "print(21 / 6)",
       "expected_output": "3",
       "reward": {
         "xpDropMin": 30,
@@ -393,51 +393,9 @@
       }
     },
     {
-      "problem": "Print the data type of 12.5.",
-      "correct_code": "print(type(12.5))",
-      "expected_output": "<class 'float'>",
-      "reward": {
-        "xpDropMin": 30,
-        "xpDropMax": 45,
-        "coinDropMin": 20,
-        "coinDropMax": 30,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
       "problem": "Create variable place='Forest' and print 'Go to ' plus place.",
       "correct_code": "place = 'Forest'\nprint('Go to ' + place)",
       "expected_output": "Go to Forest",
-      "reward": {
-        "xpDropMin": 30,
-        "xpDropMax": 45,
-        "coinDropMin": 20,
-        "coinDropMax": 30,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Print the unlocked command text goTo('Swamp').",
-      "correct_code": "print(\"goTo('Swamp')\")",
-      "expected_output": "goTo('Swamp')",
-      "reward": {
-        "xpDropMin": 30,
-        "xpDropMax": 45,
-        "coinDropMin": 20,
-        "coinDropMax": 30,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Print the unlocked action text 'punch() ready'.",
-      "correct_code": "print('punch() ready')",
-      "expected_output": "punch() ready",
       "reward": {
         "xpDropMin": 30,
         "xpDropMax": 45,
@@ -1408,27 +1366,13 @@
   "temple": [
     {
       "problem": "Use Object-Oriented Programming: create class Adventurer with __init__(name, hp), instantiate hero, and print hero.name.",
-      "correct_code": "class Adventurer:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nhero = Adventurer('Lyn', 120)\nprint(hero.name)",
-      "expected_output": "Lyn",
+      "correct_code": "class Adventurer:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nhero = Adventurer('HERO', 120)\nprint(hero.name)",
+      "expected_output": "HERO",
       "reward": {
         "xpDropMin": 55,
         "xpDropMax": 70,
         "coinDropMin": 45,
         "coinDropMax": 60,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Demonstrate Abstraction by creating class Weapon with attack(self) that raises NotImplementedError.",
-      "correct_code": "class Weapon:\n    def attack(self):\n        raise NotImplementedError('Implement in subclass')\n\nprint('ok')",
-      "expected_output": "ok",
-      "reward": {
-        "xpDropMin": 60,
-        "xpDropMax": 75,
-        "coinDropMin": 50,
-        "coinDropMax": 65,
         "armors": [],
         "weapons": [],
         "consumables": []
@@ -1449,7 +1393,7 @@
       }
     },
     {
-      "problem": "Show Polymorphism: create Weapon base, Spear and Bow subclasses with attack(), then call and print attack() result for each subclass instance.",
+      "problem": "Show Polymorphism: create Weapon base class, Spear and Bow subclasses with attack(), then call and print attack() result for each subclass instance.",
       "correct_code": "class Weapon:\n    def attack(self):\n        raise NotImplementedError()\n\nclass Spear(Weapon):\n    def attack(self):\n        return 'Spear hit'\n\nclass Bow(Weapon):\n    def attack(self):\n        return 'Bow hit'\n\nprint(Spear().attack())\nprint(Bow().attack())",
       "expected_output": "Spear hit\nBow hit",
       "reward": {
@@ -1463,7 +1407,7 @@
       }
     },
     {
-      "problem": "Demonstrate Encapsulation: create class ShieldedHero with private attribute _hp, get_hp(), take_damage(amount), and print final hp after taking 20 from 100.",
+      "problem": "Demonstrate Encapsulation: create class ShieldedHero with attributes _hp, get_hp(), take_damage(amount), and print final hp after taking 20 from 100.",
       "correct_code": "class ShieldedHero:\n    def __init__(self, hp):\n        self._hp = hp\n\n    def get_hp(self):\n        return self._hp\n\n    def take_damage(self, amount):\n        self._hp -= amount\n\nh = ShieldedHero(100)\nh.take_damage(20)\nprint(h.get_hp())",
       "expected_output": "80",
       "reward": {
@@ -1505,37 +1449,9 @@
       }
     },
     {
-      "problem": "Unlocked Weapons n Armors: define Player with equip(self, weapon), Spear, and Armor classes. Equip a Spear to a player instance, create an Armor instance, and print type(armor).__name__.",
-      "correct_code": "class Player:\n    def equip(self, weapon):\n        self.weapon = weapon\n\nclass Spear:\n    pass\n\nclass Armor:\n    pass\n\nplayer = Player()\nplayer.equip(Spear())\narmor = Armor()\nprint(type(armor).__name__)",
-      "expected_output": "Armor",
-      "reward": {
-        "xpDropMin": 80,
-        "xpDropMax": 100,
-        "coinDropMin": 70,
-        "coinDropMax": 90,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
       "problem": "Create class Hero with __init__(name). Make hero named 'Mira' and print hero.name.",
       "correct_code": "class Hero:\n    def __init__(self, name):\n        self.name = name\n\nhero = Hero('Mira')\nprint(hero.name)",
       "expected_output": "Mira",
-      "reward": {
-        "xpDropMin": 70,
-        "xpDropMax": 95,
-        "coinDropMin": 55,
-        "coinDropMax": 75,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Demonstrate abstraction: create class Skill with method use(self) that raises NotImplementedError. Print 'ok'.",
-      "correct_code": "class Skill:\n    def use(self):\n        raise NotImplementedError('todo')\n\nprint('ok')",
-      "expected_output": "ok",
       "reward": {
         "xpDropMin": 70,
         "xpDropMax": 95,
@@ -1729,48 +1645,6 @@
       }
     },
     {
-      "problem": "Unlocked Weapons n Armors marker: create empty Weapon and Armor classes and print 'Weapons and Armors ready'.",
-      "correct_code": "class Weapon:\n    pass\n\nclass Armor:\n    pass\n\nprint('Weapons and Armors ready')",
-      "expected_output": "Weapons and Armors ready",
-      "reward": {
-        "xpDropMin": 70,
-        "xpDropMax": 95,
-        "coinDropMin": 55,
-        "coinDropMax": 75,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Polymorphism with cast(): Fire returns 'burn', Ice returns 'freeze'. Use cast_spell(spell) to print both.",
-      "correct_code": "class Fire:\n    def cast(self):\n        return 'burn'\n\nclass Ice:\n    def cast(self):\n        return 'freeze'\n\ndef cast_spell(spell):\n    print(spell.cast())\n\ncast_spell(Fire())\ncast_spell(Ice())",
-      "expected_output": "burn\nfreeze",
-      "reward": {
-        "xpDropMin": 70,
-        "xpDropMax": 95,
-        "coinDropMin": 55,
-        "coinDropMax": 75,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Abstraction placeholder: create class BaseQuest with run(self) using pass. Print 'quest'.",
-      "correct_code": "class BaseQuest:\n    def run(self):\n        pass\n\nprint('quest')",
-      "expected_output": "quest",
-      "reward": {
-        "xpDropMin": 70,
-        "xpDropMax": 95,
-        "coinDropMin": 55,
-        "coinDropMax": 75,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
       "problem": "Inheritance attribute reuse: Animal sets kind='animal'. Hawk(Animal) inherits it. Print Hawk().kind.",
       "correct_code": "class Animal:\n    def __init__(self):\n        self.kind = 'animal'\n\nclass Hawk(Animal):\n    pass\n\nprint(Hawk().kind)",
       "expected_output": "animal",
@@ -1873,20 +1747,6 @@
     {
       "problem": "Use membership operators: set x = 2 and print x in [1, 2, 3].",
       "correct_code": "x = 2\nprint(x in [1, 2, 3])",
-      "expected_output": "True",
-      "reward": {
-        "xpDropMin": 50,
-        "xpDropMax": 65,
-        "coinDropMin": 40,
-        "coinDropMax": 50,
-        "armors": [],
-        "weapons": [],
-        "consumables": []
-      }
-    },
-    {
-      "problem": "Use membership operators with not in: print 'storm' not in ['sun', 'dune'].",
-      "correct_code": "print('storm' not in ['sun', 'dune'])",
       "expected_output": "True",
       "reward": {
         "xpDropMin": 50,
@@ -2699,7 +2559,7 @@
       }
     },
     {
-      "problem": "Convert 'shade' to uppercase using a string method and print it.",
+      "problem": "Convert 'shade' to uppercase using string method upper() and print it.",
       "correct_code": "text = 'shade'\nprint(text.upper())",
       "expected_output": "SHADE",
       "reward": {

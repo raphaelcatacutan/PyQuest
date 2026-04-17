@@ -1,7 +1,7 @@
 {
   "health_potion": {
     "id": "health_potion",
-    "name": "Health Potion",
+    "name": "health_potion",
     "description": "A basic red potion that restores a small amount of HP.",
     "consumableImg": "/src/assets/consumables/health_potion.png",
     "cooldown": 3,
@@ -18,7 +18,7 @@
   },
   "greater_health_potion": {
     "id": "greater_health_potion",
-    "name": "Greater Health Potion",
+    "name": "greater_health_potion",
     "description": "A refined blend for solid frontline recovery.",
     "consumableImg": "/src/assets/consumables/greater_health_potion.png",
     "cooldown": 4.5,
@@ -35,7 +35,7 @@
   },
   "superior_health_potion": {
     "id": "superior_health_potion",
-    "name": "Superior Health Potion",
+    "name": "superior_health_potion",
     "description": "A high-grade restorative reserved for dangerous fights.",
     "consumableImg": "/src/assets/consumables/superior_health_potion.png",
     "cooldown": 6.5,
@@ -52,7 +52,7 @@
   },
   "mana_potion": {
     "id": "mana_potion",
-    "name": "Mana Potion",
+    "name": "mana_potion",
     "description": "A light tonic that restores a small amount of energy.",
     "consumableImg": "/src/assets/consumables/mana_potion.png",
     "cooldown": 3,
@@ -69,7 +69,7 @@
   },
   "greater_mana_potion": {
     "id": "greater_mana_potion",
-    "name": "Greater Mana Potion",
+    "name": "greater_mana_potion",
     "description": "An efficient energy refuel for longer engagements.",
     "consumableImg": "/src/assets/consumables/greater_mana_potion.png",
     "cooldown": 4.5,
@@ -86,7 +86,7 @@
   },
   "superior_mana_potion": {
     "id": "superior_mana_potion",
-    "name": "Superior Mana Potion",
+    "name": "superior_mana_potion",
     "description": "Concentrated essence that heavily restores energy.",
     "consumableImg": "/src/assets/consumables/superior_mana_potion.png",
     "cooldown": 6.5,
@@ -103,7 +103,7 @@
   },
   "lesser_berserk_draught": {
     "id": "lesser_berserk_draught",
-    "name": "Lesser Berserk Draught",
+    "name": "lesser_berserk_draught",
     "description": "A mild stimulant that boosts damage output.",
     "consumableImg": "/src/assets/consumables/lesser_berserk_draught.png",
     "cooldown": 5.5,
@@ -121,7 +121,7 @@
   },
   "berserk_draught": {
     "id": "berserk_draught",
-    "name": "Berserk Draught",
+    "name": "berserk_draught",
     "description": "A stronger combat brew for aggressive pushes.",
     "consumableImg": "/src/assets/consumables/berserk_draught.png",
     "cooldown": 6.5,
@@ -139,7 +139,7 @@
   },
   "grand_berserk_draught": {
     "id": "grand_berserk_draught",
-    "name": "Grand Berserk Draught",
+    "name": "grand_berserk_draught",
     "description": "Top-tier damage stimulant for boss phases.",
     "consumableImg": "/src/assets/consumables/grand_berserk_draught.png",
     "cooldown": 8,
@@ -157,7 +157,7 @@
   },
   "lesser_guard_elixir": {
     "id": "lesser_guard_elixir",
-    "name": "Lesser Guard Elixir",
+    "name": "lesser_guard_elixir",
     "description": "A protective mix that hardens defense slightly.",
     "consumableImg": "/src/assets/consumables/lesser_guard_elixir.png",
     "cooldown": 5.5,
@@ -175,7 +175,7 @@
   },
   "guard_elixir": {
     "id": "guard_elixir",
-    "name": "Guard Elixir",
+    "name": "guard_elixir",
     "description": "Improves resistance during sustained fights.",
     "consumableImg": "/src/assets/consumables/guard_elixir.png",
     "cooldown": 7,
@@ -193,7 +193,7 @@
   },
   "grand_guard_elixir": {
     "id": "grand_guard_elixir",
-    "name": "Grand Guard Elixir",
+    "name": "grand_guard_elixir",
     "description": "Elite-grade defense tonic for critical battles.",
     "consumableImg": "/src/assets/consumables/grand_guard_elixir.png",
     "cooldown": 8.5,
@@ -211,7 +211,7 @@
   },
   "lesser_haste_phial": {
     "id": "lesser_haste_phial",
-    "name": "Lesser Haste Phial",
+    "name": "lesser_haste_phial",
     "description": "A small speed stimulant for repositioning.",
     "consumableImg": "/src/assets/consumables/lesser_haste_phial.png",
     "cooldown": 5,
@@ -229,7 +229,7 @@
   },
   "haste_phial": {
     "id": "haste_phial",
-    "name": "Haste Phial",
+    "name": "haste_phial",
     "description": "A potent enhancer for faster tempo in combat.",
     "consumableImg": "/src/assets/consumables/haste_phial.png",
     "cooldown": 6,
@@ -247,7 +247,7 @@
   },
   "grand_haste_phial": {
     "id": "grand_haste_phial",
-    "name": "Grand Haste Phial",
+    "name": "grand_haste_phial",
     "description": "High-end speed buff for burst windows.",
     "consumableImg": "/src/assets/consumables/grand_haste_phial.png",
     "cooldown": 7.5,
@@ -265,7 +265,7 @@
   },
   "weak_corrosion_vial": {
     "id": "weak_corrosion_vial",
-    "name": "Weak Corrosion Vial",
+    "name": "weak_corrosion_vial",
     "description": "Applies a light corrosive HP debuff.",
     "consumableImg": "/src/assets/consumables/weak_corrosion_vial.png",
     "cooldown": 5.5,
@@ -283,7 +283,7 @@
   },
   "corrosion_vial": {
     "id": "corrosion_vial",
-    "name": "Corrosion Vial",
+    "name": "corrosion_vial",
     "description": "A stronger corrosive compound that eats at HP.",
     "consumableImg": "/src/assets/consumables/corrosion_vial.png",
     "cooldown": 6.5,
@@ -301,7 +301,7 @@
   },
   "severe_corrosion_vial": {
     "id": "severe_corrosion_vial",
-    "name": "Severe Corrosion Vial",
+    "name": "severe_corrosion_vial",
     "description": "A brutal acid blend for heavy HP suppression.",
     "consumableImg": "/src/assets/consumables/severe_corrosion_vial.png",
     "cooldown": 8,
@@ -319,7 +319,7 @@
   },
   "weak_mind_leech": {
     "id": "weak_mind_leech",
-    "name": "Weak Mind Leech",
+    "name": "weak_mind_leech",
     "description": "A mild siphon that reduces energy reserves.",
     "consumableImg": "/src/assets/consumables/weak_mind_leech.png",
     "cooldown": 5.5,
@@ -337,7 +337,7 @@
   },
   "mind_leech": {
     "id": "mind_leech",
-    "name": "Mind Leech",
+    "name": "mind_leech",
     "description": "A focused drain that heavily cuts energy flow.",
     "consumableImg": "/src/assets/consumables/mind_leech.png",
     "cooldown": 6.5,
@@ -355,7 +355,7 @@
   },
   "severe_mind_leech": {
     "id": "severe_mind_leech",
-    "name": "Severe Mind Leech",
+    "name": "severe_mind_leech",
     "description": "An intense psychic siphon for major energy loss.",
     "consumableImg": "/src/assets/consumables/severe_mind_leech.png",
     "cooldown": 8,
@@ -373,7 +373,7 @@
   },
   "weak_tar_essence": {
     "id": "weak_tar_essence",
-    "name": "Weak Tar Essence",
+    "name": "weak_tar_essence",
     "description": "Sticky residue that lightly slows movement speed.",
     "consumableImg": "/src/assets/consumables/weak_tar_essence.png",
     "cooldown": 5,
@@ -391,7 +391,7 @@
   },
   "tar_essence": {
     "id": "tar_essence",
-    "name": "Tar Essence",
+    "name": "tar_essence",
     "description": "Dense pitch that significantly reduces speed.",
     "consumableImg": "/src/assets/consumables/tar_essence.png",
     "cooldown": 6,
@@ -409,7 +409,7 @@
   },
   "dense_tar_essence": {
     "id": "dense_tar_essence",
-    "name": "Dense Tar Essence",
+    "name": "dense_tar_essence",
     "description": "Heavy black pitch for severe speed suppression.",
     "consumableImg": "/src/assets/consumables/dense_tar_essence.png",
     "cooldown": 7.5,
@@ -427,7 +427,7 @@
   },
   "iron_stew": {
     "id": "iron_stew",
-    "name": "Iron Stew",
+    "name": "iron_stew",
     "description": "A fortified meal that restores HP and hardens defense.",
     "consumableImg": "/src/assets/consumables/iron_stew.png",
     "cooldown": 8.5,
@@ -450,7 +450,7 @@
   },
   "spark_noodle_bowl": {
     "id": "spark_noodle_bowl",
-    "name": "Spark Noodle Bowl",
+    "name": "spark_noodle_bowl",
     "description": "A hot meal that restores energy and boosts speed.",
     "consumableImg": "/src/assets/consumables/spark_noodle_bowl.png",
     "cooldown": 8.5,
@@ -473,7 +473,7 @@
   },
   "risky_war_broth": {
     "id": "risky_war_broth",
-    "name": "Risky War Broth",
+    "name": "risky_war_broth",
     "description": "High-risk mixture: more damage at the cost of HP stability.",
     "consumableImg": "/src/assets/consumables/risky_war_broth.png",
     "cooldown": 9,
@@ -497,7 +497,7 @@
   },
   "focus_concoction": {
     "id": "focus_concoction",
-    "name": "Focus Concoction",
+    "name": "focus_concoction",
     "description": "Sharpens speed but drains energy over time.",
     "consumableImg": "/src/assets/consumables/focus_concoction.png",
     "cooldown": 9,
@@ -521,7 +521,7 @@
   },
   "juggernaut_tonic": {
     "id": "juggernaut_tonic",
-    "name": "Juggernaut Tonic",
+    "name": "juggernaut_tonic",
     "description": "Greatly improves defense while slowing movement.",
     "consumableImg": "/src/assets/consumables/juggernaut_tonic.png",
     "cooldown": 9.5,
@@ -545,7 +545,7 @@
   },
   "chaos_elixir": {
     "id": "chaos_elixir",
-    "name": "Chaos Elixir",
+    "name": "chaos_elixir",
     "description": "A volatile blend: huge offensive tempo with HP drawback.",
     "consumableImg": "/src/assets/consumables/chaos_elixir.png",
     "cooldown": 10,

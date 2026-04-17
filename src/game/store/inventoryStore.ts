@@ -49,6 +49,7 @@ const InitialPlayerInventory: InventoryNode[] = [
   { id: "misc_folder", kind: "folder", name: "miscellaneous", children: [
     { id: "init_file_misc", kind: "util", itemId: "init_file_misc" , name: "__init__.py" },
     { id: "handbook", kind: "util", itemId: "handboom_misc" , name: "handbook.py" },
+    { id: "manual", kind: "util", itemId: "manual_misc" , name: "manual.py" },
     { id: "abilities", kind: "util", itemId: "abilities_misc" , name: "abilities.py" },
   ]},   
   { id: "pickedup_folder", kind: "folder", name: "pickedup", children: []},   

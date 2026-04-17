@@ -18,11 +18,11 @@ export function buildActions(enemy: EnemySnapshot): Action[] {
 export function getValidSkillIndices(
   actions: Action[],
   enemyEnergy: number,
-  skillCooldownsMs: number[],
+  skillCooldownsSeconds: number[],
 ): number[] {
   const valid: number[] = [];
   actions.forEach((action, index) => {
-    const cooldown = skillCooldownsMs[index] ?? 0;
+    const cooldown = skillCooldownsSeconds[index] ?? 0;
     if (cooldown <= 0 && action.energyCost <= enemyEnergy) {
       valid.push(index);
     }
@@ -30,20 +30,16 @@ export function getValidSkillIndices(
   return valid;
 }
 
-export function getAttackIntervalMs(attacksPerSecond: number, atkSpeedMultiplier = 1): number | null {
-  if (!Number.isFinite(attacksPerSecond) || attacksPerSecond <= 0) {
+export function getAttackIntervalSeconds(baseAttackIntervalSeconds: number, atkSpeedMultiplier = 1): number | null {
+  if (!Number.isFinite(baseAttackIntervalSeconds) || baseAttackIntervalSeconds <= 0) {
     return null;
   }
 
   const multiplier = Number.isFinite(atkSpeedMultiplier) && atkSpeedMultiplier > 0
     ? atkSpeedMultiplier
     : 1;
-  const effectiveRate = attacksPerSecond * multiplier;
-  if (effectiveRate <= 0) {
-    return null;
-  }
 
-  return 1000 / effectiveRate;
+  return baseAttackIntervalSeconds / multiplier;
 }
 
 export function computeDamage(base: number, critChance: number, critDmg: number, targetDef: number): number {

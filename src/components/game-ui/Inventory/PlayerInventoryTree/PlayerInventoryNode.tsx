@@ -268,7 +268,7 @@ export function PlayerInventoryNode({
           <p className="text-xs font-bold text-yellow-300">{consumable.name}</p>
           {consumable.description && <p className="text-xs text-gray-300 mt-1">{consumable.description}</p>}
           
-          {consumable.cooldown && <p className="text-xs text-gray-400 mt-2">Cooldown: {consumable.cooldown}ms</p>}
+          {consumable.cooldown && <p className="text-xs text-gray-400 mt-2">Cooldown: {consumable.cooldown}s</p>}
 
           {consumable.effects && consumable.effects.length > 0 && (
             <div className="text-xs mt-2 space-y-1">
@@ -277,9 +277,9 @@ export function PlayerInventoryNode({
                 if (effect.type === 'restore') {
                   return <p key={idx} className="text-green-400">{effect.stat}: +{effect.amount}</p>;
                 } else if (effect.type === 'buff') {
-                  return <p key={idx} className="text-blue-400">{effect.stat} Buff x{effect.multiplier} ({effect.duration}ms)</p>;
+                  return <p key={idx} className="text-blue-400">{effect.stat} Buff x{effect.multiplier} ({effect.duration}s)</p>;
                 } else if (effect.type === 'debuff') {
-                  return <p key={idx} className="text-red-400">{effect.stat}: -{effect.amount} ({effect.duration}ms)</p>;
+                  return <p key={idx} className="text-red-400">{effect.stat}: -{effect.amount} ({effect.duration}s)</p>;
                 }
                 return null;
               })}

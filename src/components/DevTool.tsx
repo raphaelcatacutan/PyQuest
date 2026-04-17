@@ -110,6 +110,14 @@ export default function DevTool() {
   const sfx = useSoundStore();
   const bounty = useBountyQuestStore();
   const kill = useKillTrackerStore();
+  const [showCombatDebug, setShowCombatDebug] = useState(false);
+  const { latestCombatDebug, combatLogs, clearCombatLogs } = useCombatDebugStore(
+    useShallow((s) => ({
+      latestCombatDebug: s.latest,
+      combatLogs: s.logs,
+      clearCombatLogs: s.clearLogs,
+    })),
+  );
 
   function randomBetween(min: number, max: number): number {
     const low = Math.max(0, Math.floor(Math.min(min, max)));
@@ -322,7 +330,7 @@ export default function DevTool() {
               </div>
               <div>
                 Analytics Time:{" "}
-                {Math.round(latestCombatDebug.analytics.elapsedMs)}ms
+                {latestCombatDebug.analytics.elapsedSeconds.toFixed(3)}s
               </div>
               <div>
                 Analytics To Player:{" "}

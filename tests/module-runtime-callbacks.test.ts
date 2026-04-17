@@ -103,8 +103,8 @@ goTo("forest")
 
         await runPython(`
 counter = 0
-while counter < 1: # delay=120
-    print(counter) # delay=40
+while counter < 1: # delay=0.12
+    print(counter) # delay=0.04
     counter = counter + 1
         `);
 
@@ -121,9 +121,9 @@ while counter < 1: # delay=120
         });
 
         expect(whileTrace).toBeDefined();
-        expect((whileTrace?.payload as Record<string, unknown>).delayMs).toBe(120);
+        expect((whileTrace?.payload as Record<string, unknown>).delaySeconds).toBe(0.12);
         expect(printTrace).toBeDefined();
-        expect((printTrace?.payload as Record<string, unknown>).delayMs).toBe(40);
+        expect((printTrace?.payload as Record<string, unknown>).delaySeconds).toBe(0.04);
     });
 
     it('reads abstracted player values from runtime state hook', async () => {

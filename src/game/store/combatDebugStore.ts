@@ -13,7 +13,7 @@ export type CombatDebugSnapshot = {
   playerHp: number;
   enemyHp: number;
   enemyEnergy: number;
-  tickMs: number;
+  tickSeconds: number;
   done: boolean;
   playerAttacksConsumed: number;
   damageCauses: string[];

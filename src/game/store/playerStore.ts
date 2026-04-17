@@ -14,6 +14,7 @@ const DEFAULT_PLAYER_ATTACK_INTERVAL_SECONDS = 3.125;
 const MIN_PLAYER_ATTACK_INTERVAL_SECONDS = 0.1;
 const MAX_PLAYER_ATTACK_INTERVAL_SECONDS = 10;
 const LEGACY_ATTACK_INTERVAL_SLOWDOWN_MULTIPLIER = 1.25;
+const DEFAULT_PLAYER_HP_REGEN_PER_SECOND = 5;
 const DEFAULT_PLAYER_ENERGY_REGEN_PER_SECOND = 4;
 const OUT_OF_COMBAT_ENERGY_REGEN_MULTIPLIER = 3;
 
@@ -50,9 +51,15 @@ function normalizePlayerAttackSpeed(atkSpeed: number): number {
 }
 
 function clampPlayerEnergy(energy: number, maxEnergy: number): number {
-  const normalizedEnergy = Number.isFinite(energy) ? energy : 0;
-  const normalizedMax = Number.isFinite(maxEnergy) ? Math.max(0, maxEnergy) : 0;
+  const normalizedEnergy = Number.isFinite(energy) ? Math.floor(energy) : 0;
+  const normalizedMax = Number.isFinite(maxEnergy) ? Math.max(0, Math.floor(maxEnergy)) : 0;
   return Math.max(0, Math.min(normalizedMax, normalizedEnergy));
+}
+
+function clampPlayerHp(hp: number, maxHP: number): number {
+  const normalizedHp = Number.isFinite(hp) ? Math.floor(hp) : 0;
+  const normalizedMax = Number.isFinite(maxHP) ? Math.max(0, Math.floor(maxHP)) : 0;
+  return Math.max(0, Math.min(normalizedMax, normalizedHp));
 }
 
 export const loadUserProfile = async (playerId: string) => {
@@ -74,11 +81,14 @@ export const loadUserProfile = async (playerId: string) => {
       user_id: playerId,
       hp: 100,
       maxHP: 100,
+      hpRegenPerSecond: DEFAULT_PLAYER_HP_REGEN_PER_SECOND,
+      hpRegenCarry: 0,
       def: 0,
       maxDef: 0,
       energy: 100,
       maxEnergy: 100,
       energyRegenPerSecond: DEFAULT_PLAYER_ENERGY_REGEN_PER_SECOND,
+      energyRegenCarry: 0,
       coins: 0,
       XP: 0,
       level: 1,
@@ -93,10 +103,20 @@ export const loadUserProfile = async (playerId: string) => {
   // Ensure the user_id matches the account and normalize legacy attack speed values.
   usePlayerStore.setState((state) => ({
     user_id: playerId,
+    hp: clampPlayerHp(state.hp, state.maxHP),
+    hpRegenPerSecond: Number.isFinite(state.hpRegenPerSecond)
+      ? Math.max(0, state.hpRegenPerSecond)
+      : DEFAULT_PLAYER_HP_REGEN_PER_SECOND,
+    hpRegenCarry: Number.isFinite(state.hpRegenCarry)
+      ? Math.max(0, Math.min(0.999999, state.hpRegenCarry))
+      : 0,
     atkSpeed: normalizePlayerAttackSpeed(state.atkSpeed),
     energyRegenPerSecond: Number.isFinite(state.energyRegenPerSecond)
       ? Math.max(0, state.energyRegenPerSecond)
       : DEFAULT_PLAYER_ENERGY_REGEN_PER_SECOND,
+    energyRegenCarry: Number.isFinite(state.energyRegenCarry)
+      ? Math.max(0, Math.min(0.999999, state.energyRegenCarry))
+      : 0,
     energy: clampPlayerEnergy(state.energy, state.maxEnergy),
   }));
 
@@ -120,6 +140,7 @@ interface PlayerStoreProps extends Player {
   setMaxEnergy: (amount: number) => void;
   spendEnergy: (amount: number) => void;
   applyEnergyRegen: (deltaSeconds: number, mode: "combat" | "out_of_combat") => void;
+  applyHpRegen: (deltaSeconds: number, mode: "combat" | "out_of_combat") => void;
   resetMaxEnergy: () => void;
   setDamage: (amount: number) => void;
   takeDamage: (amount: number) => void;
@@ -156,11 +177,14 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       password: "",
       hp: 100,
       maxHP: 100,
+      hpRegenPerSecond: DEFAULT_PLAYER_HP_REGEN_PER_SECOND,
+      hpRegenCarry: 0,
       def: 0,
       maxDef: 0,
       energy: 100,
       maxEnergy: 100,
       energyRegenPerSecond: DEFAULT_PLAYER_ENERGY_REGEN_PER_SECOND,
+      energyRegenCarry: 0,
       maxXP: 0,
       baseDmg: 2,
       baseCritDmg: 0,
@@ -202,7 +226,13 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       gainEnergy: (amount) => set((state) => ({
         energy: clampPlayerEnergy(state.energy + amount, state.maxEnergy),
       })),
-      setMaxEnergy: (amount) => set((state) => ({ maxEnergy: state.maxEnergy + amount })),
+      setMaxEnergy: (amount) => set((state) => {
+        const nextMaxEnergy = Math.max(0, Math.floor(state.maxEnergy + amount));
+        return {
+          maxEnergy: nextMaxEnergy,
+          energy: clampPlayerEnergy(state.energy, nextMaxEnergy),
+        };
+      }),
       spendEnergy: (amount) => set((state) => ({
         energy: clampPlayerEnergy(state.energy - amount, state.maxEnergy),
       })),
@@ -217,14 +247,69 @@ export const usePlayerStore = create<PlayerStoreProps>()(
 
         const regenMultiplier =
           mode === "out_of_combat" ? OUT_OF_COMBAT_ENERGY_REGEN_MULTIPLIER : 1;
-        const regenAmount = regenBase * normalizedDelta * regenMultiplier;
-        const nextEnergy = clampPlayerEnergy(state.energy + regenAmount, state.maxEnergy);
-        if (nextEnergy === state.energy) {
+        const carry = Number.isFinite(state.energyRegenCarry)
+          ? Math.max(0, Math.min(0.999999, state.energyRegenCarry))
+          : 0;
+        const regenAmount = (regenBase * normalizedDelta * regenMultiplier) + carry;
+        const wholeEnergy = Math.floor(regenAmount);
+        const nextCarry = regenAmount - wholeEnergy;
+
+        if (wholeEnergy <= 0) {
+          if (nextCarry === carry) {
+            return state;
+          }
+          return {
+            energyRegenCarry: nextCarry,
+          };
+        }
+
+        const nextEnergy = clampPlayerEnergy(state.energy + wholeEnergy, state.maxEnergy);
+        if (nextEnergy === state.energy && nextCarry === carry) {
           return state;
         }
 
         return {
           energy: nextEnergy,
+          energyRegenCarry: nextCarry,
+        };
+      }),
+      applyHpRegen: (deltaSeconds, mode) => set((state) => {
+        if (mode !== "out_of_combat") {
+          return state;
+        }
+
+        const regenBase = Number.isFinite(state.hpRegenPerSecond)
+          ? Math.max(0, state.hpRegenPerSecond)
+          : 0;
+        const normalizedDelta = Number.isFinite(deltaSeconds) ? Math.max(0, deltaSeconds) : 0;
+        if (regenBase <= 0 || normalizedDelta <= 0 || state.hp >= state.maxHP) {
+          return state;
+        }
+
+        const carry = Number.isFinite(state.hpRegenCarry)
+          ? Math.max(0, Math.min(0.999999, state.hpRegenCarry))
+          : 0;
+        const regenAmount = (regenBase * normalizedDelta) + carry;
+        const wholeHp = Math.floor(regenAmount);
+        const nextCarry = regenAmount - wholeHp;
+
+        if (wholeHp <= 0) {
+          if (nextCarry === carry) {
+            return state;
+          }
+          return {
+            hpRegenCarry: nextCarry,
+          };
+        }
+
+        const nextHp = clampPlayerHp(state.hp + wholeHp, state.maxHP);
+        if (nextHp === state.hp && nextCarry === carry) {
+          return state;
+        }
+
+        return {
+          hp: nextHp,
+          hpRegenCarry: nextCarry,
         };
       }),
       resetMaxEnergy: () => set({ maxEnergy: 100 }),
@@ -302,11 +387,16 @@ export const usePlayerStore = create<PlayerStoreProps>()(
           username: "",
           password: "",
           hp: 100,
+          maxHP: 100,
+          hpRegenPerSecond: DEFAULT_PLAYER_HP_REGEN_PER_SECOND,
+          hpRegenCarry: 0,
           energy: 100,
+          maxEnergy: 100,
           XP: 0,
           level: 1,
           atkSpeed: DEFAULT_PLAYER_ATTACK_INTERVAL_SECONDS,
           energyRegenPerSecond: DEFAULT_PLAYER_ENERGY_REGEN_PER_SECOND,
+          energyRegenCarry: 0,
           leftHand: "",
           rightHand: "",
           isDamaged: false

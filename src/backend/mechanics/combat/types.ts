@@ -2,30 +2,30 @@ export type CombatantKind = 'mob' | 'boss';
 
 export type EnemySkillEffect =
   | { type: 'heal'; healAmount: number; target?: 'self' | 'player' }
-  | { type: 'stun'; durationMs: number; target?: 'self' | 'player' }
+  | { type: 'stun'; durationSeconds: number; target?: 'self' | 'player' }
   | {
       type: 'poison';
       dmgPerSecond: number;
-      durationMs: number;
-      tickIntervalMs: number;
+      durationSeconds: number;
+      tickIntervalSeconds: number;
       target?: 'self' | 'player';
     }
   | {
       type: 'bleed';
       dmgPerSecond: number;
-      durationMs: number;
-      tickIntervalMs: number;
+      durationSeconds: number;
+      tickIntervalSeconds: number;
       target?: 'self' | 'player';
     }
-  | { type: 'empower'; dmgMultiplier: number; durationMs: number; target?: 'self' | 'player' }
-  | { type: 'speedup'; speedUp: number; durationMs: number; target?: 'self' | 'player' }
-  | { type: 'confusion'; durationMs: number; target?: 'self' | 'player' };
+  | { type: 'empower'; dmgMultiplier: number; durationSeconds: number; target?: 'self' | 'player' }
+  | { type: 'speedup'; speedUp: number; durationSeconds: number; target?: 'self' | 'player' }
+  | { type: 'confusion'; durationSeconds: number; target?: 'self' | 'player' };
 
 export type EnemySkill = {
   id: string;
   name: string;
   energyCost: number;
-  cooldownMs: number;
+  cooldownSeconds: number;
   effect: EnemySkillEffect;
 };
 
@@ -39,7 +39,7 @@ export type EnemySnapshot = {
   dmg: number;
   critChance: number;
   critDmg: number;
-  atkSpeed: number;
+  atkSpeedSeconds: number;
   skills: EnemySkill[];
 };
 
@@ -50,7 +50,7 @@ export type PlayerSnapshot = {
   baseDmg: number;
   baseCritChance: number;
   baseCritDmg: number;
-  atkSpeed: number;
+  atkSpeedSeconds: number;
   level: number;
 };
 
@@ -78,11 +78,11 @@ export type TickInput = {
   player: PlayerSnapshot;
   enemy: EnemySnapshot;
   playerAttacks?: PlayerAttackInput[];
-  deltaMs: number;
+  deltaSeconds: number;
 };
 
 export type EncounterAnalytics = {
-  elapsedMs: number;
+  elapsedSeconds: number;
   totalDamageToPlayer: number;
   totalDamageToEnemy: number;
   totalDotDamageToPlayer: number;

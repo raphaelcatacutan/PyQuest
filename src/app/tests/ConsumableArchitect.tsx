@@ -6,7 +6,7 @@ const INITIAL_CONSUMABLE: Consumable = {
   name: "",
   description: "",
   consumableImg: "",
-  cooldown: 5000,
+  cooldown: 5,
   effects: [],
   dropRate: 0.1,
   sellCost: 0,
@@ -144,7 +144,7 @@ export default function ConsumableArchitect() {
         <section style={styles.section}>
           <h3 style={styles.sectionLabel}>2. Base Settings</h3>
           <div style={styles.grid}>
-            <label style={styles.gridItem}>Cooldown (ms) <input type="number" name="cooldown" style={styles.smallInput} value={item.cooldown} onChange={handleChange} /></label>
+            <label style={styles.gridItem}>Cooldown (s) <input type="number" name="cooldown" style={styles.smallInput} value={item.cooldown} onChange={handleChange} /></label>
           </div>
         </section>
 
@@ -181,7 +181,7 @@ export default function ConsumableArchitect() {
                   <option value="speed">Speed</option>
                 </select>
                 <input type="text" inputMode="numeric" pattern="[0-9.]*" placeholder="Multiplier (e.g. 1.5)" style={styles.input} value={effectInput.buffMultiplier || ''} onChange={e => setEffectInput({...effectInput, buffMultiplier: Number(e.target.value) || 1})} />
-                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (ms)" style={styles.input} value={effectInput.buffDuration || ''} onChange={e => setEffectInput({...effectInput, buffDuration: Number(e.target.value) || 0})} />
+                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (s)" style={styles.input} value={effectInput.buffDuration || ''} onChange={e => setEffectInput({...effectInput, buffDuration: Number(e.target.value) || 0})} />
               </>
             )}
 
@@ -193,7 +193,7 @@ export default function ConsumableArchitect() {
                   <option value="speed">Speed</option>
                 </select>
                 <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Damage Amount" style={styles.input} value={effectInput.debuffAmount || ''} onChange={e => setEffectInput({...effectInput, debuffAmount: Number(e.target.value) || 0})} />
-                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (ms)" style={styles.input} value={effectInput.debuffDuration || ''} onChange={e => setEffectInput({...effectInput, debuffDuration: Number(e.target.value) || 0})} />
+                <input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Duration (s)" style={styles.input} value={effectInput.debuffDuration || ''} onChange={e => setEffectInput({...effectInput, debuffDuration: Number(e.target.value) || 0})} />
               </>
             )}
 
@@ -207,8 +207,8 @@ export default function ConsumableArchitect() {
                   <div><strong>{(effect as any).type.toUpperCase()}</strong></div>
                   <div style={{ fontSize: '11px', color: '#888' }}>
                     {(effect as any).type === 'restore' && `${(effect as any).stat}: +${(effect as any).amount}`}
-                    {(effect as any).type === 'buff' && `${(effect as any).stat}: x${(effect as any).multiplier} for ${(effect as any).duration}ms`}
-                    {(effect as any).type === 'debuff' && `${(effect as any).stat}: -${(effect as any).amount} for ${(effect as any).duration}ms`}
+                    {(effect as any).type === 'buff' && `${(effect as any).stat}: x${(effect as any).multiplier} for ${(effect as any).duration}s`}
+                    {(effect as any).type === 'debuff' && `${(effect as any).stat}: -${(effect as any).amount} for ${(effect as any).duration}s`}
                   </div>
                 </div>
                 <button style={{ ...styles.addButton, padding: '0 10px', fontSize: '10px' }} onClick={() => removeEffect(i)}>Remove</button>

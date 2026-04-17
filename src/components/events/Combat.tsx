@@ -24,6 +24,7 @@ import {
 } from "@/src/backend/mechanics/combat";
 import { getEnemiesByLocation } from "@/src/game/data/enemies";
 import { getBossesByLocation } from "@/src/game/data/bosses";
+import { pickWorldEncounterKind } from "./worldEncounterSpawn";
 import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
 
 const DEBUG_AI = true;
@@ -39,7 +40,7 @@ function toCombatSkills(skills: unknown[]): EnemySkill[] {
       name?: unknown;
       id?: unknown;
       energyCost?: unknown;
-      cooldownMs?: unknown;
+      cooldownSeconds?: unknown;
       effect?: unknown;
     };
 
@@ -47,7 +48,7 @@ function toCombatSkills(skills: unknown[]): EnemySkill[] {
       typeof skill.id !== "string" ||
       typeof skill.name !== "string" ||
       typeof skill.energyCost !== "number" ||
-      typeof skill.cooldownMs !== "number" ||
+      typeof skill.cooldownSeconds !== "number" ||
       !skill.effect
     ) {
       return;
@@ -57,7 +58,7 @@ function toCombatSkills(skills: unknown[]): EnemySkill[] {
       id: skill.id,
       name: skill.name,
       energyCost: skill.energyCost,
-      cooldownMs: skill.cooldownMs,
+      cooldownSeconds: skill.cooldownSeconds,
       effect: skill.effect as EnemySkill["effect"],
     });
   });
@@ -83,6 +84,7 @@ export default function Combat() {
   const playerHp = usePlayerStore((s) => s.hp);
 
   const spawnEnemy = useEnemyStore((s) => s.spawnEnemy);
+  const spawnBoss = useBossStore((s) => s.spawnBoss);
   const clearEnemy = useEnemyStore((s) => s.clearEnemy);
   const clearBoss = useBossStore((s) => s.clearBoss);
 
@@ -275,10 +277,10 @@ export default function Combat() {
     playerHp: number;
     enemyHp: number;
     enemyEnergy: number;
-    tickMs: number;
+    tickSeconds: number;
     playerAttacksConsumed: number;
     damageCauses: string[];
-    analyticsElapsedMs: number;
+    analyticsElapsedSeconds: number;
     analyticsToPlayer: number;
     analyticsToEnemy: number;
     analyticsDotToPlayer: number;
@@ -306,6 +308,25 @@ export default function Combat() {
   };
 
   useEffect(() => {
+    if (inCombat) {
+      return;
+    }
+
+    let lastTick = performance.now();
+    const ticker = window.setInterval(() => {
+      const now = performance.now();
+      const deltaSeconds = Math.max(0, (now - lastTick) / 1000);
+      lastTick = now;
+      usePlayerStore.getState().applyEnergyRegen(deltaSeconds, "out_of_combat");
+      usePlayerStore.getState().applyHpRegen(deltaSeconds, "out_of_combat");
+    }, 200);
+
+    return () => {
+      window.clearInterval(ticker);
+    };
+  }, [inCombat]);
+
+  useEffect(() => {
     if (!inCombat) {
       stopLoop();
       return;
@@ -314,28 +335,45 @@ export default function Combat() {
     if (enemyId || bossId) return;
 
     const enemies = getEnemiesByLocation(scene);
+    const bosses = getBossesByLocation(scene);
     const enemyKeys = Object.keys(enemies);
+    const bossKeys = Object.keys(bosses);
 
-    const canSpawnEnemy = enemyKeys.length > 0;
-    if (!canSpawnEnemy) {
+    const encounterKind = pickWorldEncounterKind({
+      enemyCount: enemyKeys.length,
+      bossCount: bossKeys.length,
+      enemyChance: 0.9,
+    });
+
+    if (!encounterKind) {
       toggleInCombat(false);
       return;
     }
 
-    const randomEnemyKey =
-      enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
-    spawnEnemy(enemies[randomEnemyKey]);
-    clearBoss();
-    toggleIsEnemy(true);
+    if (encounterKind === "enemy") {
+      const randomEnemyKey =
+        enemyKeys[Math.floor(Math.random() * enemyKeys.length)];
+      spawnEnemy(enemies[randomEnemyKey]);
+      clearBoss();
+      toggleIsEnemy(true);
+      return;
+    }
+
+    const randomBossKey = bossKeys[Math.floor(Math.random() * bossKeys.length)];
+    spawnBoss(bosses[randomBossKey]);
+    clearEnemy();
+    toggleIsEnemy(false);
   }, [
     inCombat,
     enemyId,
     bossId,
     scene,
     spawnEnemy,
+    spawnBoss,
     clearEnemy,
     clearBoss,
     toggleIsEnemy,
+    toggleInCombat,
   ]);
 
   useEffect(() => {
@@ -407,7 +445,7 @@ export default function Combat() {
           dmg: target.dmg,
           critChance: target.critChance,
           critDmg: target.critDmg,
-          atkSpeed: target.atkSpeed,
+          atkSpeedSeconds: target.atkSpeed,
           skills: toCombatSkills(target.skills),
         },
       });
@@ -427,8 +465,9 @@ export default function Combat() {
         if (!controller) return;
 
         const now = performance.now();
-        const deltaMs = now - lastTickRef.current;
+        const deltaSeconds = Math.max(0, (now - lastTickRef.current) / 1000);
         lastTickRef.current = now;
+        usePlayerStore.getState().applyEnergyRegen(deltaSeconds, "combat");
 
         const player = usePlayerStore.getState();
         const enemyState = isEnemy ? useEnemyStore.getState() : null;
@@ -445,7 +484,7 @@ export default function Combat() {
             baseDmg: player.baseDmg,
             baseCritChance: player.baseCritChance,
             baseCritDmg: player.baseCritDmg,
-            atkSpeed: player.atkSpeed,
+            atkSpeedSeconds: player.atkSpeed,
             level: player.level,
           },
           enemy: {
@@ -458,11 +497,11 @@ export default function Combat() {
             dmg: target.dmg,
             critChance: target.critChance,
             critDmg: target.critDmg,
-            atkSpeed: target.atkSpeed,
+            atkSpeedSeconds: target.atkSpeed,
             skills: toCombatSkills(target.skills),
           },
           playerAttacks,
-          deltaMs,
+          deltaSeconds,
         });
 
         if (result.damageToPlayer > 0) {
@@ -515,10 +554,10 @@ export default function Combat() {
               playerHp: playerAfter.hp,
               enemyHp: enemyAfter.hp,
               enemyEnergy: enemyAfter.energy,
-              tickMs: Math.round(deltaMs),
+              tickSeconds: Number(deltaSeconds.toFixed(3)),
               playerAttacksConsumed: result.playerAttacksConsumed,
               damageCauses: result.damageCauses,
-              analyticsElapsedMs: Math.round(result.analytics.elapsedMs),
+              analyticsElapsedSeconds: Number(result.analytics.elapsedSeconds.toFixed(3)),
               analyticsToPlayer: result.analytics.totalDamageToPlayer,
               analyticsToEnemy: result.analytics.totalDamageToEnemy,
               analyticsDotToPlayer: result.analytics.totalDotDamageToPlayer,
@@ -541,7 +580,7 @@ export default function Combat() {
               playerHp: snapshot.playerHp,
               enemyHp: snapshot.enemyHp,
               enemyEnergy: snapshot.enemyEnergy,
-              tickMs: snapshot.tickMs,
+              tickSeconds: snapshot.tickSeconds,
               done: snapshot.done,
               playerAttacksConsumed: snapshot.playerAttacksConsumed,
               damageCauses: snapshot.damageCauses,
@@ -558,7 +597,7 @@ export default function Combat() {
               useCombatDebugStore
                 .getState()
                 .appendLog(
-                  `Tick ${Math.round(deltaMs)}ms | action=${snapshot.action} | p=-${result.damageToPlayer} e=-${result.damageToEnemy} | causes=${causes}`,
+                  `Tick ${deltaSeconds.toFixed(3)}s | action=${snapshot.action} | p=-${result.damageToPlayer} e=-${result.damageToEnemy} | causes=${causes}`,
                 );
             }
           }
@@ -607,7 +646,7 @@ export default function Combat() {
           <div>Enemy: {debugState.enemyId || "-"}</div>
           <div>Action: {debugState.action}</div>
           <div>Reward: {debugState.reward}</div>
-          <div>Tick: {debugState.tickMs}ms</div>
+          <div>Tick: {debugState.tickSeconds}s</div>
           <div>Player HP: {debugState.playerHp}</div>
           <div>Enemy HP: {debugState.enemyHp}</div>
           <div>Enemy EN: {debugState.enemyEnergy}</div>
@@ -618,7 +657,7 @@ export default function Combat() {
           <div>Player Attacks: {debugState.playerAttacksConsumed}</div>
           <div>Causes: {debugState.damageCauses.join(", ") || "none"}</div>
           <div className="mt-1 font-semibold">Analytics</div>
-          <div>Elapsed: {debugState.analyticsElapsedMs}ms</div>
+          <div>Elapsed: {debugState.analyticsElapsedSeconds}s</div>
           <div>Total DMG to Player: {debugState.analyticsToPlayer}</div>
           <div>Total DMG to Enemy: {debugState.analyticsToEnemy}</div>
           <div>DOT to Player: {debugState.analyticsDotToPlayer}</div>

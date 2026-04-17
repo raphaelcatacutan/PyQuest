@@ -5,10 +5,14 @@ export interface Player {
 
   hp: number;
   maxHP: number;
+  hpRegenPerSecond: number;
+  hpRegenCarry: number;
   def: number;
   maxDef: number;
   energy: number;
   maxEnergy: number;
+  energyRegenPerSecond: number;
+  energyRegenCarry: number;
   maxXP: number;
   baseDmg: number;
   baseCritDmg: number,

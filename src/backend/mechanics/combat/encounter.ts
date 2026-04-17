@@ -1,4 +1,4 @@
-import { buildActions, clamp, computeDamage, getAttackIntervalMs, getValidSkillIndices } from './actions';
+import { buildActions, clamp, computeDamage, getAttackIntervalSeconds, getValidSkillIndices } from './actions';
 import { buildStateKey, bucketEnergy, bucketHp, bucketLevel, bucketRecentDamage, getPhase } from './state-buckets';
 import { selectActionIndex, updateQ } from './qlearning';
 import {
@@ -27,17 +27,17 @@ type DotEffectType = 'poison' | 'bleed';
 type DotInstance = {
   type: DotEffectType;
   dmgPerSecond: number;
-  remainingMs: number;
-  tickIntervalMs: number;
-  tickAccumulatorMs: number;
+  remainingSeconds: number;
+  tickIntervalSeconds: number;
+  tickAccumulatorSeconds: number;
 };
 
 type UnitStatusState = {
-  stunMs: number;
-  confusionMs: number;
-  empowerMs: number;
+  stunSeconds: number;
+  confusionSeconds: number;
+  empowerSeconds: number;
   empowerMultiplier: number;
-  speedUpMs: number;
+  speedUpSeconds: number;
   speedUpMultiplier: number;
   dots: DotInstance[];
 };
@@ -71,8 +71,8 @@ export class EncounterController {
   private lastAction: ActionTag;
   private lastDamageToPlayer: number;
   private lastDamageToEnemy: number;
-  private enemyAttackAccumulatorMs: number;
-  private skillCooldownsMs: number[];
+  private enemyAttackAccumulatorSeconds: number;
+  private skillCooldownsSeconds: number[];
   private enemyStatus: UnitStatusState;
   private playerStatus: UnitStatusState;
   private analytics: EncounterAnalytics;
@@ -84,8 +84,8 @@ export class EncounterController {
     this.lastAction = 'none';
     this.lastDamageToPlayer = 0;
     this.lastDamageToEnemy = 0;
-    this.enemyAttackAccumulatorMs = 0;
-    this.skillCooldownsMs = new Array(this.actions.length).fill(0);
+    this.enemyAttackAccumulatorSeconds = 0;
+    this.skillCooldownsSeconds = new Array(this.actions.length).fill(0);
     this.enemyStatus = createUnitStatusState();
     this.playerStatus = createUnitStatusState();
     this.analytics = createEncounterAnalytics();
@@ -107,16 +107,16 @@ export class EncounterController {
       };
     }
 
-    const deltaMs = Math.max(0, input.deltaMs || 0);
-    tickCooldowns(this.skillCooldownsMs, deltaMs);
-    tickUnitDurations(this.enemyStatus, deltaMs);
-    tickUnitDurations(this.playerStatus, deltaMs);
+    const deltaSeconds = Math.max(0, input.deltaSeconds || 0);
+    tickCooldowns(this.skillCooldownsSeconds, deltaSeconds);
+    tickUnitDurations(this.enemyStatus, deltaSeconds);
+    tickUnitDurations(this.playerStatus, deltaSeconds);
 
     let enemyEnergy = input.enemy.energy;
     const regenPerSecond = Math.max(0, input.enemy.energyRegenPerSecond);
     if (regenPerSecond > 0 && input.enemy.maxEnergy > 0) {
       enemyEnergy = clamp(
-        enemyEnergy + (regenPerSecond * deltaMs) / 1000,
+        enemyEnergy + (regenPerSecond * deltaSeconds),
         0,
         input.enemy.maxEnergy,
       );
@@ -133,7 +133,7 @@ export class EncounterController {
     let totalDotDamageToPlayer = 0;
     let totalDotDamageToEnemy = 0;
 
-    const playerDotDamage = applyDotTicks(this.playerStatus, deltaMs);
+    const playerDotDamage = applyDotTicks(this.playerStatus, deltaSeconds);
     if (playerDotDamage.total > 0) {
       damageToPlayer += playerDotDamage.total;
       totalDotDamageToPlayer += playerDotDamage.total;
@@ -145,7 +145,7 @@ export class EncounterController {
       }
     }
 
-    const enemyDotDamage = applyDotTicks(this.enemyStatus, deltaMs);
+    const enemyDotDamage = applyDotTicks(this.enemyStatus, deltaSeconds);
     if (enemyDotDamage.total > 0) {
       damageToEnemy += enemyDotDamage.total;
       totalDotDamageToEnemy += enemyDotDamage.total;
@@ -176,20 +176,20 @@ export class EncounterController {
       damageCauses.push(`player_attack_blocked_stun(${playerAttackResolution.blockedCount})`);
     }
 
-    const isEnemyStunned = this.enemyStatus.stunMs > 0;
+    const isEnemyStunned = this.enemyStatus.stunSeconds > 0;
     if (isEnemyStunned) {
       damageCauses.push('enemy_stunned');
     }
     if (!isEnemyStunned) {
-      const attackIntervalMs = getAttackIntervalMs(
-        input.enemy.atkSpeed,
+      const attackIntervalSeconds = getAttackIntervalSeconds(
+        input.enemy.atkSpeedSeconds,
         getSpeedUpMultiplier(this.enemyStatus),
       );
 
-      if (attackIntervalMs != null) {
-        this.enemyAttackAccumulatorMs += deltaMs;
-        if (this.enemyAttackAccumulatorMs >= attackIntervalMs) {
-          this.enemyAttackAccumulatorMs -= attackIntervalMs;
+      if (attackIntervalSeconds != null) {
+        this.enemyAttackAccumulatorSeconds += deltaSeconds;
+        if (this.enemyAttackAccumulatorSeconds >= attackIntervalSeconds) {
+          this.enemyAttackAccumulatorSeconds -= attackIntervalSeconds;
           didEnemyAct = true;
 
           const stateKey = buildStateKey(
@@ -207,7 +207,7 @@ export class EncounterController {
           const validSkillIndices = getValidSkillIndices(
             this.actions,
             enemyEnergy,
-            this.skillCooldownsMs,
+            this.skillCooldownsSeconds,
           );
 
           if (validSkillIndices.length > 0) {
@@ -225,7 +225,7 @@ export class EncounterController {
             if (skill) {
               enemyAction = action;
               enemyEnergy = clamp(enemyEnergy - skill.energyCost, 0, input.enemy.maxEnergy);
-              this.skillCooldownsMs[selectedSkillIndex] = Math.max(0, skill.cooldownMs);
+              this.skillCooldownsSeconds[selectedSkillIndex] = Math.max(0, skill.cooldownSeconds);
 
               const outcome = applySkillEffect(skill, this.enemyStatus, this.playerStatus);
               damageToPlayer += outcome.damageToPlayer;
@@ -240,14 +240,14 @@ export class EncounterController {
             enemyAction = {
               id: 'base_attack',
               type: 'base_attack',
-              label: this.enemyStatus.confusionMs > 0 ? 'Confused Self Attack' : 'Base Attack',
+              label: this.enemyStatus.confusionSeconds > 0 ? 'Confused Self Attack' : 'Base Attack',
               energyCost: 0,
               source: 'base_runtime',
             };
 
             const outgoingBaseDamage =
               input.enemy.dmg * getEmpowerMultiplier(this.enemyStatus);
-            const targetDef = this.enemyStatus.confusionMs > 0 ? input.enemy.def : input.player.def;
+            const targetDef = this.enemyStatus.confusionSeconds > 0 ? input.enemy.def : input.player.def;
             const damage = computeDamage(
               outgoingBaseDamage,
               input.enemy.critChance,
@@ -255,7 +255,7 @@ export class EncounterController {
               targetDef,
             );
 
-            if (this.enemyStatus.confusionMs > 0) {
+            if (this.enemyStatus.confusionSeconds > 0) {
               damageToEnemy += damage;
               damageCauses.push(`enemy_confusion_self_hit(${damage})`);
             } else {
@@ -287,7 +287,7 @@ export class EncounterController {
     this.lastDamageToEnemy = damageToEnemy;
     const done = afterPlayerHp <= 0 || afterEnemyHp <= 0;
 
-    this.analytics.elapsedMs += deltaMs;
+    this.analytics.elapsedSeconds += deltaSeconds;
     this.analytics.totalDamageToPlayer += damageToPlayer;
     this.analytics.totalDamageToEnemy += damageToEnemy;
     this.analytics.totalDotDamageToPlayer += totalDotDamageToPlayer;
@@ -345,8 +345,8 @@ export class EncounterController {
     this.lastAction = 'none';
     this.lastDamageToEnemy = 0;
     this.lastDamageToPlayer = 0;
-    this.enemyAttackAccumulatorMs = 0;
-    this.skillCooldownsMs.fill(0);
+    this.enemyAttackAccumulatorSeconds = 0;
+    this.skillCooldownsSeconds.fill(0);
     this.enemyStatus = createUnitStatusState();
     this.playerStatus = createUnitStatusState();
     this.analytics = createEncounterAnalytics();
@@ -369,12 +369,12 @@ export class EncounterController {
       return result;
     }
 
-    if (this.playerStatus.stunMs > 0) {
+    if (this.playerStatus.stunSeconds > 0) {
       result.blockedCount = attacks.length;
       return result;
     }
 
-    const isPlayerConfused = this.playerStatus.confusionMs > 0;
+    const isPlayerConfused = this.playerStatus.confusionSeconds > 0;
     for (const attack of attacks) {
       const outgoingDamage = computeDamage(
         attack.baseDamage,
@@ -414,7 +414,7 @@ function getSkillByAction(enemy: EnemySnapshot, action: Action): EnemySkill | nu
     return null;
   }
 
-  if (!Number.isFinite(skill.cooldownMs) || skill.cooldownMs < 0) {
+  if (!Number.isFinite(skill.cooldownSeconds) || skill.cooldownSeconds < 0) {
     return null;
   }
 
@@ -423,41 +423,41 @@ function getSkillByAction(enemy: EnemySnapshot, action: Action): EnemySkill | nu
 
 function createUnitStatusState(): UnitStatusState {
   return {
-    stunMs: 0,
-    confusionMs: 0,
-    empowerMs: 0,
+    stunSeconds: 0,
+    confusionSeconds: 0,
+    empowerSeconds: 0,
     empowerMultiplier: 1,
-    speedUpMs: 0,
+    speedUpSeconds: 0,
     speedUpMultiplier: 1,
     dots: [],
   };
 }
 
-function tickCooldowns(cooldownsMs: number[], deltaMs: number): void {
-  if (deltaMs <= 0) return;
-  for (let i = 0; i < cooldownsMs.length; i++) {
-    cooldownsMs[i] = Math.max(0, (cooldownsMs[i] ?? 0) - deltaMs);
+function tickCooldowns(cooldownsSeconds: number[], deltaSeconds: number): void {
+  if (deltaSeconds <= 0) return;
+  for (let i = 0; i < cooldownsSeconds.length; i++) {
+    cooldownsSeconds[i] = Math.max(0, (cooldownsSeconds[i] ?? 0) - deltaSeconds);
   }
 }
 
-function tickUnitDurations(status: UnitStatusState, deltaMs: number): void {
-  if (deltaMs <= 0) return;
+function tickUnitDurations(status: UnitStatusState, deltaSeconds: number): void {
+  if (deltaSeconds <= 0) return;
 
-  status.stunMs = Math.max(0, status.stunMs - deltaMs);
-  status.confusionMs = Math.max(0, status.confusionMs - deltaMs);
-  status.empowerMs = Math.max(0, status.empowerMs - deltaMs);
-  status.speedUpMs = Math.max(0, status.speedUpMs - deltaMs);
+  status.stunSeconds = Math.max(0, status.stunSeconds - deltaSeconds);
+  status.confusionSeconds = Math.max(0, status.confusionSeconds - deltaSeconds);
+  status.empowerSeconds = Math.max(0, status.empowerSeconds - deltaSeconds);
+  status.speedUpSeconds = Math.max(0, status.speedUpSeconds - deltaSeconds);
 
-  if (status.empowerMs <= 0) {
+  if (status.empowerSeconds <= 0) {
     status.empowerMultiplier = 1;
   }
-  if (status.speedUpMs <= 0) {
+  if (status.speedUpSeconds <= 0) {
     status.speedUpMultiplier = 1;
   }
 }
 
-function applyDotTicks(status: UnitStatusState, deltaMs: number): DotTickResult {
-  if (deltaMs <= 0 || status.dots.length === 0) {
+function applyDotTicks(status: UnitStatusState, deltaSeconds: number): DotTickResult {
+  if (deltaSeconds <= 0 || status.dots.length === 0) {
     return {
       total: 0,
       poison: 0,
@@ -469,12 +469,12 @@ function applyDotTicks(status: UnitStatusState, deltaMs: number): DotTickResult 
   let bleed = 0;
   const nextDots: DotInstance[] = [];
   for (const dot of status.dots) {
-    dot.remainingMs -= deltaMs;
-    dot.tickAccumulatorMs += deltaMs;
+    dot.remainingSeconds -= deltaSeconds;
+    dot.tickAccumulatorSeconds += deltaSeconds;
 
-    while (dot.tickAccumulatorMs >= dot.tickIntervalMs && dot.remainingMs > -dot.tickIntervalMs) {
-      dot.tickAccumulatorMs -= dot.tickIntervalMs;
-      const tickDamage = Math.max(0, Math.round((dot.dmgPerSecond * dot.tickIntervalMs) / 1000));
+    while (dot.tickAccumulatorSeconds >= dot.tickIntervalSeconds && dot.remainingSeconds > -dot.tickIntervalSeconds) {
+      dot.tickAccumulatorSeconds -= dot.tickIntervalSeconds;
+      const tickDamage = Math.max(0, Math.round(dot.dmgPerSecond * dot.tickIntervalSeconds));
       if (dot.type === 'poison') {
         poison += tickDamage;
       } else {
@@ -482,7 +482,7 @@ function applyDotTicks(status: UnitStatusState, deltaMs: number): DotTickResult 
       }
     }
 
-    if (dot.remainingMs > 0) {
+    if (dot.remainingSeconds > 0) {
       nextDots.push(dot);
     }
   }
@@ -517,16 +517,16 @@ function applySkillEffect(
       }
       break;
     case 'stun':
-      targetStatus.stunMs = Math.max(targetStatus.stunMs, toNonNegative(effect.durationMs));
+      targetStatus.stunSeconds = Math.max(targetStatus.stunSeconds, toNonNegative(effect.durationSeconds));
       break;
     case 'poison':
     case 'bleed':
       targetStatus.dots.push({
         type: effect.type,
         dmgPerSecond: toNonNegative(effect.dmgPerSecond),
-        remainingMs: toNonNegative(effect.durationMs),
-        tickIntervalMs: Math.max(1, toNonNegative(effect.tickIntervalMs)),
-        tickAccumulatorMs: 0,
+        remainingSeconds: toNonNegative(effect.durationSeconds),
+        tickIntervalSeconds: Math.max(0.001, toNonNegative(effect.tickIntervalSeconds)),
+        tickAccumulatorSeconds: 0,
       });
       break;
     case 'empower':
@@ -535,7 +535,7 @@ function applySkillEffect(
           enemyStatus.empowerMultiplier,
           Math.max(1, toNonNegative(effect.dmgMultiplier)),
         );
-        enemyStatus.empowerMs = Math.max(enemyStatus.empowerMs, toNonNegative(effect.durationMs));
+        enemyStatus.empowerSeconds = Math.max(enemyStatus.empowerSeconds, toNonNegative(effect.durationSeconds));
       }
       break;
     case 'speedup':
@@ -544,11 +544,11 @@ function applySkillEffect(
           enemyStatus.speedUpMultiplier,
           1 + toNonNegative(effect.speedUp),
         );
-        enemyStatus.speedUpMs = Math.max(enemyStatus.speedUpMs, toNonNegative(effect.durationMs));
+        enemyStatus.speedUpSeconds = Math.max(enemyStatus.speedUpSeconds, toNonNegative(effect.durationSeconds));
       }
       break;
     case 'confusion':
-      targetStatus.confusionMs = Math.max(targetStatus.confusionMs, toNonNegative(effect.durationMs));
+      targetStatus.confusionSeconds = Math.max(targetStatus.confusionSeconds, toNonNegative(effect.durationSeconds));
       break;
     default:
       break;
@@ -577,12 +577,12 @@ function resolveEffectTarget(effect: EnemySkillEffect): EffectTarget {
 }
 
 function getEmpowerMultiplier(status: UnitStatusState): number {
-  if (status.empowerMs <= 0) return 1;
+  if (status.empowerSeconds <= 0) return 1;
   return Math.max(1, status.empowerMultiplier);
 }
 
 function getSpeedUpMultiplier(status: UnitStatusState): number {
-  if (status.speedUpMs <= 0) return 1;
+  if (status.speedUpSeconds <= 0) return 1;
   return Math.max(1, status.speedUpMultiplier);
 }
 
@@ -651,7 +651,7 @@ function computeReward(
 
 function createEncounterAnalytics(): EncounterAnalytics {
   return {
-    elapsedMs: 0,
+    elapsedSeconds: 0,
     totalDamageToPlayer: 0,
     totalDamageToEnemy: 0,
     totalDotDamageToPlayer: 0,
@@ -661,3 +661,4 @@ function createEncounterAnalytics(): EncounterAnalytics {
     totalEnemySkillCasts: 0,
   };
 }
+

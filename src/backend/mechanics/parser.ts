@@ -52,16 +52,16 @@ export type PythonRuntimeHooks = {
 };
 
 export type PythonExecutionOptions = {
-    defaultInstructionDelayMs?: number;
+    defaultInstructionDelaySeconds?: number;
     enableStatementLogging?: boolean;
 };
 
 let runtimeHooks: PythonRuntimeHooks = {};
 let runtimeExecutionOptions: Required<PythonExecutionOptions> = {
-    defaultInstructionDelayMs: 1000,
+    defaultInstructionDelaySeconds: 1,
     enableStatementLogging: true
 };
-let activeInstructionDelayMs = 0;
+let activeInstructionDelaySeconds = 0;
 
 export function setPythonRuntimeHooks(hooks: PythonRuntimeHooks): void {
     runtimeHooks = {
@@ -78,7 +78,7 @@ export function setPythonExecutionOptions(options: PythonExecutionOptions): void
     runtimeExecutionOptions = {
         ...runtimeExecutionOptions,
         ...options,
-        defaultInstructionDelayMs: normalizeDelay(options.defaultInstructionDelayMs, runtimeExecutionOptions.defaultInstructionDelayMs)
+        defaultInstructionDelaySeconds: normalizeDelaySeconds(options.defaultInstructionDelaySeconds, runtimeExecutionOptions.defaultInstructionDelaySeconds)
     };
 }
 
@@ -88,24 +88,24 @@ export function getPythonExecutionOptions(): Required<PythonExecutionOptions> {
     };
 }
 
-function normalizeDelay(value: unknown, fallback = 0): number {
+function normalizeDelaySeconds(value: unknown, fallback = 0): number {
     if (typeof value === "number" && Number.isFinite(value)) {
-        return Math.max(0, Math.floor(value));
+        return Math.max(0, value);
     }
 
     if (typeof value === "string") {
         const parsed = Number(value);
         if (Number.isFinite(parsed)) {
-            return Math.max(0, Math.floor(parsed));
+            return Math.max(0, parsed);
         }
     }
 
-    return Math.max(0, Math.floor(fallback));
+    return Math.max(0, fallback);
 }
 
-function delayMs(ms: number): Promise<void> {
+function delaySeconds(seconds: number): Promise<void> {
     return new Promise((resolve) => {
-        setTimeout(resolve, ms);
+        setTimeout(resolve, seconds * 1000);
     });
 }
 
@@ -151,7 +151,7 @@ function installRuntimeBridgeBuiltins(): void {
         return;
     }
 
-    activeInstructionDelayMs = runtimeExecutionOptions.defaultInstructionDelayMs;
+    activeInstructionDelaySeconds = runtimeExecutionOptions.defaultInstructionDelaySeconds;
 
     const builtins = Sk.builtins ?? (Sk.builtins = {});
 
@@ -172,26 +172,26 @@ function installRuntimeBridgeBuiltins(): void {
     });
 
     builtins.__pyquest_set_delay = createSkBuiltinFunction((delay?: unknown) => {
-        activeInstructionDelayMs = normalizeDelay(delay, activeInstructionDelayMs);
-        return activeInstructionDelayMs;
+        activeInstructionDelaySeconds = normalizeDelaySeconds(delay, activeInstructionDelaySeconds);
+        return activeInstructionDelaySeconds;
     });
 
     builtins.__pyquest_sleep = createSkBuiltinFunction((delay?: unknown) => {
-        const normalizedDelay = normalizeDelay(delay, 0);
+        const normalizedDelay = normalizeDelaySeconds(delay, 0);
         if (normalizedDelay <= 0) {
             return null;
         }
 
-        return delayMs(normalizedDelay);
+        return delaySeconds(normalizedDelay);
     });
 
     builtins.__pyquest_tick = createSkBuiltinFunction((lineNumber: unknown, statementType: unknown, explicitDelay?: unknown) => {
-        const resolvedLineNumber = normalizeDelay(lineNumber, 0);
+        const resolvedLineNumber = Math.max(0, Math.floor(normalizeDelaySeconds(lineNumber, 0)));
         const resolvedStatementType = typeof statementType === "string" ? statementType : "Statement";
         const hasExplicitDelay = explicitDelay !== undefined && explicitDelay !== null;
         const resolvedDelay = hasExplicitDelay
-            ? normalizeDelay(explicitDelay, activeInstructionDelayMs)
-            : activeInstructionDelayMs;
+            ? normalizeDelaySeconds(explicitDelay, activeInstructionDelaySeconds)
+            : activeInstructionDelaySeconds;
 
         if (runtimeExecutionOptions.enableStatementLogging) {
             runtimeHooks.onFunctionCall?.({
@@ -199,7 +199,7 @@ function installRuntimeBridgeBuiltins(): void {
                 payload: {
                     lineNumber: resolvedLineNumber,
                     statementType: resolvedStatementType,
-                    delayMs: resolvedDelay
+                    delaySeconds: resolvedDelay
                 }
             });
         }
@@ -208,7 +208,7 @@ function installRuntimeBridgeBuiltins(): void {
             return null;
         }
 
-        return delayMs(resolvedDelay);
+        return delaySeconds(resolvedDelay);
     });
 }
 
@@ -249,13 +249,13 @@ function stripInlineComment(line: string): string {
 }
 
 function extractInlineDelayOverride(line: string): number | undefined {
-    const match = line.match(/#\s*delay\s*[:=]\s*(\d+)/i);
+    const match = line.match(/#\s*delay\s*[:=]\s*(\d+(?:\.\d+)?)/i);
 
     if (!match) {
         return undefined;
     }
 
-    return normalizeDelay(Number(match[1]), 0);
+    return normalizeDelaySeconds(Number(match[1]), 0);
 }
 
 function inferStatementType(trimmedLine: string): string {
@@ -770,5 +770,4 @@ export function validatePythonCodeDetailed(code: string): {
         errors
     };
 }
-
 

@@ -102,7 +102,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 70
+        "value": 0.07
       }
     ],
     "dropRate": 0.24,
@@ -183,7 +183,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 90
+        "value": 0.09
       }
     ],
     "dropRate": 0.12,
@@ -205,7 +205,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 110
+        "value": 0.11
       },
       {
         "stat": "health",
@@ -291,7 +291,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "evasion",
@@ -333,7 +333,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 130
+        "value": 0.13
       }
     ],
     "dropRate": 0.055,
@@ -375,7 +375,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -473,7 +473,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 70
+        "value": 0.07
       }
     ],
     "dropRate": 0.24,
@@ -576,7 +576,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 90
+        "value": 0.09
       }
     ],
     "dropRate": 0.12,
@@ -598,7 +598,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 110
+        "value": 0.11
       },
       {
         "stat": "health",
@@ -684,7 +684,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "evasion",
@@ -726,7 +726,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 130
+        "value": 0.13
       }
     ],
     "dropRate": 0.055,
@@ -768,7 +768,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -915,7 +915,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 90
+        "value": 0.09
       }
     ],
     "dropRate": 0.12,
@@ -996,7 +996,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 90
+        "value": 0.09
       }
     ],
     "dropRate": 0.12,
@@ -1055,7 +1055,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 130
+        "value": 0.13
       }
     ],
     "dropRate": 0.055,
@@ -1161,7 +1161,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -1308,7 +1308,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 90
+        "value": 0.09
       }
     ],
     "dropRate": 0.12,
@@ -1389,7 +1389,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 90
+        "value": 0.09
       }
     ],
     "dropRate": 0.12,
@@ -1448,7 +1448,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 130
+        "value": 0.13
       }
     ],
     "dropRate": 0.055,
@@ -1512,7 +1512,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 130
+        "value": 0.13
       }
     ],
     "dropRate": 0.055,
@@ -1554,7 +1554,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -1586,7 +1586,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 70
+        "value": 0.07
       }
     ],
     "dropRate": 0.24,
@@ -1777,7 +1777,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 110
+        "value": 0.11
       },
       {
         "stat": "def",
@@ -1831,7 +1831,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "energy",
@@ -1900,7 +1900,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "health",
@@ -1947,7 +1947,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -2023,7 +2023,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 70
+        "value": 0.07
       }
     ],
     "dropRate": 0.24,
@@ -2116,7 +2116,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 110
+        "value": 0.11
       },
       {
         "stat": "def",
@@ -2224,7 +2224,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "evasion",
@@ -2266,7 +2266,7 @@
       {
         "stat": "atkSpeed",
         "nature": "penalty",
-        "value": 130
+        "value": 0.13
       }
     ],
     "dropRate": 0.055,
@@ -2340,7 +2340,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -2394,7 +2394,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 70
+        "value": 0.07
       }
     ],
     "dropRate": 0.24,
@@ -2509,7 +2509,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 110
+        "value": 0.11
       },
       {
         "stat": "def",
@@ -2617,7 +2617,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "evasion",
@@ -2733,7 +2733,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",
@@ -2787,7 +2787,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 70
+        "value": 0.07
       }
     ],
     "dropRate": 0.24,
@@ -2902,7 +2902,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 110
+        "value": 0.11
       },
       {
         "stat": "def",
@@ -3010,7 +3010,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 150
+        "value": 0.15
       },
       {
         "stat": "evasion",
@@ -3126,7 +3126,7 @@
       {
         "stat": "atkSpeed",
         "nature": "bonus",
-        "value": 220
+        "value": 0.22
       },
       {
         "stat": "health",

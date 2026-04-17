@@ -1,650 +1,4 @@
 {
-    "worm":  {
-                 "id":  "worm",
-                 "name":  "Worm",
-                 "description":  "A giant rootworm that tunnels beneath wet woodland paths.",
-                 "bossImg":  "/src/assets/bosses/worm.png",
-                 "hp":  145,
-                 "maxHp":  145,
-                 "energy":  95,
-                 "maxEnergy":  95,
-                 "def":  17,
-                 "maxDef":  17,
-                 "skills":  [
-                                {
-                                    "name":  "Vine Lunge",
-                                    "description":  "Leaps forward with thorned roots.",
-                                    "energyCost":  12,
-                                    "effect":  {
-                                                   "type":  "bleed",
-                                                   "dmgPerSecond":  5,
-                                                   "durationMs":  5000,
-                                                   "tickIntervalMs":  1000,
-                                                   "target":  "player"
-                                               },
-                                    "id":  "vine_lunge_1",
-                                    "cooldownMs":  3000
-                                },
-                                {
-                                    "name":  "Bog Renewal",
-                                    "description":  "Absorbs damp earth to restore health.",
-                                    "energyCost":  18,
-                                    "effect":  {
-                                                   "type":  "heal",
-                                                   "healAmount":  28,
-                                                   "target":  "self"
-                                               },
-                                    "id":  "bog_renewal_2",
-                                    "cooldownMs":  4500
-                                }
-                            ],
-                 "dmg":  24,
-                 "atkSpeed":  0.35,
-                 "critDmg":  1.46,
-                 "critChance":  0.14,
-                 "evasion":  0.1,
-                 "location":  {
-                                  "forest":  0.42,
-                                  "swamp":  0.3
-                              },
-                 "lootDrop":  {
-                                  "xpDropMin":  0,
-                                  "xpDropMax":  0,
-                                  "coinDropMin":  0,
-                                  "coinDropMax":  0,
-                                  "armors":  [
-
-                                             ],
-                                  "weapons":  [
-
-                                              ],
-                                  "consumables":  [
-
-                                                  ]
-                              },
-                 "energyRegenPerSecond":  4
-             },
-    "red_skull":  {
-                      "id":  "red_skull",
-                      "name":  "Red Skull",
-                      "description":  "A silent predator that hunts from canopies and briars.",
-                      "bossImg":  "/src/assets/bosses/skull.png",
-                      "hp":  154,
-                      "maxHp":  154,
-                      "energy":  108,
-                      "maxEnergy":  108,
-                      "def":  18,
-                      "maxDef":  18,
-                      "skills":  [
-                                     {
-                                         "name":  "Canopy Dash",
-                                         "description":  "Accelerates through treetops to strike first.",
-                                         "energyCost":  14,
-                                         "effect":  {
-                                                        "type":  "speedup",
-                                                        "speedUp":  0.35,
-                                                        "durationMs":  3500,
-                                                        "target":  "self"
-                                                    },
-                                         "id":  "canopy_dash_1",
-                                         "cooldownMs":  3500
-                                     },
-                                     {
-                                         "name":  "Needle Burst",
-                                         "description":  "Fires a storm of razor-thorns.",
-                                         "energyCost":  16,
-                                         "effect":  {
-                                                        "type":  "poison",
-                                                        "dmgPerSecond":  6,
-                                                        "durationMs":  5000,
-                                                        "tickIntervalMs":  1000,
-                                                        "target":  "player"
-                                                    },
-                                         "id":  "needle_burst_2",
-                                         "cooldownMs":  4000
-                                     }
-                                 ],
-                      "dmg":  26,
-                      "atkSpeed":  0.39,
-                      "critDmg":  1.54,
-                      "critChance":  0.18,
-                      "evasion":  0.14,
-                      "location":  {
-                                       "forest":  0.31,
-                                       "jungle":  0.28
-                                   },
-                      "lootDrop":  {
-                                       "xpDropMin":  0,
-                                       "xpDropMax":  0,
-                                       "coinDropMin":  0,
-                                       "coinDropMax":  0,
-                                       "armors":  [
-
-                                                  ],
-                                       "weapons":  [
-
-                                                   ],
-                                       "consumables":  [
-
-                                                       ]
-                                   },
-                      "energyRegenPerSecond":  4
-                  },
-    "abyss_prince":  {
-                         "id":  "abyss_prince",
-                         "name":  "Abyss Prince",
-                         "description":  "An ancient guardian that now patrols remote border ruins.",
-                         "bossImg":  "/src/assets/bosses/skull.png",
-                         "hp":  182,
-                         "maxHp":  182,
-                         "energy":  118,
-                         "maxEnergy":  118,
-                         "def":  23,
-                         "maxDef":  23,
-                         "skills":  [
-                                        {
-                                            "name":  "Sanction",
-                                            "description":  "Marks the target and empowers the next blow.",
-                                            "energyCost":  20,
-                                            "effect":  {
-                                                           "type":  "empower",
-                                                           "dmgMultiplier":  1.45,
-                                                           "durationMs":  4000,
-                                                           "target":  "self"
-                                                       },
-                                            "id":  "sanction_1",
-                                            "cooldownMs":  5000
-                                        },
-                                        {
-                                            "name":  "Judgment Bind",
-                                            "description":  "Pins opponents in place.",
-                                            "energyCost":  22,
-                                            "effect":  {
-                                                           "type":  "stun",
-                                                           "durationMs":  2000,
-                                                           "target":  "player"
-                                                       },
-                                            "id":  "judgment_bind_2",
-                                            "cooldownMs":  5500
-                                        },
-                                        {
-                                            "name":  "Royal Aegis",
-                                            "description":  "Recovers from damage with disciplined focus.",
-                                            "energyCost":  24,
-                                            "effect":  {
-                                                           "type":  "heal",
-                                                           "healAmount":  40,
-                                                           "target":  "self"
-                                                       },
-                                            "id":  "royal_aegis_3",
-                                            "cooldownMs":  6000
-                                        }
-                                    ],
-                         "dmg":  32,
-                         "atkSpeed":  0.34,
-                         "critDmg":  1.62,
-                         "critChance":  0.21,
-                         "evasion":  0.1,
-                         "location":  {
-                                          "forest":  0.27,
-                                          "desert":  0.23
-                                      },
-                         "lootDrop":  {
-                                          "xpDropMin":  0,
-                                          "xpDropMax":  0,
-                                          "coinDropMin":  0,
-                                          "coinDropMax":  0,
-                                          "armors":  [
-
-                                                     ],
-                                          "weapons":  [
-
-                                                      ],
-                                          "consumables":  [
-
-                                                          ]
-                                      },
-                         "energyRegenPerSecond":  5
-                     },
-    "thorn_matriarch":  {
-                            "id":  "thorn_matriarch",
-                            "name":  "Thorn Matriarch",
-                            "description":  "A marsh seer that clouds minds with murk.",
-                            "bossImg":  "/src/assets/bosses/worm.png",
-                            "hp":  164,
-                            "maxHp":  164,
-                            "energy":  118,
-                            "maxEnergy":  118,
-                            "def":  19,
-                            "maxDef":  19,
-                            "skills":  [
-                                           {
-                                               "name":  "Mire Hex",
-                                               "description":  "Distorts judgment and causes missteps.",
-                                               "energyCost":  16,
-                                               "effect":  {
-                                                              "type":  "confusion",
-                                                              "durationMs":  3000,
-                                                              "target":  "player"
-                                                          },
-                                               "id":  "mire_hex_1",
-                                               "cooldownMs":  4000
-                                           },
-                                           {
-                                               "name":  "Toxic Chant",
-                                               "description":  "Summons poisonous vapors.",
-                                               "energyCost":  15,
-                                               "effect":  {
-                                                              "type":  "poison",
-                                                              "dmgPerSecond":  7,
-                                                              "durationMs":  5000,
-                                                              "tickIntervalMs":  1000,
-                                                              "target":  "player"
-                                                          },
-                                               "id":  "toxic_chant_2",
-                                               "cooldownMs":  3750
-                                           }
-                                       ],
-                            "dmg":  28,
-                            "atkSpeed":  0.36,
-                            "critDmg":  1.58,
-                            "critChance":  0.2,
-                            "evasion":  0.13,
-                            "location":  {
-                                             "swamp":  0.34,
-                                             "jungle":  0.25
-                                         },
-                            "lootDrop":  {
-                                             "xpDropMin":  0,
-                                             "xpDropMax":  0,
-                                             "coinDropMin":  0,
-                                             "coinDropMax":  0,
-                                             "armors":  [
-
-                                                        ],
-                                             "weapons":  [
-
-                                                         ],
-                                             "consumables":  [
-
-                                                             ]
-                                         },
-                            "energyRegenPerSecond":  5
-                        },
-    "grove_titan":  {
-                        "id":  "grove_titan",
-                        "name":  "Grove Titan",
-                        "description":  "A decaying giant fueled by altar sludge.",
-                        "bossImg":  "/src/assets/bosses/worm.png",
-                        "hp":  174,
-                        "maxHp":  174,
-                        "energy":  104,
-                        "maxEnergy":  104,
-                        "def":  22,
-                        "maxDef":  22,
-                        "skills":  [
-                                       {
-                                           "name":  "Crushing Mire",
-                                           "description":  "Massive slam that leaves lingering wounds.",
-                                           "energyCost":  20,
-                                           "effect":  {
-                                                          "type":  "bleed",
-                                                          "dmgPerSecond":  8,
-                                                          "durationMs":  5000,
-                                                          "tickIntervalMs":  1000,
-                                                          "target":  "player"
-                                                      },
-                                           "id":  "crushing_mire_1",
-                                           "cooldownMs":  5000
-                                       },
-                                       {
-                                           "name":  "Idol Ward",
-                                           "description":  "Channels temple sigils to harden attacks.",
-                                           "energyCost":  18,
-                                           "effect":  {
-                                                          "type":  "empower",
-                                                          "dmgMultiplier":  1.3,
-                                                          "durationMs":  4000,
-                                                          "target":  "self"
-                                                      },
-                                           "id":  "idol_ward_2",
-                                           "cooldownMs":  4500
-                                       }
-                                   ],
-                        "dmg":  31,
-                        "atkSpeed":  0.34,
-                        "critDmg":  1.5,
-                        "critChance":  0.15,
-                        "evasion":  0.08,
-                        "location":  {
-                                         "swamp":  0.29,
-                                         "temple":  0.26
-                                     },
-                        "lootDrop":  {
-                                         "xpDropMin":  0,
-                                         "xpDropMax":  0,
-                                         "coinDropMin":  0,
-                                         "coinDropMax":  0,
-                                         "armors":  [
-
-                                                    ],
-                                         "weapons":  [
-
-                                                     ],
-                                         "consumables":  [
-
-                                                         ]
-                                     },
-                        "energyRegenPerSecond":  4
-                    },
-    "mire_typhon":  {
-                        "id":  "mire_typhon",
-                        "name":  "Mire Typhon",
-                        "description":  "A warlord wrapped in living vines and shrine glyphs.",
-                        "bossImg":  "/src/assets/bosses/skull.png",
-                        "hp":  198,
-                        "maxHp":  198,
-                        "energy":  126,
-                        "maxEnergy":  126,
-                        "def":  25,
-                        "maxDef":  25,
-                        "skills":  [
-                                       {
-                                           "name":  "Overgrowth",
-                                           "description":  "Rapid growth boosts combat pace.",
-                                           "energyCost":  17,
-                                           "effect":  {
-                                                          "type":  "speedup",
-                                                          "speedUp":  0.4,
-                                                          "durationMs":  3500,
-                                                          "target":  "self"
-                                                      },
-                                           "id":  "overgrowth_1",
-                                           "cooldownMs":  4250
-                                       },
-                                       {
-                                           "name":  "Sacred Lash",
-                                           "description":  "A heavy strike powered by old temple roots.",
-                                           "energyCost":  21,
-                                           "effect":  {
-                                                          "type":  "empower",
-                                                          "dmgMultiplier":  1.35,
-                                                          "durationMs":  4000,
-                                                          "target":  "self"
-                                                      },
-                                           "id":  "sacred_lash_2",
-                                           "cooldownMs":  5250
-                                       },
-                                       {
-                                           "name":  "Pulse Bloom",
-                                           "description":  "Drains vitality from nearby life.",
-                                           "energyCost":  19,
-                                           "effect":  {
-                                                          "type":  "heal",
-                                                          "healAmount":  34,
-                                                          "target":  "self"
-                                                      },
-                                           "id":  "pulse_bloom_3",
-                                           "cooldownMs":  4750
-                                       }
-                                   ],
-                        "dmg":  35,
-                        "atkSpeed":  0.34,
-                        "critDmg":  1.68,
-                        "critChance":  0.22,
-                        "evasion":  0.11,
-                        "location":  {
-                                         "jungle":  0.31,
-                                         "village":  0.22
-                                     },
-                        "lootDrop":  {
-                                         "xpDropMin":  0,
-                                         "xpDropMax":  0,
-                                         "coinDropMin":  0,
-                                         "coinDropMax":  0,
-                                         "armors":  [
-
-                                                    ],
-                                         "weapons":  [
-
-                                                     ],
-                                         "consumables":  [
-
-                                                         ]
-                                     },
-                        "energyRegenPerSecond":  5
-                    },
-    "sun_reaver":  {
-                       "id":  "sun_reaver",
-                       "name":  "Sun Reaver",
-                       "description":  "A blazing executioner marching from temple ruins to dunes.",
-                       "bossImg":  "/src/assets/bosses/worm.png",
-                       "hp":  192,
-                       "maxHp":  192,
-                       "energy":  126,
-                       "maxEnergy":  126,
-                       "def":  24,
-                       "maxDef":  24,
-                       "skills":  [
-                                      {
-                                          "name":  "Solar Rend",
-                                          "description":  "Cuts through armor with heated force.",
-                                          "energyCost":  20,
-                                          "effect":  {
-                                                         "type":  "bleed",
-                                                         "dmgPerSecond":  9,
-                                                         "durationMs":  5000,
-                                                         "tickIntervalMs":  1000,
-                                                         "target":  "player"
-                                                     },
-                                          "id":  "solar_rend_1",
-                                          "cooldownMs":  5000
-                                      },
-                                      {
-                                          "name":  "Dazzling Strike",
-                                          "description":  "A bright impact that stuns briefly.",
-                                          "energyCost":  18,
-                                          "effect":  {
-                                                         "type":  "stun",
-                                                         "durationMs":  2000,
-                                                         "target":  "player"
-                                                     },
-                                          "id":  "dazzling_strike_2",
-                                          "cooldownMs":  4500
-                                      }
-                                  ],
-                       "dmg":  34,
-                       "atkSpeed":  0.34,
-                       "critDmg":  1.64,
-                       "critChance":  0.21,
-                       "evasion":  0.1,
-                       "location":  {
-                                        "temple":  0.25,
-                                        "desert":  0.33
-                                    },
-                       "lootDrop":  {
-                                        "xpDropMin":  0,
-                                        "xpDropMax":  0,
-                                        "coinDropMin":  0,
-                                        "coinDropMax":  0,
-                                        "armors":  [
-
-                                                   ],
-                                        "weapons":  [
-
-                                                    ],
-                                        "consumables":  [
-
-                                                        ]
-                                    },
-                       "energyRegenPerSecond":  5
-                   },
-    "dune_emperor":  {
-                         "id":  "dune_emperor",
-                         "name":  "Dune Emperor",
-                         "description":  "A tyrant who claims dominion over sand and city walls.",
-                         "bossImg":  "/src/assets/bosses/skull.png",
-                         "hp":  212,
-                         "maxHp":  212,
-                         "energy":  134,
-                         "maxEnergy":  134,
-                         "def":  27,
-                         "maxDef":  27,
-                         "skills":  [
-                                        {
-                                            "name":  "Imperial Command",
-                                            "description":  "Amplifies damage with absolute authority.",
-                                            "energyCost":  22,
-                                            "effect":  {
-                                                           "type":  "empower",
-                                                           "dmgMultiplier":  1.42,
-                                                           "durationMs":  4000,
-                                                           "target":  "self"
-                                                       },
-                                            "id":  "imperial_command_1",
-                                            "cooldownMs":  5500
-                                        },
-                                        {
-                                            "name":  "Searing Gale",
-                                            "description":  "Burning wind chips away over time.",
-                                            "energyCost":  19,
-                                            "effect":  {
-                                                           "type":  "poison",
-                                                           "dmgPerSecond":  8,
-                                                           "durationMs":  5000,
-                                                           "tickIntervalMs":  1000,
-                                                           "target":  "player"
-                                                       },
-                                            "id":  "searing_gale_2",
-                                            "cooldownMs":  4750
-                                        },
-                                        {
-                                            "name":  "Royal Recover",
-                                            "description":  "Restores endurance mid-fight.",
-                                            "energyCost":  24,
-                                            "effect":  {
-                                                           "type":  "heal",
-                                                           "healAmount":  38,
-                                                           "target":  "self"
-                                                       },
-                                            "id":  "royal_recover_3",
-                                            "cooldownMs":  6000
-                                        }
-                                    ],
-                         "dmg":  37,
-                         "atkSpeed":  0.34,
-                         "critDmg":  1.72,
-                         "critChance":  0.24,
-                         "evasion":  0.09,
-                         "location":  {
-                                          "desert":  0.29,
-                                          "village":  0.31
-                                      },
-                         "lootDrop":  {
-                                          "xpDropMin":  0,
-                                          "xpDropMax":  0,
-                                          "coinDropMin":  0,
-                                          "coinDropMax":  0,
-                                          "armors":  [
-
-                                                     ],
-                                          "weapons":  [
-
-                                                      ],
-                                          "consumables":  [
-
-                                                          ]
-                                      },
-                         "energyRegenPerSecond":  5
-                     },
-    "echo_golem":  {
-                       "id":  "echo_golem",
-                       "name":  "Echo Golem",
-                       "description":  "The final challenger, feared in desert sieges and village courts.",
-                       "bossImg":  "/src/assets/bosses/skull.png",
-                       "hp":  226,
-                       "maxHp":  226,
-                       "energy":  140,
-                       "maxEnergy":  140,
-                       "def":  30,
-                       "maxDef":  30,
-                       "skills":  [
-                                      {
-                                          "name":  "Final Decree",
-                                          "description":  "Cripples movement and opens a lethal window.",
-                                          "energyCost":  24,
-                                          "effect":  {
-                                                         "type":  "stun",
-                                                         "durationMs":  3000,
-                                                         "target":  "player"
-                                                     },
-                                          "id":  "final_decree_1",
-                                          "cooldownMs":  6000
-                                      },
-                                      {
-                                          "name":  "Ruin Spiral",
-                                          "description":  "A relentless combo that speeds up each phase.",
-                                          "energyCost":  21,
-                                          "effect":  {
-                                                         "type":  "speedup",
-                                                         "speedUp":  0.45,
-                                                         "durationMs":  3500,
-                                                         "target":  "self"
-                                                     },
-                                          "id":  "ruin_spiral_2",
-                                          "cooldownMs":  5250
-                                      },
-                                      {
-                                          "name":  "Fracture Oath",
-                                          "description":  "Inflicts deep confusion through oppressive force.",
-                                          "energyCost":  23,
-                                          "effect":  {
-                                                         "type":  "confusion",
-                                                         "durationMs":  3000,
-                                                         "target":  "player"
-                                                     },
-                                          "id":  "fracture_oath_3",
-                                          "cooldownMs":  5750
-                                      },
-                                      {
-                                          "name":  "Last Stand",
-                                          "description":  "A desperate heal to prolong the final phase.",
-                                          "energyCost":  28,
-                                          "effect":  {
-                                                         "type":  "heal",
-                                                         "healAmount":  46,
-                                                         "target":  "self"
-                                                     },
-                                          "id":  "last_stand_4",
-                                          "cooldownMs":  7000
-                                      }
-                                  ],
-                       "dmg":  40,
-                       "atkSpeed":  0.34,
-                       "critDmg":  1.78,
-                       "critChance":  0.25,
-                       "evasion":  0.08,
-                       "location":  {
-                                        "temple":  0.24,
-                                        "village":  0.37
-                                    },
-                       "lootDrop":  {
-                                        "xpDropMin":  0,
-                                        "xpDropMax":  0,
-                                        "coinDropMin":  0,
-                                        "coinDropMax":  0,
-                                        "armors":  [
-
-                                                   ],
-                                        "weapons":  [
-
-                                                    ],
-                                        "consumables":  [
-
-                                                        ]
-                                    },
-                       "energyRegenPerSecond":  6
-                   }
   "worm": {
     "id": "worm",
     "name": "Worm",
@@ -663,8 +17,13 @@
         "energyCost": 12,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 5
-        }
+          "dmgPerSecond": 5,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "vine_lunge_1",
+        "cooldownSeconds": 3
       },
       {
         "name": "Bog Renewal",
@@ -672,12 +31,15 @@
         "energyCost": 18,
         "effect": {
           "type": "heal",
-          "healAmount": 28
-        }
+          "healAmount": 28,
+          "target": "self"
+        },
+        "id": "bog_renewal_2",
+        "cooldownSeconds": 4.5
       }
     ],
-    "dmg": 24,
-    "atkSpeed": 1.06,
+    "dmg": 16,
+    "atkSpeed": 4.6,
     "critDmg": 1.46,
     "critChance": 0.14,
     "evasion": 0.1,
@@ -693,7 +55,8 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "red_skull": {
     "id": "red_skull",
@@ -713,8 +76,12 @@
         "energyCost": 14,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.35
-        }
+          "speedUp": 0.35,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "canopy_dash_1",
+        "cooldownSeconds": 3.5
       },
       {
         "name": "Needle Burst",
@@ -722,12 +89,17 @@
         "energyCost": 16,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 6
-        }
+          "dmgPerSecond": 6,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "needle_burst_2",
+        "cooldownSeconds": 4
       }
     ],
-    "dmg": 26,
-    "atkSpeed": 1.16,
+    "dmg": 17,
+    "atkSpeed": 4.425,
     "critDmg": 1.54,
     "critChance": 0.18,
     "evasion": 0.14,
@@ -743,13 +115,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "abyss_prince": {
     "id": "abyss_prince",
     "name": "Abyss Prince",
     "description": "An ancient guardian that now patrols remote border ruins.",
-    "bossImg": "/src/assets/bosses/abyss_prince.png",
+    "bossImg": "/src/assets/bosses/skull.png",
     "hp": 182,
     "maxHp": 182,
     "energy": 118,
@@ -763,8 +136,12 @@
         "energyCost": 20,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.45
-        }
+          "dmgMultiplier": 1.45,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "sanction_1",
+        "cooldownSeconds": 5
       },
       {
         "name": "Judgment Bind",
@@ -772,8 +149,11 @@
         "energyCost": 22,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "target": "player",
+          "durationSeconds": 2
+        },
+        "id": "judgment_bind_2",
+        "cooldownSeconds": 5.5
       },
       {
         "name": "Royal Aegis",
@@ -781,12 +161,15 @@
         "energyCost": 24,
         "effect": {
           "type": "heal",
-          "healAmount": 40
-        }
+          "healAmount": 40,
+          "target": "self"
+        },
+        "id": "royal_aegis_3",
+        "cooldownSeconds": 6
       }
     ],
-    "dmg": 32,
-    "atkSpeed": 1,
+    "dmg": 21,
+    "atkSpeed": 3.9,
     "critDmg": 1.62,
     "critChance": 0.21,
     "evasion": 0.1,
@@ -802,13 +185,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "thorn_matriarch": {
     "id": "thorn_matriarch",
     "name": "Thorn Matriarch",
     "description": "A marsh seer that clouds minds with murk.",
-    "bossImg": "/src/assets/bosses/thorn_matriarch.png",
+    "bossImg": "/src/assets/bosses/worm.png",
     "hp": 164,
     "maxHp": 164,
     "energy": 118,
@@ -822,8 +206,11 @@
         "energyCost": 16,
         "effect": {
           "type": "confusion",
-          "dmg": 14
-        }
+          "target": "player",
+          "durationSeconds": 3
+        },
+        "id": "mire_hex_1",
+        "cooldownSeconds": 4
       },
       {
         "name": "Toxic Chant",
@@ -831,12 +218,17 @@
         "energyCost": 15,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 7
-        }
+          "dmgPerSecond": 7,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "toxic_chant_2",
+        "cooldownSeconds": 3.75
       }
     ],
-    "dmg": 28,
-    "atkSpeed": 1.08,
+    "dmg": 18,
+    "atkSpeed": 4.25,
     "critDmg": 1.58,
     "critChance": 0.2,
     "evasion": 0.13,
@@ -852,13 +244,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "grove_titan": {
     "id": "grove_titan",
     "name": "Grove Titan",
     "description": "A decaying giant fueled by altar sludge.",
-    "bossImg": "/src/assets/bosses/grove_titan.png",
+    "bossImg": "/src/assets/bosses/worm.png",
     "hp": 174,
     "maxHp": 174,
     "energy": 104,
@@ -872,8 +265,13 @@
         "energyCost": 20,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 8
-        }
+          "dmgPerSecond": 8,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "crushing_mire_1",
+        "cooldownSeconds": 5
       },
       {
         "name": "Idol Ward",
@@ -881,12 +279,16 @@
         "energyCost": 18,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.3
-        }
+          "dmgMultiplier": 1.3,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "idol_ward_2",
+        "cooldownSeconds": 4.5
       }
     ],
-    "dmg": 31,
-    "atkSpeed": 0.96,
+    "dmg": 20,
+    "atkSpeed": 3.987,
     "critDmg": 1.5,
     "critChance": 0.15,
     "evasion": 0.08,
@@ -902,13 +304,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 4
   },
   "mire_typhon": {
     "id": "mire_typhon",
     "name": "Mire Typhon",
     "description": "A warlord wrapped in living vines and shrine glyphs.",
-    "bossImg": "/src/assets/bosses/mire_typhon.png",
+    "bossImg": "/src/assets/bosses/skull.png",
     "hp": 198,
     "maxHp": 198,
     "energy": 126,
@@ -922,8 +325,12 @@
         "energyCost": 17,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.4
-        }
+          "speedUp": 0.4,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "overgrowth_1",
+        "cooldownSeconds": 4.25
       },
       {
         "name": "Sacred Lash",
@@ -931,8 +338,12 @@
         "energyCost": 21,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.35
-        }
+          "dmgMultiplier": 1.35,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "sacred_lash_2",
+        "cooldownSeconds": 5.25
       },
       {
         "name": "Pulse Bloom",
@@ -940,12 +351,15 @@
         "energyCost": 19,
         "effect": {
           "type": "heal",
-          "healAmount": 34
-        }
+          "healAmount": 34,
+          "target": "self"
+        },
+        "id": "pulse_bloom_3",
+        "cooldownSeconds": 4.75
       }
     ],
-    "dmg": 35,
-    "atkSpeed": 1,
+    "dmg": 23,
+    "atkSpeed": 3.637,
     "critDmg": 1.68,
     "critChance": 0.22,
     "evasion": 0.11,
@@ -961,13 +375,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "sun_reaver": {
     "id": "sun_reaver",
     "name": "Sun Reaver",
     "description": "A blazing executioner marching from temple ruins to dunes.",
-    "bossImg": "/src/assets/bosses/sun_reaver.png",
+    "bossImg": "/src/assets/bosses/worm.png",
     "hp": 192,
     "maxHp": 192,
     "energy": 126,
@@ -981,8 +396,13 @@
         "energyCost": 20,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 9
-        }
+          "dmgPerSecond": 9,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "solar_rend_1",
+        "cooldownSeconds": 5
       },
       {
         "name": "Dazzling Strike",
@@ -990,12 +410,15 @@
         "energyCost": 18,
         "effect": {
           "type": "stun",
-          "duration": 2
-        }
+          "target": "player",
+          "durationSeconds": 2
+        },
+        "id": "dazzling_strike_2",
+        "cooldownSeconds": 4.5
       }
     ],
-    "dmg": 34,
-    "atkSpeed": 1.02,
+    "dmg": 22,
+    "atkSpeed": 3.725,
     "critDmg": 1.64,
     "critChance": 0.21,
     "evasion": 0.1,
@@ -1011,13 +434,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "dune_emperor": {
     "id": "dune_emperor",
     "name": "Dune Emperor",
     "description": "A tyrant who claims dominion over sand and city walls.",
-    "bossImg": "/src/assets/bosses/dune_emperor.png",
+    "bossImg": "/src/assets/bosses/skull.png",
     "hp": 212,
     "maxHp": 212,
     "energy": 134,
@@ -1031,8 +455,12 @@
         "energyCost": 22,
         "effect": {
           "type": "empower",
-          "dmgMultiplier": 1.42
-        }
+          "dmgMultiplier": 1.42,
+          "target": "self",
+          "durationSeconds": 4
+        },
+        "id": "imperial_command_1",
+        "cooldownSeconds": 5.5
       },
       {
         "name": "Searing Gale",
@@ -1040,8 +468,13 @@
         "energyCost": 19,
         "effect": {
           "type": "poison",
-          "dmgPerSecond": 8
-        }
+          "dmgPerSecond": 8,
+          "target": "player",
+          "durationSeconds": 5,
+          "tickIntervalSeconds": 1
+        },
+        "id": "searing_gale_2",
+        "cooldownSeconds": 4.75
       },
       {
         "name": "Royal Recover",
@@ -1049,12 +482,15 @@
         "energyCost": 24,
         "effect": {
           "type": "heal",
-          "healAmount": 38
-        }
+          "healAmount": 38,
+          "target": "self"
+        },
+        "id": "royal_recover_3",
+        "cooldownSeconds": 6
       }
     ],
-    "dmg": 37,
-    "atkSpeed": 0.97,
+    "dmg": 24,
+    "atkSpeed": 3.462,
     "critDmg": 1.72,
     "critChance": 0.24,
     "evasion": 0.09,
@@ -1070,13 +506,14 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 5
   },
   "echo_golem": {
     "id": "echo_golem",
     "name": "Echo Golem",
     "description": "The final challenger, feared in desert sieges and village courts.",
-    "bossImg": "/src/assets/bosses/echo_golem.png",
+    "bossImg": "/src/assets/bosses/skull.png",
     "hp": 226,
     "maxHp": 226,
     "energy": 140,
@@ -1090,8 +527,11 @@
         "energyCost": 24,
         "effect": {
           "type": "stun",
-          "duration": 3
-        }
+          "target": "player",
+          "durationSeconds": 3
+        },
+        "id": "final_decree_1",
+        "cooldownSeconds": 6
       },
       {
         "name": "Ruin Spiral",
@@ -1099,8 +539,12 @@
         "energyCost": 21,
         "effect": {
           "type": "speedup",
-          "speedUp": 0.45
-        }
+          "speedUp": 0.45,
+          "target": "self",
+          "durationSeconds": 3.5
+        },
+        "id": "ruin_spiral_2",
+        "cooldownSeconds": 5.25
       },
       {
         "name": "Fracture Oath",
@@ -1108,8 +552,11 @@
         "energyCost": 23,
         "effect": {
           "type": "confusion",
-          "dmg": 22
-        }
+          "target": "player",
+          "durationSeconds": 3
+        },
+        "id": "fracture_oath_3",
+        "cooldownSeconds": 5.75
       },
       {
         "name": "Last Stand",
@@ -1117,12 +564,15 @@
         "energyCost": 28,
         "effect": {
           "type": "heal",
-          "healAmount": 46
-        }
+          "healAmount": 46,
+          "target": "self"
+        },
+        "id": "last_stand_4",
+        "cooldownSeconds": 7
       }
     ],
-    "dmg": 40,
-    "atkSpeed": 0.96,
+    "dmg": 26,
+    "atkSpeed": 3.2,
     "critDmg": 1.78,
     "critChance": 0.25,
     "evasion": 0.08,
@@ -1138,6 +588,7 @@
       "armors": [],
       "weapons": [],
       "consumables": []
-    }
+    },
+    "energyRegenPerSecond": 6
   }
 }

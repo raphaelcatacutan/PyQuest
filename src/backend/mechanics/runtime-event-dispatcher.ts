@@ -30,7 +30,6 @@ import {
   normalizeItemId,
 } from "./shop-item-modules";
 import statementDamageTable from "./damage.json";
-import { enqueuePlayerAttack } from "./combat/player-attacks";
 
 const SCENE_VALUES: SceneTypes[] = [
   "",
@@ -202,6 +201,14 @@ function normalizeNonNegativeInt(value: unknown): number {
   return Math.max(0, Math.floor(value));
 }
 
+function normalizeDurationSeconds(value: unknown, fallback = 0): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return Math.max(0, fallback);
+  }
+
+  return Math.max(0, value);
+}
+
 function resolveStatementMechanics(statementType: string): StatementMechanics {
   const rawValue =
     STATEMENT_MECHANICS[statementType] ??
@@ -353,16 +360,18 @@ function computeWeaponModifierDamageDelta(weapon: Weapon): number {
 
 function applyWeaponInflictions(weapon: Weapon): number {
   return weapon.inflictions.reduce((totalBonusDamage, infliction) => {
-    const durationSeconds =
-      infliction.duration > 100
-        ? Math.max(1, Math.floor(infliction.duration / 1000))
-        : Math.max(1, Math.floor(infliction.duration));
+    const durationSeconds = normalizeDurationSeconds(infliction.duration, 0);
+    if (durationSeconds <= 0) {
+      return totalBonusDamage;
+    }
 
     if (infliction.type === "stun") {
-      useEnemyStore.getState().takeEnergyCost(Math.max(1, durationSeconds));
+      useEnemyStore
+        .getState()
+        .takeEnergyCost(Math.max(1, Math.round(durationSeconds)));
       appendRuntimeDebug("weapon infliction applied", {
         type: infliction.type,
-        duration: infliction.duration,
+        durationSeconds,
       });
       return totalBonusDamage;
     }
@@ -376,7 +385,7 @@ function applyWeaponInflictions(weapon: Weapon): number {
     if (expectedDamage > 0) {
       appendRuntimeDebug("weapon infliction applied", {
         type: infliction.type,
-        duration: infliction.duration,
+        durationSeconds,
         chance: infliction.chance,
         expectedDamage,
       });
@@ -448,22 +457,21 @@ function applyWeaponSkill(
 
     case "stun": {
       const durationValue = skill.effect.duration ?? skill.effect.value;
-      const energyDrain =
-        durationValue > 100
-          ? Math.max(1, Math.floor(durationValue / 1000))
-          : Math.max(1, Math.floor(durationValue));
+      const durationSeconds = normalizeDurationSeconds(durationValue, 0);
+      const energyDrain = Math.max(1, Math.round(durationSeconds));
       useEnemyStore.getState().takeEnergyCost(energyDrain);
       break;
     }
 
     case "bleed": {
       const durationValue = skill.effect.duration ?? 1;
-      const durationSeconds =
-        durationValue > 100
-          ? Math.max(1, Math.floor(durationValue / 1000))
-          : Math.max(1, Math.floor(durationValue));
-      const bleedDamage =
-        Math.max(0, Math.floor(skill.effect.value)) * durationSeconds;
+      const durationSeconds = normalizeDurationSeconds(durationValue, 1);
+      const bleedDamage = Math.max(
+        0,
+        Math.round(
+          Math.max(0, Math.floor(skill.effect.value)) * durationSeconds,
+        ),
+      );
       applyEnemyDamage(bleedDamage);
       break;
     }
@@ -532,11 +540,10 @@ function applyConsumableEffects(itemId: string, consumable: Consumable): void {
       }
 
       if (effect.stat === "speed") {
-        const speedBoost = Math.max(
-          1,
-          Math.floor(player.atkSpeed * (1 - 1 / multiplier)),
-        );
-        player.setAtkSpeed(-speedBoost);
+        const speedBoost = Math.max(0, player.atkSpeed * (1 - 1 / multiplier));
+        if (speedBoost > 0) {
+          player.setAtkSpeed(-speedBoost);
+        }
         continue;
       }
     }
@@ -606,8 +613,12 @@ function applyArmorActivation(itemId: string): void {
     }
 
     if (modifier.stat === "atkSpeed") {
+      const speedMagnitude = Math.max(
+        0,
+        Number.isFinite(modifier.value) ? modifier.value : 0,
+      );
       player.setAtkSpeed(
-        modifier.nature === "penalty" ? magnitude : -magnitude,
+        modifier.nature === "penalty" ? speedMagnitude : -speedMagnitude,
       );
     }
   }
@@ -757,12 +768,12 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
     case "python.statement": {
       const statementType = readString(payload, "statementType", "Statement");
       const lineNumber = Math.max(0, readNumber(payload, "lineNumber", 0));
-      const delayValue = Math.max(0, readNumber(payload, "delayMs", 0));
+      const delayValue = Math.max(0, readNumber(payload, "delaySeconds", 0));
       const statementMechanics = resolveStatementMechanics(statementType);
       appendRuntimeDebug("statement trace", {
         statementType,
         lineNumber,
-        delayMs: delayValue,
+        delaySeconds: delayValue,
         energyCost: statementMechanics.energyCost,
         damage: statementMechanics.damage,
       });

@@ -2,7 +2,7 @@
   "wooden_wand": {
     "id": "wooden_wand",
     "filename": "wooden_wand",
-    "name": "Wooden Wand",
+    "name": "wooden_wand",
     "description": "Common Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/wooden_wand.png",
     "wieldType": "one",
@@ -30,7 +30,7 @@
   "wilted_wand": {
     "id": "wilted_wand",
     "filename": "wilted_wand",
-    "name": "Wilted Wand",
+    "name": "wilted_wand",
     "description": "Common Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/wilted_wand.png",
     "wieldType": "one",
@@ -58,7 +58,7 @@
   "academy_wand": {
     "id": "academy_wand",
     "filename": "academy_wand",
-    "name": "Academy Wand",
+    "name": "academy_wand",
     "description": "Common Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/academy_wand.png",
     "wieldType": "one",
@@ -86,7 +86,7 @@
   "amethyst_staff": {
     "id": "amethyst_staff",
     "filename": "amethyst_staff",
-    "name": "Amethyst Staff",
+    "name": "amethyst_staff",
     "description": "Common Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/amethyst_staff.png",
     "wieldType": "one",
@@ -114,7 +114,7 @@
   "old_staff": {
     "id": "old_staff",
     "filename": "old_staff",
-    "name": "Old Staff",
+    "name": "old_staff",
     "description": "Common Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/old_staff.png",
     "wieldType": "one",
@@ -142,7 +142,7 @@
   "great_forests_wand": {
     "id": "great_forests_wand",
     "filename": "great_forests_wand",
-    "name": "Great Forest's Wand",
+    "name": "great_forests_wand",
     "description": "Rare Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/great_forests_wand.png",
     "wieldType": "one",
@@ -185,7 +185,7 @@
   "cursed_wand": {
     "id": "cursed_wand",
     "filename": "cursed_wand",
-    "name": "Cursed Wand",
+    "name": "cursed_wand",
     "description": "Rare Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/cursed_wand.png",
     "wieldType": "one",
@@ -235,7 +235,7 @@
   "diamond_staff": {
     "id": "diamond_staff",
     "filename": "diamond_staff",
-    "name": "Diamond Staff",
+    "name": "diamond_staff",
     "description": "Rare Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/diamond_staff.png",
     "wieldType": "one",
@@ -278,7 +278,7 @@
   "fire_drake_wand": {
     "id": "fire_drake_wand",
     "filename": "fire_drake_wand",
-    "name": "Fire Drake Wand",
+    "name": "fire_drake_wand",
     "description": "Rare Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/fire_drake_wand.png",
     "wieldType": "one",
@@ -327,7 +327,7 @@
   "lightning_staff": {
     "id": "lightning_staff",
     "filename": "lightning_staff",
-    "name": "Lightning Staff",
+    "name": "lightning_staff",
     "description": "Rare Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/lightning_staff.png",
     "wieldType": "one",
@@ -377,7 +377,7 @@
   "floyds_sage_wand": {
     "id": "floyds_sage_wand",
     "filename": "floyds_sage_wand",
-    "name": "Floyd's Sage Wand",
+    "name": "floyds_sage_wand",
     "description": "Epic Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/floyds_sage_wand.png",
     "wieldType": "one",
@@ -434,7 +434,7 @@
   "staff_of_ages": {
     "id": "staff_of_ages",
     "filename": "staff_of_ages",
-    "name": "Staff of Ages",
+    "name": "staff_of_ages",
     "description": "Epic Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/staff_of_ages.png",
     "wieldType": "one",
@@ -491,7 +491,7 @@
   "seasons_blessing": {
     "id": "seasons_blessing",
     "filename": "seasons_blessing",
-    "name": "Season's Blessing",
+    "name": "seasons_blessing",
     "description": "Epic Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/seasons_blessing.png",
     "wieldType": "one",
@@ -548,7 +548,7 @@
   "galaxies_tear": {
     "id": "galaxies_tear",
     "filename": "galaxies_tear",
-    "name": "Galaxies Tear",
+    "name": "galaxies_tear",
     "description": "Legendary Wizard wand weapon.",
     "weaponImg": "src/assets/weapons/galaxies_tear.png",
     "wieldType": "one",
@@ -631,7 +631,7 @@
   "training_sword": {
     "id": "training_sword",
     "filename": "training_sword",
-    "name": "Training Sword",
+    "name": "training_sword",
     "description": "Common Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/training_sword.png",
     "wieldType": "one",
@@ -659,7 +659,7 @@
   "common_sword": {
     "id": "common_sword",
     "filename": "common_sword",
-    "name": "Common Sword",
+    "name": "common_sword",
     "description": "Common Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/common_sword.png",
     "wieldType": "one",
@@ -687,7 +687,7 @@
   "rapier": {
     "id": "rapier",
     "filename": "rapier",
-    "name": "Rapier",
+    "name": "rapier",
     "description": "Common Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/rapier.png",
     "wieldType": "one",
@@ -715,7 +715,7 @@
   "rusty_axe": {
     "id": "rusty_axe",
     "filename": "rusty_axe",
-    "name": "Rusty Axe",
+    "name": "rusty_axe",
     "description": "Common Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/rusty_axe.png",
     "wieldType": "one",
@@ -743,7 +743,7 @@
   "spear": {
     "id": "spear",
     "filename": "spear",
-    "name": "Spear",
+    "name": "spear",
     "description": "Common Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/spear.png",
     "wieldType": "one",
@@ -771,7 +771,7 @@
   "steel_sword": {
     "id": "steel_sword",
     "filename": "steel_sword",
-    "name": "Steel Sword",
+    "name": "steel_sword",
     "description": "Rare Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/steel_sword.png",
     "wieldType": "one",
@@ -814,7 +814,7 @@
   "ashen_sword": {
     "id": "ashen_sword",
     "filename": "ashen_sword",
-    "name": "Ashen Sword",
+    "name": "ashen_sword",
     "description": "Rare Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/ashen_sword.png",
     "wieldType": "one",
@@ -864,7 +864,7 @@
   "lightning_spear": {
     "id": "lightning_spear",
     "filename": "lightning_spear",
-    "name": "Lightning Spear",
+    "name": "lightning_spear",
     "description": "Rare Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/lightning_spear.png",
     "wieldType": "one",
@@ -914,7 +914,7 @@
   "coated_blade": {
     "id": "coated_blade",
     "filename": "coated_blade",
-    "name": "Coated Blade",
+    "name": "coated_blade",
     "description": "Rare Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/coated_blade.png",
     "wieldType": "one",
@@ -964,7 +964,7 @@
   "steel_axe": {
     "id": "steel_axe",
     "filename": "steel_axe",
-    "name": "Steel Axe",
+    "name": "steel_axe",
     "description": "Rare Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/steel_axe.png",
     "wieldType": "one",
@@ -1013,7 +1013,7 @@
   "elbrauns_blade": {
     "id": "elbrauns_blade",
     "filename": "elbrauns_blade",
-    "name": "Elbraun's Blade",
+    "name": "elbrauns_blade",
     "description": "Epic Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/elbrauns_blade.png",
     "wieldType": "one",
@@ -1071,7 +1071,7 @@
   "heavenly_sword": {
     "id": "heavenly_sword",
     "filename": "heavenly_sword",
-    "name": "Heavenly Sword",
+    "name": "heavenly_sword",
     "description": "Epic Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/heavenly_sword.png",
     "wieldType": "one",
@@ -1128,7 +1128,7 @@
   "shadow_glaive": {
     "id": "shadow_glaive",
     "filename": "shadow_glaive",
-    "name": "Shadow Glaive",
+    "name": "shadow_glaive",
     "description": "Epic Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/shadow_glaive.png",
     "wieldType": "one",
@@ -1192,7 +1192,7 @@
   "ancient_of_rites": {
     "id": "ancient_of_rites",
     "filename": "ancient_of_rites",
-    "name": "Ancient of Rites",
+    "name": "ancient_of_rites",
     "description": "Legendary Warrior sword weapon.",
     "weaponImg": "src/assets/weapons/ancient_of_rites.png",
     "wieldType": "one",
@@ -1275,7 +1275,7 @@
   "wooden_bow": {
     "id": "wooden_bow",
     "filename": "wooden_bow",
-    "name": "Wooden Bow",
+    "name": "wooden_bow",
     "description": "Common Archer bow weapon.",
     "weaponImg": "src/assets/weapons/wooden_bow.png",
     "wieldType": "dual",
@@ -1303,7 +1303,7 @@
   "crossbow": {
     "id": "crossbow",
     "filename": "crossbow",
-    "name": "Crossbow",
+    "name": "crossbow",
     "description": "Common Archer bow weapon.",
     "weaponImg": "src/assets/weapons/crossbow.png",
     "wieldType": "dual",
@@ -1331,7 +1331,7 @@
   "slingshot": {
     "id": "slingshot",
     "filename": "slingshot",
-    "name": "Slingshot",
+    "name": "slingshot",
     "description": "Common Archer bow weapon.",
     "weaponImg": "src/assets/weapons/slingshot.png",
     "wieldType": "dual",
@@ -1359,7 +1359,7 @@
   "old_compound_bow": {
     "id": "old_compound_bow",
     "filename": "old_compound_bow",
-    "name": "Old Compound Bow",
+    "name": "old_compound_bow",
     "description": "Common Archer bow weapon.",
     "weaponImg": "src/assets/weapons/old_compound_bow.png",
     "wieldType": "dual",
@@ -1387,7 +1387,7 @@
   "wilted_bow": {
     "id": "wilted_bow",
     "filename": "wilted_bow",
-    "name": "Wilted Bow",
+    "name": "wilted_bow",
     "description": "Common Archer bow weapon.",
     "weaponImg": "src/assets/weapons/wilted_bow.png",
     "wieldType": "dual",
@@ -1415,7 +1415,7 @@
   "steel_crossbow": {
     "id": "steel_crossbow",
     "filename": "steel_crossbow",
-    "name": "Steel Crossbow",
+    "name": "steel_crossbow",
     "description": "Rare Archer bow weapon.",
     "weaponImg": "src/assets/weapons/steel_crossbow.png",
     "wieldType": "dual",
@@ -1458,7 +1458,7 @@
   "multishot_bow": {
     "id": "multishot_bow",
     "filename": "multishot_bow",
-    "name": "Multishot Bow",
+    "name": "multishot_bow",
     "description": "Rare Archer bow weapon.",
     "weaponImg": "src/assets/weapons/multishot_bow.png",
     "wieldType": "dual",
@@ -1501,7 +1501,7 @@
   "elven_bow": {
     "id": "elven_bow",
     "filename": "elven_bow",
-    "name": "Elven Bow",
+    "name": "elven_bow",
     "description": "Rare Archer bow weapon.",
     "weaponImg": "src/assets/weapons/elven_bow.png",
     "wieldType": "dual",
@@ -1544,7 +1544,7 @@
   "volcanic_bow": {
     "id": "volcanic_bow",
     "filename": "volcanic_bow",
-    "name": "Volcanic Bow",
+    "name": "volcanic_bow",
     "description": "Rare Archer bow weapon.",
     "weaponImg": "src/assets/weapons/volcanic_bow.png",
     "wieldType": "dual",
@@ -1593,7 +1593,7 @@
   "lightning_bow": {
     "id": "lightning_bow",
     "filename": "lightning_bow",
-    "name": "Lightning Bow",
+    "name": "lightning_bow",
     "description": "Rare Archer bow weapon.",
     "weaponImg": "src/assets/weapons/lightning_bow.png",
     "wieldType": "dual",
@@ -1643,7 +1643,7 @@
   "sorbets_great_bow": {
     "id": "sorbets_great_bow",
     "filename": "sorbets_great_bow",
-    "name": "Sorbet's Great Bow",
+    "name": "sorbets_great_bow",
     "description": "Epic Archer bow weapon.",
     "weaponImg": "src/assets/weapons/sorbets_great_bow.png",
     "wieldType": "dual",
@@ -1701,7 +1701,7 @@
   "hells_bane": {
     "id": "hells_bane",
     "filename": "hells_bane",
-    "name": "Hell's Bane",
+    "name": "hells_bane",
     "description": "Epic Archer bow weapon.",
     "weaponImg": "src/assets/weapons/hells_bane.png",
     "wieldType": "dual",
@@ -1765,7 +1765,7 @@
   "blighted_bow": {
     "id": "blighted_bow",
     "filename": "blighted_bow",
-    "name": "Blighted Bow",
+    "name": "blighted_bow",
     "description": "Epic Archer bow weapon.",
     "weaponImg": "src/assets/weapons/blighted_bow.png",
     "wieldType": "dual",
@@ -1829,7 +1829,7 @@
   "lunar_promise": {
     "id": "lunar_promise",
     "filename": "lunar_promise",
-    "name": "Lunar Promise",
+    "name": "lunar_promise",
     "description": "Legendary Archer bow weapon.",
     "weaponImg": "src/assets/weapons/lunar_promise.png",
     "wieldType": "dual",
@@ -1912,7 +1912,7 @@
   "dagger": {
     "id": "dagger",
     "filename": "dagger",
-    "name": "Dagger",
+    "name": "dagger",
     "description": "Common Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/dagger.png",
     "wieldType": "dual",
@@ -1940,7 +1940,7 @@
   "stiletto": {
     "id": "stiletto",
     "filename": "stiletto",
-    "name": "Stiletto",
+    "name": "stiletto",
     "description": "Common Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/stiletto.png",
     "wieldType": "dual",
@@ -1968,7 +1968,7 @@
   "rusted_kukri": {
     "id": "rusted_kukri",
     "filename": "rusted_kukri",
-    "name": "Rusted Kukri",
+    "name": "rusted_kukri",
     "description": "Common Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/rusted_kukri.png",
     "wieldType": "dual",
@@ -1996,7 +1996,7 @@
   "quickblade": {
     "id": "quickblade",
     "filename": "quickblade",
-    "name": "Quickblade",
+    "name": "quickblade",
     "description": "Common Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/quickblade.png",
     "wieldType": "dual",
@@ -2024,7 +2024,7 @@
   "butterfly_knife": {
     "id": "butterfly_knife",
     "filename": "butterfly_knife",
-    "name": "Butterfly Knife",
+    "name": "butterfly_knife",
     "description": "Common Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/butterfly_knife.png",
     "wieldType": "dual",
@@ -2052,7 +2052,7 @@
   "poisoned_throwing_knives": {
     "id": "poisoned_throwing_knives",
     "filename": "poisoned_throwing_knives",
-    "name": "Poisoned Throwing Knives",
+    "name": "poisoned_throwing_knives",
     "description": "Rare Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/poisoned_throwing_knives.png",
     "wieldType": "dual",
@@ -2102,7 +2102,7 @@
   "steel_kukri": {
     "id": "steel_kukri",
     "filename": "steel_kukri",
-    "name": "Steel Kukri",
+    "name": "steel_kukri",
     "description": "Rare Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/steel_kukri.png",
     "wieldType": "dual",
@@ -2151,7 +2151,7 @@
   "fire_fang": {
     "id": "fire_fang",
     "filename": "fire_fang",
-    "name": "Fire Fang",
+    "name": "fire_fang",
     "description": "Rare Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/fire_fang.png",
     "wieldType": "dual",
@@ -2200,7 +2200,7 @@
   "serrated_dirk": {
     "id": "serrated_dirk",
     "filename": "serrated_dirk",
-    "name": "Serrated Dirk",
+    "name": "serrated_dirk",
     "description": "Rare Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/serrated_dirk.png",
     "wieldType": "dual",
@@ -2250,7 +2250,7 @@
   "lightning_dagger": {
     "id": "lightning_dagger",
     "filename": "lightning_dagger",
-    "name": "Lightning Dagger",
+    "name": "lightning_dagger",
     "description": "Rare Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/lightning_dagger.png",
     "wieldType": "dual",
@@ -2300,7 +2300,7 @@
   "lantiers_hidden_blade": {
     "id": "lantiers_hidden_blade",
     "filename": "lantiers_hidden_blade",
-    "name": "Lantier's Hidden Blade",
+    "name": "lantiers_hidden_blade",
     "description": "Epic Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/lantiers_hidden_blade.png",
     "wieldType": "dual",
@@ -2365,7 +2365,7 @@
   "duskblade": {
     "id": "duskblade",
     "filename": "duskblade",
-    "name": "Duskblade",
+    "name": "duskblade",
     "description": "Epic Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/duskblade.png",
     "wieldType": "dual",
@@ -2429,7 +2429,7 @@
   "vampire_fans": {
     "id": "vampire_fans",
     "filename": "vampire_fans",
-    "name": "Vampire Fans",
+    "name": "vampire_fans",
     "description": "Epic Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/vampire_fans.png",
     "wieldType": "dual",
@@ -2487,7 +2487,7 @@
   "last_whisper": {
     "id": "last_whisper",
     "filename": "last_whisper",
-    "name": "Last Whisper",
+    "name": "last_whisper",
     "description": "Legendary Rogue dagger weapon.",
     "weaponImg": "src/assets/weapons/last_whisper.png",
     "wieldType": "dual",

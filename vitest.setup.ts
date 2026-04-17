@@ -52,7 +52,7 @@ const builtins: any = {};
 
     let match;
 
-    const tickRegex = /^\s*__pyquest_tick\((\d+),\s*"([A-Za-z0-9_]+)"(?:,\s*([^)]+))?\)\s*$/gm;
+    const tickRegex = /^\s*(?:__pyquest_tick|_pyquest_tick)\((\d+),\s*"([A-Za-z0-9_]+)"(?:,\s*([^)]+))?\)\s*$/gm;
     while ((match = tickRegex.exec(code)) !== null) {
       const lineNumber = Number(match[1]);
       const statementType = match[2];

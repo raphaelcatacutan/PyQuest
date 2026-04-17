@@ -96,7 +96,7 @@ function createWeaponVariableCode(weapon: Weapon): string {
     const className = `_WeaponRef_${variableName}`;
 
     const classBody = skillMethods.length > 0
-        ? `${className}(_WeaponRefBase):\n${skillMethods}\n\n\n${variableName} = ${className}(${toPythonString(itemId)})`
+        ? `class ${className}(_WeaponRefBase):\n${skillMethods}\n\n\n${variableName} = ${className}(${toPythonString(itemId)})`
         : `${variableName} = _WeaponRefBase(${toPythonString(itemId)})`;
 
     return classBody;
@@ -165,11 +165,15 @@ function buildPickedupSymbolLines(input: PickedupModuleInput): string[] {
     const usedSymbols = new Set<string>();
     const lines: string[] = [];
 
+    // Pickedup remains the only user-facing module, so keep all item symbols available
+    // and let runtime event gates enforce whether an item can actually be used.
+    const shouldIncludeAllSymbols = true;
+
     for (const weapon of Object.values(Weapons)) {
         const normalizedId = normalizeItemId(weapon.id);
         const symbolName = normalizeIdentifier(weapon.id);
 
-        if (!weaponIdSet.has(normalizedId) || usedSymbols.has(symbolName)) {
+        if ((!shouldIncludeAllSymbols && !weaponIdSet.has(normalizedId)) || usedSymbols.has(symbolName)) {
             continue;
         }
 
@@ -181,7 +185,7 @@ function buildPickedupSymbolLines(input: PickedupModuleInput): string[] {
         const normalizedId = normalizeItemId(consumable.id);
         const symbolName = normalizeIdentifier(consumable.id);
 
-        if (!consumableIdSet.has(normalizedId) || usedSymbols.has(symbolName)) {
+        if ((!shouldIncludeAllSymbols && !consumableIdSet.has(normalizedId)) || usedSymbols.has(symbolName)) {
             continue;
         }
 
@@ -193,7 +197,7 @@ function buildPickedupSymbolLines(input: PickedupModuleInput): string[] {
         const normalizedId = normalizeItemId(armor.id);
         const symbolName = normalizeIdentifier(armor.id);
 
-        if (!armorIdSet.has(normalizedId) || usedSymbols.has(symbolName)) {
+        if ((!shouldIncludeAllSymbols && !armorIdSet.has(normalizedId)) || usedSymbols.has(symbolName)) {
             continue;
         }
 

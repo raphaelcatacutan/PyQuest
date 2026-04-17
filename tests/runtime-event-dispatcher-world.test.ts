@@ -43,4 +43,19 @@ describe("runtime world events", () => {
 
     expect(useGameStore.getState().inCombat).toBe(true);
   });
+
+  it("blocks explore(False) during active enemy battle", () => {
+    useSceneStore.setState({ scene: "forest" });
+    useGameStore.setState({ inCombat: true, isEnemy: true });
+
+    dispatchPythonRuntimeEvent({
+      name: "builtin.explore",
+      payload: { state: false },
+    });
+
+    expect(useGameStore.getState().inCombat).toBe(true);
+    expect(useTerminalStore.getState().logs).toContain(
+      "[PY]: explore(False) cannot end an active enemy battle.",
+    );
+  });
 });

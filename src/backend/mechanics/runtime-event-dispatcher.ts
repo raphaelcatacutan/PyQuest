@@ -576,60 +576,6 @@ function applyConsumableEffects(itemId: string, consumable: Consumable): void {
   });
 }
 
-function applyArmorActivation(itemId: string): void {
-  const armor = Armors[itemId];
-  if (!armor) {
-    appendTerminalLog(`Armor '${itemId}' is not registered.`);
-    return;
-  }
-
-  const player = usePlayerStore.getState();
-
-  player.gainDef(Math.max(0, Math.floor(armor.baseDef)));
-
-  for (const modifier of armor.modifiers) {
-    const magnitude = Math.max(0, Math.floor(modifier.value));
-    const signedMagnitude =
-      modifier.nature === "penalty" ? -magnitude : magnitude;
-
-    if (modifier.stat === "def") {
-      player.gainDef(signedMagnitude);
-      continue;
-    }
-
-    if (modifier.stat === "health") {
-      player.gainHP(signedMagnitude);
-      continue;
-    }
-
-    if (modifier.stat === "energy") {
-      player.gainEnergy(signedMagnitude);
-      continue;
-    }
-
-    if (modifier.stat === "dmg") {
-      player.setDamage(signedMagnitude);
-      continue;
-    }
-
-    if (modifier.stat === "atkSpeed") {
-      const speedMagnitude = Math.max(
-        0,
-        Number.isFinite(modifier.value) ? modifier.value : 0,
-      );
-      player.setAtkSpeed(
-        modifier.nature === "penalty" ? speedMagnitude : -speedMagnitude,
-      );
-    }
-  }
-
-  appendRuntimeDebug("armor activated", {
-    itemId,
-    baseDef: armor.baseDef,
-    modifiers: armor.modifiers.length,
-  });
-}
-
 export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
   const payload = event.payload;
 
@@ -954,24 +900,6 @@ export function dispatchPythonRuntimeEvent(event: PythonModuleCallEvent): void {
         itemId,
         energyCost: consumableEnergyCost,
       });
-      return;
-    }
-
-    case "pickedup.armor.activate": {
-      const itemId = normalizeItemId(readString(payload, "itemId", ""));
-      if (itemId.length === 0) {
-        appendTerminalLog("Armor activation failed: missing item id.");
-        return;
-      }
-
-      if (!getUnlockedPickedupImportState().armorItemIds.includes(itemId)) {
-        appendTerminalLog(
-          `'${itemId}' is not available in pickedup inventory.`,
-        );
-        return;
-      }
-
-      applyArmorActivation(itemId);
       return;
     }
 

@@ -1,4 +1,4 @@
-# PyQuest Python Runtime Reference
+﻿# PyQuest Python Runtime Reference
 
 This reference includes every player-facing callable currently available in the Python runtime.
 
@@ -650,562 +650,226 @@ from pickedup import wooden_wand
 ## Armors
 
 from pickedup import academy_hat
-- activate()
-  - effect: gain base def 2; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import aegis_helmet
-- activate()
-  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import apprentice_hat
-- activate()
-  - effect: gain base def 2; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import apprentice_robe
-- activate()
-  - effect: gain base def 3; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import archer_hood
-- activate()
-  - effect: gain base def 2; modifiers: bonus evasion 0.02
-  - energy cost: 0
 
 from pickedup import archers_garb
-- activate()
-  - effect: gain base def 3; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import ashen_helm
-- activate()
-  - effect: gain base def 4; modifiers: bonus dmg 2; penalty def 1
-  - energy cost: 0
 
 from pickedup import ashen_plate
-- activate()
-  - effect: gain base def 6; modifiers: bonus dmg 2; penalty def 1
-  - energy cost: 0
 
 from pickedup import bastion_mail
-- activate()
-  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import blackthorn_mask
-- activate()
-  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import blackweave_tunic
-- activate()
-  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import bulwark_great_helmet
-- activate()
-  - effect: gain base def 7; modifiers: bonus dmgReduction 0.04; bonus def 3; penalty energy 10
-  - energy cost: 0
 
 from pickedup import chainmail_armor
-- activate()
-  - effect: gain base def 3; modifiers: bonus def 1
-  - energy cost: 0
 
 from pickedup import chosen_eclipse
-- activate()
-  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import cloth_mask
-- activate()
-  - effect: gain base def 2; modifiers: bonus evasion 0.02
-  - energy cost: 0
 
 from pickedup import crown_of_the_seventh_circle
-- activate()
-  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import dawnbreak_visor
-- activate()
-  - effect: gain base def 7; modifiers: bonus dmg 3; bonus energy 18; penalty def 2
-  - energy cost: 0
 
 from pickedup import daybreak_hat
-- activate()
-  - effect: gain base def 7; modifiers: bonus health 32; bonus dmg 3; penalty atkSpeed 130
-  - energy cost: 0
 
 from pickedup import dusk_and_dawn
-- activate()
-  - effect: gain base def 12; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import duskleather_armor
-- activate()
-  - effect: gain base def 6; modifiers: bonus dmg 2; penalty dmgReduction 0.01
-  - energy cost: 0
 
 from pickedup import duskwrap_mask
-- activate()
-  - effect: gain base def 4; modifiers: bonus dmg 2; penalty dmgReduction 0.01
-  - energy cost: 0
 
 from pickedup import elbrauns_helm
-- activate()
-  - effect: gain base def 7; modifiers: bonus def 3; bonus health 32; penalty atkSpeed 130
-  - energy cost: 0
 
 from pickedup import elbrauns_iron_will
-- activate()
-  - effect: gain base def 10; modifiers: bonus def 3; bonus health 32; penalty atkSpeed 130
-  - energy cost: 0
 
 from pickedup import elven_hood
-- activate()
-  - effect: gain base def 4; modifiers: bonus evasion 0.03; penalty health 10
-  - energy cost: 0
 
 from pickedup import elven_leather
-- activate()
-  - effect: gain base def 6; modifiers: bonus atkSpeed 110; penalty def 1
-  - energy cost: 0
 
 from pickedup import falconhide_vest
-- activate()
-  - effect: gain base def 6; modifiers: bonus dmg 2; penalty dmgReduction 0.01
-  - energy cost: 0
 
 from pickedup import feather_charm
-- activate()
-  - effect: gain base def 2; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import final_memorial
-- activate()
-  - effect: gain base def 10; modifiers: bonus dmg 3; bonus dmgReduction 0.04; penalty energy 10
-  - energy cost: 0
 
 from pickedup import floyds_big_hat
-- activate()
-  - effect: gain base def 7; modifiers: bonus energy 18; bonus dmg 3; penalty def 2
-  - energy cost: 0
 
 from pickedup import floyds_star_cloak
-- activate()
-  - effect: gain base def 10; modifiers: bonus energy 18; bonus dmg 3; penalty def 2
-  - energy cost: 0
 
 from pickedup import galaxies_heart
-- activate()
-  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import galeforce_amulet
-- activate()
-  - effect: gain base def 7; modifiers: bonus dmg 3; bonus atkSpeed 150; penalty health 16
-  - energy cost: 0
 
 from pickedup import guard_helm
-- activate()
-  - effect: gain base def 2; modifiers: bonus dmgReduction 0.01
-  - energy cost: 0
 
 from pickedup import guard_mail
-- activate()
-  - effect: gain base def 3; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import hawkeye_band
-- activate()
-  - effect: gain base def 4; modifiers: bonus dmg 2; penalty dmgReduction 0.01
-  - energy cost: 0
 
 from pickedup import heavy_helm
-- activate()
-  - effect: gain base def 2; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import high_wizard_hat
-- activate()
-  - effect: gain base def 4; modifiers: bonus dmg 2; penalty def 1
-  - energy cost: 0
 
 from pickedup import high_wizard_robe
-- activate()
-  - effect: gain base def 6; modifiers: bonus dmg 2; penalty def 1
-  - energy cost: 0
 
 from pickedup import horus_mantle
-- activate()
-  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import hunter_cap
-- activate()
-  - effect: gain base def 2; modifiers: bonus atkSpeed 70
-  - energy cost: 0
 
 from pickedup import hunter_tunic
-- activate()
-  - effect: gain base def 3; modifiers: bonus evasion 0.02
-  - energy cost: 0
 
 from pickedup import iron_cuirass
-- activate()
-  - effect: gain base def 3; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import iron_helm
-- activate()
-  - effect: gain base def 2; modifiers: bonus def 1
-  - energy cost: 0
 
 from pickedup import knight_armor
-- activate()
-  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import knight_helm
-- activate()
-  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import lantiers_blessing
-- activate()
-  - effect: gain base def 10; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty def 2
-  - energy cost: 0
 
 from pickedup import lantiers_persona
-- activate()
-  - effect: gain base def 7; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty def 2
-  - energy cost: 0
 
 from pickedup import last_bastion
-- activate()
-  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import leather_jerkin
-- activate()
-  - effect: gain base def 3; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import leather_mask
-- activate()
-  - effect: gain base def 2; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import leather_vest
-- activate()
-  - effect: gain base def 3; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import light_jerkin
-- activate()
-  - effect: gain base def 3; modifiers: bonus evasion 0.02
-  - energy cost: 0
 
 from pickedup import lost_from_light
-- activate()
-  - effect: gain base def 16; modifiers: bonus def 5; bonus evasion 0.07; bonus energy 26; bonus dmg 5; bonus atkSpeed 220; bonus health 48; bonus dmgReduction 0.06
-  - energy cost: 0
 
 from pickedup import monocle
-- activate()
-  - effect: gain base def 2; modifiers: bonus atkSpeed 70
-  - energy cost: 0
 
 from pickedup import moonthread_hat
-- activate()
-  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import moonthread_robe
-- activate()
-  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import mountains_heart
-- activate()
-  - effect: gain base def 10; modifiers: bonus health 32; bonus dmgReduction 0.04; penalty atkSpeed 130
-  - energy cost: 0
 
 from pickedup import nightrunner_garb
-- activate()
-  - effect: gain base def 6; modifiers: bonus evasion 0.03; penalty health 10
-  - energy cost: 0
 
 from pickedup import nightstalker_mask
-- activate()
-  - effect: gain base def 4; modifiers: bonus evasion 0.03; penalty health 10
-  - energy cost: 0
 
 from pickedup import north_wind_armor
-- activate()
-  - effect: gain base def 10; modifiers: bonus dmg 3; bonus evasion 0.05; penalty health 16
-  - energy cost: 0
 
 from pickedup import old_mantle
-- activate()
-  - effect: gain base def 3; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import puppeteers_mask
-- activate()
-  - effect: gain base def 7; modifiers: bonus evasion 0.05; bonus dmg 3; penalty health 16
-  - energy cost: 0
 
 from pickedup import ranger_amulet
-- activate()
-  - effect: gain base def 4; modifiers: bonus atkSpeed 110; penalty def 1
-  - energy cost: 0
 
 from pickedup import ranger_jerkin
-- activate()
-  - effect: gain base def 6; modifiers: bonus evasion 0.03; penalty health 10
-  - energy cost: 0
 
 from pickedup import runed_greathelm
-- activate()
-  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import runic_monocle
-- activate()
-  - effect: gain base def 4; modifiers: bonus atkSpeed 110; penalty health 10
-  - energy cost: 0
 
 from pickedup import runic_robe
-- activate()
-  - effect: gain base def 6; modifiers: bonus atkSpeed 110; penalty health 10
-  - energy cost: 0
 
 from pickedup import scholars_glasses
-- activate()
-  - effect: gain base def 2; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import scout_band
-- activate()
-  - effect: gain base def 2; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import scout_vest
-- activate()
-  - effect: gain base def 3; modifiers: bonus atkSpeed 70
-  - energy cost: 0
 
 from pickedup import shade_scarf
-- activate()
-  - effect: gain base def 2; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import shadow_realm_mask
-- activate()
-  - effect: gain base def 7; modifiers: bonus dmg 3; bonus energy 18; penalty health 16
-  - energy cost: 0
 
 from pickedup import shadow_tunic
-- activate()
-  - effect: gain base def 3; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import shadoweave_cloak
-- activate()
-  - effect: gain base def 10; modifiers: bonus evasion 0.05; bonus dmg 3; penalty health 16
-  - energy cost: 0
 
 from pickedup import shadowthread_cloak
-- activate()
-  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import shadowveil_hood
-- activate()
-  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import silent_hood
-- activate()
-  - effect: gain base def 4; modifiers: bonus atkSpeed 110; penalty def 1
-  - energy cost: 0
 
 from pickedup import silentstep_vest
-- activate()
-  - effect: gain base def 6; modifiers: bonus atkSpeed 110; penalty def 1
-  - energy cost: 0
 
 from pickedup import silverweave_cloak
-- activate()
-  - effect: gain base def 6; modifiers: bonus def 2; penalty atkSpeed 90
-  - energy cost: 0
 
 from pickedup import silverweave_hat
-- activate()
-  - effect: gain base def 4; modifiers: bonus def 2; penalty atkSpeed 90
-  - energy cost: 0
 
 from pickedup import simple_cloak
-- activate()
-  - effect: gain base def 3; modifiers: bonus atkSpeed 70
-  - energy cost: 0
 
 from pickedup import skies_blessing
-- activate()
-  - effect: gain base def 7; modifiers: bonus evasion 0.05; bonus health 32; penalty def 2
-  - energy cost: 0
 
 from pickedup import soldier_armor
-- activate()
-  - effect: gain base def 3; modifiers: bonus dmgReduction 0.01
-  - energy cost: 0
 
 from pickedup import soldier_helm
-- activate()
-  - effect: gain base def 2; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import sorbets_wind_amulet
-- activate()
-  - effect: gain base def 7; modifiers: bonus atkSpeed 150; bonus energy 18; penalty def 2
-  - energy cost: 0
 
 from pickedup import sorbets_windbreaker
-- activate()
-  - effect: gain base def 10; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty def 2
-  - energy cost: 0
 
 from pickedup import star_shatterer_cloak
-- activate()
-  - effect: gain base def 10; modifiers: bonus dmg 3; bonus health 32; penalty atkSpeed 130
-  - energy cost: 0
 
 from pickedup import starreader_hat
-- activate()
-  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import starwoven_mantle
-- activate()
-  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import steel_cuirass
-- activate()
-  - effect: gain base def 6; modifiers: bonus def 2; penalty atkSpeed 90
-  - energy cost: 0
 
 from pickedup import steel_helm
-- activate()
-  - effect: gain base def 4; modifiers: bonus def 2; penalty atkSpeed 90
-  - energy cost: 0
 
 from pickedup import stormwatch_circlet
-- activate()
-  - effect: gain base def 4; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import stormweave_tunic
-- activate()
-  - effect: gain base def 6; modifiers: bonus health 20; penalty evasion 0.015
-  - energy cost: 0
 
 from pickedup import street_hood
-- activate()
-  - effect: gain base def 2; modifiers: bonus atkSpeed 70
-  - energy cost: 0
 
 from pickedup import student_robe
-- activate()
-  - effect: gain base def 3; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import sulgatas_shadow
-- activate()
-  - effect: gain base def 10; modifiers: bonus dmg 3; bonus energy 18; penalty health 16
-  - energy cost: 0
 
 from pickedup import tempestveil_cloak
-- activate()
-  - effect: gain base def 10; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty health 16
-  - energy cost: 0
 
 from pickedup import thiefs_garb
-- activate()
-  - effect: gain base def 3; modifiers: bonus atkSpeed 70
-  - energy cost: 0
 
 from pickedup import trail_amulet
-- activate()
-  - effect: gain base def 2; modifiers: bonus health 12
-  - energy cost: 0
 
 from pickedup import travelers_coat
-- activate()
-  - effect: gain base def 3; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import vanguard_armor
-- activate()
-  - effect: gain base def 6; modifiers: bonus dmgReduction 0.02; penalty atkSpeed 90
-  - energy cost: 0
 
 from pickedup import vanguard_helm
-- activate()
-  - effect: gain base def 4; modifiers: bonus dmgReduction 0.02; penalty atkSpeed 90
-  - energy cost: 0
 
 from pickedup import voidpetal_hat
-- activate()
-  - effect: gain base def 7; modifiers: bonus atkSpeed 150; bonus evasion 0.05; penalty health 16
-  - energy cost: 0
 
 from pickedup import windcall_charm
-- activate()
-  - effect: gain base def 4; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import windrunner_coat
-- activate()
-  - effect: gain base def 6; modifiers: bonus energy 12; penalty def 1
-  - energy cost: 0
 
 from pickedup import worn_cloak
-- activate()
-  - effect: gain base def 3; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import worn_greathelm
-- activate()
-  - effect: gain base def 2; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import worn_plate
-- activate()
-  - effect: gain base def 3; modifiers: bonus dmg 1
-  - energy cost: 0
 
 from pickedup import worn_veil
-- activate()
-  - effect: gain base def 2; modifiers: bonus energy 8
-  - energy cost: 0
 
 from pickedup import woven_hat
-- activate()
-  - effect: gain base def 2; modifiers: bonus def 1
-  - energy cost: 0
 
 from pickedup import woven_robe
-- activate()
-  - effect: gain base def 3; modifiers: bonus def 1
-  - energy cost: 0
 
 from pickedup import yggdrasil_shroud
-- activate()
-  - effect: gain base def 10; modifiers: bonus health 32; bonus energy 18; penalty atkSpeed 130
-  - energy cost: 0
 

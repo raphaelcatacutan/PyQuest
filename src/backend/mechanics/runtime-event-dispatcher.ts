@@ -1,7 +1,5 @@
 import {
-  useBossStore,
   useDungeonStore,
-  useEnemyStore,
   useGameStore,
   usePlayerStore,
   useSceneStore,
@@ -12,6 +10,7 @@ import {
 import type { SceneTypes } from "../../game/types/scene.types";
 import type { PythonModuleCallEvent } from "./parser";
 import statementDamageTable from "./damage.json";
+import { enqueuePlayerAttack } from "./combat/player-attacks";
 
 const SCENE_VALUES: SceneTypes[] = [
   "",
@@ -115,15 +114,8 @@ function applyPlayerAttackDamage(damage: number): void {
     );
     return;
   }
-
-  if (gameState.isEnemy) {
-    useEnemyStore.getState().takeDamage(damage);
-    appendRuntimeLog(`Enemy took ${damage} damage.`);
-    return;
-  }
-
-  useBossStore.getState().takeDamage(damage);
-  appendRuntimeLog(`Boss took ${damage} damage.`);
+  enqueuePlayerAttack(damage, "python.attack");
+  appendRuntimeLog(`Queued player attack (${damage}).`);
 }
 
 function resolveStatementDamage(statementType: string): number {

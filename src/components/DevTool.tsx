@@ -36,6 +36,7 @@ export default function DevTool(){
   if (!devTool) return null
 
   const [input, setInput] = useState("")
+  const [showCombatDebug, setShowCombatDebug] = useState(true)
   const { playerId } = useInventoryStore(
   useShallow((s) => ({
     playerId: s.player_id
@@ -166,8 +167,13 @@ export default function DevTool(){
           useSoundStore.getState().playSfx('click')
           console.log("Played Hit SFX")
           }}/>
+        <Button
+          text={`Combat Log (${showCombatDebug ? "on" : "off"})`}
+          onClick={() => setShowCombatDebug((s) => !s)}
+        />
       </div>
 
+      {showCombatDebug && (
       <div className="absolute z-101 bottom-20 right-0 w-[420px] max-h-72 overflow-auto border bg-zinc-900 p-2 text-xs">
         <div className="flex items-center justify-between mb-1">
           <span className="font-semibold">Combat Debug</span>
@@ -201,6 +207,7 @@ export default function DevTool(){
           ))
         )}
       </div>
+      )}
       
     </>
   )

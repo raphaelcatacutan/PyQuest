@@ -62,7 +62,7 @@ export type PythonRunOptions = {
 
 let runtimeHooks: PythonRuntimeHooks = {};
 let runtimeExecutionOptions: Required<PythonExecutionOptions> = {
-    defaultInstructionDelaySeconds: 1,
+    defaultInstructionDelaySeconds: 0,
     enableStatementLogging: true
 };
 let activeInstructionDelaySeconds = 0;
@@ -895,4 +895,3 @@ export function validatePythonCodeDetailed(code: string): {
         errors
     };
 }
-

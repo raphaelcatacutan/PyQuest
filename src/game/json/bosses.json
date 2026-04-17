@@ -17,7 +17,7 @@
         "energyCost": 12,
         "effect": {
           "type": "bleed",
-          "dmgPerSecond": 5,
+          "dmgPerSecond": 2,
           "target": "player",
           "durationSeconds": 5,
           "tickIntervalSeconds": 1

@@ -7,6 +7,8 @@ import { resetBountyPersist } from './bountyQuestStore';
 import { resetDungeonPersist } from './dungeonStore';
 import { resetKillTrackerPersist } from './killTrackerStore';
 import showToast from '@/src/components/ui/Toast';
+import { useSceneStore } from './sceneStore';
+import { useTerminalStore } from './terminalStore';
 
 export const loadUserProfile = async (playerId: string) => {
   if (!playerId) return;
@@ -152,7 +154,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
         const hp = Math.max(0, state.hp - amount)
         if (hp <= 0) { useSoundStore.getState().playSfx('death') }
         else { useSoundStore.getState().playSfx('hurt') }
-        return { hp: hp }
+        return { hp: 100 }
       }),
       resetDamage: () => set({ baseDmg: 2 }),
 
@@ -200,6 +202,9 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       toggleIsHealing: (bool) => set((s) => ({ isHealing: bool ?? !s.isHealing })),
 
       logOut: () => {
+        useSceneStore.getState().setScene('village')
+        useTerminalStore.getState().clearLogs()
+
         // Reset all persist keys before clearing state to prevent ghost logins
         usePlayerStore.persist.setOptions({
           name: 'pyquest-active-session',

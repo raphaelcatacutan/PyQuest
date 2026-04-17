@@ -90,9 +90,12 @@ function assertExecutionActive(controller: PythonExecutionController): void {
     }
 }
 
+function isSuspensionRuntimeError(errorMessage: string): boolean {
+    return /SuspensionError:\s*Cannot call a function that blocks or suspends here/i.test(errorMessage);
+}
+
 function formatRuntimeErrorMessage(errorMessage: string): string {
-    const suspensionErrorPattern = /SuspensionError:\s*Cannot call a function that blocks or suspends here/i;
-    if (suspensionErrorPattern.test(errorMessage)) {
+    if (isSuspensionRuntimeError(errorMessage)) {
         const lineMatch = errorMessage.match(/(?:on\s+)?line\s+(\d+)/i);
         const lineInfo = lineMatch ? ` (line ${lineMatch[1]})` : "";
         return `PyQuest runtime error${lineInfo}: this action tried to pause execution in a restricted runtime context. This is a game runtime limitation, not a Python syntax mistake.`;
@@ -444,9 +447,12 @@ function countChar(text: string, char: string): number {
     return (text.match(new RegExp(`\\${char}`, "g")) ?? []).length;
 }
 
-function instrumentPythonInstructions(code: string): string {
+function instrumentPythonInstructions(code: string, forcedDelaySeconds?: number): string {
     const lines = code.split(/\r?\n/);
     const instrumentedLines: string[] = [];
+    const resolvedForcedDelay = forcedDelaySeconds === undefined
+        ? undefined
+        : normalizeDelaySeconds(forcedDelaySeconds, 0);
 
     let bracketDepth = 0;
     let previousLineContinues = false;
@@ -473,7 +479,10 @@ function instrumentPythonInstructions(code: string): string {
         if (shouldInstrument) {
             const indentation = originalLine.match(/^\s*/) ? (originalLine.match(/^\s*/) as RegExpMatchArray)[0] : "";
             const statementType = inferStatementType(trimmedLine);
-            const delayOverride = extractInlineDelayOverride(originalLine);
+            const inlineDelayOverride = extractInlineDelayOverride(originalLine);
+            const delayOverride = resolvedForcedDelay === undefined
+                ? inlineDelayOverride
+                : resolvedForcedDelay;
             const tickCall = delayOverride === undefined
                 ? `${indentation}${PYQUEST_TICK_BRIDGE_NAME}(${index + 1}, "${statementType}")`
                 : `${indentation}${PYQUEST_TICK_BRIDGE_NAME}(${index + 1}, "${statementType}", ${delayOverride})`;
@@ -737,18 +746,27 @@ export function runPython(code: string, options?: PythonRunOptions): Promise<str
 
         let output = "";
         const builtinPrelude = getBuiltinPreludeCode();
-        const instrumentedCode = instrumentPythonInstructions(code);
-        const transformedCode = expandCustomModuleImports(instrumentedCode);
-        const sourceCode = builtinPrelude ? `${builtinPrelude}\n\n${transformedCode}` : transformedCode;
+        const buildSourceCode = (forcedDelaySeconds?: number): string => {
+            const instrumentedCode = instrumentPythonInstructions(code, forcedDelaySeconds);
+            const transformedCode = expandCustomModuleImports(instrumentedCode);
+            return builtinPrelude ? `${builtinPrelude}\n\n${transformedCode}` : transformedCode;
+        };
 
-        // Ensure each run starts from a clean import/compiler state so newly loaded modules are used.
-        if (Sk?.builtin?.dict) {
-            Sk.sysmodules = new Sk.builtin.dict([]);
-        }
-        Sk.realsyspath = undefined;
-        if (typeof Sk.resetCompiler === "function") {
-            Sk.resetCompiler();
-        }
+        const resetRuntimeState = (): void => {
+            // Ensure each run starts from a clean import/compiler state so newly loaded modules are used.
+            if (Sk?.builtin?.dict) {
+                Sk.sysmodules = new Sk.builtin.dict([]);
+            }
+            Sk.realsyspath = undefined;
+            if (typeof Sk.resetCompiler === "function") {
+                Sk.resetCompiler();
+            }
+        };
+
+        const runSkulpt = (sourceCode: string): Promise<void> => {
+            resetRuntimeState();
+            return Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, sourceCode, true)) as Promise<void>;
+        };
 
         Sk.configure({
             output: (text: string) => {
@@ -790,20 +808,31 @@ export function runPython(code: string, options?: PythonRunOptions): Promise<str
             }
         });
 
-        Sk.misceval.asyncToPromise(() => Sk.importMainWithBody("<stdin>", false, sourceCode, true))
-            .then(() => {
-                resolve(output);
-            })
-            .catch((e: any) => {
-                const errorMessage = e instanceof Error ? e.message : String(e);
-                if (errorMessage.includes(EXECUTION_STOPPED_MESSAGE)) {
-                    output += EXECUTION_STOPPED_MESSAGE;
-                    resolve(output);
-                    return;
-                }
+        const runWithRetry = (allowRetryOnSuspension: boolean): Promise<string> => {
+            const sourceCode = buildSourceCode(allowRetryOnSuspension ? undefined : 0);
+            return runSkulpt(sourceCode)
+                .then(() => output)
+                .catch((e: any) => {
+                    const errorMessage = e instanceof Error ? e.message : String(e);
 
-                output += "Error: " + formatRuntimeErrorMessage(errorMessage);
-                resolve(output);
+                    if (errorMessage.includes(EXECUTION_STOPPED_MESSAGE)) {
+                        output += EXECUTION_STOPPED_MESSAGE;
+                        return output;
+                    }
+
+                    if (allowRetryOnSuspension && isSuspensionRuntimeError(errorMessage)) {
+                        output = "";
+                        return runWithRetry(false);
+                    }
+
+                    output += "Error: " + formatRuntimeErrorMessage(errorMessage);
+                    return output;
+                });
+        };
+
+        runWithRetry(true)
+            .then((finalOutput) => {
+                resolve(finalOutput);
             })
             .finally(() => {
                 if (activeExecutionController === executionController) {

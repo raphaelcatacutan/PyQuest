@@ -15,7 +15,6 @@ import { bindPythonRuntimeToZustand, unbindPythonRuntimeFromZustand } from "@/sr
 import { dispatchPythonRuntimeEvent } from "@/src/backend/mechanics/runtime-event-dispatcher";
 import showToast from "../ui/Toast";
 import type { MachineProblem } from "@/src/game/types/mp.types";
-import type { LootDrop, LootItem } from "@/src/game/types/loot.types";
 import type { InventoryNode } from "@/src/game/types/inventory.types";
 import { validateMachineProblemSolution } from "@/src/game/data/mps";
 
@@ -24,10 +23,11 @@ export default function CodeEditor() {
   const [ hover, isHovered ] = useState(false)
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const runningRef = useRef(false);
+  const handleRunRef = useRef<() => void>(() => {});
   const handleEditorDidMount: OnMount = (editor, _monaco) => {
     editorRef.current = editor;
     editor.addCommand(_monaco.KeyMod.CtrlCmd | _monaco.KeyCode.Enter, () => {
-      handleRun();
+      handleRunRef.current();
     });
   };
   const { hp, maxHP } = usePlayerStore(
@@ -43,15 +43,12 @@ export default function CodeEditor() {
     }))
   )
   const appendToLogs = useTerminalStore((s) => s.appendToLog)
-  const { addInventoryItem, playerInventory, setInventoryItemCode } = useInventoryStore(
+  const { playerInventory, setInventoryItemCode } = useInventoryStore(
     useShallow((s) => ({
-      addInventoryItem: s.addInventoryItem,
       playerInventory: s.playerInventory,
       setInventoryItemCode: s.setInventoryItemCode,
     }))
   )
-  const gainXP = usePlayerStore((s) => s.gainXP)
-  const gainCoins = usePlayerStore((s) => s.gainCoins)
   const { inCombat, isEnemy } = useGameStore(
     useShallow((s) => ({
       inCombat: s.inCombat,
@@ -188,58 +185,10 @@ export default function CodeEditor() {
     return moduleDefinitions.length - filteredDefinitions.length
   }
 
-  function randomBetween(min: number, max: number): number {
-    const low = Math.max(0, Math.floor(Math.min(min, max)));
-    const high = Math.max(low, Math.floor(Math.max(min, max)));
-    return Math.floor(Math.random() * (high - low + 1)) + low;
-  }
-
-  function grantLootItems(reward: LootDrop): number {
-    let totalGranted = 0;
-
-    const grantCategory = (items: LootItem[], kind: "weapon" | "armor" | "consumable") => {
-      items.forEach((item) => {
-        const quantity = Math.max(1, item.quantity ?? 1);
-        for (let index = 0; index < quantity; index += 1) {
-          const uniqueId = `mp-loot-${item.itemId}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-          addInventoryItem("pickedup_folder", {
-            id: uniqueId,
-            kind,
-            itemId: item.itemId,
-            name: item.itemId,
-          });
-          totalGranted += 1;
-        }
-      });
-    };
-
-    grantCategory(reward.weapons, "weapon");
-    grantCategory(reward.armors, "armor");
-    grantCategory(reward.consumables, "consumable");
-
-    return totalGranted;
-  }
-
-  function completeMachineProblemAndDefeatTarget(activeProblem: MachineProblem): void {
-    const reward = activeProblem.reward;
-    const xpReward = randomBetween(reward.xpDropMin, reward.xpDropMax);
-    const coinReward = randomBetween(reward.coinDropMin, reward.coinDropMax);
-    const grantedLootCount = grantLootItems(reward);
-
-    if (xpReward > 0) {
-      gainXP(xpReward);
-    }
-
-    if (coinReward > 0) {
-      gainCoins(coinReward);
-    }
-
-    const rewardSuffix = grantedLootCount > 0 ? ` + ${grantedLootCount} loot item(s)` : "";
-
-    appendToLogs(`[PY]: Machine problem solved. +${xpReward} XP, +${coinReward} coins${rewardSuffix}.`);
+  function completeMachineProblemAndDefeatTarget(): void {
     showToast({
       variant: "success",
-      message: `Machine problem solved! +${xpReward} XP, +${coinReward} coins${rewardSuffix}`,
+      message: "Machine problem solved!",
     });
 
     if (isEnemy) {
@@ -260,7 +209,7 @@ export default function CodeEditor() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        handleRun();
+        handleRunRef.current();
       }
     };
 
@@ -368,7 +317,7 @@ export default function CodeEditor() {
       const solved = validateMachineProblemSolution(activeProblem, code);
       if (solved) {
         appendToLogs("[PY]: Machine problem requirements satisfied.");
-        completeMachineProblemAndDefeatTarget(activeProblem);
+        completeMachineProblemAndDefeatTarget();
         runningRef.current = false;
         return;
       }
@@ -405,6 +354,12 @@ export default function CodeEditor() {
       runningRef.current = false;
     }
   }
+
+  useEffect(() => {
+    handleRunRef.current = () => {
+      void handleRun();
+    };
+  }, [handleRun]);
 
   function handleExitFile() {
 
@@ -459,6 +414,8 @@ export default function CodeEditor() {
             readOnly: isActiveFileReadOnly,
             wordBasedSuggestions: "off", // Prevents suggesting words found in the document
             snippetSuggestions: "none",  // Prevents code snippets from popping up
+            wordWrap: "on",              // Enables text wrapping
+            wrappingIndent: "indent",    // Keeps the wrapped line indented for readability
           }}
         />
 

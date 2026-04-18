@@ -11,11 +11,14 @@ import { useSoundStore } from "@/src/game/store/soundStore";
 export default function LoginPage() {
   const navigate = useNavigate()
   const [username, setUsername] = useState("");
+  const [showAgeDialog, setShowAgeDialog] = useState(false);
+  const [pendingAge, setPendingAge] = useState("");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingUsername, setPendingUsername] = useState("");
-  const { setUserId} = usePlayerStore(
+  const { setUserId, setAge } = usePlayerStore(
     useShallow((s) => ({
-      setUserId: s.setUserId
+      setUserId: s.setUserId,
+      setAge: s.setAge
     }))
   )
   const { setPlayerId } = useInventoryStore(
@@ -57,25 +60,47 @@ export default function LoginPage() {
 
     // Check if user exists
     if (userExists(username)) {
-      // User exists, proceed to game
-      await proceedToGame(username);
-    } else {
-      // User does not exist, show confirmation dialog
-      setPendingUsername(username);
+      // User exists, show overwrite confirmation dialog
       setShowConfirmDialog(true);
+      setPendingUsername(username);
+    } else {
+      // New user, show age input dialog
+      setShowAgeDialog(true);
+      setPendingUsername(username);
     }
   }
 
-  const handleCreateAccount = async () => {
+  const handleAgeSubmit = async () => {
+    if (!pendingAge || parseInt(pendingAge) <= 0) {
+      showToast({ variant: "error", message: "Please enter a valid age" });
+      return;
+    }
+    
+    setAge(parseInt(pendingAge));
     if (registerUser(pendingUsername)) {
-      setShowConfirmDialog(false);
+      setShowAgeDialog(false);
       setUsername("");
+      setPendingAge("");
+      setPendingUsername("");
       toggleGuide(true);
       await proceedToGame(pendingUsername, { isNewUser: true });
     } else {
       showToast({ variant: "error", message: "Failed to create account" });
-      setShowConfirmDialog(false);
+      setShowAgeDialog(false);
     }
+  }
+
+  const handleAgeCancel = () => {
+    setShowAgeDialog(false);
+    setPendingUsername("");
+    setPendingAge("");
+  }
+
+  const handleOverwriteAccount = async () => {
+    setShowConfirmDialog(false);
+    setUsername("");
+    setPendingUsername("");
+    await proceedToGame(pendingUsername);
   }
 
   const handleCancel = () => {
@@ -142,15 +167,54 @@ export default function LoginPage() {
         </div>
       </div>
 
+      {/* Age Input Dialog */}
+      {showAgeDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-sm rounded-2xl border-3 border-gray-500 bg-gray-900 p-8 shadow-2xl">
+            <h2 className="mb-4 text-center text-xl font-semibold text-gray-100">
+              Create Account
+            </h2>
+            <p className="mb-6 text-center text-sm text-gray-300">
+              Welcome, <span className="font-semibold text-yellow-300">{pendingUsername}</span>! Please enter your age to begin your adventure.
+            </p>
+            
+            <input
+              type="number"
+              min="1"
+              value={pendingAge}
+              onChange={(e) => setPendingAge(e.target.value)}
+              placeholder="Enter your age"
+              autoFocus
+              className="w-full mb-4 rounded-xl border border-white/10 bg-black/40 p-3 text-gray-100 placeholder:text-gray-500 outline-none focus:border-yellow-200/60 focus:ring-2 focus:ring-yellow-200/20"
+            />
+            
+            <div className="flex gap-4">
+              <button
+                onClick={handleAgeCancel}
+                className="flex-1 rounded-xl border-2 border-gray-500 px-4 py-2 font-semibold text-gray-300 cursor-pointer hover:bg-gray-800 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAgeSubmit}
+                className="flex-1 rounded-xl bg-yellow-600 px-4 py-2 font-semibold text-gray-100 cursor-pointer hover:bg-yellow-500 transition"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Confirmation Dialog */}
       {showConfirmDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-sm rounded-2xl border-3 border-gray-500 bg-gray-900 p-8 shadow-2xl">
             <h2 className="mb-4 text-center text-xl font-semibold text-gray-100">
-              Create New Account?
+              Account Exists
             </h2>
-            <p className="mb-6 text-center text-[20px] text-gray-300">
-              The username <span className="font-semibold text-yellow-300">{pendingUsername}</span> does not exist. Would you like to create a new account with this username?
+            <p className="mb-6 text-center text-sm text-gray-300">
+              An account with the username <span className="font-semibold text-yellow-300">{pendingUsername}</span> already exists. Would you like to continue with this account?
             </p>
             
             <div className="flex gap-4">
@@ -161,10 +225,10 @@ export default function LoginPage() {
                 Cancel
               </button>
               <button
-                onClick={handleCreateAccount}
+                onClick={handleOverwriteAccount}
                 className="flex-1 rounded-xl bg-yellow-600 px-4 py-2 font-semibold text-gray-100 cursor-pointer hover:bg-yellow-500 transition"
               >
-                Create Account
+                Continue
               </button>
             </div>
           </div>

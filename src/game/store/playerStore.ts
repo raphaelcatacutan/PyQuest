@@ -132,6 +132,7 @@ interface PlayerStoreProps extends Player {
   setUserId: (user_id: string) => void;
   setUsername: (username: string) => void;
   setPassword: (pass: string) => void;
+  setAge: (age: number) => void;
   gainHP: (amount: number) => void;
   setMaxHP: (amount: number) => void;
   resetMaxHP: () => void;
@@ -213,6 +214,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       
       setUsername: (username) => set({ username }),
       setPassword: (pass) => set({ password: pass }),
+      setAge: (age) => set({ age: age }),
 
       // gainHP: (amount) => set((state) => ({ hp: state.hp + amount })),
       gainHP: (amount) => {

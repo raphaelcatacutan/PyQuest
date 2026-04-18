@@ -70,8 +70,6 @@ export const LootInventoryTree = forwardRef<
     }
   }));
 
-  // TODO: Add Confirm Message, Loot will disappear after confirming. Must have "Don't show again" option
-  
   function handleTrash(nodeIds: string[]) {
     // Remove items from inventory
     const deleteFromArray = (items: InventoryNode[]): InventoryNode[] => {

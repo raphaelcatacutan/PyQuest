@@ -3,8 +3,6 @@ import { useBossStore } from "@/src/game/store"
 import { getRandomMP } from "@/src/game/data/dungeon";
 import { useEffect, useRef, useState } from "react";
 
-// TODO: Bug: terminal outputs double console, meaning useEffect is being performed twice.
-//            This affects which enemy/boss is being rendered
 
 export default function BossEncounter(){
   const { name, hp, maxHp, energy, maxEnergy, bossImg, activeProblem } = useBossStore(

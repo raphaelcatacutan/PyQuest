@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import { Metrics } from "../types/metrics.types";
+import { Metrics, LevelStats, TestResult } from "../types/metrics.types";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { SceneTypes } from "../types/scene.types";
 
 /**
  * 
@@ -13,187 +15,310 @@ interface MetricStoreProps extends Metrics {
   // Metrics trackers
   trackPlaytime: (msElapsed: number) => void;
   trackDamageTaken: (dmg: number) => void;
+  trackDamageInflicted: (dmg: number) => void;
   trackDeath: () => void;
+  trackEnemyEncountered: (level: number) => void;
   trackEnemyDefeated: (level: number) => void;
+  trackBossEncountered: (level: number) => void;
   trackBossDefeated: (level: number) => void;
   trackCoinsEarned: (coins: number, level: number) => void;
   trackCoinsSpent: (coins: number, level: number) => void;
   trackXpGained: (xp: number, level: number) => void;
+  trackWeaponUsed: (level: number) => void;
+  trackArmorUsed: (level: number) => void;
   trackConsumableUsed: (level: number) => void;
   trackError: (level: number) => void;
+  trackCombo: (comboCount: number, level: number) => void;
+  trackTimeAliveInBattle: (timeMs: number, level: number) => void;
+  trackTimeAliveInExploration: (timeMs: number, level: number) => void;
+  trackMpSolved: (level: number) => void;
+  trackGoTo: (scene: SceneTypes) => void;
+  trackSyntaxError: (errorType: string) => void;
+  recordTestResult: (testId: string, result: TestResult, isPreTest: boolean) => void;
   incrementSessionCount: () => void;
   recordLastPlayed: () => void;
+  resetMetrics: () => void;
 }
 
-const saveMetricsToLocalStorage = (playerId: string, metrics: Metrics) => {
-  if (playerId) {
-    localStorage.setItem(`metrics-${playerId}`, JSON.stringify(metrics));
-  }
-};
 
-const loadMetricsFromLocalStorage = (playerId: string): Partial<Metrics> => {
-  if (!playerId) return {};
-  const saved = localStorage.getItem(`metrics-${playerId}`);
-  return saved ? JSON.parse(saved) : {};
-};
 
-export const useMetricStore = create<MetricStoreProps>((set) => ({
-  playerId: "",
-  playtime: 0,
-  lastPlayed: 0,
-  sessionCount: 0,
-  totalDamageTaken: 0,
-  totalDeaths: 0,
-  errorPerLevel: {},
-  consumablesUsedPerLevel: {},
-  enemiesDefeatedPerLevel: {},
-  bossesDefeatedPerLevel: {},
-  coinsEarnedPerLevel: {},
-  coinsSpentPerLevel: {},
-  xpGainedPerLevel: {},
-  deathsPerLevel: {},
-  firstEntry: true,
+const createEmptyLevelStats = (): LevelStats => ({
+  mpSolved: 0,
+  errors: 0,
+  highestCombo: 0,
+  longestTimeAliveInBattle: 0,
+  longestTimeAliveDuringExploration: 0,
+  weaponsUsed: 0,
+  armorsWore: 0,
+  consumablesUsed: 0,
+  enemiesEncountered: 0,
+  enemiesDefeated: 0,
+  bossesEncountered: 0,
+  bossesDefeated: 0,
+  coinsEarned: 0,
+  coinsSpent: 0,
+  xpGained: 0,
+  deaths: 0,
+});
 
-  setPlayerId: (playerId: string) =>
-    set((state) => {
-      // Save current player's metrics before switching
-      if (state.playerId && state.playerId !== playerId) {
-        saveMetricsToLocalStorage(state.playerId, {
-          playerId: state.playerId,
-          playtime: state.playtime,
-          lastPlayed: state.lastPlayed,
-          sessionCount: state.sessionCount,
-          totalDamageTaken: state.totalDamageTaken,
-          totalDeaths: state.totalDeaths,
-          errorPerLevel: state.errorPerLevel,
-          consumablesUsedPerLevel: state.consumablesUsedPerLevel,
-          enemiesDefeatedPerLevel: state.enemiesDefeatedPerLevel,
-          bossesDefeatedPerLevel: state.bossesDefeatedPerLevel,
-          coinsEarnedPerLevel: state.coinsEarnedPerLevel,
-          coinsSpentPerLevel: state.coinsSpentPerLevel,
-          xpGainedPerLevel: state.xpGainedPerLevel,
-          deathsPerLevel: state.deathsPerLevel,
-          firstEntry: state.firstEntry,
-        });
-      }
+export const useMetricStore = create<MetricStoreProps>()(
+  persist((set) => ({
+    playerId: "",
+    playtime: 0,
+    lastPlayed: 0,
+    sessionCount: 0,
+    totalDamageTaken: 0,
+    totalDamageInflicted: 0,
+    totalDeaths: 0,
+    levelData: {},
+    testData: {
+      preTest: {},
+      postTest: {},
+      learningGain: 0,
+    },
+    goToFrequency: {} as Record<SceneTypes, number>,
+    syntaxErrorFrequency: {} as Record<string, number>,
 
-      // Load new player's metrics
-      const savedMetrics = loadMetricsFromLocalStorage(playerId);
-      return {
+    setPlayerId: (playerId: string) =>
+      set(() => ({
         playerId,
-        playtime: savedMetrics.playtime ?? 0,
-        lastPlayed: savedMetrics.lastPlayed ?? 0,
-        sessionCount: savedMetrics.sessionCount ?? 0,
-        totalDamageTaken: savedMetrics.totalDamageTaken ?? 0,
-        totalDeaths: savedMetrics.totalDeaths ?? 0,
-        errorPerLevel: savedMetrics.errorPerLevel ?? {},
-        consumablesUsedPerLevel: savedMetrics.consumablesUsedPerLevel ?? {},
-        enemiesDefeatedPerLevel: savedMetrics.enemiesDefeatedPerLevel ?? {},
-        bossesDefeatedPerLevel: savedMetrics.bossesDefeatedPerLevel ?? {},
-        coinsEarnedPerLevel: savedMetrics.coinsEarnedPerLevel ?? {},
-        coinsSpentPerLevel: savedMetrics.coinsSpentPerLevel ?? {},
-        xpGainedPerLevel: savedMetrics.xpGainedPerLevel ?? {},
-        deathsPerLevel: savedMetrics.deathsPerLevel ?? {},
-        firstEntry: savedMetrics.firstEntry ?? true,
-      };
-    }),
+      })),
 
-  trackPlaytime: (msElapsed: number) =>
-    set((state) => {
-      const newPlaytime = state.playtime + msElapsed;
-      const newState = { playtime: newPlaytime };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackPlaytime: (msElapsed: number) =>
+      set((state) => ({
+        playtime: state.playtime + msElapsed,
+      })),
 
-  trackDamageTaken: (dmg: number) =>
-    set((state) => {
-      const newState = { totalDamageTaken: state.totalDamageTaken + dmg };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackDamageTaken: (dmg: number) =>
+      set((state) => ({
+        totalDamageTaken: state.totalDamageTaken + dmg,
+      })),
 
-  trackDeath: () =>
-    set((state) => {
-      const newState = { totalDeaths: state.totalDeaths + 1 };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackDamageInflicted: (dmg: number) =>
+      set((state) => ({
+        totalDamageInflicted: state.totalDamageInflicted + dmg,
+      })),
 
-  trackEnemyDefeated: (level: number) =>
-    set((state) => {
-      const newEnemiesDefeated = { ...state.enemiesDefeatedPerLevel };
-      newEnemiesDefeated[level] = (newEnemiesDefeated[level] ?? 0) + 1;
-      const newState = { enemiesDefeatedPerLevel: newEnemiesDefeated };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackDeath: () =>
+      set((state) => ({
+        totalDeaths: state.totalDeaths + 1,
+      })),
 
-  trackBossDefeated: (level: number) =>
-    set((state) => {
-      const newBossesDefeated = { ...state.bossesDefeatedPerLevel };
-      newBossesDefeated[level] = (newBossesDefeated[level] ?? 0) + 1;
-      const newState = { bossesDefeatedPerLevel: newBossesDefeated };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackEnemyEncountered: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].enemiesEncountered += 1;
+        return { levelData: newLevelData };
+      }),
 
-  trackCoinsEarned: (coins: number, level: number) =>
-    set((state) => {
-      const newCoinsEarned = { ...state.coinsEarnedPerLevel };
-      newCoinsEarned[level] = (newCoinsEarned[level] ?? 0) + coins;
-      const newState = { coinsEarnedPerLevel: newCoinsEarned };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackEnemyDefeated: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].enemiesDefeated += 1;
+        return { levelData: newLevelData };
+      }),
 
-  trackCoinsSpent: (coins: number, level: number) =>
-    set((state) => {
-      const newCoinsSpent = { ...state.coinsSpentPerLevel };
-      newCoinsSpent[level] = (newCoinsSpent[level] ?? 0) + coins;
-      const newState = { coinsSpentPerLevel: newCoinsSpent };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackBossEncountered: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].bossesEncountered += 1;
+        return { levelData: newLevelData };
+      }),
 
-  trackXpGained: (xp: number, level: number) =>
-    set((state) => {
-      const newXpGained = { ...state.xpGainedPerLevel };
-      newXpGained[level] = (newXpGained[level] ?? 0) + xp;
-      const newState = { xpGainedPerLevel: newXpGained };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackBossDefeated: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].bossesDefeated += 1;
+        return { levelData: newLevelData };
+      }),
 
-  trackConsumableUsed: (level: number) =>
-    set((state) => {
-      const newConsumablesUsed = { ...state.consumablesUsedPerLevel };
-      newConsumablesUsed[level] = (newConsumablesUsed[level] ?? 0) + 1;
-      const newState = { consumablesUsedPerLevel: newConsumablesUsed };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackCoinsEarned: (coins: number, level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].coinsEarned += coins;
+        return { levelData: newLevelData };
+      }),
 
-  trackError: (level: number) =>
-    set((state) => {
-      const newErrors = { ...state.errorPerLevel };
-      newErrors[level] = (newErrors[level] ?? 0) + 1;
-      const newState = { errorPerLevel: newErrors };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackCoinsSpent: (coins: number, level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].coinsSpent += coins;
+        return { levelData: newLevelData };
+      }),
 
-  incrementSessionCount: () =>
-    set((state) => {
-      const newState = { sessionCount: state.sessionCount + 1 };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
+    trackXpGained: (xp: number, level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].xpGained += xp;
+        return { levelData: newLevelData };
+      }),
 
-  recordLastPlayed: () =>
-    set((state) => {
-      const newState = { lastPlayed: Date.now() };
-      saveMetricsToLocalStorage(state.playerId, { ...state, ...newState });
-      return newState;
-    }),
-}))
+    trackWeaponUsed: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].weaponsUsed += 1;
+        return { levelData: newLevelData };
+      }),
+
+    trackArmorUsed: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].armorsWore += 1;
+        return { levelData: newLevelData };
+      }),
+
+    trackConsumableUsed: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].consumablesUsed += 1;
+        return { levelData: newLevelData };
+      }),
+
+    trackError: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].errors += 1;
+        return { levelData: newLevelData };
+      }),
+
+    trackCombo: (comboCount: number, level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].highestCombo = Math.max(newLevelData[level].highestCombo, comboCount);
+        return { levelData: newLevelData };
+      }),
+
+    trackTimeAliveInBattle: (timeMs: number, level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].longestTimeAliveInBattle = Math.max(newLevelData[level].longestTimeAliveInBattle, timeMs);
+        return { levelData: newLevelData };
+      }),
+
+    trackTimeAliveInExploration: (timeMs: number, level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].longestTimeAliveDuringExploration = Math.max(newLevelData[level].longestTimeAliveDuringExploration, timeMs);
+        return { levelData: newLevelData };
+      }),
+
+    trackMpSolved: (level: number) =>
+      set((state) => {
+        const newLevelData = { ...state.levelData };
+        newLevelData[level] = newLevelData[level] ?? createEmptyLevelStats();
+        newLevelData[level].mpSolved += 1;
+        return { levelData: newLevelData };
+      }),
+
+    trackGoTo: (scene: SceneTypes) =>
+      set((state) => {
+        const newGoToFrequency = { ...state.goToFrequency };
+        newGoToFrequency[scene] = (newGoToFrequency[scene] ?? 0) + 1;
+        return { goToFrequency: newGoToFrequency };
+      }),
+
+    trackSyntaxError: (errorType: string) =>
+      set((state) => {
+        const newSyntaxErrorFrequency = { ...state.syntaxErrorFrequency };
+        newSyntaxErrorFrequency[errorType] = (newSyntaxErrorFrequency[errorType] ?? 0) + 1;
+        return { syntaxErrorFrequency: newSyntaxErrorFrequency };
+      }),
+
+    recordTestResult: (testId: string, result: TestResult, isPreTest: boolean) =>
+      set((state) => {
+        const newTestData = { ...state.testData };
+        const targetTest = isPreTest ? newTestData.preTest : newTestData.postTest;
+        targetTest[testId] = result;
+        
+        // Calculate learning gain if both tests exist
+        if (Object.keys(newTestData.preTest).length > 0 && Object.keys(newTestData.postTest).length > 0) {
+          const preAvg = Object.values(newTestData.preTest).reduce((sum, t) => sum + t.score, 0) / Object.keys(newTestData.preTest).length;
+          const postAvg = Object.values(newTestData.postTest).reduce((sum, t) => sum + t.score, 0) / Object.keys(newTestData.postTest).length;
+          newTestData.learningGain = postAvg - preAvg;
+        }
+        
+        return { testData: newTestData };
+      }),
+
+    incrementSessionCount: () =>
+      set((state) => ({
+        sessionCount: state.sessionCount + 1,
+      })),
+
+    recordLastPlayed: () =>
+      set(() => ({
+        lastPlayed: Date.now(),
+      })),
+
+    resetMetrics: () =>
+      set(() => ({
+        playtime: 0,
+        lastPlayed: 0,
+        sessionCount: 0,
+        totalDamageTaken: 0,
+        totalDamageInflicted: 0,
+        totalDeaths: 0,
+        levelData: {},
+        testData: {
+          preTest: {},
+          postTest: {},
+          learningGain: 0,
+        },
+        goToFrequency: {} as Record<SceneTypes, number>,
+        syntaxErrorFrequency: {} as Record<string, number>,
+      })),
+  }),
+  {
+    name: "player-metrics-default",
+    storage: createJSONStorage(() => localStorage),
+    skipHydration: true
+  }
+))
+
+export const loadMetricsProfile = async (playerId: string) => {
+  if (!playerId) return;
+
+  const storageKey = `${playerId}-metrics`;
+  const existingData = localStorage.getItem(storageKey);
+  const isNewPlayer = !existingData;
+
+  useMetricStore.persist.setOptions({
+    name: `${playerId}-metrics`,
+  });
+
+  if (isNewPlayer) {
+    useMetricStore.setState({
+      playerId,
+      levelData: {},
+      testData: { preTest: {}, postTest: {}, learningGain: 0 },
+      goToFrequency: {} as Record<SceneTypes, number>,
+      syntaxErrorFrequency: {} as Record<string, number>,
+    });
+  }
+
+  await useMetricStore.persist.rehydrate();
+
+  useMetricStore.setState({ playerId });
+
+  console.log(`Successfully loaded metrics for: ${playerId}`);
+};
+
+export const resetMetricsPersist = () => {
+  useMetricStore.persist.setOptions({
+    name: "player-metrics-default",
+  });
+};

@@ -6,6 +6,7 @@ import { resetInventoryPersist } from './inventoryStore';
 import { resetBountyPersist } from './bountyQuestStore';
 import { resetDungeonPersist } from './dungeonStore';
 import { resetKillTrackerPersist } from './killTrackerStore';
+import { resetMetricsPersist } from './metricsStore';
 import showToast from '@/src/components/ui/Toast';
 import { useSceneStore } from './sceneStore';
 import { useTerminalStore } from './terminalStore';
@@ -80,6 +81,7 @@ export const loadUserProfile = async (playerId: string) => {
     usePlayerStore.setState({ 
       user_id: playerId,
       hp: 100,
+      // TODO: Include age?
       maxHP: 100,
       hpRegenPerSecond: DEFAULT_PLAYER_HP_REGEN_PER_SECOND,
       hpRegenCarry: 0,
@@ -175,6 +177,7 @@ export const usePlayerStore = create<PlayerStoreProps>()(
       user_id: "",
       username: "",
       password: "",
+      age: 0,
       hp: 100,
       maxHP: 100,
       hpRegenPerSecond: DEFAULT_PLAYER_HP_REGEN_PER_SECOND,
@@ -381,11 +384,13 @@ export const usePlayerStore = create<PlayerStoreProps>()(
         resetBountyPersist();
         resetDungeonPersist();
         resetKillTrackerPersist();
+        resetMetricsPersist();
         
         set({
           user_id: "",
           username: "",
           password: "",
+          age: 0,
           hp: 100,
           maxHP: 100,
           hpRegenPerSecond: DEFAULT_PLAYER_HP_REGEN_PER_SECOND,

@@ -37,6 +37,7 @@ import {
   DEFAULT_MAIN_FILE_NAME,
   DEFAULT_MAIN_FILE_PATH,
 } from "@/src/game/constants/editor";
+import { loadMetricsProfile } from "@/src/game/store/metricsStore"
 
 export default function GamePage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -153,6 +154,7 @@ export default function GamePage() {
         await loadTutorialProfile(currentId);
         await loadDungeonProfile(currentId);
         await loadKillProfile(currentId);
+        await loadMetricsProfile(currentId);
 
         const findMainFile = (nodes: InventoryNode[]): Exclude<InventoryNode, { kind: "folder" }> | null => {
           for (const node of nodes) {

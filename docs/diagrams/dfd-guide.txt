@@ -1,0 +1,17 @@
+based on article:
+https://www.geeksforgeeks.org/software-engineering/what-is-dfddata-flow-diagram/
+
+plan a dfd:
+1. level 0 (logical and physical)
+2. level 1 (logical and physical)
+
+each dfd shoould be presented in:
+1. yourdon+ demarco
+2. gane+ sarson
+3. ssadm
+
+all should have the external entry (can be user), process,store, and flow.
+
+you can  base the plan based on the existing files in ../current_diagrams/__.png
+
+

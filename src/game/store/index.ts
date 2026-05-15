@@ -21,3 +21,4 @@ export * from "./killTrackerStore";
 export * from "./merchantStore";
 export * from "./combatDebugStore";
 export * from "./comboStore";
+export * from "./dashboardStore";

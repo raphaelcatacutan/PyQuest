@@ -9,9 +9,9 @@
     },
     {
       "questId": "q2",
-      "description": "Kill 2 Babies",
+      "description": "Kill 2 Crows",
       "isCompleted": false,
-      "targetId": "baby",
+      "targetId": "crow",
       "requiredAmount": 2
     },
     {

@@ -1,0 +1,26 @@
+%%{init: {'flowchart': {'nodeSpacing': 75, 'rankSpacing': 120, 'curve': 'linear'}}}%%
+flowchart TB
+    User([User])
+
+    P1[User Actions]
+    P2[Game Runtime]
+    P3[State Update Layer]
+    P4[UI Rendering]
+
+    D1[(Player and Inventory Data)]
+    D2[(Challenge Progress)]
+    D3[(Session Cache / Local Storage)]
+
+    User -->|Login, movement, code input| P1
+    P1 --> P2
+    P2 -->|Gameplay and code events| P3
+
+    P3 --> D1
+    P3 --> D2
+    P3 --> D3
+
+    D1 --> P4
+    D2 --> P4
+    P2 --> P4
+
+    P4 -->|Updated game view and feedback| User

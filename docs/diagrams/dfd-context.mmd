@@ -1,0 +1,9 @@
+%%{init: {'flowchart': {'nodeSpacing': 70, 'rankSpacing': 110, 'curve': 'linear'}}}%%
+flowchart TB
+    User([User])
+    System[PyQuest System]
+    LS[(Local Storage)]
+
+    User -->|Login, gameplay actions, code input| System
+    System -->|UI updates, combat feedback, terminal output| User
+    System <-->|Save and load session and progress| LS

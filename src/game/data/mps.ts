@@ -33,6 +33,35 @@ export const getRandomMPByScene = (scene: string): MachineProblem => {
   return problemsForLevel[randomIndex] ?? FALLBACK_PROBLEM;
 }
 
+export type MPDifficultyLabel = "easy" | "medium" | "hard";
+
+const MP_DIFFICULTY_XP_MAX = {
+  easy: 55,
+  medium: 85,
+} as const;
+
+export const getMachineProblemDifficulty = (problem?: MachineProblem): MPDifficultyLabel => {
+  const explicitDifficulty = problem?.difficulty;
+  if (
+    explicitDifficulty === "easy" ||
+    explicitDifficulty === "medium" ||
+    explicitDifficulty === "hard"
+  ) {
+    return explicitDifficulty;
+  }
+
+  const xpDropMax = problem?.reward?.xpDropMax ?? 0;
+  if (xpDropMax <= MP_DIFFICULTY_XP_MAX.easy) {
+    return "easy";
+  }
+
+  if (xpDropMax <= MP_DIFFICULTY_XP_MAX.medium) {
+    return "medium";
+  }
+
+  return "hard";
+}
+
 function stripInlinePythonComments(code: string): string {
   const lines = code.replace(/\r/g, "").split("\n");
 

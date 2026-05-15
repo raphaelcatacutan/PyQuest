@@ -2,6 +2,7 @@ import { SceneTypes } from "./scene.types";
 import { LootDrop } from "./loot.types";
 
 export interface MachineProblem {
+  difficulty?: "easy" | "medium" | "hard";
   problem: string;
   correct_code: string;
   expected_output: string;

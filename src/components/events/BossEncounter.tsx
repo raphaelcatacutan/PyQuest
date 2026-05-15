@@ -1,7 +1,7 @@
 import { useShallow } from "zustand/shallow"
 import { useBossStore } from "@/src/game/store"
-import { getRandomMP } from "@/src/game/data/dungeon";
 import { useEffect, useRef, useState } from "react";
+import { getMachineProblemDifficulty } from "@/src/game/data/mps";
 
 
 export default function BossEncounter(){
@@ -27,6 +27,12 @@ export default function BossEncounter(){
   const expected_output = activeProblem?.expected_output?? "...";
   const displayedEnergy = Math.floor(energy);
   const displayedMaxEnergy = Math.floor(maxEnergy);
+  const problemDifficulty = getMachineProblemDifficulty(activeProblem);
+  const difficultyBadgeClass = problemDifficulty === "easy"
+    ? "bg-emerald-400 text-black"
+    : problemDifficulty === "medium"
+      ? "bg-amber-300 text-black"
+      : "bg-red-400 text-black";
 
   const [isHurt, setIsHurt] = useState(false);
   const prevHpRef = useRef(hp);
@@ -72,7 +78,11 @@ export default function BossEncounter(){
               </div>
               <div className="flex max-w-200 flex-col p-5 rounded-2xl border border-zinc-600 bg-header  justify-center font-[code] overflow-y-auto">
                 <span className="h-full mb-2">
-                  <span className="text-blue-500">Machine Problem:</span> {activeProblemText}
+                  <span className="text-blue-500">Machine Problem:</span>{" "}
+                  <span className={`rounded px-2 py-0.5 text-[10px] font-bold ${difficultyBadgeClass}`}>
+                    {problemDifficulty.toUpperCase()}
+                  </span>{" "}
+                  {activeProblemText}
                 </span>
                 <span className="h-full">
                   <span className="text-blue-500">Expected Output: </span>

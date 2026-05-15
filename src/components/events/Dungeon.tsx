@@ -55,6 +55,11 @@ export default function Dungeon(){
 
   const healthPercentage = (hp / maxHp) * 100;
   const energyPercentage = (energy / maxEnergy) * 100;
+  const difficultyBadgeClass = mode === "easy"
+    ? "bg-emerald-400 text-black"
+    : mode === "medium"
+      ? "bg-amber-300 text-black"
+      : "bg-red-400 text-black";
 
 
   useEffect(() => {
@@ -128,7 +133,11 @@ export default function Dungeon(){
                   </div>
                   <div className="flex w-full p-5 bg-header items-center justify-center font-[code]">
                     <span className="h-full overflow-y-auto">
-                      
+                      {mode && (
+                        <span className={`mr-2 rounded px-2 py-0.5 text-[10px] font-bold ${difficultyBadgeClass}`}>
+                          {mode.toUpperCase()}
+                        </span>
+                      )}
                       {machineProblem}
                     </span>
                   </div>

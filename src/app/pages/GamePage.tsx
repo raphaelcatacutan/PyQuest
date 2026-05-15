@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react"
-import { useShallow } from "zustand/shallow"
-import CodeEditor from "@/src/components/game-ui/CodeEditor"
-import LeftSideBar from "@/src/components/game-ui/LeftSideBar"
-import Button from "@/src/components/ui/Button"
+import { useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/shallow";
+import CodeEditor from "@/src/components/game-ui/CodeEditor";
+import LeftSideBar from "@/src/components/game-ui/LeftSideBar";
+import Button from "@/src/components/ui/Button";
 import Combat from "@/src/components/events/Combat";
 import { RightSideBar } from "@/src/components/game-ui/RightSideBar";
 import { rightPanelIcon } from "@/src/assets";
@@ -21,6 +21,7 @@ import {
 } from "@/src/game/store";
 import { InventoryNode } from "@/src/game/types/inventory.types";
 import BountyQuest from "@/src/components/ui/BountyQuest";
+import Dashboard from "@/src/components/ui/Dashboard";
 import DevTool from "@/src/components/DevTool";
 import Damaged from "@/src/components/events/Damaged";
 import NavBar from "@/src/components/ui/NavBar";
@@ -28,7 +29,7 @@ import Dungeon from "@/src/components/events/Dungeon";
 import Trials from "@/src/components/events/Trials";
 import NPC from "@/src/components/events/NPC";
 import Tutorial from "@/src/components/events/Tutorial";
-import { Info } from "@/src/components/ui/Info"
+import { Info } from "@/src/components/ui/Info";
 import { loadBountyProfile } from "@/src/game/store";
 import { loadKillProfile } from "@/src/game/store/killTrackerStore";
 import {
@@ -37,21 +38,27 @@ import {
   DEFAULT_MAIN_FILE_NAME,
   DEFAULT_MAIN_FILE_PATH,
 } from "@/src/game/constants/editor";
-import { loadMetricsProfile } from "@/src/game/store/metricsStore"
+import { loadMetricsProfile } from "@/src/game/store/metricsStore";
 
 export default function GamePage() {
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [displayBg, setDisplayBg] = useState("")
-  const previousInVillageRef = useRef<boolean>(true)
-  const inVillage = useGameStore(s => s.inVillage)
-  const sceneBg = useSceneStore(s => s.sceneBg)
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [displayBg, setDisplayBg] = useState("");
+  const previousInVillageRef = useRef<boolean>(true);
+  const inVillage = useGameStore((s) => s.inVillage);
+  const sceneBg = useSceneStore((s) => s.sceneBg);
   const { rightPanel, toggleRightPanel } = useGameStore(
     useShallow((s) => ({
       rightPanel: s.rightPanel,
-      toggleRightPanel: s.toggleRightPanel
-    }))
-  )
-  const { playerInventory, addInventoryItem, deleteInventoryItem, renameInventoryItem, moveInventoryItem } = useInventoryStore(
+      toggleRightPanel: s.toggleRightPanel,
+    })),
+  );
+  const {
+    playerInventory,
+    addInventoryItem,
+    deleteInventoryItem,
+    renameInventoryItem,
+    moveInventoryItem,
+  } = useInventoryStore(
     useShallow((s) => ({
       playerInventory: s.playerInventory,
       addInventoryItem: s.addInventoryItem,
@@ -60,7 +67,7 @@ export default function GamePage() {
       moveInventoryItem: s.moveInventoryItem,
     })),
   );
-  const isDamaged = usePlayerStore(s => s.isDamaged)
+  const isDamaged = usePlayerStore((s) => s.isDamaged);
 
   const lootInventoryRef = useRef<{
     getItems: (nodeIds: string[]) => InventoryNode[];
@@ -129,7 +136,9 @@ export default function GamePage() {
 
     if (enteredVillage) {
       const progressIncrement = useBountyQuestStore.getState().questLevel;
-      useTutorialStore.getState().startGameLoop(progressIncrement, { openTutorial: false });
+      useTutorialStore
+        .getState()
+        .startGameLoop(progressIncrement, { openTutorial: false });
     }
 
     previousInVillageRef.current = inVillage;
@@ -156,7 +165,9 @@ export default function GamePage() {
         await loadKillProfile(currentId);
         await loadMetricsProfile(currentId);
 
-        const findMainFile = (nodes: InventoryNode[]): Exclude<InventoryNode, { kind: "folder" }> | null => {
+        const findMainFile = (
+          nodes: InventoryNode[],
+        ): Exclude<InventoryNode, { kind: "folder" }> | null => {
           for (const node of nodes) {
             if (node.kind === "folder") {
               const nestedMain = findMainFile(node.children);
@@ -166,7 +177,10 @@ export default function GamePage() {
               continue;
             }
 
-            if (node.id === DEFAULT_MAIN_FILE_ID || node.name === DEFAULT_MAIN_FILE_NAME) {
+            if (
+              node.id === DEFAULT_MAIN_FILE_ID ||
+              node.name === DEFAULT_MAIN_FILE_NAME
+            ) {
               return node;
             }
           }
@@ -174,7 +188,9 @@ export default function GamePage() {
           return null;
         };
 
-        const mainFile = findMainFile(useInventoryStore.getState().playerInventory);
+        const mainFile = findMainFile(
+          useInventoryStore.getState().playerInventory,
+        );
         useEditorStore.getState().openFile({
           id: mainFile?.id ?? DEFAULT_MAIN_FILE_ID,
           name: mainFile?.name ?? DEFAULT_MAIN_FILE_NAME,
@@ -229,7 +245,7 @@ export default function GamePage() {
         {/* body div */}
         <CodeEditor />
         <div id="scene" className="relative flex h-full w-full bg-black">
-          <Info/>
+          <Info />
           {/* scene */}
           <NPC />
           <Trials />
@@ -242,11 +258,12 @@ export default function GamePage() {
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "repeat",
-              transition: "opacity 0.3s ease-in, filter 0.3s ease-in-out, transform 0.1s ease-out",
+              transition:
+                "opacity 0.3s ease-in, filter 0.3s ease-in-out, transform 0.1s ease-out",
               opacity: isTransitioning ? 0.4 : 1,
               filter: isTransitioning ? "brightness(0)" : "brightness(1)",
             }}
-          /> 
+          />
           <div className="absolute h-full z-50">
             <LeftSideBar
               playerInventory={playerInventory}
@@ -276,12 +293,13 @@ export default function GamePage() {
               />
             </div>
           )}
-          <Combat/>
+          <Combat />
         </div>
       </div>
 
       {/* Misc */}
       <BountyQuest />
+      <Dashboard />
       <Damaged />
       <DevTool />
     </div>

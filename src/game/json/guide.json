@@ -6,8 +6,9 @@
     { "targetId": "code-editor", "text": "This is your Code Editor—where logic becomes power. Type your commands here." },
     { "targetId": "status-bar", "text": "Your Health and Energy. Keep an eye on these; syntax errors can be draining." },
     { "targetId": "lvl-bar", "text": "This is your Level. Grow your knowledge to unlock more complex syntax." },
-    { "targetId": "bounty-quest", "text": "Access the bounty quest to check your remaining tasks before leveling up." },
-    { "targetId": "bounty-quest", "text": "If you ever feel confused with the interface, just toggle me again by clicking the Guide button." },
-    { "targetId": "bounty-quest", "text": "If you wish to open the tutorial, toggle the Dialogue button." },
+    { "targetId": "bounty-quest", "text": "This is your Player Dashboard. View your stats, equipment, and unlocked scenes at a glance." },
+    { "targetId": "bounty-quest", "text": "This is the Bounty Quest panel. Check your remaining tasks and progress before leveling up." },
+    { "targetId": "bounty-quest", "text": "This is the Guide. If you ever feel confused with the interface, you can toggle me again by clicking this button." },
+    { "targetId": "bounty-quest", "text": "This is the Tutorial. Click here to open the tutorial and get step-by-step instructions." },
     { "targetId": "origin", "text": "Good job, player! The environment is initialized. You may now proceed talking with the Innkeeper. Good luck surviving the logic ahead!" }
 ]

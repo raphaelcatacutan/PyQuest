@@ -1,0 +1,10 @@
+%%{init: {'flowchart': {'nodeSpacing': 70, 'rankSpacing': 110, 'curve': 'linear'}}}%%
+flowchart LR
+    U[E1 User]
+    P0[P0 React+Vite+Skulpt Runtime]
+    D[(D Browser LocalStorage)]
+
+    U -->|Form input, editor text, UI events| P0
+    P0 -->|Rendered UI, terminal logs, combat updates| U
+    P0 -->|localStorage.setItem JSON writes| D
+    D -->|localStorage.getItem and hydrate| P0

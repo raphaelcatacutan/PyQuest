@@ -1,0 +1,17 @@
+# Level 0 DFD - Logical (SSADM)
+
+Level: 0
+Type: Logical
+Notation: SSADM
+
+Mermaid source:
+
+    %%{init: {'flowchart': {'nodeSpacing': 70, 'rankSpacing': 110, 'curve': 'linear'}}}%%
+    flowchart LR
+        U([E1 User])
+        P0[P0 PyQuest System]
+        D[(D Shared Data Store)]
+        U -->|Login, code input, gameplay actions| P0
+        P0 -->|Game view, terminal output, feedback| U
+        P0 -->|Save state and progress| D
+        D -->|Load saved state| P0
